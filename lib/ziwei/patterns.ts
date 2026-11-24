@@ -18,7 +18,7 @@
 import 'server-only';
 import type { ZiweiChart, Palace, Star, SiHua } from './types';
 import { SCHOOL_NAME_TO_ID, SCHOOL_STAR_ID_TO_NAME } from './school-data';
-import {starId,palaceId,siHuaId,PalaceId} from './identity';
+import {starId,palaceId,siHuaId,PalaceId,SiHuaId,BrightnessId} from './identity';
 import { translateStarCnToVi, CN_TO_VI_PALACE } from './algorithm';
 
 // ────────────────── 类型 ──────────────────
@@ -48,33 +48,34 @@ const KUI_YUE = ['Thiên Khôi', 'Thiên Việt', '天魁', '天钺'];
 // ────────────────── 辅助函数 ──────────────────
 // Use the stable numeric star IDs already defined by school-data at the boundary.
 // Unknown names retain their exact identity; do not collapse unrelated minor stars.
-function starKey(name: string): number | string {
+function starKey(star: Star | string): number | string {
+  if(typeof star!=='string'&&star.id!==undefined&&SCHOOL_STAR_ID_TO_NAME[star.id]!==undefined)return star.id;
+  const name=typeof star==='string'?star:star.name;
   return starId(name) ?? starId(translateStarCnToVi(name)) ?? translateStarCnToVi(name);
 }
-function matchStarName(starName: string, queryName: string): boolean {
-  return starKey(starName) === starKey(queryName);
+function matchStarName(star: Star | string, queryName: string): boolean {
+  return starKey(star) === starKey(queryName);
 }
-
-function getMajorStarNames(palace: Palace): string[] {
-  return palace.stars.filter(s => s.type === 'major').map(s => s.name);
+function getMajorStars(palace: Palace): Star[] {
+  return palace.stars.filter(s => s.type === 'major');
 }
 function findStar(palace: Palace, name: string): Star | undefined {
-  return palace.stars.find(s => matchStarName(s.name, name));
+  return palace.stars.find(s => matchStarName(s, name));
 }
 function hasStar(palace: Palace, name: string): boolean {
-  return palace.stars.some(s => matchStarName(s.name, name));
+  return palace.stars.some(s => matchStarName(s, name));
 }
 function findStarPalace(chart: ZiweiChart, name: string): Palace | undefined {
-  return chart.palaces.find(p => p.stars.some(s => matchStarName(s.name, name)));
+  return chart.palaces.find(p => p.stars.some(s => matchStarName(s, name)));
 }
 function getPalaceByBranch(chart: ZiweiChart, branch: number): Palace | undefined {
   return chart.palaces.find(p => p.branch === ((branch % 12) + 12) % 12);
 }
 function shaCountInPalace(palace: Palace, list: string[] = SHA_HARD): number {
-  return palace.stars.filter(s => list.some(item => matchStarName(s.name, item))).length;
+  return palace.stars.filter(s => list.some(item => matchStarName(s, item))).length;
 }
 function hasShaInPalace(palace: Palace, list: string[] = SHA_NAMES): boolean {
-  return palace.stars.some(s => list.some(item => matchStarName(s.name, item)));
+  return palace.stars.some(s => list.some(item => matchStarName(s, item)));
 }
 function getSanFangPalaces(chart: ZiweiChart): Palace[] {
   const m = chart.mingGongBranch;
@@ -97,7 +98,7 @@ function getJiaPalaces(chart: ZiweiChart, branch: number): { prev?: Palace; next
 function sanFangAllStars(chart: ZiweiChart): { has(name: string): boolean } {
   const set = new Set<number | string>();
   getSanFangPalaces(chart).forEach(p => {
-    p.stars.forEach(s => set.add(starKey(s.name)));
+    p.stars.forEach(s => set.add(starKey(s)));
   });
   return { has: name => set.has(starKey(name)) };
 }
@@ -106,23 +107,28 @@ function sanFangShaCount(chart: ZiweiChart, list: string[] = SHA_HARD): number {
 }
 function isBright(palace: Palace, starName: string): boolean {
   const s = findStar(palace, starName);
+  if(s?.brightnessId!==undefined)return s.brightnessId===BrightnessId.Miao||s.brightnessId===BrightnessId.Wang;
   return s?.brightness === 'bright';
 }
 function isDim(palace: Palace, starName: string): boolean {
   const s = findStar(palace, starName);
+  if(s?.brightnessId!==undefined)return [BrightnessId.Bu,BrightnessId.Xian,BrightnessId.XianLeisure].includes(s.brightnessId);
   return s?.brightness === 'dim';
 }
-export function isSiHua(starSiHua: string | undefined, target: 'Lộc' | 'Quyền' | 'Khoa' | 'Kỵ' | '禄' | '权' | '科' | '忌'): boolean {
-  const a=siHuaId(starSiHua),b=siHuaId(target);
+export function isSiHua(starSiHua: string | SiHuaId | undefined, target: SiHua): boolean {
+  const a=typeof starSiHua==='number'?starSiHua:siHuaId(starSiHua),b=siHuaId(target);
   return a!==undefined&&a===b;
 }
-
-function getStarSiHua(palace: Palace, starName: string): Star['siHua'] | undefined {
-  return findStar(palace, starName)?.siHua;
+function starHasSiHua(star:Star,target:SiHua):boolean{
+  return isSiHua(star.siHuaId??star.siHua,target);
+}
+function getStarSiHua(palace: Palace, starName: string): Star['siHua'] | SiHuaId | undefined {
+  const star=findStar(palace,starName);
+  return star?.siHuaId??star?.siHua;
 }
 // 四化挂在星曜的 siHua 字段上，不是独立星名——不能用 hasStar / sanFangAllStars 查「化禄」
 function palaceHasSiHua(palace: Palace, hua: SiHua): boolean {
-  return palace.stars.some(s => isSiHua(s.siHua, hua));
+  return palace.stars.some(s => starHasSiHua(s, hua));
 }
 function sanFangHasSiHua(chart: ZiweiChart, hua: SiHua): boolean {
   return getSanFangPalaces(chart).some(p => palaceHasSiHua(p, hua));
@@ -331,7 +337,7 @@ function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
     name: '杀破狼',
     level: breaking.length ? 'caution' : 'good',
     description: '七杀、破军、贪狼三星会命，开创闯荡之命格。一生变动多、不甘平凡，宜创业、军警、业务、销售。中年后才能稳定守成，年轻时易因冲动失利。',
-    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStarNames(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
+    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStars(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
     conditions: { required, bonus, breaking },
     source: '《紫微斗数全书·杀破狼》',
   });
@@ -355,7 +361,7 @@ function detectJiYueTongLiang(chart: ZiweiChart, ming: Palace, patterns: Pattern
     name: '机月同梁',
     level: breaking.length ? 'good' : 'excellent',
     description: '天机太阴天同天梁四星齐入命迁财官，文质彬彬、聪慧善谋。最适合公职、学术、文艺、医疗、服务等需稳定累积的行业，不宜大冒险大投机。',
-    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStarNames(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
+    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStars(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
     conditions: { required, bonus, breaking },
     source: '《紫微斗数全书·机月同梁格》',
   });
@@ -541,7 +547,7 @@ function detectShiZhongYinYu(chart: ZiweiChart, ming: Palace, patterns: Pattern[
 /** 明珠出海：命宫在未空宫，对宫丑宫为太阳太阴 */
 function detectMingZhuChuHai(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
   if (ming.branch !== 7) return;   // 命在未
-  if (getMajorStarNames(ming).length > 0) return;   // 命宫为空宫
+  if (getMajorStars(ming).length > 0) return;   // 命宫为空宫
   const dui = getDuiGong(chart, ming.branch);
   if (!dui) return;
   if (!hasStar(dui, '太阳') || !hasStar(dui, '太阴')) return;
@@ -655,7 +661,7 @@ function detectShuangLuChaoYuan(chart: ZiweiChart, ming: Palace, patterns: Patte
   let huaLuFound = false;
   let luCunFound = false;
   for (const p of sanFang) {
-    if (p.stars.some(s => isSiHua(s.siHua, 'Lộc'))) huaLuFound = true;
+    if (p.stars.some(s => starHasSiHua(s, 'Lộc'))) huaLuFound = true;
     if (hasStar(p, '禄存')) luCunFound = true;
   }
   if (!huaLuFound || !luCunFound) return;
@@ -679,9 +685,9 @@ function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
   let lu = false, quan = false, ke = false;
   for (const p of sanFangPalaces) {
     for (const s of p.stars) {
-      if (isSiHua(s.siHua, 'Lộc')) lu = true;
-      if (isSiHua(s.siHua, 'Quyền')) quan = true;
-      if (isSiHua(s.siHua, 'Khoa')) ke = true;
+      if (starHasSiHua(s, 'Lộc')) lu = true;
+      if (starHasSiHua(s, 'Quyền')) quan = true;
+      if (starHasSiHua(s, 'Khoa')) ke = true;
     }
   }
   if (!(lu && quan && ke)) return;
@@ -698,7 +704,7 @@ function detectSanQiJiaHui(chart: ZiweiChart, patterns: Pattern[]) {
 
 /** 化禄入命/官/财 */
 function detectHuaLuRuMing(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
-  const huaLuStar = ming.stars.find(s => isSiHua(s.siHua, 'Lộc') && s.type === 'major');
+  const huaLuStar = ming.stars.find(s => starHasSiHua(s, 'Lộc') && s.type === 'major');
   if (!huaLuStar) return;
 
   patterns.push({
@@ -718,7 +724,7 @@ function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
   const qianBranch = (chart.mingGongBranch + 6) % 12;
   for (const palace of chart.palaces) {
     if (palace.branch !== chart.mingGongBranch && palace.branch !== qianBranch) continue;
-    const jiStar = palace.stars.find(s => isSiHua(s.siHua, 'Kỵ') && s.type === 'major');
+    const jiStar = palace.stars.find(s => starHasSiHua(s, 'Kỵ') && s.type === 'major');
     if (!jiStar) continue;
 
     const inMing = palace.branch === chart.mingGongBranch;
@@ -738,7 +744,7 @@ function detectHuaJiRuMingQian(chart: ZiweiChart, patterns: Pattern[]) {
 /** 羊陀夹忌：化忌坐宫，左右被擎羊陀罗夹 */
 function detectYangTuoJiaJi(chart: ZiweiChart, patterns: Pattern[]) {
   for (const palace of chart.palaces) {
-    const jiStar = palace.stars.find(s => isSiHua(s.siHua, 'Kỵ'));
+    const jiStar = palace.stars.find(s => starHasSiHua(s, 'Kỵ'));
     if (!jiStar) continue;
     if (palace.branch !== chart.mingGongBranch) continue;   // 只看命宫被夹
 
@@ -908,7 +914,7 @@ function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
 function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
   const cai = chart.palaces.find(p => (p.id ?? palaceId(p.name)) === PalaceId.Wealth);
   if (!cai) return;
-  const luStar = cai.stars.find(s => s.type === 'major' && isSiHua(s.siHua, 'Lộc'));
+  const luStar = cai.stars.find(s => s.type === 'major' && starHasSiHua(s, 'Lộc'));
   if (!luStar) return;
   patterns.push({
     name: '化禄入财',
@@ -924,7 +930,7 @@ function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
 function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
   const guan = chart.palaces.find(p => (p.id ?? palaceId(p.name)) === PalaceId.Career);
   if (!guan) return;
-  const quanStar = guan.stars.find(s => s.type === 'major' && isSiHua(s.siHua, 'Quyền'));
+  const quanStar = guan.stars.find(s => s.type === 'major' && starHasSiHua(s, 'Quyền'));
   if (!quanStar) return;
   patterns.push({
     name: '化权入官',
@@ -942,7 +948,7 @@ function detectHuaKeRuMingShen(chart: ZiweiChart, patterns: Pattern[]) {
   const shen = chart.palaces.find(p => p.branch === chart.shenGongBranch);
   const target = [ming, shen].filter((p): p is Palace => Boolean(p));
   for (const p of target) {
-    const keStar = p.stars.find(s => s.type === 'major' && isSiHua(s.siHua, 'Khoa'));
+    const keStar = p.stars.find(s => s.type === 'major' && starHasSiHua(s, 'Khoa'));
     if (!keStar) continue;
     const isMing = p.branch === chart.mingGongBranch;
     patterns.push({
@@ -968,7 +974,7 @@ function detectJiYueTongLiangPartial(chart: ZiweiChart, ming: Palace, patterns: 
     name: '机月同梁三星会',
     level: 'neutral',
     description: `机月同梁需天机、太阴、天同、天梁四星齐会三方四正方为完整真格；本盘只会齐其中 3 颗（${has.join('、')}），缺${missing.join('、')}未会，并非完整真格，力量减一档。文质带谋，宜公职、教研、医疗、服务等靠积累与稳定的行业，关键看缺位星与四化的配合。`,
-    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStarNames(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
+    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStars(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
     conditions: { required: [`三方四正会${has.join('、')}（机月同梁缺${missing.join('、')}）`] },
     source: '《紫微斗数全书·机月同梁格》',
   });
@@ -1028,8 +1034,8 @@ function detectKeQuanShuangHui(chart: ZiweiChart, patterns: Pattern[]) {
   let hasKe = false, hasQuan = false;
   for (const p of sfPalaces) {
     for (const s of p.stars) {
-      if (s.type === 'major' && isSiHua(s.siHua, 'Khoa')) hasKe = true;
-      if (s.type === 'major' && isSiHua(s.siHua, 'Quyền')) hasQuan = true;
+      if (s.type === 'major' && starHasSiHua(s, 'Khoa')) hasKe = true;
+      if (s.type === 'major' && starHasSiHua(s, 'Quyền')) hasQuan = true;
     }
   }
   if (!hasKe || !hasQuan) return;
@@ -1150,19 +1156,67 @@ function translateConditionText(text: string): string {
   return s;
 }
 
+const VERIFIED_RULE_VI: Record<string,string> = {
+  "君臣庆会": "Tử Vi ở Mệnh, Tả Phù và Hữu Bật cùng hội tam phương tứ chính.",
+  "紫府同宫": "Tử Vi và Thiên Phủ cùng một cung; có xét cung đó có phải Mệnh hay không.",
+  "府相朝垣": "Thiên Phủ và Thiên Tướng ở hai cung khác nhau trong tam phương tứ chính của Mệnh.",
+  "阳梁昌禄": "Thái Dương, Thiên Lương, Văn Xương và Lộc Tồn cùng hội tam phương tứ chính.",
+  "火贪格": "Tham Lang đồng cung hoặc hội chiếu với Hỏa Tinh và Tham Lang thuộc tam phương tứ chính của Mệnh.",
+  "铃贪格": "Tham Lang đồng cung hoặc hội chiếu với Linh Tinh và Tham Lang thuộc tam phương tứ chính của Mệnh.",
+  "武贪格": "Vũ Khúc và Tham Lang đồng cung hoặc đối cung, có hội tam phương tứ chính của Mệnh.",
+  "杀破狼": "Thất Sát, Phá Quân và Tham Lang cùng hội tam phương tứ chính của cung Mệnh.",
+  "机月同梁": "Thiên Cơ, Thái Âm, Thiên Đồng và Thiên Lương cùng hội tam phương tứ chính.",
+  "廉贞天相格": "Liêm Trinh và Thiên Tướng đồng cung.",
+  "武曲七杀": "Vũ Khúc và Thất Sát đồng cung.",
+  "天同天梁格": "Thiên Đồng và Thiên Lương đồng cung.",
+  "日月同宫": "Thái Dương và Thái Âm đồng cung ở Sửu hoặc Mùi.",
+  "日月夹命": "Thái Dương và Thái Âm ở hai cung liền kề hai bên Mệnh.",
+  "巨日同宫": "Cự Môn và Thái Dương đồng cung ở Dần hoặc Thân.",
+  "石中隐玉": "Cự Môn tọa Mệnh tại Tý hoặc Ngọ.",
+  "明珠出海": "Mệnh tại Mùi vô chính diệu, đối cung Sửu có Thái Dương và Thái Âm.",
+  "紫微入命": "Tử Vi tọa Mệnh, không có Thiên Phủ đồng cung.",
+  "辅弼夹命": "Tả Phù và Hữu Bật ở hai cung liền kề hai bên Mệnh.",
+  "昌曲夹命": "Văn Xương và Văn Khúc ở hai cung liền kề hai bên Mệnh.",
+  "魁钺夹命": "Thiên Khôi và Thiên Việt ở hai cung liền kề hai bên Mệnh.",
+  "双禄朝垣": "Hóa Lộc và Lộc Tồn cùng hội tam phương tứ chính của Mệnh.",
+  "三奇加会": "Hóa Lộc, Hóa Quyền và Hóa Khoa cùng hội tam phương tứ chính.",
+  "化禄入命": "Một chính tinh ở Mệnh mang Hóa Lộc.",
+  "化忌入命迁": "Một chính tinh ở Mệnh hoặc Thiên Di mang Hóa Kỵ.",
+  "羊陀夹忌": "Hóa Kỵ ở Mệnh, Kình Dương và Đà La ở hai cung liền kề hai bên.",
+  "火铃夹命": "Hỏa Tinh và Linh Tinh ở hai cung liền kề hai bên Mệnh.",
+  "空劫夹命": "Địa Không và Địa Kiếp ở hai cung liền kề hai bên Mệnh.",
+  "廉杀羊": "Liêm Trinh, Thất Sát và Kình Dương cùng hội tam phương tứ chính.",
+  "巨火羊": "Cự Môn, Hỏa Tinh và Kình Dương cùng hội tam phương tứ chính.",
+  "铃昌陀武": "Linh Tinh, Văn Xương, Đà La và Vũ Khúc cùng hội tam phương tứ chính.",
+  "马头带箭": "Kình Dương tọa Mệnh tại Ngọ.",
+  "禄存守命": "Lộc Tồn ở cung Mệnh.",
+  "禄存守身": "Lộc Tồn ở cung Thân.",
+  "天马入命": "Thiên Mã ở cung Mệnh.",
+  "天马在迁": "Thiên Mã ở cung Thiên Di.",
+  "化禄入财": "Một chính tinh ở Tài Bạch mang Hóa Lộc.",
+  "化权入官": "Một chính tinh ở Quan Lộc mang Hóa Quyền.",
+  "化科入命": "Một chính tinh ở Mệnh mang Hóa Khoa.",
+  "化科入身": "Một chính tinh ở Thân mang Hóa Khoa.",
+  "机月同梁三星会": "Đúng ba trong bốn sao Thiên Cơ, Thái Âm, Thiên Đồng, Thiên Lương hội tam phương tứ chính; không đồng nhất với cách đủ bốn sao.",
+  "昌曲坐命": "Văn Xương và Văn Khúc cùng tọa Mệnh.",
+  "昌曲同会": "Văn Xương và Văn Khúc hội tam phương tứ chính nhưng không cùng tọa Mệnh.",
+  "辅弼同会": "Tả Phù và Hữu Bật cùng hội tam phương tứ chính.",
+  "魁钺同会": "Thiên Khôi và Thiên Việt cùng hội tam phương tứ chính.",
+  "科权双会": "Chính tinh mang Hóa Khoa và Hóa Quyền cùng hội tam phương tứ chính."
+};
+
 function translatePattern(p: Pattern): Pattern {
   return {
     ...p,
     name: PATTERN_NAME_VI[p.name] ?? p.name,
     // Describe the verified detector condition, not an unverified quotation or prediction.
-    description: p.name === '杀破狼'
-      ? 'Thất Sát, Phá Quân và Tham Lang cùng hội tam phương tứ chính của cung Mệnh. Đây là cách phân loại tổ hợp sao theo tử vi truyền thống, chỉ dùng để tham khảo.'
-      : p.description,
+    description: VERIFIED_RULE_VI[p.name] ?? 'Điều kiện cách cục chưa có bản mô tả được kiểm chứng.',
+    // Original commentary is kept in detector source; do not present unsupported quotations as verified.
     palaces: p.palaces.map(pl => CN_TO_VI_PALACE[pl] ?? pl),
     conditions: p.conditions ? {
-      required: p.conditions.required.map(translateConditionText),
-      bonus: p.conditions.bonus?.map(translateConditionText),
-      breaking: p.conditions.breaking?.map(translateConditionText),
+      required: p.conditions.required.map(translateConditionText).some(t=>/\p{Script=Han}/u.test(t)) ? [VERIFIED_RULE_VI[p.name] ?? 'Cần bổ sung bản dịch điều kiện.'] : p.conditions.required.map(translateConditionText),
+      bonus: p.conditions.bonus?.map(translateConditionText).map(t=>/\p{Script=Han}/u.test(t)?'Có điều kiện hỗ trợ chưa hoàn tất bản dịch; cần đối chiếu nguồn.':t),
+      breaking: p.conditions.breaking?.map(translateConditionText).map(t=>/\p{Script=Han}/u.test(t)?'Có điều kiện phá cách chưa hoàn tất bản dịch; cần đối chiếu nguồn.':t),
     } : undefined,
   };
 }
@@ -1259,7 +1313,7 @@ export function getMingGongSummary(chart: ZiweiChart): {
     '太阳': ['Quang minh', 'Quan quý', 'Hào sảng'],
     '武曲': ['Tài phú', 'Cương nghị', 'Quyết đoán'],
     '天同': ['Ôn hòa', 'Hưởng phúc', 'Tùy duyên'],
-    '廉贞': ['才艺', 'Đào hoa', 'Đa biến'],
+    '廉贞': ['Tài nghệ', 'Đào hoa', 'Đa biến'],
     '天府': ['Kho tàng', 'Vững vàng', 'Bảo thủ'],
     '太阴': ['Dịu dàng', 'Tài phú', 'Tinh tế'],
     '贪狼': ['Dục vọng', 'Đào hoa', 'Đa tài'],

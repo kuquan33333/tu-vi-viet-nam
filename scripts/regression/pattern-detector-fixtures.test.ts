@@ -88,7 +88,10 @@ for(const c of cases){
  test('L2 fixture VI/CN: '+c.name,async()=>{
   const {detectPatterns}=await import('../../lib/ziwei/patterns');
   for(const mode of ['vi','cn'] as const){
-   assert.ok(detectPatterns(fixture(c,mode)).some(p=>p.name===c.name),mode+' missing '+c.name);
+   const p=detectPatterns(fixture(c,mode)).find(p=>p.name===c.name);assert.ok(p,mode+' missing '+c.name);
+   assert.doesNotMatch(p.description,/\p{Script=Han}/u);
+   assert.ok(p.conditions?.required.length);
+   for(const t of [...(p.conditions?.required||[]),...(p.conditions?.bonus||[]),...(p.conditions?.breaking||[])])assert.doesNotMatch(t,/\p{Script=Han}/u);
    assert.ok(!detectPatterns(fixture(c,mode,true)).some(p=>p.name===c.name),mode+' false positive '+c.name);
   }
  });
