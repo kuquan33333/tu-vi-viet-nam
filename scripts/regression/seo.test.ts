@@ -27,8 +27,21 @@ test('D3/D4: menu đủ và không đánh dấu link nội bộ như link ngoài
  const src=read('components/AppChrome.tsx');
  for(const path of ['/cong-cu','/hop-ban','/ho-so','/lich-van-nien'])assert.ok(src.includes(path),path);
  assert.doesNotMatch(src,/↗/);
+ const desktop=src.match(/<nav className="desktop-links"[\s\S]*?<\/nav>/)?.[0]||'';
+ assert.ok(desktop.includes('sections.map'), 'Desktop must render all main sections');
+ const mobile=src.match(/<nav className="mobile-site-menu"[\s\S]*?<\/nav>/)?.[0]||'';
+ assert.ok(mobile.includes('mobileSections.map'), 'Mobile must render all sections');
 });
 test('A: robots, sitemap loại URL cũ/hồ sơ',()=>{
  assert.match(read('app/robots.ts'),/['"]\/ho-so['"]/);
  assert.doesNotMatch(read('app/sitemap.ts'),/['"]\/heming['"]|['"]\/ho-so['"]/);
+});
+
+test('D7: bốn thuật ngữ có chú thích trong form',()=>{
+ const src=read('components/BirthForm.tsx');
+ for(const term of ['Sinh thần','Dương lịch (Mặt trời)','Âm lịch (Mặt trăng)','Chân Thái Dương Thời'])assert.ok(src.includes('term="'+term+'"'),term);
+});
+test('D1: breadcrumb dùng chung cho thư viện, chương sách và trang pháp lý',()=>{
+ for(const p of ['app/library/page.tsx','app/library/[book]/page.tsx','app/library/[book]/[chapter]/page.tsx','app/library/search/page.tsx','app/privacy/page.tsx','app/terms/page.tsx'])assert.match(read(p),/<Breadcrumb items=/,p);
+ assert.match(read('components/Breadcrumb.tsx'),/BreadcrumbList/);
 });

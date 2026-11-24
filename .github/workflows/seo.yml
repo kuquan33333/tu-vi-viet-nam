@@ -1,0 +1,83 @@
+name: SEO and static export QA
+
+on:
+  pull_request:
+    branches: [revamp-v2, main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'lib/seo/**'
+      - 'lib/classics/**'
+      - 'lib/site.ts'
+      - 'public/**'
+      - 'scripts/**'
+      - 'package*.json'
+      - '.github/workflows/seo.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  seo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SITE_URL: https://lichvannien-9sv.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test
+      - run: npx tsx scripts/regression/seo.test.ts
+      - run: |
+          npx tsx scripts/test-triad.ts
+          npx tsx scripts/test-revamp.ts
+      - name: Build static export
+        run: |
+          node scripts/prepare-cloudflare-demo.mjs
+          npm run build
+          node scripts/check-seo-export.mjs
+      - name: Serve export for QA
+        run: |
+          node scripts/serve-export.mjs > /tmp/seo-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break || sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+          while read -r from to status; do
+            [[ "$status" == "301" ]] || continue
+            actual=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "http://127.0.0.1:4173$from")
+            test "$actual" = "301 http://127.0.0.1:4173$to"
+          done < out/_redirects
+      - name: Lighthouse SEO mobile
+        run: |
+          mkdir -p qa-artifacts/lighthouse
+          export CHROME_PATH=$(command -v google-chrome)
+          for route in home chart hop-ban lich-van-nien library cong-cu; do
+            url="http://127.0.0.1:4173/$route"
+            if [ "$route" = home ]; then url="http://127.0.0.1:4173/"; fi
+            npx --yes lighthouse@12.6.0 "$url" --only-categories=seo --output=json --output-path="qa-artifacts/lighthouse/$route.json" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
+          done
+          node scripts/check-seo-lighthouse.mjs
+      - name: Capture responsive screenshots
+        if: always()
+        run: |
+          if ! curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+          mkdir -p qa-artifacts/screenshots
+          npx --yes playwright@1.51.1 install chromium
+          for route in home chart hop-ban lich-van-nien library cong-cu; do
+            url="http://127.0.0.1:4173/$route"
+            if [ "$route" = home ]; then url="http://127.0.0.1:4173/"; fi
+            npx --yes playwright@1.51.1 screenshot --viewport-size="360,800" --wait-for-timeout=1000 "$url" "qa-artifacts/screenshots/$route-360.png"
+            npx --yes playwright@1.51.1 screenshot --viewport-size="1280,900" --wait-for-timeout=1000 "$url" "qa-artifacts/screenshots/$route-1280.png"
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-qa-results
+          path: qa-artifacts
+          if-no-files-found: warn

@@ -37,12 +37,7 @@ export default function AppChrome({children}:{children:React.ReactNode}){
      <span>TỬ VI <em>ĐẨU SỐ</em><small>THƯ QUÁN PHƯƠNG ĐÔNG</small></span>
     </Link>
     <nav className="desktop-links" aria-label="Điều hướng chính">
-     <Link href="/" className={active('/')?'is-active':''}>Trang chủ</Link>
-     <Link href="/chart" className={active('/chart')?'is-active':''}>Lá số</Link>
-     <Link href="/thien-ky" className={active('/thien-ky')?'is-active':''}>Thiên Kỷ</Link>
-     <Link href="/dia-ky" className={active('/dia-ky')?'is-active':''}>Địa Kỷ</Link>
-     <Link href="/nhan-ky" className={active('/nhan-ky')?'is-active':''}>Nhân Kỷ</Link>
-     <Link href="/library" className={active('/library')?'is-active':''}>Thư viện</Link>
+     {sections.map(s=><Link key={s.href} href={s.href} aria-current={path===s.href?'page':undefined} className={active(s.href)?'is-active':''}>{s.label}</Link>)}
     </nav>
     <div className="header-utilities">
      <button type="button" className="theme-switch" aria-label={theme==='dark'?'Chuyển sang chế độ sáng':'Chuyển sang chế độ tối'} onClick={toggle} title="Đổi giao diện">{theme==='dark'?'☀':'☾'}</button>
@@ -53,7 +48,7 @@ export default function AppChrome({children}:{children:React.ReactNode}){
    {open&&<nav className="mobile-site-menu" id="mobile-site-menu" aria-label="Menu toàn website">
      <div className="site-wrap">
       <p className="eyebrow" style={{padding:'12px 2px'}}>KHÁM PHÁ THƯ QUÁN</p>
-      {mobileSections.map(s=><Link key={s.href} href={s.href} aria-current={active(s.href)?'page':undefined} className={active(s.href)?'is-active':''}>{s.label}<span aria-hidden="true">→</span></Link>)}
+      {mobileSections.map(s=><Link key={s.href} href={s.href} aria-current={path===s.href?'page':undefined} className={active(s.href)?'is-active':''}>{s.label}<span aria-hidden="true">→</span></Link>)}
       <div className="menu-caption">Tri thức truyền thống dành cho mục đích văn hóa và tham khảo.</div>
      </div>
     </nav>}
@@ -68,7 +63,7 @@ export default function AppChrome({children}:{children:React.ReactNode}){
    <div className="site-wrap footer-bottom"><span>© 2026 Tử Vi Đẩu Số · Định hướng nghiên cứu cổ học</span><span>Không thay thế tư vấn y tế, pháp lý hoặc tài chính</span></div>
   </footer>
   <nav className="bottom-nav" aria-label="Điều hướng nhanh trên điện thoại">
-   {quick.map(q=><Link key={q.href} href={q.href} aria-current={active(q.href)?'page':undefined} className={active(q.href)?'active':''}>
+   {quick.map(q=><Link key={q.href} href={q.href} aria-current={path===q.href?'page':undefined} className={active(q.href)?'active':''}>
      <span className="bottom-symbol" aria-hidden="true">{q.symbol}</span><span>{q.label}</span>
    </Link>)}
   </nav>
