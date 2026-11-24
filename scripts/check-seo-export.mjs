@@ -17,13 +17,13 @@ for(const f of files){
  const tags=[...head.matchAll(/<(?:link|meta)\b[^>]*>/gi)].map(m=>attrs(m[0]));
  const canonical=tags.filter(t=>t.rel==='canonical');
  assert.equal(canonical.length,1,f+' canonical count');
- assert.equal(canonical[0].href,base+(normalized==='/'?'/':normalized),f+' canonical');
+ assert.equal(new URL(canonical[0].href).href,new URL(normalized,base).href,f+' canonical');
  const title=head.match(/<title>([\s\S]*?)<\/title>/i)?.[1];
  assert.ok(title,f+' title');assert.ok(!titles.has(title),f+' duplicate title');titles.add(title);
  for(const key of ['description','og:title','og:description','og:url','og:image','twitter:card','twitter:title','twitter:description','twitter:image']){
   assert.ok(tags.some(t=>(t.name===key||t.property===key)&&t.content),f+' '+key);
  }
- assert.equal(tags.find(t=>t.property==='og:url')?.content,canonical[0].href,f+' OG URL');
+ assert.equal(new URL(tags.find(t=>t.property==='og:url').content).href,new URL(canonical[0].href).href,f+' OG URL');
  for(const a of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)){
   const t=attrs(a[1]);if(t.href?.startsWith('/')&&!t.href.startsWith('//'))assert.ok(!a[2].includes('↗'),f+' internal arrow '+t.href);
   if(t.href?.startsWith('/')&&!t.href.startsWith('//'))internalLinks.push({file:f,href:t.href});
@@ -34,7 +34,7 @@ for(const f of files){
  if(normalized==='/library'||normalized.startsWith('/library/')||['/privacy','/terms'].includes(normalized)){
   const bc=schemas.find(x=>x['@type']==='BreadcrumbList');
   assert.ok(bc,f+' breadcrumb schema');
-  assert.equal(bc.itemListElement.at(-1).item,canonical[0].href,f+' breadcrumb destination');
+  assert.equal(new URL(bc.itemListElement.at(-1).item).href,new URL(canonical[0].href).href,f+' breadcrumb destination');
   assert.ok(bc.itemListElement.every((x,i)=>x.position===i+1),f+' breadcrumb order');
  }
  const banners=[...html.matchAll(/<header\b[^>]*class="[^"]*\bglobal-header\b[^"]*"/g)];
