@@ -9,6 +9,7 @@ import type { BirthInfo, LunarInfo, Star, Palace, DaXian, DaXianSiHua, ZiweiChar
 import { BRANCHES, STEMS } from './constants';
 import { schoolStarBrightness, type BrightnessSchool, SCHOOL_NAME_TO_ID, SCHOOL_STAR_ID_TO_NAME } from './school-data';
 import { SCHOOL_AX } from './school-tables.generated';
+import {starId,palaceId,siHuaId,brightnessId} from './identity';
 import { DEFAULT_LEAP_MONTH } from './school-config';
 // 飞星派工具仅供导出，不再在排盘时调用（倪师《天纪 03》：四化星永远固定不动）
 // import { detectSelfSihua, getSiHuaByStem } from './sihua';
@@ -737,11 +738,15 @@ export function generateChart(
     return {
       ...p,
       name: palaceName,
+      id: palaceId(p.name) ?? palaceId(palaceName),
       borrowedFromName: p.borrowedFromName ? (CN_TO_VI_PALACE[p.borrowedFromName] ?? p.borrowedFromName) : undefined,
       borrowedStars: p.borrowedStars?.map(s => translateStarCnToVi(s)),
       stars: p.stars.map(s => ({
         ...s,
         name: translateStarCnToVi(s.name),
+        id: starId(s.name),
+        siHuaId: siHuaId(s.siHua),
+        brightnessId: brightnessId(s.brightnessRaw),
         siHua: s.siHua ? (CN_TO_VI_SIHUA[s.siHua] ?? s.siHua) : undefined,
         brightnessRaw: s.brightnessRaw ? (CN_TO_VI_BRIGHTNESS[s.brightnessRaw] ?? s.brightnessRaw) : undefined,
       })),

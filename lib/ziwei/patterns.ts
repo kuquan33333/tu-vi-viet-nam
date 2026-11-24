@@ -18,6 +18,7 @@
 import 'server-only';
 import type { ZiweiChart, Palace, Star, SiHua } from './types';
 import { SCHOOL_NAME_TO_ID, SCHOOL_STAR_ID_TO_NAME } from './school-data';
+import {starId,palaceId,siHuaId,PalaceId} from './identity';
 import { translateStarCnToVi, CN_TO_VI_PALACE } from './algorithm';
 
 // ────────────────── 类型 ──────────────────
@@ -48,7 +49,7 @@ const KUI_YUE = ['Thiên Khôi', 'Thiên Việt', '天魁', '天钺'];
 // Use the stable numeric star IDs already defined by school-data at the boundary.
 // Unknown names retain their exact identity; do not collapse unrelated minor stars.
 function starKey(name: string): number | string {
-  return SCHOOL_NAME_TO_ID[name] ?? SCHOOL_NAME_TO_ID[translateStarCnToVi(name)] ?? translateStarCnToVi(name);
+  return starId(name) ?? starId(translateStarCnToVi(name)) ?? translateStarCnToVi(name);
 }
 function matchStarName(starName: string, queryName: string): boolean {
   return starKey(starName) === starKey(queryName);
@@ -112,13 +113,8 @@ function isDim(palace: Palace, starName: string): boolean {
   return s?.brightness === 'dim';
 }
 export function isSiHua(starSiHua: string | undefined, target: 'Lộc' | 'Quyền' | 'Khoa' | 'Kỵ' | '禄' | '权' | '科' | '忌'): boolean {
-  if (!starSiHua) return false;
-  const map: Record<string, string> = {
-    '禄': 'Lộc', '权': 'Quyền', '科': 'Khoa', '忌': 'Kỵ',
-    'Lộc': 'Lộc', 'Quyền': 'Quyền', 'Khoa': 'Khoa', 'Kỵ': 'Kỵ'
-  };
-  const targetVi = map[target] ?? target;
-  return map[starSiHua] === targetVi;
+  const a=siHuaId(starSiHua),b=siHuaId(target);
+  return a!==undefined&&a===b;
 }
 
 function getStarSiHua(palace: Palace, starName: string): Star['siHua'] | undefined {
@@ -910,7 +906,7 @@ function detectTianMaRuMing(chart: ZiweiChart, patterns: Pattern[]) {
 
 /** 化禄入财：财帛宫主星化禄 */
 function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
-  const cai = chart.palaces.find(p => p.name === 'Tài Bạch' || p.name === '财帛');
+  const cai = chart.palaces.find(p => (p.id ?? palaceId(p.name)) === PalaceId.Wealth);
   if (!cai) return;
   const luStar = cai.stars.find(s => s.type === 'major' && isSiHua(s.siHua, 'Lộc'));
   if (!luStar) return;
@@ -926,7 +922,7 @@ function detectHuaLuRuCai(chart: ZiweiChart, patterns: Pattern[]) {
 
 /** 化权入官：官禄宫主星化权 */
 function detectHuaQuanRuGuan(chart: ZiweiChart, patterns: Pattern[]) {
-  const guan = chart.palaces.find(p => p.name === 'Quan Lộc' || p.name === '官禄');
+  const guan = chart.palaces.find(p => (p.id ?? palaceId(p.name)) === PalaceId.Career);
   if (!guan) return;
   const quanStar = guan.stars.find(s => s.type === 'major' && isSiHua(s.siHua, 'Quyền'));
   if (!quanStar) return;
@@ -1100,6 +1096,7 @@ export const PATTERN_NAME_VI: Record<string, string> = {
   '机月同梁偏格': 'Cơ Nguyệt Đồng Lương Biến Cách',
   '机月同梁三星会': 'Cơ Nguyệt Đồng Lương – hội ba sao',
   '昌曲同会': 'Xương Khúc Đồng Hội',
+  '昌曲坐命': 'Xương Khúc Tọa Mệnh',
   '辅弼同会': 'Phụ Bật Đồng Hội',
   '魁钺同会': 'Khôi Việt Đồng Hội',
   '科权双会': 'Khoa Quyền Song Hội',
