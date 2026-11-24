@@ -246,3 +246,34 @@ button,a,select,input{touch-action:manipulation}
 @media(prefers-reduced-motion:reduce){
  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+/* Lịch Vạn Niên & Hợp Bàn */
+.calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px;flex-wrap:wrap}
+.calendar-toolbar .action-outline{min-width:38px;padding:9px 12px;min-height:38px}
+.calendar-month-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.calendar-week{text-align:center;color:var(--tx-3);font-weight:750;font-size:11px;padding:8px 0}
+.calendar-day{display:flex;min-width:0;min-height:77px;flex-direction:column;align-items:center;justify-content:start;gap:4px;background:var(--bg-card);border:1px solid var(--bdr);border-radius:10px;padding:9px 2px;cursor:pointer;color:var(--tx-0)}
+.calendar-day:hover{border-color:var(--ac)}
+.calendar-day.outside{opacity:.35}
+.calendar-day.today{border-color:var(--ac-bdr);background:var(--ac-bg)}
+.calendar-day.selected{background:var(--tx-0);color:var(--bg-0);border-color:var(--tx-0)}
+.calendar-day.selected .lunar-day,.calendar-day.selected .calendar-holiday{color:var(--bg-0)}
+.solar-day{font-size:17px;font-weight:800}
+.lunar-day{font-size:9px;color:var(--tx-3);white-space:nowrap}
+.calendar-holiday{font-size:8px;color:var(--ac-dim);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.calendar-facts{display:grid;gap:3px;margin:19px 0}
+.calendar-facts div{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--bdr);font-size:12px}
+.calendar-facts span{color:var(--tx-3)}
+.calendar-facts strong{color:var(--tx-0);text-align:right}
+.compare-forms .profile-box{min-width:0}
+.compare-forms .profile-box>div{max-width:100%}
+@media(max-width:700px){
+ .calendar-month-grid{gap:3px}
+ .calendar-day{min-height:64px;border-radius:7px;padding:7px 1px}
+ .solar-day{font-size:14px}
+ .lunar-day{font-size:8px}
+ .calendar-holiday{font-size:7px}
+ .calendar-toolbar .action-outline{font-size:11px;padding:6px 10px}
+ .profile-split{grid-template-columns:1fr}
+ .compare-forms[data-mobile-selected="A"] .compare-b{display:none}
+ .compare-forms[data-mobile-selected="B"] .compare-a{display:none}
+}
