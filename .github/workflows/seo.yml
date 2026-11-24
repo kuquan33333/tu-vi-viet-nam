@@ -74,6 +74,9 @@ jobs:
           "$RUNNER_TEMP/browser-qa/node_modules/.bin/playwright" install chromium
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" node scripts/check-browser-interaction.mjs
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" AXE_SCRIPT="$RUNNER_TEMP/browser-qa/node_modules/axe-core/axe.min.js" node scripts/check-v4-browser.mjs
+      - name: QA năm phân hệ chuyên sâu 360/1280
+        if: ${{ !cancelled() }}
+        run: PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" node scripts/check-five-systems-browser.mjs
       - name: Capture responsive screenshots
         if: always()
         run: |

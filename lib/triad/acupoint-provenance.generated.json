@@ -1,0 +1,2538 @@
+{
+  "date": "2026-11-24",
+  "catalogSource": "https://github.com/aicuc/3d-acupoint-atlas",
+  "referenceSource": "https://github.com/SciCrunch/TARA-Ontology-Repository/blob/master/curated-data/acupoints/acupoints.csv",
+  "pointCodeMatch": 361,
+  "variantReviewCount": 277,
+  "clinicallyVerifiedLocations": 0,
+  "note": "Codes checked against TARA. Chinese-name differences mostly represent traditional/simplified variant notation; each requires manual review. No source location descriptions copied; no clinical verification.",
+  "points": [
+    {
+      "code": "LU 1",
+      "name": "中府",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 2",
+      "name": "云门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 3",
+      "name": "天府",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 4",
+      "name": "侠白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 5",
+      "name": "尺泽",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 6",
+      "name": "孔最",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 7",
+      "name": "列缺",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 8",
+      "name": "经渠",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 9",
+      "name": "太渊",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 10",
+      "name": "鱼际",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LU 11",
+      "name": "少商",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 1",
+      "name": "商阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 2",
+      "name": "二间",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 3",
+      "name": "三间",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 4",
+      "name": "合谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 5",
+      "name": "阳溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 6",
+      "name": "偏历",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 7",
+      "name": "温溜",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 8",
+      "name": "下廉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 9",
+      "name": "上廉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 10",
+      "name": "手三里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 11",
+      "name": "曲池",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 12",
+      "name": "肘髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 13",
+      "name": "手五里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 14",
+      "name": "臂臑",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 15",
+      "name": "肩髃",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 16",
+      "name": "巨骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 17",
+      "name": "天鼎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 18",
+      "name": "扶突",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 19",
+      "name": "口禾髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LI 20",
+      "name": "迎香",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 1",
+      "name": "承泣",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 2",
+      "name": "四白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 3",
+      "name": "巨髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 4",
+      "name": "地仓",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 5",
+      "name": "大迎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 6",
+      "name": "颊车",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 7",
+      "name": "下关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 8",
+      "name": "头维",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 9",
+      "name": "人迎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 10",
+      "name": "水突",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 11",
+      "name": "气舍",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 12",
+      "name": "缺盆",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 13",
+      "name": "气户",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 14",
+      "name": "库房",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 15",
+      "name": "屋翳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 16",
+      "name": "膺窗",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 17",
+      "name": "乳中",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 18",
+      "name": "乳根",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 19",
+      "name": "不容",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 20",
+      "name": "承满",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 21",
+      "name": "梁门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 22",
+      "name": "关门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 23",
+      "name": "太乙",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 24",
+      "name": "滑肉门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 25",
+      "name": "天枢",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 26",
+      "name": "外陵",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 27",
+      "name": "大巨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 28",
+      "name": "水道",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 29",
+      "name": "归来",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 30",
+      "name": "气冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 31",
+      "name": "髀关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 32",
+      "name": "伏兔",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 33",
+      "name": "阴市",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 34",
+      "name": "梁丘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 35",
+      "name": "犊鼻",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 36",
+      "name": "足三里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 37",
+      "name": "上巨虚",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 38",
+      "name": "条口",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 39",
+      "name": "下巨虚",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 40",
+      "name": "丰隆",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 41",
+      "name": "解溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 42",
+      "name": "冲阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 43",
+      "name": "陷谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 44",
+      "name": "内庭",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "ST 45",
+      "name": "厉兑",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 1",
+      "name": "隐白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 2",
+      "name": "大都",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 3",
+      "name": "太白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 4",
+      "name": "公孙",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 5",
+      "name": "商丘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 6",
+      "name": "三阴交",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 7",
+      "name": "漏谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 8",
+      "name": "地机",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 9",
+      "name": "阴陵泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 10",
+      "name": "血海",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 11",
+      "name": "箕门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 12",
+      "name": "冲门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 13",
+      "name": "府舍",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 14",
+      "name": "腹结",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 15",
+      "name": "大横",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 16",
+      "name": "腹哀",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 17",
+      "name": "食窦",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 18",
+      "name": "天溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 19",
+      "name": "胸乡",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 20",
+      "name": "周荣",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SP 21",
+      "name": "大包",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 1",
+      "name": "极泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 2",
+      "name": "青灵",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 3",
+      "name": "少海",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 4",
+      "name": "灵道",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 5",
+      "name": "通里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 6",
+      "name": "阴郄",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 7",
+      "name": "神门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 8",
+      "name": "少府",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "HT 9",
+      "name": "少冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 1",
+      "name": "少泽",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 2",
+      "name": "前谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 3",
+      "name": "后溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 4",
+      "name": "腕骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 5",
+      "name": "阳谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 6",
+      "name": "养老",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 7",
+      "name": "支正",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 8",
+      "name": "小海",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 9",
+      "name": "肩贞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 10",
+      "name": "臑俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 11",
+      "name": "天宗",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 12",
+      "name": "秉风",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 13",
+      "name": "曲垣",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 14",
+      "name": "肩外俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 15",
+      "name": "肩中俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 16",
+      "name": "天窗",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 17",
+      "name": "天容",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 18",
+      "name": "颧髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "SI 19",
+      "name": "听宫",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 1",
+      "name": "睛明",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 2",
+      "name": "攒竹",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 3",
+      "name": "眉冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 4",
+      "name": "曲差",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 5",
+      "name": "五处",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 6",
+      "name": "承光",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 7",
+      "name": "通天",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 8",
+      "name": "络却",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 9",
+      "name": "玉枕",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 10",
+      "name": "天柱",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 11",
+      "name": "大杼",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 12",
+      "name": "风门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 13",
+      "name": "肺俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 14",
+      "name": "厥阴俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 15",
+      "name": "心俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 16",
+      "name": "督俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 17",
+      "name": "膈俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 18",
+      "name": "肝俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 19",
+      "name": "胆俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 20",
+      "name": "脾俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 21",
+      "name": "胃俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 22",
+      "name": "三焦俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 23",
+      "name": "肾俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 24",
+      "name": "气海俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 25",
+      "name": "大肠俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 26",
+      "name": "关元俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 27",
+      "name": "小肠俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 28",
+      "name": "膀胱俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 29",
+      "name": "中膂俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 30",
+      "name": "白环俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 31",
+      "name": "上髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 32",
+      "name": "次髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 33",
+      "name": "中髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 34",
+      "name": "下髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 35",
+      "name": "会阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 36",
+      "name": "承扶",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 37",
+      "name": "殷门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 38",
+      "name": "浮郄",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 39",
+      "name": "委阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 40",
+      "name": "委中",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 41",
+      "name": "附分",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 42",
+      "name": "魄户",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 43",
+      "name": "膏肓",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 44",
+      "name": "神堂",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 45",
+      "name": "譩譆",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 46",
+      "name": "膈关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 47",
+      "name": "魂门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 48",
+      "name": "阳纲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 49",
+      "name": "意舍",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 50",
+      "name": "胃仓",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 51",
+      "name": "肓门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 52",
+      "name": "志室",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 53",
+      "name": "胞肓",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 54",
+      "name": "秩边",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 55",
+      "name": "合阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 56",
+      "name": "承筋",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 57",
+      "name": "承山",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 58",
+      "name": "飞扬",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 59",
+      "name": "跗阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 60",
+      "name": "昆仑",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 61",
+      "name": "仆参",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 62",
+      "name": "申脉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 63",
+      "name": "金门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 64",
+      "name": "京骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 65",
+      "name": "束骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 66",
+      "name": "足通谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "BL 67",
+      "name": "至阴",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 1",
+      "name": "涌泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 2",
+      "name": "然谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 3",
+      "name": "太溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 4",
+      "name": "大钟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 5",
+      "name": "水泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 6",
+      "name": "照海",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 7",
+      "name": "复溜",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 8",
+      "name": "交信",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 9",
+      "name": "筑宾",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 10",
+      "name": "阴谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 11",
+      "name": "横骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 12",
+      "name": "大赫",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 13",
+      "name": "气穴",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 14",
+      "name": "四满",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 15",
+      "name": "中注",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 16",
+      "name": "肓俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 17",
+      "name": "商曲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 18",
+      "name": "石关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 19",
+      "name": "阴都",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 20",
+      "name": "腹通谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 21",
+      "name": "幽门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 22",
+      "name": "步廊",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 23",
+      "name": "神封",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 24",
+      "name": "灵墟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 25",
+      "name": "神藏",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 26",
+      "name": "彧中",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "KI 27",
+      "name": "俞府",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 1",
+      "name": "天池",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 2",
+      "name": "天泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 3",
+      "name": "曲泽",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 4",
+      "name": "郄门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 5",
+      "name": "间使",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 6",
+      "name": "内关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 7",
+      "name": "大陵",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 8",
+      "name": "劳宫",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "PC 9",
+      "name": "中冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 1",
+      "name": "关冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 2",
+      "name": "液门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 3",
+      "name": "中渚",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 4",
+      "name": "阳池",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 5",
+      "name": "外关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 6",
+      "name": "支沟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 7",
+      "name": "会宗",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 8",
+      "name": "三阳络",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 9",
+      "name": "四渎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 10",
+      "name": "天井",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 11",
+      "name": "清冷渊",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 12",
+      "name": "消泺",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 13",
+      "name": "臑会",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 14",
+      "name": "肩髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 15",
+      "name": "天髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 16",
+      "name": "天牖",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 17",
+      "name": "翳风",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 18",
+      "name": "瘈脉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 19",
+      "name": "颅息",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 20",
+      "name": "角孙",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 21",
+      "name": "耳门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 22",
+      "name": "耳和髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "TE 23",
+      "name": "丝竹空",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 1",
+      "name": "瞳子髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 2",
+      "name": "听会",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 3",
+      "name": "上关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 4",
+      "name": "颔厌",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 5",
+      "name": "悬颅",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 6",
+      "name": "悬厘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 7",
+      "name": "曲鬓",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 8",
+      "name": "率谷",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 9",
+      "name": "天冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 10",
+      "name": "浮白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 11",
+      "name": "头窍阴",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 12",
+      "name": "完骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 13",
+      "name": "本神",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 14",
+      "name": "阳白",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 15",
+      "name": "头临泣",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 16",
+      "name": "目窗",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 17",
+      "name": "正营",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 18",
+      "name": "承灵",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 19",
+      "name": "脑空",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 20",
+      "name": "风池",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 21",
+      "name": "肩井",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 22",
+      "name": "渊腋",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 23",
+      "name": "辄筋",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 24",
+      "name": "日月",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 25",
+      "name": "京门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 26",
+      "name": "带脉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 27",
+      "name": "五枢",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 28",
+      "name": "维道",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 29",
+      "name": "居髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 30",
+      "name": "环跳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 31",
+      "name": "风市",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 32",
+      "name": "中渎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 33",
+      "name": "膝阳关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 34",
+      "name": "阳陵泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 35",
+      "name": "阳交",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 36",
+      "name": "外丘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 37",
+      "name": "光明",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 38",
+      "name": "阳辅",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 39",
+      "name": "悬钟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 40",
+      "name": "丘墟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 41",
+      "name": "足临泣",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 42",
+      "name": "地五会",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 43",
+      "name": "侠溪",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GB 44",
+      "name": "足窍阴",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 1",
+      "name": "大敦",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 2",
+      "name": "行间",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 3",
+      "name": "太冲",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 4",
+      "name": "中封",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 5",
+      "name": "蠡沟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 6",
+      "name": "中都",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 7",
+      "name": "膝关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 8",
+      "name": "曲泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 9",
+      "name": "阴包",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 10",
+      "name": "足五里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 11",
+      "name": "阴廉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 12",
+      "name": "急脉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 13",
+      "name": "章门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "LR 14",
+      "name": "期门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 1",
+      "name": "长强",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 2",
+      "name": "腰俞",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 3",
+      "name": "腰阳关",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 4",
+      "name": "命门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 5",
+      "name": "悬枢",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 6",
+      "name": "脊中",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 7",
+      "name": "中枢",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 8",
+      "name": "筋缩",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 9",
+      "name": "至阳",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 10",
+      "name": "灵台",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 11",
+      "name": "神道",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 12",
+      "name": "身柱",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 13",
+      "name": "陶道",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 14",
+      "name": "大椎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 15",
+      "name": "哑门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 16",
+      "name": "风府",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 17",
+      "name": "脑户",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 18",
+      "name": "强间",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 19",
+      "name": "后顶",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 20",
+      "name": "百会",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 21",
+      "name": "前顶",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 22",
+      "name": "囟会",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 23",
+      "name": "上星",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 24",
+      "name": "神庭",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 25",
+      "name": "素髎",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 26",
+      "name": "水沟",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 27",
+      "name": "兑端",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "GV 28",
+      "name": "龈交",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 1",
+      "name": "会阴",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 2",
+      "name": "曲骨",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 3",
+      "name": "中极",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 4",
+      "name": "关元",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 5",
+      "name": "石门",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 6",
+      "name": "气海",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 7",
+      "name": "阴交",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 8",
+      "name": "神阙",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 9",
+      "name": "水分",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 10",
+      "name": "下脘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 11",
+      "name": "建里",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 12",
+      "name": "中脘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 13",
+      "name": "上脘",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 14",
+      "name": "巨阙",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 15",
+      "name": "鸠尾",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 16",
+      "name": "中庭",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 17",
+      "name": "膻中",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 18",
+      "name": "玉堂",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 19",
+      "name": "紫宫",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 20",
+      "name": "华盖",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 21",
+      "name": "璇玑",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 22",
+      "name": "天突",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 23",
+      "name": "廉泉",
+      "indexMatched": true,
+      "nameNeedsVariantReview": false,
+      "anatomicalLocationVerified": false
+    },
+    {
+      "code": "CV 24",
+      "name": "承浆",
+      "indexMatched": true,
+      "nameNeedsVariantReview": true,
+      "anatomicalLocationVerified": false
+    }
+  ]
+}

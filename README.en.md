@@ -17,9 +17,9 @@ The site is a **cultural and historical astrology research interface**, not a sc
 | Two-chart comparison (/hop-ban) | Offline 12-palace structural comparison using saved profiles or new birth data | Not a compatibility score or relationship prediction |
 | Profiles (/ho-so) | Up to 30 browser-local records, JSON import/export, delete and optional PIN-based Web Crypto encryption | JSON exports are **unencrypted**; no cloud sync or PIN recovery |
 | Vietnamese calendar (/lich-van-nien) | Vietnamese UTC+7 solar/lunar dates for 1900–2050, Can Chi, public/traditional dates, 24 solar terms, A4 print | Near-midnight historical boundaries remain uncertain; no inferred annual days off |
-| Tian Ji (/thien-ky) | 64 I Ching hexagrams, Chinese line texts with source notes, casting tool and basic Qimen earth plate | Vietnamese source-cleared translation is incomplete; **not** a complete time-based Qimen engine |
-| Di Ji (/dia-ky) | 24-direction compass, Eight Mansions and site checklist | No complete GIS or Flying Star geomancy engine |
-| Ren Ji (/nhan-ky) | 16 introductory articles, 14 meridians, 361 point codes, limited illustration and optional third-party 3D link | Not a verified medical atlas or full licensed classical text |
+| Tian Ji (/thien-ky) | Hourly rotating-plate Qimen (Chai Bu school) plus 64 I Ching judgement paraphrases and context essays | Other Qimen schools and scholarly translations of all 384 lines remain incomplete |
+| Di Ji (/dia-ky) | 24-direction compass, Eight Mansions, Xuan Kong three-layer Hạ quái chart, consent-based OSM location map and local floor-plan overlay | No cadastral GIS, alternative flying-star schools or on-site survey certification |
+| Ren Ji (/nhan-ky) | 16 introduction articles, 4 linked public-source classical manuscripts, 361 codes cross-checked with TARA, illustrative 2D/3D | 0/361 anatomical locations independently clinically verified; no complete licensed Vietnamese medical editions |
 | Library (/library) | 21 chapters across three collections and text search | Not a claim to every full edition |
 | Knowledge (/knowledge) | Introductory reference for 14 major stars | The original 182 dynamic topic pages are **excluded** from the static Pages export |
 
