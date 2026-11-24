@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {generateChart} from '../lib/ziwei/algorithm';
+import {compareCharts,getStudyReading,getSynastryFacts} from '../lib/ziwei/client-reading';
+import {solarToLunarVN} from '../lib/ziwei/lunar-solar';
+import type {BirthInfo} from '../lib/ziwei/types';
+const a:BirthInfo={year:1990,month:5,day:6,hour:4,gender:'male',name:'Bộ kiểm thử A'};
+const b:BirthInfo={year:1992,month:9,day:16,hour:7,gender:'female',name:'Bộ kiểm thử B'};
+const chartA=generateChart(a),chartB=generateChart(b);
+assert.equal(chartA.palaces.length,12,'A must have 12 palaces');
+assert.equal(chartB.palaces.length,12,'B must have 12 palaces');
+assert.equal(new Set(chartA.palaces.map(x=>x.branch)).size,12);
+assert.equal(new Set(chartB.palaces.map(x=>x.branch)).size,12);
+const chosen=chartA.palaces.find(x=>x.branch===chartA.mingGongBranch)!;
+const reading=getStudyReading(chartA,chosen);
+assert.equal(reading.fact.label,chosen.name);
+assert.equal(reading.trine.length,2);
+const pairs=compareCharts(chartA,chartB);
+assert.equal(pairs.length,12);
+assert(pairs.some(x=>x.name==='Mệnh'));
+assert(pairs.some(x=>x.name==='Phu Thê'));
+for(const p of pairs){assert(Array.isArray(p.a));assert(Array.isArray(p.b));assert(Array.isArray(p.shared));}
+const facts=getSynastryFacts(chartA,chartB);
+assert.equal(facts.rows.length,12);
+assert(solarToLunarVN(2026,11,24)!==null);
+console.log('✓ revamp: deterministic chart generation, 12-palace comparison, offline reading and lunar calendar.');
