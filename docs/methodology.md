@@ -67,3 +67,11 @@ Workflow source-audit.yml chỉ chạy khi script nguồn thay đổi trên qa/i
 ## E6 — tích hợp runtime QA (chưa phát hành)
 
 Sau khi bước adapter cô lập của run 45380118014 đã SUCCESS, tích hợp cùng provider qua package sinh cục bộ `iztro-vn-local` ở postinstall. Không sửa iztro/lunar-lite gốc hay thay dependency lock; giữ LICENSE MIT và fail nếu version khác 2.6.1/0.2.8. Negative control của run 45375452157 chứng minh 4 Tết legacy sai ngày âm/Mệnh theo UTC+7, test runtime mới giữ chứng cứ đó. `generateChart`, `getLunarInfo`, `resolveEffectiveLunarDate`, `solarToLunarVN`, `lunarToSolarVN` cùng lấy bảng UTC+7 cho 1900–2050. Tùy chọn nhuận split dùng quy tắc gốc iztro; prev/next/origin dùng override đồng bộ trong phạm vi một lần gọi, giữ nguyên ngày dương và reset finally. Ngày âm thật tách khỏi tháng quy an sao. Lịch trước 1900 và hồ sơ chỉ định legacy dùng engine cũ có nhãn. Các ngày biên tranh chấp được gắn calendarUncertain, chưa phân xử theo JPL. Giờ/ngày Can Chi và mốc tiết khí exact vẫn dùng upstream, không tuyên bố UTC+7 chính xác giây. CI và trình duyệt bản tích hợp mới chưa nghiệm thu ở lúc commit.
+
+### E6: kiểm chứng JPL và tích hợp lịch Việt Nam (24-11-2026)
+
+- Nguồn: JPL DE440s, Skyfield 1.53, UT1+7 cố định. Run 45380516366: thu phân 1938-09-23 23:59:27.128; sóc 1944-06-20 23:59:32.907; sóc 1967-07-08 00:00:04.106. Cả ba ủng hộ ngày trong bảng ứng viên. Không khẳng định tái dựng lịch hành chính từng vùng.
+- Run 45380118014: adapter cô lập iztro 2.6.1, 80 ca trọng điểm, 24 ca không đổi; 64 ca đối chiếu chính tinh với iztro gốc trên cùng ngày âm, 40 ca thay đổi so với lịch cũ. Giữ license MIT; package sinh từ lockfile, không sửa dependency gốc.
+- Runtime mới sử dụng cùng bảng cho lập lá số, hợp bàn, lịch vạn niên và lưu nhật tứ hóa. Hồ sơ cũ không có phiên bản giữ lịch cũ; hồ sơ mới lưu phiên bản. Ngày âm thực tế tách khỏi tháng an sao. Mốc tiết khí vẫn chỉ tham khảo.
+- Run 45380118181: kiểm thử tương tác bản trước tích hợp runtime ở 360/1280 đều đạt, không lỗi JS, không phát hiện tên sinh tổng hợp trong request (chặn mạng ngoài). Bản runtime cần kiểm thử lại.
+- GeoNames ADM2, run 45380516366: 696 địa danh, 338 khớp tên và tỉnh duy nhất, 10 nhập nhằng, 348 chưa khớp theo tiêu chí này. Không tự điền kinh độ từ kết quả chưa thẩm định. Dữ liệu CC BY 4.0; nguồn https://download.geonames.org/export/dump/VN.zip.

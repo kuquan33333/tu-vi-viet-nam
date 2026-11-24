@@ -8,7 +8,8 @@
  * 论断正文仍按倪师；本模块供排盘叠层使用。
  */
 
-import { Lunar } from 'lunar-javascript';
+import { Lunar,Solar } from 'lunar-javascript';
+import {lunarToSolarVN} from './lunar-solar';
 import type { ZiweiChart, Palace, SiHua } from './types';
 import { SI_HUA_TABLE, STEMS } from './constants';
 import { CHILDHOOD_DAXIAN_INDEX, getChildhoodDaXianPalace } from './yunxian-context';
@@ -163,7 +164,10 @@ export function getLiuRiSiHua(
   try {
     const monthKey = isLeapMonth ? -Math.abs(lunarMonth) : Math.abs(lunarMonth);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const lunar = (Lunar as any).fromYmd(lunarYear, monthKey, lunarDay) as { getDayGan(): string };
+    const vn=lunarYear>=1899&&lunarYear<=2050;
+    const solar=vn?lunarToSolarVN(lunarYear,lunarMonth,lunarDay,isLeapMonth):null;
+    if(vn&&!solar)return null;
+    const lunar = (solar?Solar.fromYmd(solar.year,solar.month,solar.day).getLunar():(Lunar as any).fromYmd(lunarYear, monthKey, lunarDay)) as { getDayGan(): string };
     const dayGan = String(lunar.getDayGan?.() ?? '');
     const stemIndex = STEMS_CN.indexOf(dayGan) >= 0 ? STEMS_CN.indexOf(dayGan) : STEMS.indexOf(dayGan);
     if (stemIndex < 0) return null;

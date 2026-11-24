@@ -45,3 +45,12 @@ test('E6 historical disagreement is explicit; famous pre-1900 fixtures remain le
  }
  assert.equal(generateChart({year:1753,month:5,day:5,hour:6,gender:'male'}).birthInfo.calendarVersion,'legacy-cn');
 });
+
+import {getLiuRiSiHua} from '../../lib/ziwei/sihua';
+import {Solar} from 'lunar-javascript';
+import {STEMS_CN} from '../../lib/ziwei/algorithm';
+test('E6 daily transformations follow real VN Gregorian date',()=>{
+ const expected=STEMS_CN.indexOf(Solar.fromYmd(1985,3,21).getLunar().getDayGan());
+ assert.ok(expected>=0);assert.equal(getLiuRiSiHua(1985,2,1,true)?.stemIndex,expected);
+ assert.equal(getLiuRiSiHua(1985,2,31,true),null);
+});

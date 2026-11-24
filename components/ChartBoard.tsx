@@ -171,7 +171,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           })()}
 
           <div className="text-[8px] text-center leading-relaxed" style={{ color: 'var(--t-faint)', opacity: 0.85 }}>
-            Âm lịch: {chart.lunarInfo.lunarDay}/{chart.lunarInfo.isLeapMonth ? 'Nhuận ' : ''}{chart.lunarInfo.lunarMonth}/{chart.lunarInfo.lunarYear}
+            Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth ? 'Nhuận ' : ''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}
           </div>
         </motion.div>
 

@@ -22,7 +22,7 @@ export default function ChartPage(){
  useEffect(()=>{
   const queued=takeQueuedProfile();if(!queued)return;
   try {
-   const next=generateChart(queued.birth);
+   const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});
    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
   } catch {setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.');}
  },[]);
@@ -75,6 +75,7 @@ export default function ChartPage(){
     </div>
    </div>
    {feedback&&<p role="status" className="study-notice" style={{marginBottom:14}}>{feedback}</p>}
+   <p className="study-notice">{chart.birthInfo.calendarVersion==='legacy-cn'?'Hồ sơ dùng lịch cũ (không tự đổi kết quả đã lưu). Chọn Lập lại nếu muốn tính theo lịch Việt Nam UTC+7.':'Lịch Việt Nam UTC+7 · ngày âm thực tế hiển thị riêng với quy tắc an sao tháng nhuận.'} {chart.birthInfo.calendarUncertain||''}</p>
    <div className="workspace-toolbar workspace-surface" style={{padding:'11px 15px'}}>
     <TimeNav chart={chart} view={view} liunianYear={year} onViewChange={setView} onYearChange={setYear}/>
    </div>

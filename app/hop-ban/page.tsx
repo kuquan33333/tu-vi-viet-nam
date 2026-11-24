@@ -83,7 +83,7 @@ export default function HemingPage(){
       const c=chart as ZiweiChart;return <div key={label as string} className="surface-card profile-box">
        <div className="eyebrow">LÁ SỐ {label as string}</div><h2>{chartLabel(c.birthInfo)}</h2>
        <p className="workspace-note">Mệnh tại cung {c.palaces.find(p=>p.branch===c.mingGongBranch)?.name} · {c.wuxingJuName}</p>
-       <p className="workspace-note">Cung Mệnh tại chi {BRANCHES[c.mingGongBranch]}</p>
+       <p className="workspace-note">Cung Mệnh tại chi {BRANCHES[c.mingGongBranch]}</p><p className="workspace-note">Lịch {c.birthInfo.calendarVersion==='legacy-cn'?'cũ':'Việt Nam UTC+7'} · {c.birthInfo.calendarUncertain||''}</p>
        <div className="reading-pills">{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=><span key={s.name}>{s.name}</span>)}</div>
       </div>;
     })}

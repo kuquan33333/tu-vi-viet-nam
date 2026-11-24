@@ -447,7 +447,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
               </select>
             </div>
             <div>
-              <input type="number" inputMode="numeric" aria-label="Năm âm lịch" min={1900} max={Math.min(2050,new Date().getFullYear())} placeholder="Năm âm" value={lunarYear} onChange={e=>handleLunarDateChange(e.target.value,lunarMonth,lunarDay,isLeapMonth)} style={inputStyle} required/>
+              <input type="number" inputMode="numeric" aria-label="Năm âm lịch" min={1899} max={Math.min(2050,new Date().getFullYear())} placeholder="Năm âm" value={lunarYear} onChange={e=>handleLunarDateChange(e.target.value,lunarMonth,lunarDay,isLeapMonth)} style={inputStyle} required/>
             </div>
           </div>
         )}
@@ -527,7 +527,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
       {form.province==='Tỉnh Quảng Trị'&&form.city&&y>=1900&&y<=1975&&currentCityData?.isSouthOf17thParallel===undefined&&<label style={{display:'block',margin:'10px 0'}}>Vị trí lịch sử so với sông Bến Hải<select aria-label="Khu vực lịch sử" value={form.historicalRegion||''} onChange={e=>setForm({...form,historicalRegion:e.target.value?e.target.value as BirthRegion:undefined})} style={inputStyle}><option value="">Chưa xác định</option><option value="north">Phía Bắc</option><option value="south">Phía Nam</option></select></label>}
       {civil&&civil.offsets.length>1&&<div className="study-notice" role="alert"><p>Giờ này xuất hiện hai lần trong lịch sử. Chọn múi giờ đã xác nhận từ hồ sơ:</p>{civil.offsets.map(offset=><label key={offset} style={{display:'block'}}><input type="radio" checked={chosen===offset} onChange={()=>{setChosenKey(civilKey);setChosenOffset(offset);}}/> UTC{offset>=0?'+':''}{offset/60}</label>)}</div>}
-      <p className="study-notice">Lịch âm hiện tại chưa đạt đối chiếu UTC+7 toàn phạm vi; lá số tại các ngày khác biệt cần kiểm tra theo lịch Việt Nam trước khi sử dụng.</p>
+      <p className="study-notice">Ngày âm sử dụng lịch Việt Nam UTC+7 (1900–2050); các quy ước giờ sinh và lịch lịch sử vẫn cần đối chiếu hồ sơ thực tế.</p>
       {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}
       {/* ── Banner cảnh báo đổi múi giờ lịch sử Việt Nam ── */}
       {historicalTz && historicalTz.deltaMinutes !== 0 && (

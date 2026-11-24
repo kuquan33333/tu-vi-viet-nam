@@ -55,6 +55,16 @@ try{
   await goto('/ho-so');await page.getByRole('heading',{name:/QA-BIRTH-UNIQUE/}).waitFor();
   await page.getByRole('button',{name:/Xem lá số/}).click();
   await page.getByLabel('Bàn lá số 12 cung').waitFor();
+  await goto('/lich-van-nien');
+  await page.getByLabel('Năm tra cứu').selectOption('1985');
+  await page.getByLabel('Tháng tra cứu').selectOption('1');
+  await page.getByRole('gridcell',{name:'21/1/1985',exact:true}).click();
+  await page.getByText('1/1/1985',{exact:true}).waitFor();
+  await page.getByText('Ất Sửu',{exact:true}).waitFor();
+  await goto('/chart');await fillNormal(page);await fillDate(page,'1985','1','21');
+  await page.getByRole('button',{name:/LẬP LÁ SỐ TỬ VI/}).click();
+  await page.getByLabel('Bàn lá số 12 cung').waitFor();
+  await page.getByText(/Âm lịch: 1\/1\/1985/).waitFor();
   await goto('/hop-ban');
   const a=page.locator('.compare-a'),b=page.locator('.compare-b');
   await fillNormal(a);
