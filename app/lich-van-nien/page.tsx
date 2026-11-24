@@ -21,9 +21,24 @@ export default function CalendarPage(){
  },[year,month]);
  const lunar=useMemo(()=>solarToLunarVN(selected.getFullYear(),selected.getMonth()+1,selected.getDate()),[selected]);
  const ganZhi=useMemo(()=>{
-  try{const l=Solar.fromYmd(selected.getFullYear(),selected.getMonth()+1,selected.getDate()).getLunar();
-   return {year:l.getYearInGanZhi(),month:l.getMonthInGanZhi(),day:l.getDayInGanZhi(),term:l.getJieQi()};
-  }catch{return null;}
+  try {
+   const l=Solar.fromYmd(selected.getFullYear(),selected.getMonth()+1,selected.getDate()).getLunar();
+   // lunar-javascript exposes Gan/Zhi methods under version-specific names.
+   // Resolve conservatively; never fabricate values if the current build lacks them.
+   const object=l as unknown as Record<string,unknown>;
+   const call=(name:string):string => {
+    const fn=object[name];if(typeof fn!=='function')return '';
+    try{const value=(fn as (this:typeof l)=>unknown).call(l);return typeof value==='string'?value:'';}
+    catch{return '';}
+   };
+   const pair=(composite:string,gan:string,zhi:string)=>call(composite)||(call(gan)+call(zhi))||'—';
+   return {
+    year:pair('getYearInGanZhi','getYearGan','getYearZhi'),
+    month:pair('getMonthInGanZhi','getMonthGan','getMonthZhi'),
+    day:pair('getDayInGanZhi','getDayGan','getDayZhi'),
+    term:call('getJieQi')||call('getJie')||call('getQi')
+   };
+  } catch{return null;}
  },[selected]);
  function shift(n:number){
   const d=date(year,month+n,1);if(d.getFullYear()<1900||d.getFullYear()>2050)return;
@@ -66,7 +81,7 @@ export default function CalendarPage(){
      <div><span>Năm Can Chi</span><strong>{ganZhi?.year||'—'}</strong></div>
      <div><span>Tháng Can Chi</span><strong>{ganZhi?.month||'—'}</strong></div>
      <div><span>Ngày Can Chi</span><strong>{ganZhi?.day||'—'}</strong></div>
-     <div><span>Tiết khí đúng ngày</span><strong>{ganZhi?.term||'Không phải ngày giao tiết'}</strong></div>
+     <div><span>Tiết khí tham khảo</span><strong>{ganZhi?.term||'Không phải ngày giao tiết'}</strong></div>
     </div>
     <div className="study-notice">Can Chi và tiết khí hiển thị theo bộ lịch hiện có của dự án; tại thời điểm chuyển tiết cần đối chiếu nguồn lịch pháp chuyên môn.</div>
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
