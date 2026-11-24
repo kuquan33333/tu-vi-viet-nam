@@ -5,6 +5,27 @@ import {Solar} from 'lunar-javascript';
 import {solarToLunarVN} from '@/lib/ziwei/lunar-solar';
 const DAYS=['T2','T3','T4','T5','T6','T7','CN'];
 const HOLIDAYS:Record<string,string>={'1-1':'Tết Dương lịch','4-30':'Ngày Giải phóng miền Nam','5-1':'Quốc tế Lao động','9-2':'Quốc khánh'};
+const STEM_CN=[...'甲乙丙丁戊己庚辛壬癸'];
+const BRANCH_CN=[...'子丑寅卯辰巳午未申酉戌亥'];
+const STEM_VI=['Giáp','Ất','Bính','Đinh','Mậu','Kỷ','Canh','Tân','Nhâm','Quý'];
+const BRANCH_VI=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+function ganZhiVi(v:string|undefined){
+ if(!v||v==='—')return '—';
+ return [...v].map(ch=>{
+  const si=STEM_CN.indexOf(ch);if(si>=0)return STEM_VI[si];
+  const zi=BRANCH_CN.indexOf(ch);if(zi>=0)return BRANCH_VI[zi];
+  return ch;
+ }).join(' ');
+}
+const TERMS_VI:Record<string,string>={
+ '立春':'Lập xuân','雨水':'Vũ thủy','惊蛰':'Kinh trập','驚蟄':'Kinh trập','春分':'Xuân phân',
+ '清明':'Thanh minh','谷雨':'Cốc vũ','穀雨':'Cốc vũ','立夏':'Lập hạ','小满':'Tiểu mãn','小滿':'Tiểu mãn',
+ '芒种':'Mang chủng','芒種':'Mang chủng','夏至':'Hạ chí','小暑':'Tiểu thử','大暑':'Đại thử',
+ '立秋':'Lập thu','处暑':'Xử thử','處暑':'Xử thử','白露':'Bạch lộ','秋分':'Thu phân',
+ '寒露':'Hàn lộ','霜降':'Sương giáng','立冬':'Lập đông','小雪':'Tiểu tuyết','大雪':'Đại tuyết',
+ '冬至':'Đông chí','小寒':'Tiểu hàn','大寒':'Đại hàn'
+};
+
 const date=(y:number,m:number,d:number)=>new Date(y,m-1,d);
 export default function CalendarPage(){
  const today=new Date();
@@ -78,10 +99,10 @@ export default function CalendarPage(){
     <h2 className="display-small" style={{fontSize:30,margin:'10px 0'}}>{selected.toLocaleDateString('vi-VN')}</h2>
     <p className="lead">Âm lịch: <strong>{lunar?(lunar.lunarDay+'/'+lunar.lunarMonth+'/'+lunar.lunarYear+(lunar.isLeapMonth?' (tháng nhuận)':'')):'—'}</strong></p>
     <div className="calendar-facts">
-     <div><span>Năm Can Chi</span><strong>{ganZhi?.year||'—'}</strong></div>
-     <div><span>Tháng Can Chi</span><strong>{ganZhi?.month||'—'}</strong></div>
-     <div><span>Ngày Can Chi</span><strong>{ganZhi?.day||'—'}</strong></div>
-     <div><span>Tiết khí tham khảo</span><strong>{ganZhi?.term||'Không phải ngày giao tiết'}</strong></div>
+     <div><span>Năm Can Chi</span><strong>{ganZhiVi(ganZhi?.year)}</strong></div>
+     <div><span>Tháng Can Chi</span><strong>{ganZhiVi(ganZhi?.month)}</strong></div>
+     <div><span>Ngày Can Chi</span><strong>{ganZhiVi(ganZhi?.day)}</strong></div>
+     <div><span>Tiết khí tham khảo</span><strong>{ganZhi?.term?(TERMS_VI[ganZhi.term]||ganZhi.term):'Không có mốc giao tiết'}</strong></div>
     </div>
     <div className="study-notice">Can Chi và tiết khí hiển thị theo bộ lịch hiện có của dự án; tại thời điểm chuyển tiết cần đối chiếu nguồn lịch pháp chuyên môn.</div>
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
