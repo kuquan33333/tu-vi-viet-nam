@@ -116,8 +116,9 @@ Rủi ro test cũ: `pan-integrity.test.ts` so sánh tên cung Hán với kết q
 ### Lần audit mới
 - Node v22.16.0, npm 10.9.2 trong container.
 - git ls-remote https://github.com/kuquan33333/tu-vi-viet-nam.git HEAD: fatal: Could not resolve host: github.com. GitHub API đọc được nhưng không thể clone/cài gói từ mạng bằng terminal.
+- npm ping --registry=https://registry.npmjs.org --fetch-retries=0 --fetch-timeout=5000: exit 1, EAI_AGAIN registry.npmjs.org (không phân giải DNS).
 - npm install, npm run typecheck, npm test, npm run build: chưa chạy mới tại container vì không có checkout và phụ thuộc. Không chạy npm tại thư mục không phải dự án.
-- CI: workflow đã bổ sung typecheck/test/triad/V2/build raw và static. Chưa có kết quả của nhánh audit tại thời điểm ghi báo cáo. Không ghi “CI xanh” khi chưa nhận log.
+- CI: workflow đã bổ sung typecheck/test/triad/V2/build raw và static. PR nháp #1: https://github.com/kuquan33333/tu-vi-viet-nam/pull/1 (base revamp-v2, head qa/audit-baseline-v2). API Actions truy vấn commit 683c664e9639dfe62ddf84284ac7af1bfda24786 và danh sách runs theo nhánh đều trả 0 runs; combined status không có status. Chưa có log kiểm thử mới; không ghi “CI xanh”.
 - Không có thay đổi sản phẩm, nên không có ảnh “sau” khác ảnh “trước”.
 
 ## Lighthouse mobile và giao diện
