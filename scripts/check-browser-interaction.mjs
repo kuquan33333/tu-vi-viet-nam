@@ -73,7 +73,7 @@ try{
   await fillNormal(a);
   if(width===360)await page.getByRole('button',{name:/Người thứ hai/}).click();
   await fillNormal(b);
-  await page.getByRole('button',{name:/Phân tích cấu trúc hai lá số/}).click();
+  await page.getByRole('button',{name:/Đối chiếu hai lá số/}).click();
   await page.getByRole('heading',{name:'Báo cáo đối chiếu 12 cung'}).waitFor();
   await page.screenshot({path:'qa-artifacts/interaction/hop-ban-'+width+'.png',fullPage:true});
   await goto('/chart');

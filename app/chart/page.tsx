@@ -8,7 +8,7 @@ import {generateChart} from '@/lib/ziwei/algorithm';
 import {uncertainBirthOptions} from '@/lib/ziwei/share';
 import {STAR_DESCRIPTIONS,BRANCHES} from '@/lib/ziwei/constants';
 import {chartLabel,getPalaceFact,getStudyReading,READING_NOTICE} from '@/lib/ziwei/client-reading';
-import {saveProfile,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
+import {saveProfiles,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
 import type {BirthInfo,ZiweiChart,Palace,Star} from '@/lib/ziwei/types';
 
 export default function ChartPage(){
@@ -36,10 +36,10 @@ export default function ChartPage(){
    window.scrollTo({top:0,behavior:'smooth'});
   }catch{setFeedback('Chưa tính được lá số với dữ liệu vừa nhập. Hãy kiểm tra ngày và giờ sinh.');}
  }
- function save(){
+ async function save(){
   if(!chart)return;
-  try {saveProfile(chart.birthInfo);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
-  catch {setFeedback('Không lưu được. Trình duyệt có thể đang chặn bộ nhớ hoặc đã hết dung lượng.');}
+  try {await saveProfiles([chart.birthInfo]);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
+  catch(e) {setFeedback(e instanceof Error?e.message:'Không lưu được hồ sơ.');}
  }
  async function copy(){
   if(!chart)return;
