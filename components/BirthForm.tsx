@@ -6,6 +6,7 @@ import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES } from '@/lib/ziwei/cities';
+import {birthLocationsForProvince,searchBirthplaces,birthRegion,type BirthRegion} from '@/lib/ziwei/legacy-birthplaces';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
 import { lunarToSolarVN, solarToLunarVN } from '@/lib/ziwei/lunar-solar';
 import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
@@ -27,6 +28,7 @@ export interface BirthFormState {
   lateZishi?: 'next-day' | 'current-day';
   utcOffsetMinutes?: number;
   civilTimeIssue?: string;
+  historicalRegion?: BirthRegion;
   calendarType?: 'solar' | 'lunar';
   isLeapMonth?: boolean;
 }
@@ -76,14 +78,14 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     trueSolar: initialData?.trueSolar ?? true,
     lateZishi: initialData?.lateZishi ?? 'next-day',
     utcOffsetMinutes: initialData?.utcOffsetMinutes,
+    historicalRegion: initialData?.historicalRegion,
     gender: initialData?.gender ?? 'male',
     calendarType: initialData?.calendarType ?? 'solar',
     isLeapMonth: initialData?.isLeapMonth ?? false,
   });
 
   const [locationQuery,setLocationQuery]=useState('');
-  const normalized=(value:string)=>value.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
-  const locationMatches=locationQuery.trim()?PROVINCES.flatMap(p=>p.cities.filter(c=>normalized(p.name+' '+c.name).includes(normalized(locationQuery.trim()))).map(c=>({p,c}))).slice(0,20):[];
+  const locationMatches=useMemo(()=>searchBirthplaces(locationQuery),[locationQuery]);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
@@ -91,8 +93,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
 
   const cityList = useMemo(() => {
-    const prov = PROVINCES.find(p => p.name === form.province);
-    return prov ? prov.cities : [];
+    return birthLocationsForProvince(form.province);
   }, [form.province]);
 
   const currentProvince = useMemo(() => {
@@ -100,29 +101,31 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   }, [form.province]);
 
   const currentCityData = useMemo(() => {
-    return currentProvince?.cities.find(c => c.name === form.city);
-  }, [currentProvince, form.city]);
+    return cityList.find(c => c.name === form.city);
+  }, [cityList, form.city]);
 
-  const isSouth = currentCityData?.isSouthOf17thParallel ?? currentProvince?.isSouthOf17thParallel ?? false;
+  const region=birthRegion(form.province,form.city,form.historicalRegion);
+  const isSouth=region??false;
 
   // ─── Kiểm tra múi giờ lịch sử Việt Nam ───────────────────────────
   const y = parseInt(form.year, 10) || 0;
   const m = parseInt(form.month, 10) || 0;
   const d = parseInt(form.day, 10) || 0;
+  const regionMissing=form.province==='Tỉnh Quảng Trị'&&Boolean(form.city)&&y>=1900&&y<=1975&&region===undefined;
 
   const historicalTz = useMemo(() => {
-    if (form.province==='Nước ngoài'||!form.province||!form.city||!m||!d) return null;
+    if (regionMissing||form.province==='Nước ngoài'||!form.province||!form.city||!m||!d) return null;
     return getHistoricalTzPeriod(y, m, d, isSouth);
-  }, [y, m, d, isSouth,form.province,form.city]);
+  }, [y, m, d, isSouth,form.province,form.city,regionMissing]);
 
   // Keep the original local civil clock and its date. Apply the historical UTC offset once in solarPreview.
-  const civil = form.province && form.province!=='Nước ngoài' && form.city && y>=1900 && m && d && !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' ? resolveHistoricalCivilTime(y,m,d,Number(form.clockHour),Number(form.clockMinute),Number(form.clockSecond||0),isSouth) : null;
+  const civil = !regionMissing && form.province && form.province!=='Nước ngoài' && form.city && y>=1900 && m && d && !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' ? resolveHistoricalCivilTime(y,m,d,Number(form.clockHour),Number(form.clockMinute),Number(form.clockSecond||0),isSouth) : null;
   const [chosenOffset,setChosenOffset]=useState<number|undefined>(undefined);
   const civilKey=[form.province,form.city,y,m,d,form.clockHour,form.clockMinute,form.clockSecond].join('|');
   const [chosenKey,setChosenKey]=useState('');
   const chosen=chosenKey===civilKey?chosenOffset:undefined;
   const actualOffset=civil?.offsets.length===1?civil.offsets[0]:civil?.offsets.includes(chosen??NaN)?chosen:undefined;
-  const civilTimeIssue=civil?.offsets.length===0?'Giờ địa phương này không tồn tại do đổi múi giờ. Hãy kiểm tra lại giờ sinh.':civil&&actualOffset===undefined?'Giờ địa phương này lặp lại khi đổi múi giờ; cần chọn múi giờ ghi nhận.':civil?.uncertain?'Mốc chuyển giờ tháng 10/1954 tại miền Bắc chưa có ngày chính xác; chưa thể lập lá số chắc chắn với quy đổi tự động.':'';
+  const civilTimeIssue=regionMissing?'Cần xác định phía Bắc hoặc Nam sông Bến Hải theo nơi sinh lịch sử; không tự chọn múi giờ.':civil?.offsets.length===0?'Giờ địa phương này không tồn tại do đổi múi giờ. Hãy kiểm tra lại giờ sinh.':civil&&actualOffset===undefined?'Giờ địa phương này lặp lại khi đổi múi giờ; cần chọn múi giờ ghi nhận.':civil?.uncertain?'Mốc chuyển giờ tháng 10/1954 tại miền Bắc chưa có ngày chính xác; chưa thể lập lá số chắc chắn với quy đổi tự động.':'';
   const effectiveForm = {...form,utcOffsetMinutes:form.province==='Nước ngoài'?form.utcOffsetMinutes:actualOffset??historicalTz?.actualOffsetMinutes??420,civilTimeIssue};
   const preview = !civilTimeIssue && Number.isFinite(form.longitude) && !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' && form.year && form.month && form.day && form.province && form.city ? solarPreview(effectiveForm) : null;
   const branch=preview?.branch;
@@ -209,13 +212,13 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     : '';
 
   const handleProvince = (prov: string) => {
-    setForm({ ...form, province: prov, city: '', longitude: NaN,utcOffsetMinutes:undefined });
+    setForm({ ...form, province: prov, city: '', longitude: NaN,utcOffsetMinutes:undefined,historicalRegion:undefined });
   };
 
   const handleCity = (cityName: string) => {
     const prov = PROVINCES.find(p => p.name === form.province);
     const cityData = prov?.cities.find(c => c.name === cityName);
-    setForm({ ...form, city: cityName, longitude: cityData?.longitude ?? NaN });
+    setForm({ ...form, city: cityName, longitude: cityData?.longitude ?? NaN,historicalRegion:undefined });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -459,7 +462,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </label>
         <div className="form-term-note">Chân Thái Dương Thời <TermTooltip term="Chân Thái Dương Thời" /></div>
         <input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>
-        {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,utcOffsetMinutes:undefined});setLocationQuery('');}}>{c.name} · {p.name}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
+        {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <select
             value={form.province}
@@ -490,7 +493,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           </select>}
         </div>
         {form.province==='Nước ngoài'&&<label>Múi giờ UTC tại thời điểm sinh (giờ)<input type="number" step="0.25" min={-12} max={14} value={form.utcOffsetMinutes===undefined?'':form.utcOffsetMinutes/60} onChange={e=>setForm({...form,utcOffsetMinutes:e.target.value===''?undefined:Number(e.target.value)*60})} style={inputStyle}/></label>}
-        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value)})} style={inputStyle}/></details>}
+        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'||currentCityData?.requiresLongitude?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value)})} style={inputStyle}/></details>}
         <AnimatePresence mode="wait">
           {form.province ? (
             <motion.p
@@ -516,6 +519,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </AnimatePresence>
       </div>
 
+      {form.province==='Tỉnh Quảng Trị'&&form.city&&y>=1900&&y<=1975&&currentCityData?.isSouthOf17thParallel===undefined&&<label style={{display:'block',margin:'10px 0'}}>Vị trí lịch sử so với sông Bến Hải<select aria-label="Khu vực lịch sử" value={form.historicalRegion||''} onChange={e=>setForm({...form,historicalRegion:e.target.value?e.target.value as BirthRegion:undefined})} style={inputStyle}><option value="">Chưa xác định</option><option value="north">Phía Bắc</option><option value="south">Phía Nam</option></select></label>}
       {civil&&civil.offsets.length>1&&<div className="study-notice" role="alert"><p>Giờ này xuất hiện hai lần trong lịch sử. Chọn múi giờ đã xác nhận từ hồ sơ:</p>{civil.offsets.map(offset=><label key={offset} style={{display:'block'}}><input type="radio" checked={chosen===offset} onChange={()=>{setChosenKey(civilKey);setChosenOffset(offset);}}/> UTC{offset>=0?'+':''}{offset/60}</label>)}</div>}
       <p className="study-notice">Lịch âm hiện tại chưa đạt đối chiếu UTC+7 toàn phạm vi; lá số tại các ngày khác biệt cần kiểm tra theo lịch Việt Nam trước khi sử dụng.</p>
       {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}

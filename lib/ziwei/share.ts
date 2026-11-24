@@ -102,6 +102,7 @@ export function formToSearchParams(form: BirthFormState): URLSearchParams {
   if(form.trueSolar===false)p.set('ts','0');
   if(form.lateZishi==='current-day')p.set('zi','same');
   if(form.utcOffsetMinutes!==undefined)p.set('tz',String(form.utcOffsetMinutes));
+  if(form.historicalRegion)p.set('hr',form.historicalRegion);
   p.set('g', form.gender === 'male' ? 'm' : 'f');
   return p;
 }
@@ -127,6 +128,7 @@ export function searchParamsToForm(params: URLSearchParams): Partial<BirthFormSt
     province: params.get('p') || '',
     city: params.get('c') || '',
     longitude: longitudeParam!==null&&longitudeParam.trim()!==''?Number(longitudeParam):known??NaN,
+    historicalRegion:params.get('hr')==='north'?'north':params.get('hr')==='south'?'south':undefined,
     trueSolar:params.get('ts')!=='0',
     lateZishi:params.get('zi')==='same'?'current-day':'next-day',
     utcOffsetMinutes:params.has('tz')?Number(params.get('tz')):undefined,
