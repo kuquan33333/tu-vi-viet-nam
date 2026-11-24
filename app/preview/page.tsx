@@ -85,9 +85,9 @@ export default function PreviewPage() {
             letterSpacing: '0.1em',
             display: 'flex', gap: '20px',
           }}>
-            <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Trang Chủ ↗</Link>
+            <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Trang Chủ →</Link>
             <span>·</span>
-            <Link href="/chart" style={{ color: 'inherit', textDecoration: 'none' }}>An Lá Số</Link>
+            <Link href="/chart" style={{ color: 'inherit', textDecoration: 'none' }}>Lập lá số</Link>
             <span>·</span>
             <Link href="/hop-ban" style={{ color: 'inherit', textDecoration: 'none' }}>Hợp Bàn</Link>
           </div>

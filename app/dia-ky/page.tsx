@@ -204,7 +204,7 @@ export default function DiaKyPage(){
    {tab==='compass'?<CompassPanel/>:tab==='battrach'?<BattrachPanel/>:<LandPanel/>}
    <div className="study-card" style={{marginTop:16}}>
     <h2>Nguồn tham khảo và phương pháp</h2>
-    <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
+    <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noopener noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
     <p>Một cung hướng cát theo phong thủy không đồng nghĩa nhà ở đạt yêu cầu an toàn hay hợp pháp. Công cụ không tự đánh giá “long mạch”, không thay thế bản đồ đo đạc.</p>
    </div>
    <footer className="study-footer">Địa Kỷ · Công cụ tham khảo văn hóa, kiến trúc và địa lý. Không dùng làm căn cứ pháp lý, địa chính hoặc xây dựng.</footer>

@@ -277,3 +277,18 @@ button,a,select,input{touch-action:manipulation}
  .compare-forms[data-mobile-selected="A"] .compare-b{display:none}
  .compare-forms[data-mobile-selected="B"] .compare-a{display:none}
 }
+
+/* Đợt 3: điều hướng duy nhất và hub công cụ. */
+.global-header .header-inner{gap:16px}
+.global-header .desktop-links{gap:1px}
+.global-header .desktop-links a{padding:9px 8px}
+.study-section-nav{border-bottom:1px solid var(--bdr);background:var(--bg-card)}
+.study-section-nav .study-nav{justify-content:center;min-height:0;padding:8px 0}
+.study-section-nav .study-links{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
+.tool-hub-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tool-hub-card{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:24px;text-decoration:none;color:var(--tx-0)}
+.tool-hub-card h2{font-size:20px;font-weight:700}.tool-hub-card p{color:var(--tx-2);line-height:1.6}.tool-hub-card .section-link{margin-top:auto}
+@media(max-width:1100px){.global-header .desktop-links a{padding:8px 5px;font-size:11px}.global-header .header-inner{gap:10px}}
+@media(max-width:1000px){.global-header .desktop-links{display:none}.global-header .mobile-menu-button{display:grid}.global-header .header-utilities{margin-left:auto}}
+@media(max-width:760px){.tool-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-hub-card{padding:16px}.tool-hub-card h2{font-size:17px}}
+@media(max-width:370px){.tool-hub-grid{grid-template-columns:1fr}.global-header .header-inner{gap:6px}.global-header .header-cta{display:none}}
