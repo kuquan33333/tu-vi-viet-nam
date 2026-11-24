@@ -300,6 +300,7 @@ export function getLunarInfo(
   hour?: number,
   policy: LunarMonthPolicy = 'prev-month',
   useVN = year>=1900&&year<=2050,
+  birthClock?: Pick<BirthInfo,'origInput'|'timeConvention'>,
 ): LunarInfo {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
@@ -317,11 +318,31 @@ export function getLunarInfo(
   let fourPillars: [string, string, string, string] | undefined;
   let fourPillarsLunar: [string, string, string, string] | undefined;
   try {
-    // ★ 2026-09-01 立春/节气边界修正：节气四柱的年柱、月柱改用 getEightChar()（精确到立春/节的时刻）。
-    //   时刻用「时辰中点」(index*2 点)近似，与排盘既有的真太阳时时辰同口径；日柱/时柱不受立春影响、保持原算法。
+    // Giao tiết là một thời điểm thiên văn toàn cầu. Dùng giờ dân sự gốc
+    // và offset thực tế, không dùng giờ chân thái dương hoặc ngày đã quy Tý.
+    // lunar-javascript 1.7.7 tính mốc tiết khí ở UTC+8 (qiAccurate + 1/3 ngày).
+    // Chỉ quy đổi đầu vào cho trụ năm/tháng; ngày/giờ an sao giữ nguyên.
     const effHour = (hour !== undefined && hour >= 0 && hour <= 11) ? hour * 2 : 0;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ec = (Solar as any).fromYmdHms(year, month, day, effHour, 0, 0).getLunar().getEightChar();
+    let termClock = {year,month,day,hour:effHour,minute:0,second:0};
+    if (useVN) {
+      const original=birthClock?.origInput;
+      const offset=birthClock?.timeConvention?.utcOffsetMinutes;
+      if (original && typeof offset==='number' && Number.isFinite(offset)) {
+        const instant = Date.UTC(original.year,original.month-1,original.day,
+          original.clockHour,original.clockMinute,original.clockSecond??0)
+          +(480-offset)*60000;
+        const t = new Date(instant);
+        termClock={year:t.getUTCFullYear(),month:t.getUTCMonth()+1,day:t.getUTCDate(),
+          hour:t.getUTCHours(),minute:t.getUTCMinutes(),second:t.getUTCSeconds()};
+      } else {
+        // Dữ liệu chỉ có chi giờ: dùng giờ đại diện UTC+7, vẫn là xấp xỉ.
+        const t=new Date(Date.UTC(year,month-1,day,effHour+1));
+        termClock={year:t.getUTCFullYear(),month:t.getUTCMonth()+1,day:t.getUTCDate(),
+          hour:t.getUTCHours(),minute:0,second:0};
+      }
+    }
+    const ec = Solar.fromYmdHms(termClock.year,termClock.month,termClock.day,
+      termClock.hour,termClock.minute,termClock.second).getLunar().getEightChar();
     const yearGZ = translateGZ(ec.getYear() as string);    // 节气四柱年柱：立春精确换年
     const monthGZ = translateGZ(ec.getMonth() as string);  // 节气四柱月柱：节气精确换月 + 五虎遁用立春校正后的年干
     const dayGanRaw = String(lu.getDayGan?.() ?? '');
@@ -699,7 +720,7 @@ export function generateChart(
   if (yearStemCn) applySchoolKuiyue(rawPalaces, yearStemCn);
 
   // ── 农历信息（含节气四柱）──
-  const lunarInfo = getLunarInfo(year, month, day, hour, leapMode,useVN);
+  const lunarInfo = getLunarInfo(year, month, day, hour, leapMode,useVN,birthInfo);
 
   // ★ 2026-08-14 金标准盘核对：截空/副截阴干对调 + 年支大耗 + 旬空成对副旬
   applySchoolJiekong(rawPalaces, lunarInfo.yearStem);

@@ -22,3 +22,16 @@ test('E6: month pillar changes at actual Mang Chủng instant, not chi-hour midp
 test('E6: identical astronomical instant in two time zones has the same term pillars',()=>{
  assert.deepEqual(chartAt(2004,2,4,18,58,420,9),chartAt(2004,2,4,19,58,480,10));
 });
+
+test('E6: crossing the civil date in another time zone preserves the astronomical instant',()=>{
+ assert.deepEqual(chartAt(2004,2,4,18,58,420,9),chartAt(2004,2,5,1,58,840,1));
+});
+test('E6: original clock, not adjusted chart day, decides term year/month',()=>{
+ const b:BirthInfo={year:2004,month:2,day:5,hour:9,gender:'male',
+  origInput:{year:2004,month:2,day:4,clockHour:18,clockMinute:54},
+  timeConvention:{trueSolar:true,lateZishi:'next-day',utcOffsetMinutes:420}};
+ const a=generateChart(b),fallback=generateChart({...b,origInput:undefined});
+ assert.deepEqual(a.lunarInfo.fourPillars?.slice(0,2),['Quý Mùi','Ất Sửu']);
+ assert.deepEqual(a.lunarInfo.fourPillars?.slice(2),fallback.lunarInfo.fourPillars?.slice(2));
+ assert.deepEqual(a.palaces,fallback.palaces);
+});
