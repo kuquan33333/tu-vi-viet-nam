@@ -1,38 +1,32 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import { pageMetadata } from '@/lib/seo/metadata';
-export const metadata = pageMetadata({title:"Chính sách quyền riêng tư – Tử Vi Đẩu Số",description:"Tìm hiểu cách nền tảng xử lý và lưu trữ thông tin người dùng.",path:"/privacy"});
+import {pageMetadata} from '@/lib/seo/metadata';
+export const metadata=pageMetadata({title:'Chính sách quyền riêng tư – Tử Vi Đẩu Số',description:'Dữ liệu lá số được tính trên thiết bị, tùy chọn lưu hồ sơ cục bộ, PIN và quyền riêng tư của nguồn ngoài.',path:'/privacy'});
 
-export default function PrivacyPage() {
-  return (
-    <>
-      <Breadcrumb items={[{label:'Quyền riêng tư',href:'/privacy'}]} />
-      <main style={{ maxWidth: 800, margin: '0 auto', padding: '60px 24px 80px', color: 'var(--tx-1)', lineHeight: 1.8 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Chính Sách Quyền Riêng Tư</h1>
-        <p style={{ fontSize: 12, color: 'var(--tx-3)', marginBottom: 32 }}>Cập nhật lần cuối: Tháng 11 năm 2026</p>
+export default function PrivacyPage(){
+ return <>
+  <Breadcrumb items={[{label:'Quyền riêng tư',href:'/privacy'}]}/>
+  <main style={{maxWidth:800,margin:'0 auto',padding:'42px 24px 70px',color:'var(--tx-1)',lineHeight:1.85}}>
+   <h1 style={{fontSize:28,fontWeight:750,marginBottom:8}}>Chính sách quyền riêng tư</h1>
+   <p style={{fontSize:12,color:'var(--tx-3)',marginBottom:26}}>Cập nhật 24/11/2026 · Phạm vi website đang triển khai</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>1. Thu thập Thông tin</h2>
-        <p>Để an lập lá số Tử Vi Đẩu Số chuẩn xác, hệ thống chỉ thu thập các thông số cần thiết phục vụ tính toán:</p>
-        <ul style={{ paddingLeft: 24 }}>
-          <li>Họ và tên (không bắt buộc)</li>
-          <li>Ngày, tháng, năm sinh (Dương lịch hoặc Âm lịch)</li>
-          <li>Giờ, phút, giây sinh</li>
-          <li>Giới tính sinh học</li>
-          <li>Tỉnh/Thành phố nơi sinh (để lấy kinh độ tính Chân Thái Dương Thời)</li>
-        </ul>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>1. Dữ liệu bạn nhập</h2>
+   <p>Biểu mẫu có thể nhận tên (không bắt buộc), ngày và giờ sinh, quy ước nam/nữ của thuật số cổ truyền, nơi sinh, kinh độ và lựa chọn trường phái/giờ lịch sử. Việc lập lá số và đối chiếu hai lá số trong bản Pages tĩnh chạy trong trình duyệt, không gửi các giá trị sinh đó tới API AI.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>2. Lưu trữ và Bảo mật Cục bộ</h2>
-        <p>Thuật toán an sao Tử Vi Đẩu Số chạy hoàn toàn phía client (trong trình duyệt của bạn). Dữ liệu hồ sơ chỉ được lưu khi bạn chọn lưu. Có thể bật khóa PIN mã hóa AES-GCM; khi mở khóa, dữ liệu nằm trong bộ nhớ phiên của tab hiện tại. Tải lại trang sẽ khóa tab đó. PIN ngắn có thể bị dò ngoại tuyến, và mã hóa không chống được thiết bị đã bị xâm nhập.</p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>2. Lưu trên thiết bị</h2>
+   <p>Hồ sơ chỉ được lưu khi bạn bấm lưu; tối đa 30 hồ sơ tại một trình duyệt. Các mục dùng <code>localStorage</code> gồm hồ sơ, chế độ sáng/tối và dữ liệu gieo quẻ nếu bạn dùng tính năng lưu lịch sử; <code>sessionStorage</code> hỗ trợ mở hồ sơ vừa chọn. Dữ liệu không tự đồng bộ sang thiết bị khác.</p>
+   <p>Bạn có thể khóa kho hồ sơ bằng PIN 6–12 chữ số. Trình duyệt sử dụng Web Crypto với PBKDF2/SHA-256 và AES-256-GCM. Khóa giải mã chỉ được duy trì trong bộ nhớ phiên trang đã mở; tải lại sẽ khóa. PIN ngắn có thể bị dò khi người khác có bản mã; tính năng không bảo vệ máy bị chiếm quyền hoặc trang đã mở khóa.</p>
+   <p>Nếu không bật PIN, hồ sơ cục bộ được lưu dưới dạng dữ liệu đọc được. Nếu quên PIN, website không có cơ chế khôi phục kho đã mã hóa.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>3. Cookies & Bộ nhớ Cục bộ</h2>
-        <p>Nền tảng sử dụng localStorage để ghi nhớ chế độ giao diện sáng/tối và danh sách các lá số bạn chủ động lưu. Không tích hợp công cụ phân tích truy cập hoặc font từ máy chủ bên ngoài trong giao diện chính.</p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>3. Xuất, nhập và xóa</h2>
+   <p>Mục Hồ sơ hỗ trợ xuất/nhập JSON và xóa. <strong>Tệp JSON xuất ra là bản rõ, không được mã hóa</strong> ngay cả khi kho đang bật PIN: bạn cần tự bảo quản an toàn và không chia sẻ file có thông tin sinh nếu không cần thiết. Xóa dữ liệu của trình duyệt cũng có thể làm mất toàn bộ hồ sơ; không có bản sao máy chủ.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>4. Quyền của Người dùng</h2>
-        <p>Bạn có thể xuất/nhập bản sao JSON hoặc xóa hồ sơ tại mục Hồ sơ. Tệp JSON xuất ra không được mã hóa. Không thể khôi phục kho nếu quên PIN. Xóa dữ liệu trang web trong trình duyệt cũng làm mất hồ sơ; không có bản sao trên máy chủ.</p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>4. Tài nguyên và trang bên ngoài</h2>
+   <p>Ứng dụng chính không nhúng font hoặc thư viện theo dõi lượt xem bên ngoài. Khi bạn chủ động mở các công cụ tham khảo như Kỳ Môn hoặc atlas huyệt đạo 3D, trình duyệt có thể kết nối tới tên miền của tác giả; nhà cung cấp có thể nhận địa chỉ IP và dữ liệu kết nối theo chính sách của họ. Các liên kết nguồn GitHub cũng hoạt động theo chính sách website đích.</p>
+   <p>Cloudflare Pages và hạ tầng mạng vẫn có thể xử lý thông tin kỹ thuật cần thiết để phục vụ request, độc lập với dữ liệu sinh chỉ lưu cục bộ. Website không khẳng định không có bất kỳ nhật ký truy cập nào ở tầng hạ tầng.</p>
 
-        <p style={{ marginTop: 48, fontSize: 12, color: 'var(--tx-3)' }}>
-          <a href="/terms" style={{ color: 'var(--ac)' }}>Điều khoản Sử dụng</a> · <a href="/" style={{ color: 'var(--ac)' }}>Trang Chủ</a>
-        </p>
-      </main>
-    </>
-  );
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>5. Quyền kiểm soát</h2>
+   <p>Bạn có thể xem, xóa, xuất hoặc khóa dữ liệu đã lưu tại <a href="/ho-so">Hồ sơ</a>. Để xóa cả thiết lập giao diện và lịch sử cục bộ, hãy xóa dữ liệu của website trong cài đặt trình duyệt.</p>
+   <p style={{fontSize:12,color:'var(--tx-3)',marginTop:32}}>Tài liệu này mô tả hành vi mã nguồn bản phát hành hiện tại, không áp dụng cho website ngoài mà bạn tự truy cập.</p>
+  </main>
+ </>;
 }

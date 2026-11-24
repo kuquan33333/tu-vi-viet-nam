@@ -1,39 +1,32 @@
 import Breadcrumb from '@/components/Breadcrumb';
-import { pageMetadata } from '@/lib/seo/metadata';
-export const metadata = pageMetadata({title:"Điều khoản sử dụng – Tử Vi Đẩu Số",description:"Điều khoản sử dụng và phạm vi tham khảo của các công cụ cổ học.",path:"/terms"});
+import {pageMetadata} from '@/lib/seo/metadata';
+export const metadata=pageMetadata({title:'Điều khoản sử dụng – Tử Vi Đẩu Số',description:'Phạm vi sử dụng công cụ cổ học, trách nhiệm người dùng và giấy phép mã nguồn/dữ liệu.',path:'/terms'});
 
-export default function TermsPage() {
-  return (
-    <>
-      <Breadcrumb items={[{label:'Điều khoản sử dụng',href:'/terms'}]} />
-      <main style={{ maxWidth: 800, margin: '0 auto', padding: '60px 24px 80px', color: 'var(--tx-1)', lineHeight: 1.8 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, marginBottom: 8 }}>Điều Khoản Sử Dụng</h1>
-        <p style={{ fontSize: 12, color: 'var(--tx-3)', marginBottom: 32 }}>Cập nhật lần cuối: Tháng 5 năm 2026</p>
+export default function TermsPage(){
+ return <>
+  <Breadcrumb items={[{label:'Điều khoản sử dụng',href:'/terms'}]}/>
+  <main style={{maxWidth:800,margin:'0 auto',padding:'42px 24px 70px',color:'var(--tx-1)',lineHeight:1.85}}>
+   <h1 style={{fontSize:28,fontWeight:750,marginBottom:8}}>Điều khoản sử dụng</h1>
+   <p style={{fontSize:12,color:'var(--tx-3)',marginBottom:26}}>Cập nhật 24/11/2026 · Phạm vi bản website Cloudflare Pages</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>1. Giới thiệu Dịch vụ</h2>
-        <p>Nền tảng Tử Vi Đẩu Số cung cấp công cụ an sao và tra cứu mệnh lý dựa trên phương pháp luận của Thầy Nghê Hải Hạ trong giáo trình《Thiên Kỷ》và các bộ cổ thư kinh điển. Toàn bộ nội dung mệnh lý chỉ mang tính chất tham khảo chiêm nghiệm, <strong>không cấu thành bất kỳ lời khuyên y tế, đầu tư tài chính, pháp lý hay quyết định trọng đại mang tính bắt buộc nào</strong>.</p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>1. Phạm vi và mục đích</h2>
+   <p>Website cung cấp công cụ tra cứu và tìm hiểu Tử Vi Đẩu Số, Kinh Dịch, La Kinh, Bát Trạch, lịch pháp và một số tư liệu y học cổ truyền. Đây là nội dung văn hóa, học thuật và giải trí có ghi phương pháp, không phải hệ thống dự báo được kiểm chứng khoa học.</p>
+   <p>Không sử dụng kết quả của website thay cho quyết định dựa trên chứng cứ, hoặc tư vấn y tế, pháp lý, tài chính, xây dựng và những lĩnh vực cần chuyên gia có giấy phép.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>2. Quy chuẩn Người dùng</h2>
-        <p>Khi sử dụng nền tảng này, bạn đồng ý:</p>
-        <ul style={{ paddingLeft: 24 }}>
-          <li>Chỉ sử dụng nền tảng cho mục đích cá nhân, học tập, nghiên cứu hợp pháp.</li>
-          <li>Không sử dụng nội dung nền tảng để tuyên truyền mê tín dị đoan hoặc thương mại hóa bất hợp pháp.</li>
-          <li>Không thực hiện các hành vi gây cản trở hoặc phá hoại sự vận hành bình thường của hệ thống.</li>
-          <li>Chịu trách nhiệm về tính chuẩn xác của ngày giờ sinh cung cấp; hệ thống không chịu trách nhiệm về sai lệch phát sinh do nhập sai thông tin.</li>
-        </ul>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>2. Sự không chắc chắn và an toàn</h2>
+   <p>Kết quả lá số chịu ảnh hưởng của ngày âm, giờ sinh, kinh độ, quy tắc giờ Tý và phiên bản lịch. Những trường hợp giờ sinh chưa rõ, chuyển múi giờ lịch sử, tiết khí hoặc sóc gần nửa đêm có thể có nhiều cách xác định; phần mềm chỉ diễn giải theo phương pháp ghi trong tài liệu, không bảo đảm sự thật về cá nhân.</p>
+   <p>Nhân Kỷ không chẩn đoán bệnh, hướng dẫn châm cứu, kê đơn hoặc tự điều trị. Địa Kỷ không thay thế khảo sát địa chất, hồ sơ địa chính hay quy chuẩn xây dựng.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>3. Sở hữu Trí tuệ</h2>
-        <p style={{ background: 'rgba(184,146,42,0.06)', border: '1px solid rgba(184,146,42,0.2)', padding: 16, borderRadius: 8 }}>
-          Toàn bộ thiết kế giao diện, thuật toán an sao, bảng đối chiếu giờ lịch sử Việt Nam, cơ sở dữ liệu 34 tỉnh thành và các bản dịch nghĩa cổ thư trên nền tảng được biên soạn và bảo hộ quyền tác giả. Nghiêm cấm mọi hành vi sao chép trái phép với mục đích thương mại hoặc đảo ngược mã nguồn.
-        </p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>3. Mã nguồn, thư tịch và quyền sử dụng</h2>
+   <p>Mã nguồn thuộc phạm vi giấy phép <a href="https://github.com/kuquan33333/tu-vi-viet-nam/blob/revamp-v2/LICENSE" target="_blank" rel="noopener noreferrer">MIT của repository</a> có thể được sử dụng, sửa đổi, phân phối theo các điều khoản MIT. Website không đặt ra lệnh cấm chung với việc đọc, sửa đổi hoặc nghiên cứu mã nguồn hợp pháp.</p>
+   <p>Các tư liệu, bản ghi cổ thư, hình ảnh, dữ liệu huyệt đạo và nội dung do bên thứ ba cung cấp có giấy phép riêng. Một số tệp nghiên cứu trong <code>docs/tianji-ziwei/</code> thuộc CC BY-NC-SA 4.0, không phải MIT và có giới hạn phi thương mại; việc tái sử dụng cần kiểm tra đúng quyền của từng nguồn. Không mặc định mọi nội dung trang đều thuộc sở hữu độc quyền của website.</p>
 
-        <h2 style={{ fontSize: 18, marginTop: 32, marginBottom: 12 }}>4. Miễn trừ Trách nhiệm</h2>
-        <p>Thuật số Tử Vi Đẩu Số là di sản văn hóa cổ truyền. Vận mệnh con người chịu tác động của cả ba yếu tố Thiên - Địa - Nhân (Tiên thiên, Môi trường, Ý chí phấn đấu). Người dùng cần giữ thái độ khoa học, lý tính và tự chịu trách nhiệm về mọi quyết định cá nhân trong cuộc sống.</p>
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>4. Quyền riêng tư và dịch vụ bên ngoài</h2>
+   <p>Lá số và kho hồ sơ được xử lý cục bộ theo <a href="/privacy">Chính sách quyền riêng tư</a>. Việc chọn mở ứng dụng Kỳ Môn hoặc atlas 3D bên ngoài có thể tạo yêu cầu mạng tới nhà cung cấp đó; trang ngoài áp dụng chính sách riêng.</p>
 
-        <p style={{ marginTop: 48, fontSize: 12, color: 'var(--tx-3)' }}>
-          <a href="/privacy" style={{ color: 'var(--ac)' }}>Chính sách Quyền riêng tư</a> · <a href="/" style={{ color: 'var(--ac)' }}>Trang Chủ</a>
-        </p>
-      </main>
-    </>
-  );
+   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>5. Trách nhiệm người dùng</h2>
+   <p>Không dùng website để vi phạm pháp luật, xâm phạm quyền tác giả, xâm nhập trái phép hoặc phát tán thông tin cá nhân của người khác. Khi sử dụng lại mã nguồn hoặc nội dung, người dùng cần tuân thủ giấy phép áp dụng cho phần được sử dụng và các quy định liên quan.</p>
+   <p style={{fontSize:12,color:'var(--tx-3)',marginTop:32}}>Các điều khoản này mô tả phạm vi công cụ đang cung cấp; không phải ý kiến pháp lý cá biệt. Với tranh chấp quyền hoặc nội dung có nguồn không rõ, cần rà soát riêng trước khi khai thác thương mại.</p>
+  </main>
+ </>;
 }
