@@ -1,7 +1,9 @@
 /**
- * Chuyển đổi qua lại giữa Âm lịch và Dương lịch (bộ lịch legacy lunar-javascript; chưa đạt đối chiếu UTC+7).
+ * Lịch âm UTC+7 dùng chung cho form, lịch và lá số. Legacy chỉ dùng cho đối chiếu/hồ sơ cũ.
  */
 import { Lunar, LunarMonth, Solar } from 'lunar-javascript';
+import {candidateMonths,candidateSolarToLunar,candidateLunarToSolar,CANDIDATE_VERSION} from './vn-calendar-candidate';
+export {CANDIDATE_VERSION};
 
 export interface SolarDate {
   year: number;
@@ -27,7 +29,7 @@ function isIntInRange(value: unknown, min: number, max: number): value is number
  * Số ngày của một tháng Âm lịch (29 hoặc 30 ngày).
  * Nếu tháng đó không tồn tại (ví dụ: không có tháng nhuận đó) thì trả về 0.
  */
-export function lunarMonthDayCount(year: number, month: number, isLeapMonth = false): number {
+export function legacyLunarMonthDayCount(year: number, month: number, isLeapMonth = false): number {
   if (!isIntInRange(year, LUNAR_YEAR_MIN, LUNAR_YEAR_MAX) || !isIntInRange(month, 1, 12)) return 0;
   try {
     const lm = LunarMonth.fromYm(year, isLeapMonth ? -month : month);
@@ -61,8 +63,8 @@ export function isValidLunarDate(year: number, month: number, day: number, isLea
 /**
  * Chuyển đổi Âm lịch sang Dương lịch.
  */
-export function lunarToSolar(year: number, month: number, day: number, isLeapMonth = false): SolarDate | null {
-  if (!isValidLunarDate(year, month, day, isLeapMonth)) return null;
+export function legacyLunarToSolar(year: number, month: number, day: number, isLeapMonth = false): SolarDate | null {
+  if (!isIntInRange(day,1,30)||day>legacyLunarMonthDayCount(year,month,isLeapMonth)) return null;
   try {
     const solar = Lunar.fromYmd(year, isLeapMonth ? -month : month, day).getSolar();
     const result = { year: solar.getYear(), month: solar.getMonth(), day: solar.getDay() };
@@ -76,7 +78,7 @@ export function lunarToSolar(year: number, month: number, day: number, isLeapMon
 /**
  * Chuyển đổi Dương lịch sang Âm lịch.
  */
-export function solarToLunar(year: number, month: number, day: number): LunarDate | null {
+export function legacySolarToLunar(year: number, month: number, day: number): LunarDate | null {
   try {
     const solar = Solar.fromYmd(year, month, day);
     const lunar = solar.getLunar();
@@ -92,12 +94,19 @@ export function solarToLunar(year: number, month: number, day: number): LunarDat
   }
 }
 
-/**
- * Chuyển đổi Âm lịch sang Dương lịch qua alias tương thích cũ; chưa đạt chuẩn đối chiếu UTC+7.
- */
-export const lunarToSolarVN = lunarToSolar;
-
-/**
- * Chuyển đổi Dương lịch sang Âm lịch qua alias tương thích cũ; chưa đạt chuẩn đối chiếu UTC+7.
- */
-export const solarToLunarVN = solarToLunar;
+/** Fixed UTC+7, proleptic (not a reconstruction of each region's historic administrative calendar). */
+export function lunarMonthDayCount(year:number,month:number,isLeapMonth=false):number{
+ return candidateMonths.find(r=>r.year===year&&r.month===month&&r.leap===isLeapMonth)?.length??0;
+}
+export function solarToLunarVN(year:number,month:number,day:number):LunarDate|null{return candidateSolarToLunar(year,month,day);}
+export function lunarToSolarVN(year:number,month:number,day:number,isLeapMonth=false):SolarDate|null{return candidateLunarToSolar(year,month,day,isLeapMonth);}
+export const solarToLunar=solarToLunarVN;
+export const lunarToSolar=lunarToSolarVN;
+/** Dates still awaiting precision-source adjudication; never silently label as confirmed. */
+export function calendarUncertainty(year:number,month:number,day:number):string|undefined{
+ const k=year*10000+month*100+day;
+ if(k>=19380825&&k<=19381022)return 'Tháng nhuận 1938: các nguồn thiên văn chưa thống nhất ở mốc thu phân sát nửa đêm.';
+ if(k>=19440620&&k<=19440719)return 'Ngày sóc tháng 6/1944 sát nửa đêm UTC+7; các nguồn còn khác nhau.';
+ if(k>=19670707&&k<=19670806)return 'Ngày sóc tháng 7/1967 rất gần nửa đêm UTC+7; cần đối chiếu nguồn chính xác cao.';
+ return undefined;
+}

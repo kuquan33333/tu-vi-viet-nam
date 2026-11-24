@@ -1,5 +1,5 @@
 /**
- * QA ONLY: calendar provider for an isolated copy of iztro 2.6.1.
+ * Calendar provider for an isolated copy of iztro 2.6.1 (QA candidate).
  * The original lunar-lite and iztro packages remain untouched.
  * No network requests, no fake Gregorian birthdays.
  * See docs/methodology.md for unresolved UTC+7 boundary days.
@@ -9,8 +9,14 @@ const {candidateMonths,candidateSolarToLunar,candidateLunarToSolar}=require('./v
 const stems=[...'甲乙丙丁戊己庚辛壬癸'],branches=[...'子丑寅卯辰巳午未申酉戌亥'];
 const mod=(n,k)=>((n%k)+k)%k;
 const yearPair=y=>[stems[mod(y-4,10)],branches[mod(y-4,12)]];
+let override=null;
+function withEffectiveCalendarDate(date,lunar,fn){
+ const old=override;override={key:legacy.normalizeDateStr(date).slice(0,3).join('-'),lunar};
+ try{return fn();}finally{override=old;}
+}
 function candidate(date){
  const [y,m,d]=legacy.normalizeDateStr(date);
+ if(override&&override.key===[y,m,d].join('-'))return override.lunar;
  if(y<1900||y>2050)return null;
  const result=candidateSolarToLunar(y,m,d);
  if(!result)throw new RangeError('Invalid UTC+7 civil date');
@@ -53,4 +59,4 @@ function getHeavenlyStemAndEarthlyBranchBySolarDate(date,hour,options){
 function getHeavenlyStemAndEarthlyBranchByLunarDate(date,hour,leap,options={year:'normal',month:'exact'}){
  return getHeavenlyStemAndEarthlyBranchBySolarDate(lunar2solar(date,leap).toString(),hour,options);
 }
-module.exports={...legacy,solar2lunar,lunar2solar,getTotalDaysOfLunarMonth,getHeavenlyStemAndEarthlyBranchBySolarDate,getHeavenlyStemAndEarthlyBranchByLunarDate};
+module.exports={...legacy,withEffectiveCalendarDate,solar2lunar,lunar2solar,getTotalDaysOfLunarMonth,getHeavenlyStemAndEarthlyBranchBySolarDate,getHeavenlyStemAndEarthlyBranchByLunarDate};

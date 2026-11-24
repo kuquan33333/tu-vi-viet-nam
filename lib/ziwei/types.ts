@@ -10,6 +10,8 @@ export interface BirthInfo {
   city?: string;       // 出生城市
   timeConvention?: { trueSolar: boolean; lateZishi: 'next-day' | 'current-day'; utcOffsetMinutes: number };
   assumedHour?: boolean;
+  calendarVersion?: string;
+  calendarUncertain?: string;
   longitude?: number;  // 出生地经度（用于真太阳时校正）
   /**
    * 原始输入（用户在表单里实际填的时间），已知出生时间时始终保留。
@@ -28,6 +30,9 @@ export interface BirthInfo {
 }
 
 export interface LunarInfo {
+  rawDate?: {lunarYear:number;lunarMonth:number;lunarDay:number;isLeapMonth:boolean};
+  calendarVersion?: string;
+  calendarUncertain?: string;
   lunarYear: number;
   lunarMonth: number;    // positive = normal, negative = leap month
   lunarDay: number;

@@ -4,6 +4,9 @@
  */
 
 import { astro } from 'iztro';
+import { astro as vnAstro } from 'iztro-vn-local';
+import {withEffectiveCalendarDate} from 'iztro-vn-local/vn-adapter.cjs';
+import {solarToLunarVN,lunarMonthDayCount,calendarUncertainty,CANDIDATE_VERSION} from './lunar-solar';
 import { Solar, LunarMonth } from 'lunar-javascript';
 import type { BirthInfo, LunarInfo, Star, Palace, DaXian, DaXianSiHua, ZiweiChart, StarBrightness, SiHua } from './types';
 import { BRANCHES, STEMS } from './constants';
@@ -94,6 +97,7 @@ astro.config({
   yearDivide: 'normal',
   brightness: DEFAULT_BRIGHTNESS,
 });
+vnAstro.config({yearDivide:'normal',brightness:DEFAULT_BRIGHTNESS});
 
 // ─── 亮度流派切换（2026-05-12，金标准盘核对后引入）─────────────────────────
 // 默认 = 我们当前的自定义表（基于全书 + 金标准盘交叉验证）
@@ -221,6 +225,7 @@ export function resolveEffectiveLunarDate(
   month: number,
   day: number,
   policy: LunarMonthPolicy = 'prev-month',
+  useVN = year>=1900&&year<=2050,
 ): EffectiveLunarDate {
   // 闰月归属是字面量联合类型，但本函数可从运行时 JavaScript / JSON API 直接调用，
   // 类型形同虚设。拼错的 policy 原本会落进下方 if/else 链的尾部，静默按「归本月」
@@ -231,15 +236,18 @@ export function resolveEffectiveLunarDate(
       `leapMonth policy must be one of 'split' | 'next-month' | 'prev-month' | 'origin-month'; received ${String(policy)}`,
     );
   }
-  const lunar = Solar.fromYmd(year, month, day).getLunar();
-  const rawLunarMonth = Number(lunar.getMonth());
-  const rawLunarDay = Number(lunar.getDay());
+  const l=useVN?solarToLunarVN(year,month,day):null;
+  if(useVN&&!l)throw new RangeError('Ngày dương ngoài phạm vi lịch UTC+7 hoặc không hợp lệ.');
+  const lunar = l?null:Solar.fromYmd(year, month, day).getLunar();
+  const rawYear=l?.lunarYear??Number(lunar!.getYear());
+  const rawLunarMonth = l?(l.isLeapMonth?-l.lunarMonth:l.lunarMonth):Number(lunar!.getMonth());
+  const rawLunarDay = l?.lunarDay??Number(lunar!.getDay());
   const isRawLeapMonth = rawLunarMonth < 0;
   const absoluteMonth = Math.abs(rawLunarMonth);
 
   if (!isRawLeapMonth) {
     return {
-      lunarYear: Number(lunar.getYear()),
+      lunarYear: rawYear,
       lunarMonth: absoluteMonth,
       lunarDay: rawLunarDay,
       isLeapMonth: false,
@@ -248,7 +256,7 @@ export function resolveEffectiveLunarDate(
     };
   }
 
-  let lunarYear = Number(lunar.getYear());
+  let lunarYear = rawYear;
   let lunarMonth = absoluteMonth;
   let isLeapMonth = false;
 
@@ -270,8 +278,8 @@ export function resolveEffectiveLunarDate(
   let lunarDay = rawLunarDay;
   try {
     const monthKey = isLeapMonth ? -lunarMonth : lunarMonth;
-    const dayCount = LunarMonth.fromYm(lunarYear, monthKey)?.getDayCount?.();
-    if (typeof dayCount === 'number' && dayCount > 0 && lunarDay > dayCount) lunarDay = dayCount;
+    const dayCount = useVN?lunarMonthDayCount(lunarYear,lunarMonth,isLeapMonth):LunarMonth.fromYm(lunarYear, monthKey)?.getDayCount?.();
+    if ((!useVN||policy!=='split')&&typeof dayCount === 'number' && dayCount > 0 && lunarDay > dayCount) lunarDay = dayCount;
   } catch { /* 查不到月信息则保留原日，维持下游既有容错 */ }
 
   return {
@@ -291,10 +299,11 @@ export function getLunarInfo(
   day: number,
   hour?: number,
   policy: LunarMonthPolicy = 'prev-month',
+  useVN = year>=1900&&year<=2050,
 ): LunarInfo {
   const solar = Solar.fromYmd(year, month, day);
   const lunar = solar.getLunar();
-  const effective = resolveEffectiveLunarDate(year, month, day, policy);
+  const effective = resolveEffectiveLunarDate(year, month, day, policy,useVN);
   // lunar-javascript 没有 .d.ts，立春换年方法只在 runtime 上有，用 any 绕过
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lu = lunar as any;
@@ -302,8 +311,8 @@ export function getLunarInfo(
   // 注意：节气四柱(下方)用 getEightChar() 精确到立春/节的时刻，八字四柱永远立春换年，跟紫微的"农历年"是两套
   const yearGanRaw = String(lu.getYearGan?.() ?? '');
   const yearZhiRaw = String(lu.getYearZhi?.() ?? '');
-  const yearStem = STEMS_CN.indexOf(yearGanRaw) >= 0 ? STEMS_CN.indexOf(yearGanRaw) : STEMS.indexOf(yearGanRaw);
-  const yearBranch = BRANCHES_CN.indexOf(yearZhiRaw) >= 0 ? BRANCHES_CN.indexOf(yearZhiRaw) : BRANCHES.indexOf(yearZhiRaw);
+  const yearStem = useVN?((effective.lunarYear-4)%10+10)%10:STEMS_CN.indexOf(yearGanRaw) >= 0 ? STEMS_CN.indexOf(yearGanRaw) : STEMS.indexOf(yearGanRaw);
+  const yearBranch = useVN?((effective.lunarYear-4)%12+12)%12:BRANCHES_CN.indexOf(yearZhiRaw) >= 0 ? BRANCHES_CN.indexOf(yearZhiRaw) : BRANCHES.indexOf(yearZhiRaw);
   // ★ 节气四柱（年柱/月柱/日柱/时柱）+ 非节气四柱（农历口径月柱）
   let fourPillars: [string, string, string, string] | undefined;
   let fourPillarsLunar: [string, string, string, string] | undefined;
@@ -343,6 +352,9 @@ export function getLunarInfo(
   } catch { /* lunar-javascript 接口异常时跳过 */ }
 
   return {
+    rawDate: useVN?solarToLunarVN(year,month,day)??undefined:undefined,
+    calendarVersion:useVN?CANDIDATE_VERSION:'legacy-cn',
+    calendarUncertain:useVN?calendarUncertainty(year,month,day):undefined,
     lunarYear: effective.lunarYear,
     lunarMonth: effective.lunarMonth,
     lunarDay: effective.lunarDay,
@@ -571,12 +583,19 @@ export function generateChart(
   // 默认 = DEFAULT_LEAP_MONTH（2026-09-05 起 split：主流排盘默认口径「月中分界」，150 组金标准盘对照验证；倪师派归下月可经流派抽屉切 next-month）
   // 非 split 时先算农历，闰月才切 byLunar；非闰月仍走 bySolar，与 split 行为完全一致
   const leapMode = opts?.leapMonth ?? DEFAULT_LEAP_MONTH;
-  const effectiveLunar = resolveEffectiveLunarDate(year, month, day, leapMode);
+  const useVN=year>=1900&&year<=2050&&birthInfo.calendarVersion!=='legacy-cn';
+  const effectiveLunar = resolveEffectiveLunarDate(year, month, day, leapMode,useVN);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let astrolabe: any;
 
-  if (leapMode !== 'split' && effectiveLunar.rawLunarMonth < 0) {
+  if(useVN){
+    const date=[year,month,day].join('-');
+    if(effectiveLunar.rawLunarMonth<0&&leapMode!=='split'){
+      const effective={lunarYear:effectiveLunar.lunarYear,lunarMonth:effectiveLunar.lunarMonth,lunarDay:effectiveLunar.lunarDay,isLeapMonth:effectiveLunar.isLeapMonth};
+      astrolabe=withEffectiveCalendarDate(date,effective,()=>vnAstro.bySolar(date,hour,iztroGender,false,'zh-CN'));
+    }else astrolabe=vnAstro.bySolar(date,hour,iztroGender,true,'zh-CN');
+  } else if (leapMode !== 'split' && effectiveLunar.rawLunarMonth < 0) {
       // 闰月生人 → 按用户选项切换月份归属
       const lunarDateStr = `${effectiveLunar.lunarYear}-${effectiveLunar.lunarMonth}-${effectiveLunar.lunarDay}`;
       astrolabe = astro.byLunar(
@@ -596,6 +615,8 @@ export function generateChart(
   const chartBirthInfo = {
     ...birthInfo,
     leapMonthPolicy: leapMode,
+    calendarVersion:useVN?CANDIDATE_VERSION:'legacy-cn',
+    calendarUncertain:useVN?calendarUncertainty(year,month,day):undefined,
   } as BirthInfo & { leapMonthPolicy: LunarMonthPolicy };
 
   // ── 组装十二宫 ──
@@ -678,7 +699,7 @@ export function generateChart(
   if (yearStemCn) applySchoolKuiyue(rawPalaces, yearStemCn);
 
   // ── 农历信息（含节气四柱）──
-  const lunarInfo = getLunarInfo(year, month, day, hour, leapMode);
+  const lunarInfo = getLunarInfo(year, month, day, hour, leapMode,useVN);
 
   // ★ 2026-08-14 金标准盘核对：截空/副截阴干对调 + 年支大耗 + 旬空成对副旬
   applySchoolJiekong(rawPalaces, lunarInfo.yearStem);

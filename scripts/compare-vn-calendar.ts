@@ -2,7 +2,7 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
 import {resolve} from 'node:path';
 import assert from 'node:assert/strict';
-import {solarToLunarVN,lunarToSolarVN} from '../lib/ziwei/lunar-solar';
+import {legacySolarToLunar,legacyLunarToSolar,solarToLunarVN,lunarToSolarVN} from '../lib/ziwei/lunar-solar';
 import {candidateSolarToLunar} from '../lib/ziwei/vn-calendar-candidate';
 import {astro} from 'iztro';
 
@@ -23,18 +23,20 @@ async function main(){
  const chartProbe:unknown[]=[];
  for(let ts=start;ts<end;ts+=day){
   const dt=new Date(ts),y=dt.getUTCFullYear(),m=dt.getUTCMonth()+1,d=dt.getUTCDate(),key=dt.toISOString().slice(0,10);
-  const current=solarToLunarVN(y,m,d),r=LichTa.toLunar(d,m,y,7);
+  const current=legacySolarToLunar(y,m,d),r=LichTa.toLunar(d,m,y,7);
   assert.ok(current,key+' current returned null');assert.ok(r&&r.day>0&&r.month>0,key+' reference invalid');
   const ref={lunarYear:r.year,lunarMonth:r.month,lunarDay:r.day,isLeapMonth:r.isLeap};
   const a=[current.lunarYear,current.lunarMonth,current.lunarDay,Number(current.isLeapMonth)],b=[ref.lunarYear,ref.lunarMonth,ref.lunarDay,Number(ref.isLeapMonth)];
   total++;
   const cand=candidateSolarToLunar(y,m,d);assert.ok(cand,key+' candidate null');
+  assert.deepEqual(solarToLunarVN(y,m,d),cand,'Runtime and QA candidate differ '+key);
+  assert.deepEqual(lunarToSolarVN(cand.lunarYear,cand.lunarMonth,cand.lunarDay,cand.isLeapMonth),{year:y,month:m,day:d},'Runtime roundtrip '+key);
   const ca=[cand.lunarYear,cand.lunarMonth,cand.lunarDay,Number(cand.isLeapMonth)];
   if(ca.join(',')!==b.join(',')){candidateReferenceDiff++;candidateDiff.push(key+' '+ca.join('/')+' '+b.join('/'));}
   if(ca.join(',')!==a.join(','))candidateLegacyDiff++;
   if(a.join(',')!==b.join(','))diff.push([key,...a,...b].join(','));
   if(current.lunarYear>=1900&&current.lunarYear<=2050){
-   const back=lunarToSolarVN(current.lunarYear,current.lunarMonth,current.lunarDay,current.isLeapMonth);
+   const back=legacyLunarToSolar(current.lunarYear,current.lunarMonth,current.lunarDay,current.isLeapMonth);
    if(!back||back.year!==y||back.month!==m||back.day!==d)reverse.push([key,'current',back?JSON.stringify(back):'null'].join(','));
   }
   const refBack=LichTa.toSolar(r.day,r.month,r.year,r.isLeap,7);
