@@ -59,3 +59,7 @@ Run 45375709927 tại 34b95ad: 46 fixture Hán/Việt (mỗi fixture có kiểm 
 - Thêm kiểm tra tương tác Playwright trên bản static 360/1280: bỏ mặc định, tìm huyện cũ, giờ không rõ, lập/lưu/mở hồ sơ, Hợp bàn, giờ lịch sử lặp; chỉ dùng dữ liệu tổng hợp, chặn request ngoài localhost. Screenshot và JSON lưu artifact. Chưa ghi nhận kết quả của lượt mới tại lúc commit.
 
 - Run 45379930149 tái hiện TS7022 ở 4 biến local của audit adapter; thêm annotation rõ cho dữ liệu boundary/call của thư viện JS, không thay điều kiện test.
+
+## QA nguồn độ chính xác cao (không phải phụ thuộc sản phẩm)
+
+Workflow source-audit.yml chỉ chạy khi script nguồn thay đổi trên qa/integration-v3 hoặc được kích hoạt thủ công, để tránh tải lặp dữ liệu lớn. JPL DE440s tải từ https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp , dùng Skyfield 1.53 (https://rhodesmill.org/skyfield/api-almanac.html) tính ba mốc sát nửa đêm; dùng UT1 cho thời kỳ trước UTC, cộng +7 theo quy ước hồi chiếu. Ghi SHA256, phiên bản, thời gian và số giây cách nửa đêm; chưa xác nhận chạy thành công. GeoNames dump VN và admin1CodesASCII chỉ tìm ứng viên địa điểm ADM2 trùng tên huyện và tỉnh cũ; nguồn https://www.geonames.org/export/ và https://download.geonames.org/export/dump/ (CC BY). Không ghi tọa độ vào runtime nếu chưa thẩm định; có báo cáo ứng viên/trùng tên/không tìm được. Dữ liệu không chứa thông tin sinh của người dùng. Lỗi tải nguồn phải hiện ra trong workflow nghiên cứu, không được coi là dữ liệu xác minh.
