@@ -13,6 +13,16 @@ fs.writeFileSync(
   original.replace(marker, marker + "\n  output: 'export',\n  images: { unoptimized: true },"),
 );
 
+// Route metadata được export tĩnh theo yêu cầu Next.js 16.
+for (const route of ['app/robots.ts', 'app/sitemap.ts']) {
+  if (fs.existsSync(route)) {
+    const text = fs.readFileSync(route, 'utf8');
+    if (!text.includes("export const dynamic = 'force-static'")) {
+      fs.writeFileSync(route, "export const dynamic = 'force-static';\n" + text);
+    }
+  }
+}
+
 // API route không hỗ trợ khi build Next.js output: export.
 // Phần lập lá số vẫn chạy bằng thuật toán trong trình duyệt.
 fs.rmSync('app/api', { recursive: true, force: true });
