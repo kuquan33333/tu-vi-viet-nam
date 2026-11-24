@@ -7,11 +7,11 @@ function placementsFor(year: number, month = 5, day = 15) {
   const chart = generateChart({ year, month, day, hour: 11, gender: 'male', longitude: 120 });
   return chart.palaces.flatMap((palace) =>
     palace.stars
-      .filter((star) => star.name === '红鸾' || star.name === '天喜')
+      .filter((star) => star.name === 'Hồng Loan' || star.name === 'Thiên Hỷ')
       .map((star) => ({
         name: star.name,
         branch: BRANCHES[palace.branch],
-        palaceLabel: `${STEMS[palace.stem]}${BRANCHES[palace.branch]}`,
+        palaceLabel: `${STEMS[palace.stem]} ${BRANCHES[palace.branch]}`,
       })),
   );
 }
@@ -19,11 +19,11 @@ function placementsFor(year: number, month = 5, day = 15) {
 const placements = placementsFor(1974, 1, 28);
 
 assert.deepEqual(
-  placements.sort((a, b) => a.name.localeCompare(b.name, 'zh-CN')),
+  placements.sort((a, b) => a.name.localeCompare(b.name, 'vi')),
   [
-    { name: '天喜', branch: '未', palaceLabel: '辛未' },
-    { name: '红鸾', branch: '丑', palaceLabel: '丁丑' },
-  ].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN')),
+    { name: 'Thiên Hỷ', branch: 'Mùi', palaceLabel: 'Tân Mùi' },
+    { name: 'Hồng Loan', branch: 'Sửu', palaceLabel: 'Đinh Sửu' },
+  ].sort((a, b) => a.name.localeCompare(b.name, 'vi')),
   '甲寅年应按卯起子年逆数得到红鸾丑、天喜未；丁丑/辛未是所在宫完整干支',
 );
 
@@ -31,8 +31,8 @@ const representativeYears = [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 201
 for (let yearBranch = 0; yearBranch < 12; yearBranch += 1) {
   const year = representativeYears[yearBranch];
   const yearPlacements = placementsFor(year);
-  const hongluan = yearPlacements.filter((item) => item.name === '红鸾');
-  const tianxi = yearPlacements.filter((item) => item.name === '天喜');
+  const hongluan = yearPlacements.filter((item) => item.name === 'Hồng Loan');
+  const tianxi = yearPlacements.filter((item) => item.name === 'Thiên Hỷ');
   const expectedHongluan = (3 - yearBranch + 12) % 12;
   const expectedTianxi = (expectedHongluan + 6) % 12;
 

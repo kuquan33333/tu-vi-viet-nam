@@ -1,3 +1,4 @@
+import type {StarId,PalaceId,SiHuaId,BrightnessId} from './identity';
 export interface BirthInfo {
   year: number;      // Gregorian year（已经过子时换日修正后的"排盘日"）
   month: number;     // Gregorian month (1-12)
@@ -7,6 +8,8 @@ export interface BirthInfo {
   name?: string;
   province?: string;   // 出生省份
   city?: string;       // 出生城市
+  timeConvention?: { trueSolar: boolean; lateZishi: 'next-day' | 'current-day'; utcOffsetMinutes: number };
+  assumedHour?: boolean;
   longitude?: number;  // 出生地经度（用于真太阳时校正）
   /**
    * 原始输入（用户在表单里实际填的时间），已知出生时间时始终保留。
@@ -46,6 +49,9 @@ export type StarBrightness =
   | '庙' | '旺' | '得' | '利' | '平' | '不' | '闲' | '陷' | '地';
 
 export interface Star {
+  id?: StarId;
+  siHuaId?: SiHuaId;
+  brightnessId?: BrightnessId;
   name: string;
   type: 'major' | 'minor' | 'lucky' | 'sha';
   siHua?: SiHua;
@@ -61,6 +67,7 @@ export interface SelfSihuaMark {
 }
 
 export interface Palace {
+  id?: PalaceId;
   branch: number;      // 0-11 (地支索引)
   stem: number;        // 0-9 (天干索引)
   name: string;        // 宫名

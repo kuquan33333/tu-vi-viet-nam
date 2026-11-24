@@ -2,8 +2,9 @@
 import {useMemo,useState} from 'react';
 import Link from 'next/link';
 import BirthForm,{type BirthFormState} from '@/components/BirthForm';
+import {BRANCHES} from '@/lib/ziwei/constants';
 import {generateChart} from '@/lib/ziwei/algorithm';
-import {formToBirthInfo} from '@/lib/ziwei/share';
+import {formToBirthInfo,birthFormProblem} from '@/lib/ziwei/share';
 import {compareCharts,getSynastryFacts,chartLabel,READING_NOTICE} from '@/lib/ziwei/client-reading';
 import {saveProfile} from '@/lib/ziwei/profile-storage';
 import type {ZiweiChart} from '@/lib/ziwei/types';
@@ -18,11 +19,7 @@ const TOPICS:Record<string,string>={
 };
 function complete(f:BirthFormState|null){
  if(!f)return false;
- const y=Number(f.year),m=Number(f.month),d=Number(f.day);
- if(!Number.isInteger(y)||y<1900||y>2030||!Number.isInteger(m)||m<1||m>12||!Number.isInteger(d)||d<1||d>31)return false;
- const dt=new Date(y,m-1,d);
- return dt.getFullYear()===y&&dt.getMonth()===m-1&&dt.getDate()===d &&
- (f.unknownTime||f.clockHour!==''&&f.clockMinute!=='');
+ return !f.unknownTime&&!birthFormProblem(f);
 }
 export default function HemingPage(){
  const [formA,setA]=useState<BirthFormState|null>(null);
@@ -36,7 +33,7 @@ export default function HemingPage(){
  const rows=useMemo(()=>chartA&&chartB?compareCharts(chartA,chartB):[],[chartA,chartB]);
  function run(){
   setError('');setMessage('');
-  if(!complete(formA)||!complete(formB)){setError('Hãy nhập ngày sinh hợp lệ (1900–2030) và giờ sinh hoặc chọn không rõ giờ cho cả hai người.');return;}
+  if(!complete(formA)||!complete(formB)){setError('Hãy nhập ngày sinh hợp lệ, nơi sinh và giờ sinh xác định của cả hai người. Không tự giả định giờ sinh.');return;}
   try{
    const a=generateChart(formToBirthInfo(formA!));
    const b=generateChart(formToBirthInfo(formB!));
@@ -86,7 +83,7 @@ export default function HemingPage(){
       const c=chart as ZiweiChart;return <div key={label as string} className="surface-card profile-box">
        <div className="eyebrow">LÁ SỐ {label as string}</div><h2>{chartLabel(c.birthInfo)}</h2>
        <p className="workspace-note">Mệnh tại cung {c.palaces.find(p=>p.branch===c.mingGongBranch)?.name} · {c.wuxingJuName}</p>
-       <p className="workspace-note">Cung Mệnh tại chi {c.palaces.find(p=>p.branch===c.mingGongBranch)?.branch} (chỉ số 0–11)</p>
+       <p className="workspace-note">Cung Mệnh tại chi {BRANCHES[c.mingGongBranch]}</p>
        <div className="reading-pills">{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=><span key={s.name}>{s.name}</span>)}</div>
       </div>;
     })}

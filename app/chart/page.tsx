@@ -1,16 +1,18 @@
 'use client';
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
-import BirthForm from '@/components/BirthForm';
+import BirthForm,{type BirthFormState} from '@/components/BirthForm';
 import ChartBoard from '@/components/ChartBoard';
 import TimeNav,{type TimeView} from '@/components/TimeNav';
 import {generateChart} from '@/lib/ziwei/algorithm';
-import {STAR_DESCRIPTIONS} from '@/lib/ziwei/constants';
+import {uncertainBirthOptions} from '@/lib/ziwei/share';
+import {STAR_DESCRIPTIONS,BRANCHES} from '@/lib/ziwei/constants';
 import {chartLabel,getPalaceFact,getStudyReading,READING_NOTICE} from '@/lib/ziwei/client-reading';
 import {saveProfile,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
 import type {BirthInfo,ZiweiChart,Palace,Star} from '@/lib/ziwei/types';
 
 export default function ChartPage(){
+ const [options,setOptions]=useState<ZiweiChart[]>([]);
  const [chart,setChart]=useState<ZiweiChart|null>(null);
  const [palace,setPalace]=useState<Palace|null>(null);
  const [star,setStar]=useState<Star|null>(null);
@@ -24,7 +26,9 @@ export default function ChartPage(){
    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
   } catch {setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.');}
  },[]);
+ function onUncertain(form:BirthFormState){try{setOptions(uncertainBirthOptions(form).map(b=>generateChart(b)));setFeedback('');}catch{setFeedback('Không thể tạo các phương án; kiểm tra ngày và nơi sinh.');}}
  function onGenerated(birth:BirthInfo){
+  setOptions([]);
   try{
    const next=generateChart(birth);
    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
@@ -53,7 +57,8 @@ export default function ChartPage(){
     <h1 className="display-small">Lập lá số Tử Vi</h1>
     <p className="lead" style={{maxWidth:680}}>Nhập ngày giờ sinh và nơi sinh để lập bàn 12 cung. Phần tính toán thực hiện trên thiết bị; không cần tài khoản.</p>
    </div>
-   <div className="workspace-surface"><BirthForm onSubmit={onGenerated}/></div>
+   <div className="workspace-surface"><BirthForm onSubmit={onGenerated} onUnknownTime={onUncertain}/></div>
+   {options.length>0&&<section className="workspace-surface" style={{marginTop:20,padding:16}}><h2>12 phương án chưa xác định</h2><p role="alert" className="study-notice">Giả định ngày an sao không đổi, lần lượt xét 12 chi giờ. Mệnh, Thân, Cục và đại hạn chỉ là khả năng; gần nửa đêm còn có thể đổi ngày. Không lưu phương án nào thành hồ sơ.</p><div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(145px,1fr))',gap:8}}>{options.map(c=><div key={c.birthInfo.hour} className="surface-card" style={{padding:10}}><strong>Giờ {BRANCHES[c.birthInfo.hour]}</strong><p>Mệnh: {BRANCHES[c.mingGongBranch]} · Thân: {BRANCHES[c.shenGongBranch]}</p><p>{c.wuxingJuName}</p><small>{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=>s.name).join(', ')||'Vô chính diệu'}</small></div>)}</div><button className="action-outline" onClick={()=>setOptions([])}>Đóng phương án</button></section>}
    {feedback&&<p role="status" className="study-notice">{feedback}</p>}
    <div className="home-note" style={{marginTop:23}}>Lưu ý: thông tin trong lá số là cách diễn giải văn hóa truyền thống, không phải khẳng định chính xác về tính cách, tương lai, sức khỏe hay tài chính. Bạn có thể lưu hồ sơ cục bộ sau khi lập xong.</div>
   </div>:

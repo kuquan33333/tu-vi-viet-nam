@@ -11,8 +11,6 @@ import type { ZiweiChart, Star } from '../../lib/ziwei/types';
 // Chỉ test; không thay đổi thuật toán hay cung cấp dữ liệu sinh qua mạng.
 // Các test nguồn (L3–L6) không thay thế kiểm thử trình duyệt/ảnh PNG/API.
 const source = (p: string) => readFileSync(new URL('../../' + p, import.meta.url), 'utf8');
-const strict = process.argv.includes('--strict-audit');
-const known = (reason: string) => ({ todo: strict ? false : reason });
 const sample = () => generateChart({ year: 1990, month: 5, day: 6, hour: 4, gender: 'male' });
 
 // Cùng cơ chế với patterns-sihua-bonus.test.ts hiện có: chỉ vô hiệu hóa
@@ -81,7 +79,7 @@ function satPhaFixture(): ZiweiChart {
   return chart;
 }
 
-test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', known('L2: sanFangAllStars chỉ thêm khóa tiếng Việt nhưng detector hỏi khóa Hán; chạy --strict-audit để thấy lỗi đỏ'), async () => {
+test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', async () => {
   const { detectPatterns } = await import('../../lib/ziwei/patterns');
   const chart = satPhaFixture();
   const pattern = detectPatterns(chart).find(p => p.name === 'Sát Phá Tham');
@@ -89,7 +87,7 @@ test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', known('L2
   assert.equal(pattern.palaces.length, 3);
 });
 
-test('L2: mô tả cách cục không còn chữ Hán', known('L2: translatePattern không dịch description; chưa sửa nội dung/nguồn'), async () => {
+test('L2: mô tả cách cục không còn chữ Hán', async () => {
   const { detectPatterns } = await import('../../lib/ziwei/patterns');
   const chart = satPhaFixture();
   // Tách lỗi dịch mô tả khỏi lỗi khóa VI/CN: cung cấp tên gốc detector đang tra.
@@ -100,22 +98,8 @@ test('L2: mô tả cách cục không còn chữ Hán', known('L2: translatePatt
   assert.doesNotMatch(pattern.description, /\p{Script=Han}/u);
 });
 
-test('L3: tỉnh và thành phố mặc định của BirthForm tồn tại cùng một mục', () => {
-  const text = source('components/BirthForm.tsx');
-  const province = text.match(/province:\s*initialData\?\.province\s*\?\?\s*'([^']+)'/)?.[1];
-  const city = text.match(/city:\s*initialData\?\.city\s*\?\?\s*'([^']+)'/)?.[1];
-  assert.ok(province && city);
-  assert.ok(PROVINCES.find(p => p.name === province)?.cities.some(c => c.name === city));
-});
-
-test('L4: biểu thức quy đổi lịch sử cộng delta âm, không đảo dấu (kiểm tra nguồn)', () => {
-  const text = source('components/BirthForm.tsx');
-  assert.match(text, /adjustedMinutes\s*=\s*\(totalMinutes\s*\+\s*historicalTz\.deltaMinutes\s*\+\s*1440\)\s*%\s*1440/);
-  assert.match(text, /Tự động quy đổi về UTC\+7 \(\{historicalTz\.deltaMinutes\} phút\)/);
-  assert.equal((9 * 60 + 15 - 60 + 1440) % 1440, 8 * 60 + 15);
-  assert.equal((9 * 60 + 15 - 120 + 1440) % 1440, 7 * 60 + 15);
-});
-
+test('L3: form không gán địa danh hay giờ mặc định',()=>{const text=source('components/BirthForm.tsx');for(const k of ['province','city','clockHour','clockMinute'])assert.ok(text.includes(k+": initialData?."+k+" ?? ''"));});
+test('L4: hiệu chỉnh lịch sử sử dụng đúng offset thay vì sửa giờ nhập',()=>{const text=source('components/BirthForm.tsx');assert.match(text,/actualOffset\?\?historicalTz\?\.actualOffsetMinutes\?\?420/);assert.doesNotMatch(text,/adjustedMinutes\s*=/);});
 test('L5: tọa độ 12 cung thẻ chia sẻ khớp bàn lá số (kiểm tra nguồn)', () => {
   const share = source('components/ShareCardCanvas.tsx').split('const ZHIWEI_LAYOUT')[1].split('];')[0];
   const board = source('components/ChartBoard.tsx').split('const BRANCH_GRID_POS')[1].split('};')[0];
@@ -168,9 +152,18 @@ test('L8: 34 tỉnh thành, cờ Đông Hà/Quảng Trị, không còn hai tệp
   }
 });
 
-test('L8: npm test phải bao phủ toàn bộ regression scripts', known('L8: 11 test cũ chưa được kiểm chứng và vẫn không có trong npm test; không đánh dấu chúng là đã pass'), () => {
+test('L8: npm test phải bao phủ toàn bộ regression scripts', () => {
   const pkg = JSON.parse(source('package.json')) as { scripts: { test: string } };
   const files = readdirSync(new URL('.', import.meta.url)).filter(x => x.endsWith('.test.ts'));
   const missing = files.filter(x => !pkg.scripts.test.includes('scripts/regression/' + x));
   assert.deepEqual(missing, [], 'Test chưa chạy: ' + missing.join(', '));
+});
+
+test('L2: Sát Phá Tham vẫn xác định đủ cung khi sao không đứng đầu danh sách chính tinh', async () => {
+  const {detectPatterns}=await import('../../lib/ziwei/patterns');
+  const chart=satPhaFixture();
+  chart.palaces.find(p=>p.branch===chart.mingGongBranch)!.stars.unshift({name:'Thiên Phủ',type:'major'} as Star);
+  const p=detectPatterns(chart).find(x=>x.name==='Sát Phá Tham');
+  assert.ok(p);
+  assert.equal(p.palaces.length,3);
 });
