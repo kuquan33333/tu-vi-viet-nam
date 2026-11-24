@@ -54,6 +54,9 @@ jobs:
         run: |
           npx tsx scripts/test-triad.ts
           npx tsx scripts/test-revamp.ts
+      - name: Đối chiếu lịch UTC+7 toàn phạm vi 1900–2050
+        if: ${{ !cancelled() }}
+        run: npx --no-install tsx scripts/compare-vn-calendar.ts
       - name: Build mã nguồn nguyên trạng
         if: ${{ !cancelled() }}
         run: npm run build
