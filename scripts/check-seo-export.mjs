@@ -31,7 +31,7 @@ for(const f of files){
  }
  const schemas=[...html.matchAll(/<script\b[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/gi)].map(m=>JSON.parse(m[1]));
  if(normalized==='/')assert.ok(schemas.some(x=>x['@type']==='WebSite'&&x.url===base+'/'),f+' WebSite');
- if(normalized==='/library'||normalized.startsWith('/library/')||['/privacy','/terms'].includes(normalized)){
+ if(normalized.startsWith('/thien-ky/que/')||normalized==='/library'||normalized.startsWith('/library/')||['/privacy','/terms'].includes(normalized)){
   const bc=schemas.find(x=>x['@type']==='BreadcrumbList');
   assert.ok(bc,f+' breadcrumb schema');
   assert.equal(new URL(bc.itemListElement.at(-1).item).href,new URL(canonical[0].href).href,f+' breadcrumb destination');
@@ -41,6 +41,7 @@ for(const f of files){
  assert.equal(banners.length,1,f+' global header count');
  visited.add(normalized);console.log('PASS',normalized);
 }
+required.push(...Array.from({length:64},(_,i)=>'/thien-ky/que/'+(i+1)));
 for(const route of required)assert.ok(visited.has(route),'Missing route '+route);
 for(const {file,href} of internalLinks){const target=new URL(href,base).pathname.replace(/\/$/,'')||'/';assert.ok(visited.has(target)||fs.existsSync(path.join(root,target.replace(/^\//,''))),file+' broken internal link '+href);}
 const redirect=fs.readFileSync(path.join(root,'_redirects'),'utf8');
