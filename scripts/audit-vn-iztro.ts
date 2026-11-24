@@ -58,19 +58,19 @@ try{
    const raw=a.rawDates.lunarDate;
    assert.deepEqual([raw.lunarYear,raw.lunarMonth,raw.lunarDay,raw.isLeap],[l.lunarYear,l.lunarMonth,l.lunarDay,l.isLeapMonth],date);
    assert.deepEqual(a.rawDates.chineseDate.yearly,[stems[mod(l.lunarYear-4,10)],branches[mod(l.lunarYear-4,12)]],date);
-   const effectiveMonth=l.lunarMonth+(l.isLeapMonth&&l.lunarDay>15?1:0);
+   const effectiveMonth:number=l.lunarMonth+(l.isLeapMonth&&l.lunarDay>15?1:0);
    assert.equal(a.earthlyBranchOfSoulPalace,branches[mod(effectiveMonth+1-hour,12)],date+' Mệnh');
    assert.equal(a.earthlyBranchOfBodyPalace,branches[mod(effectiveMonth+1+hour,12)],date+' Thân');
    assert.equal(a.palaces.length,12);assert.equal(major(a).length,14);assert.equal(new Set(major(a).map((v:any)=>v[0])).size,14);
-   const back=provider.lunar2solar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),l.isLeapMonth);
+   const back:{solarYear:number;solarMonth:number;solarDay:number}=provider.lunar2solar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),l.isLeapMonth);
    assert.deepEqual([back.solarYear,back.solarMonth,back.solarDay],[y,m,d]);
-   const fromLunar=vn.byLunar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),hour,gender,l.isLeapMonth,true,'zh-CN');
+   const fromLunar:any=vn.byLunar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),hour,gender,l.isLeapMonth,true,'zh-CN');
    assert.deepEqual(normalize(fromLunar),normalize(a),'same calendar must give same chart');
    // Confirm against independent unmodified iztro byLunar only where it can
    // represent this lunar tuple exactly. Never use its substituted solar date in production.
    let reference='unrepresentable';
    try{
-    const ref=original.byLunar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),hour,gender,l.isLeapMonth,true,'zh-CN');
+    const ref:any=original.byLunar([l.lunarYear,l.lunarMonth,l.lunarDay].join('-'),hour,gender,l.isLeapMonth,true,'zh-CN');
     const rr=ref.rawDates.lunarDate;
     if(JSON.stringify([rr.lunarYear,rr.lunarMonth,rr.lunarDay,rr.isLeap])===JSON.stringify([l.lunarYear,l.lunarMonth,l.lunarDay,l.isLeapMonth])){
      assert.deepEqual([a.earthlyBranchOfSoulPalace,a.earthlyBranchOfBodyPalace,a.fiveElementsClass,major(a)],[ref.earthlyBranchOfSoulPalace,ref.earthlyBranchOfBodyPalace,ref.fiveElementsClass,major(ref)],date+' independent principal stars');
