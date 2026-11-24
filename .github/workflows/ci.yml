@@ -27,14 +27,38 @@ jobs:
       - name: Kiểm tra kiểu
         run: npm run typecheck
       - name: Hồi quy
+        if: ${{ !cancelled() }}
         run: npm test
+      - name: Kiểm tra từng test hồi quy (kể cả các file bị bỏ sót)
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          mkdir -p qa-baseline
+          failed=0
+          for file in scripts/regression/*.test.ts; do
+            name=$(basename "$file")
+            if npx --no-install tsx "$file" > "qa-baseline/$name.log" 2>&1; then
+              echo "PASS $name" | tee -a qa-baseline/inventory.txt
+            else
+              echo "FAIL $name" | tee -a qa-baseline/inventory.txt
+              failed=1
+            fi
+            cat "qa-baseline/$name.log"
+          done
+          exit "$failed"
+      - name: Kiểm tra lỗi mở ở chế độ nghiêm ngặt
+        if: ${{ !cancelled() }}
+        run: npm run test:audit-strict
       - name: Kiểm thử Triad và V2
+        if: ${{ !cancelled() }}
         run: |
           npx tsx scripts/test-triad.ts
           npx tsx scripts/test-revamp.ts
       - name: Build mã nguồn nguyên trạng
+        if: ${{ !cancelled() }}
         run: npm run build
       - name: Build tĩnh giống production
+        if: ${{ !cancelled() }}
         env:
           NEXT_PUBLIC_SITE_URL: https://lichvannien-9sv.pages.dev
         run: |
@@ -42,3 +66,21 @@ jobs:
           node scripts/prepare-cloudflare-demo.mjs
           npm run build
           test -d out
+      - name: Đo Lighthouse mobile baseline (website production)
+        if: ${{ !cancelled() }}
+        shell: bash
+        run: |
+          mkdir -p qa-baseline/lighthouse
+          failed=0
+          for route in home chart lich-van-nien; do
+            url="https://lichvannien-9sv.pages.dev/$route"
+            if [ "$route" = home ]; then url="https://lichvannien-9sv.pages.dev/"; fi
+            npx --yes lighthouse@12.6.0 "$url" --output=json --output-path="qa-baseline/lighthouse/$route.json" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet || failed=1
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: audit-baseline-evidence
+          path: qa-baseline
+          if-no-files-found: warn

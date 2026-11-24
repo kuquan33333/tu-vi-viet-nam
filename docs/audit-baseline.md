@@ -137,3 +137,9 @@ Rủi ro test cũ: `pan-integrity.test.ts` so sánh tên cung Hán với kết q
 - Thiếu tài liệu audit A1–E10; CẦN BỔ SUNG NGUỒN. Không tự gán các mã A1–E10 cho L1–L8.
 - Không thay giấy phép, ghi công, dữ liệu người dùng hay nội dung cổ thư; chưa merge/deploy.
 - Tiêu chí hoàn thành đợt 1 chưa đạt: cần log CI chạy mới, golden snapshot được đối chiếu và Lighthouse/ảnh viewport.
+
+## Bổ sung sau xác nhận phạm vi đợt 1–2
+
+GitHub Actions đã trả về hai lượt chạy trên nhánh SEO ngày 24/11/2026: CI [45369629097](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45369629097) thành công với typecheck và hồi quy cũ; SEO [45369629230](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45369629230) đã cài npm, typecheck, npm test, test SEO, Triad/V2 và compile static thành công, nhưng thất bại tại assertion canonical HTML trang chủ. Đây **không phải** kết quả của nhánh baseline.
+
+Workflow baseline bổ sung kiểm tra riêng từng file regression, bao gồm 11 test bị bỏ sót; ghi log từng file và exit lỗi nếu bất kỳ test nào thất bại. Chạy strict audit, build độc lập với kết quả test, đo Lighthouse mobile trên ba route production, lưu artifact. Không sửa hành vi sản phẩm. Kết quả của nhánh baseline cần được đọc từ run mới; không suy ra PASS từ nhánh SEO.
