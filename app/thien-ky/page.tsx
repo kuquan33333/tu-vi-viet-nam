@@ -112,7 +112,7 @@ function IChingTool(){
    <h2>Từ điển 64 quẻ</h2>
    <label className="study-label" htmlFor="dich-search">Tra cứu theo tên, số quẻ hoặc ý chính</label>
    <input className="study-input" id="dich-search" value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Ví dụ: Thái, 29, hòa thuận..."/>
-   <div className="study-grid" style={{gridTemplateColumns:'minmax(0,1fr) minmax(0,1.3fr)',alignItems:'start'}}>
+   <div className="study-grid study-dictionary-layout" style={{alignItems:'start'}}>
     <div className="study-point-list">
      {listed.map(h=><button type="button" key={h.number} className={selected.number===h.number?'active':''} onClick={()=>setSelected(h)}>
        {h.number}. {h.name}<small>{h.theme}</small>
@@ -126,6 +126,7 @@ function IChingTool(){
 }
 function QimenTool(){
  const [term,setTerm]=useState<Term>('Đông chí');
+ const [showExternal,setShowExternal]=useState(false);
  const [yuan,setYuan]=useState<0|1|2>(0);
  const plate=useMemo(()=>buildEarthPlate(term,yuan),[term,yuan]);
  return <>
@@ -167,7 +168,13 @@ function QimenTool(){
   <div className="study-card">
    <h2>Ghi chú trường phái và nguồn thuật toán</h2>
    <p>Quy tắc ba nguyên và bảng 24 tiết khí được tham chiếu từ dự án MIT <a href="https://github.com/qilaidev/metaphysics-engine" target="_blank" rel="noreferrer">qilaidev/metaphysics-engine</a>. Với ứng dụng Kỳ Môn đầy đủ cần thêm các bước: xác định chính xác giao tiết theo phút, phù đầu, trực phù/trực sử, chuyển Thiên bàn – Bát môn – Bát thần, và bộ kiểm thử cho trường phái lựa chọn.</p>
-   <p>Để thử công cụ thời gia Kỳ Môn đầy đủ của một dự án khác, xem <a href="https://qimen-2i1.pages.dev" target="_blank" rel="noreferrer">bản tham khảo độc lập qimen</a> (không phải chức năng đã tích hợp vào website).</p>
+   <p>Để tham khảo một bộ tính thời gia Kỳ Môn đầy đủ, bạn có thể mở ứng dụng bên ngoài <a href="https://qimen-2i1.pages.dev" target="_blank" rel="noreferrer">qimen</a>. Ứng dụng đó có thuật toán và điều khoản riêng, không phải kết quả do module này tính.</p>
+   <button className="study-btn secondary" type="button" onClick={()=>setShowExternal(v=>!v)}>{showExternal?'Ẩn công cụ bên ngoài':'Thử bản Kỳ Môn đầy đủ tại đây ↗'}</button>
+   {showExternal&&<div style={{marginTop:15}}>
+    <iframe title="Ứng dụng Kỳ Môn tham khảo của tác giả idavailable" src="https://qimen-2i1.pages.dev" loading="lazy" referrerPolicy="no-referrer"
+      sandbox="allow-scripts allow-same-origin" style={{width:'100%',height:580,border:'1px solid var(--ac-bdr)',borderRadius:12}}/>
+    <p className="study-muted">Nếu ứng dụng bên ngoài chặn nhúng, hãy mở link tác giả ở trên.</p>
+   </div>}
   </div>
  </>;
 }
