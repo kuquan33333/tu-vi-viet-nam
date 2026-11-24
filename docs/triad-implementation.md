@@ -31,3 +31,7 @@ Giữ nguyên LICENSE MIT và ghi nguồn ở UI; các điều khoản dữ li�
 3. Huyền Không Phi Tinh, mô-đun sơ đồ nhà, dữ liệu GIS thực tế (cần dữ liệu bản đồ và quy chuẩn kỹ thuật).
 4. Kiểm duyệt y thư tiếng Việt có dẫn bản gốc/ấn bản, kiểm tra thuật ngữ, bản đồ vị trí huyệt được chuyên gia xác nhận, không cung cấp tự chẩn đoán/điều trị.
 5. Trình duyệt mobile: thử cảm biến với iOS Safari thực, người dùng có thể dùng nhập độ bằng tay nếu từ chối quyền.
+
+## Bản build thử nghiệm
+
+- Đã đưa các thành phần vào nhánh demo. Build Cloudflare chạy kiểm thử hồi quy trước khi xuất trang tĩnh.
