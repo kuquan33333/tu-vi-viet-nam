@@ -292,3 +292,19 @@ button,a,select,input{touch-action:manipulation}
 @media(max-width:1000px){.global-header .desktop-links{display:none}.global-header .mobile-menu-button{display:grid}.global-header .header-utilities{margin-left:auto}}
 @media(max-width:760px){.tool-hub-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tool-hub-card{padding:16px}.tool-hub-card h2{font-size:17px}}
 @media(max-width:370px){.tool-hub-grid{grid-template-columns:1fr}.global-header .header-inner{gap:6px}.global-header .header-cta{display:none}}
+
+/* Breadcrumb và chú thích thuật ngữ: dùng được khi chạm, focus hoặc rê chuột. */
+.breadcrumb{padding-top:15px;padding-bottom:15px;color:var(--tx-2);font-size:13px}
+.breadcrumb ol{display:flex;flex-wrap:wrap;gap:6px 9px;align-items:center;list-style:none;margin:0;padding:0}
+.breadcrumb li{display:inline-flex;align-items:baseline;gap:9px;min-width:0;overflow-wrap:anywhere}
+.breadcrumb a{color:var(--ac-dim);text-decoration:underline;text-underline-offset:3px}.breadcrumb [aria-current=page]{font-weight:650;color:var(--tx-0)}
+.crumb-separator{color:var(--tx-3)}
+.term-help{position:relative;display:inline-block;vertical-align:middle;letter-spacing:0;font-size:13px;text-align:left;text-transform:none;font-weight:400;line-height:1.5}
+.term-help-button{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--bdr-med);border-radius:50%;color:var(--ac-dim);background:var(--bg-card);font-size:15px;cursor:pointer;vertical-align:middle}
+.term-help-button:focus-visible{outline:2px solid var(--ac-dim);outline-offset:2px}
+.term-help-popup{display:none;position:absolute;z-index:110;top:calc(100% + 6px);right:0;width:min(230px,68vw);padding:10px 12px;border:1px solid var(--bdr-med);border-radius:9px;color:var(--tx-0);background:var(--bg-card);box-shadow:var(--sh-lg);font-size:12px;white-space:normal;overflow-wrap:anywhere}
+.term-help-popup.is-open,.term-help:focus-within .term-help-popup{display:block}
+@media(hover:hover){.term-help:hover .term-help-popup{display:block}}
+.calendar-term-help{display:flex;justify-content:space-around;gap:8px;margin:-8px 0 14px;font-size:11px;color:var(--tx-2)}
+.form-term-note{font-size:11px;color:var(--tx-2);margin:0 0 6px;display:flex;align-items:center;gap:6px}
+@media(max-width:480px){.term-help-popup{right:auto;left:50%;transform:translateX(-50%)}.calendar-term-help>span:last-child .term-help-popup{right:0;left:auto;transform:none}}

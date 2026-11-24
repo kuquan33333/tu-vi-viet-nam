@@ -1,4 +1,6 @@
 'use client';
+import Breadcrumb from '@/components/Breadcrumb';
+
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
@@ -17,12 +19,7 @@ export default function SearchPage() {
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/library" style={{ fontSize: 12, color: 'var(--ac)', textDecoration: 'none' }}>← Thư Viện Cổ Thư</Link>
-        <span style={{ fontSize: 12, color: 'var(--tx-3)' }}>KẾT QUẢ TRA CỨU</span>
-        <Link href="/" style={{ fontSize: 12, color: 'var(--ac)', textDecoration: 'none' }}>Trang Chủ →</Link>
-      </div>
+      <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:'Tra cứu',href:'/library/search'}]} />
 
       <main className="max-w-3xl mx-auto px-6 py-12">
         <header className="text-center mb-10">

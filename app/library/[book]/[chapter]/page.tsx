@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book]/[chapter] — Trang đọc toàn văn từng chương / quyển
@@ -28,18 +29,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href={`/library/${book.slug}`} style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Mục Lục 《{book.title}》
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.08em', fontWeight: 600 }}>
-          {chapter.title}
-        </div>
-        <Link href="/library" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          Thư Viện →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug},{label:chapter.title,href:chapterPath(book.slug,chapterIdx)}]} />
 
       <article className="max-w-3xl mx-auto px-6 py-12">
         {/* Tiêu đề chương */}

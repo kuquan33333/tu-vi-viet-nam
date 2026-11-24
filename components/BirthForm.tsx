@@ -1,4 +1,5 @@
 'use client';
+import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { BirthInfo } from '@/lib/ziwei/types';
@@ -293,7 +294,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
     >
       {/* Tiêu đề */}
       <h3 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
-        ── NHẬP THÔNG TIN SINH THẦN ──
+        NHẬP THÔNG TIN SINH THẦN <TermTooltip term="Sinh thần" />
       </h3>
 
       {/* ── Tiến trình hoàn thành ── */}
@@ -347,6 +348,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
           Âm lịch (Mặt trăng)
         </button>
       </div>
+      <div className="calendar-term-help"><span>Dương lịch <TermTooltip term="Dương lịch (Mặt trời)" /></span><span>Âm lịch <TermTooltip term="Âm lịch (Mặt trăng)" /></span></div>
 
       {/* ── Họ và tên ── */}
       <div style={{ marginBottom: '16px' }}>
@@ -481,6 +483,7 @@ export default function BirthForm({ onSubmit, loading, initialData, onFormSave, 
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>
           Nơi sinh (Hiệu chỉnh Chân Thái Dương Thời theo kinh độ)
         </label>
+        <div className="form-term-note">Chân Thái Dương Thời <TermTooltip term="Chân Thái Dương Thời" /></div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <select
             value={form.province}

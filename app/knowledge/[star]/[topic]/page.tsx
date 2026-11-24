@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /knowledge/[star]/[topic] — Trang chi tiết luận giải chuyên đề
@@ -53,31 +54,9 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
 
-      {/* Thanh Header */}
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Trang Chủ
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em', fontWeight: 600 }}>
-          KHO TRI THỨC MỆNH LÝ
-        </div>
-        <Link href="/chart" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          An Lá Số →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Kho kiến thức',href:'/knowledge'},{label:`${star} · ${data.topicLabel}`,href:`/knowledge/${slug}/${topic}`}]} />
 
       <article className="max-w-3xl mx-auto px-6 py-12">
-        {/* Breadcrumb */}
-        <nav style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em', marginBottom: '16px' }}>
-          <Link href="/" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>Trang Chủ</Link>
-          <span style={{ margin: '0 8px' }}>/</span>
-          <Link href="/knowledge" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>Kho Tri Thức</Link>
-          <span style={{ margin: '0 8px' }}>/</span>
-          <span>{star}</span>
-          <span style={{ margin: '0 8px' }}>·</span>
-          <span style={{ color: 'var(--ac)' }}>{data.palaceName}</span>
-        </nav>
 
         {/* Tiêu đề trang */}
         <header style={{ marginBottom: '36px' }}>
@@ -154,7 +133,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             textDecoration: 'none',
             boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
           }}>
-            An Lá Số Ngay →
+            Lập lá số ngay →
           </Link>
         </div>
 

@@ -1,3 +1,4 @@
+import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * Thư Viện Cổ Thư Toàn Văn · Trang Chủ
@@ -13,19 +14,7 @@ export const metadata = pageMetadata({title:"Thư viện cổ thư Tử Vi Đẩ
 export default function LibraryHomePage() {
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      {/* Thanh Header */}
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Trang Chủ
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.15em', fontWeight: 600 }}>
-          THƯ VIỆN CỔ THƯ TOÀN VĂN
-        </div>
-        <Link href="/chart" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          An Lá Số →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Thư viện',href:'/library'}]} />
 
       {/* Hero */}
       <div className="text-center px-6 py-16">
@@ -67,8 +56,8 @@ export default function LibraryHomePage() {
               }}
               className="hover:shadow-lg"
             >
-              <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '6px' }}>
-                {book.dynasty} · {book.author.split(' ')[0]}
+              <div style={{ fontSize: '12px', color: 'var(--tx-3)', lineHeight: 1.5, overflowWrap: 'anywhere', marginBottom: '8px' }}>
+                {book.dynasty} · {book.author}
               </div>
               <div style={{ fontSize: '19px', fontWeight: 700, color: 'var(--tx-0)', marginBottom: '10px', letterSpacing: '0.02em' }}>
                 《{book.title}》
