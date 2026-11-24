@@ -2,6 +2,8 @@
 
 import {useMemo,useState} from 'react';
 import TriadNav from '@/components/TriadNav';
+import {MEDICAL_SOURCES} from '@/lib/triad/medical-sources';
+import acupointAudit from '@/lib/triad/acupoint-provenance.generated.json';
 import catalog from '@/lib/triad/acupoint-catalog.json';
 import {CANONS,POINT_ALIASES,POINTS_ON_SCHEMATIC} from '@/lib/triad/renji';
 
@@ -204,6 +206,14 @@ export default function NhanKyPage(){
     <p>Danh mục tên và mã 361 huyệt, 14 kinh mạch được chuyển từ <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noopener noreferrer">aicuc/3d-acupoint-atlas</a> (MIT, ghi công tác giả). Các mục giới thiệu y thư do dự án biên soạn mới, không sao chép nguyên văn giáo trình có bản quyền.</p>
     
    </div>
+   <section className="study-card" style={{marginTop:18}}>
+    <h2>Kiểm chứng danh mục và thư mục có nguồn</h2>
+    <p className="study-notice"><strong>${acupointAudit.pointCodeMatch}/361 mã huyệt</strong> đã đối chiếu với TARA Ontology; ${acupointAudit.variantReviewCount} tên có biểu diễn Hán tự khác dạng, cần hiệu đính; vị trí huyệt được chuyên gia thẩm định: <strong>${acupointAudit.clinicallyVerifiedLocations}/361</strong>. Mã số trùng nhau không chứng minh tọa độ y khoa chính xác.</p>
+    <div className="study-grid">
+     {MEDICAL_SOURCES.map(b=><article className="study-card" key={b.url}><h3>{b.title}</h3><p className="study-muted">{b.name}</p><p>{b.limits}</p><a className="study-btn secondary" href={b.url} target="_blank" rel="noopener noreferrer">Mở bản Hán cổ ở Wikisource</a></article>)}
+    </div>
+    <p className="study-muted">Bản Hán cổ không mặc định đồng nghĩa bản chép số hóa có thể sao chép mà không ghi nguồn. Các bản dịch hiện đại có thể có bản quyền. Tài liệu <a href="https://www.who.int/publications/i/item/9290611057" target="_blank" rel="noopener noreferrer">danh pháp 361 huyệt WHO</a> và sách định vị WHO 2008 có bản quyền; chưa đưa toàn bộ mô tả vào website. TARA chỉ dùng đối chiếu mã, không nhập mô tả phương pháp châm cứu.</p>
+   </section>
    <footer className="study-footer">Nhân Kỷ · Thư viện giáo dục.</footer>
   </main>
  </div>;
