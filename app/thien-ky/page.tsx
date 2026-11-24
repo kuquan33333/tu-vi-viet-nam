@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import TriadNav from '@/components/TriadNav';
+import TimeQimenTool from '@/components/TimeQimenTool';
 import {
  HEXAGRAMS, castHexagram, changedLines, hexFromLines, readingRule,
  LINE_GUIDE, type Hexagram, type LineValue,
@@ -130,10 +131,12 @@ function QimenTool(){
  const [showExternal,setShowExternal]=useState(false);
  const [yuan,setYuan]=useState<0|1|2>(0);
  const plate=useMemo(()=>buildEarthPlate(term,yuan),[term,yuan]);
+  // Thời gia trên: tự tính cục, thiên bàn, sao/môn/thần theo giờ nhập.
  return <>
+  <TimeQimenTool/>
   <div className="study-grid">
    <section className="study-card">
-    <h2>Địa bàn Kỳ Môn – Cửu cung</h2>
+    <h2>Địa bàn Kỳ Môn – Cửu cung (chọn tay)</h2>
     <p>Định âm/dương độn, cục số theo tiết khí và thượng/trung/hạ nguyên; an địa bàn Tam Kỳ Lục Nghi bằng phép thuận/nghịch phi 9 cung.</p>
     <div className="study-picks">
      <label className="study-label">Tiết khí
@@ -151,7 +154,7 @@ function QimenTool(){
      <div><div className="study-muted">Phương pháp</div><strong>{plate.yang?'Dương độn thuận phi':'Âm độn nghịch phi'}</strong></div>
      <div><div className="study-muted">Cục số</div><div className="study-stat">{plate.ju}</div></div>
     </div>
-    <div className="study-notice"><strong>Giới hạn quan trọng:</strong> Đây là <strong>địa bàn phục vụ nghiên cứu</strong>, không phải thời gia Kỳ Môn đầy đủ. Bạn phải tự xác định tiết khí/nguyên; Thiên bàn, Trực Phù/Trực Sử, Bát môn chuyển bàn theo giờ và Bát thần chuyển bàn chưa được tính.</div>
+    <div className="study-notice"><strong>Giới hạn quan trọng:</strong> Đây là <strong>địa bàn phục vụ nghiên cứu</strong>, không phải thời gia Kỳ Môn đầy đủ. Bạn phải tự xác định tiết khí/nguyên; Bảng thủ công này không tính sao/môn/thần động theo giờ; hãy dùng công cụ thời gia ở trên cho phép tính theo thời điểm.</div>
    </section>
    <section className="study-card">
     <h2>Cửu cung Lạc Thư</h2>
@@ -190,7 +193,7 @@ export default function ThienKyPage(){
     <p className="study-lead">Từ Tử Vi Đẩu Số đến Chu Dịch và Kỳ Môn Độn Giáp. Tra cứu quy tắc, thao tác quẻ và khám phá cửu cung minh bạch.</p>
     <div className="study-tabs" role="tablist" aria-label="Chọn phân hệ Thiên Kỷ">
      <button type="button" role="tab" aria-selected={tab==='dich'} onClick={()=>setTab('dich')} className={'study-tab'+(tab==='dich'?' active':'')}>Chu Dịch · 64 quẻ</button>
-     <button type="button" role="tab" aria-selected={tab==='qimen'} onClick={()=>setTab('qimen')} className={'study-tab'+(tab==='qimen'?' active':'')}>Địa bàn Kỳ Môn – Cửu cung</button>
+     <button type="button" role="tab" aria-selected={tab==='qimen'} onClick={()=>setTab('qimen')} className={'study-tab'+(tab==='qimen'?' active':'')}>Kỳ Môn thời gia · cửu cung</button>
      <button type="button" role="tab" aria-selected={tab==='tuvi'} onClick={()=>setTab('tuvi')} className={'study-tab'+(tab==='tuvi'?' active':'')}>Tử Vi Đẩu Số</button>
     </div>
    </div>
