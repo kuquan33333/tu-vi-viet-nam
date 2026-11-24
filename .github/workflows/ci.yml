@@ -61,6 +61,11 @@ jobs:
           curl --fail --silent --show-error --location --retry 2 'https://raw.githubusercontent.com/zeforc/lichta/6f656383f9eb525373ea6a7ef327fdd3fdc3ac54/packages/core/dist/index.mjs' --output "$reference"
           test "$(git hash-object "$reference")" = baff4984d0603db3d2b7ce97eec8c38ad92907f3
           VN_CALENDAR_REFERENCE="$reference" npx --no-install tsx scripts/compare-vn-calendar.ts
+      - name: Kiểm chứng thiên văn UTC+7 độc lập (QA, không cài vào sản phẩm)
+        if: ${{ !cancelled() }}
+        run: |
+          npm install --prefix "$RUNNER_TEMP/astronomy-qa" --no-audit --no-fund --ignore-scripts --no-save astronomy-engine@2.1.19
+          ASTRONOMY_ENGINE_PATH="$RUNNER_TEMP/astronomy-qa/node_modules/astronomy-engine/astronomy.js" npx --no-install tsx scripts/audit-vn-astronomy.ts
       - name: Build mã nguồn nguyên trạng
         if: ${{ !cancelled() }}
         run: npm run build
