@@ -2,7 +2,7 @@ import type {MetadataRoute} from 'next';
 import {ALL_BOOKS} from '@/lib/classics';
 import {SITE_URL} from '@/lib/site';
 
-export const dynamic='force-static';
+export const dynamic = 'force-static';
 export default function sitemap():MetadataRoute.Sitemap {
  const changed=new Date('2026-11-24');
  const pages=[
