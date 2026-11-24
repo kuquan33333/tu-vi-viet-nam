@@ -22,7 +22,7 @@ export default function HoSoPage(){
    <div className="workspace-head"><p>{profiles.length}/{PROFILE_LIMIT} hồ sơ</p><div className="site-actions" style={{display:'flex',gap:8,flexWrap:'wrap'}}>
     <Link href="/chart" className="action-primary">Lập lá số mới</Link>
     <button className="action-outline" disabled={busy} onClick={()=>void run(download)}>Xuất JSON</button>
-    <label className="action-outline">Nhập JSON<input type="file" accept=".json,application/json" aria-label="Nhập JSON" disabled={busy} onChange={e=>{const f=e.target.files?.[0];e.target.value='';if(f)void run(async()=>{if(f.size>1000000)throw Error('Tệp quá lớn.');const count=await importProfiles(await f.text());setMessage('Đã nhập '+count+' hồ sơ mới. Bỏ qua mã trùng.');});}} style={{maxWidth:190}}/></label>
+    <label className="action-outline profile-import-label">Nhập JSON<input type="file" accept=".json,application/json" aria-label="Nhập JSON" disabled={busy} onChange={e=>{const f=e.target.files?.[0];e.target.value='';if(f)void run(async()=>{if(f.size>1000000)throw Error('Tệp quá lớn.');const count=await importProfiles(await f.text());setMessage('Đã nhập '+count+' hồ sơ mới. Bỏ qua mã trùng.');});}} className="profile-import-input"/></label>
     {profiles.length>0&&<button className="action-outline" disabled={busy} onClick={()=>{if(window.confirm('Xóa tất cả hồ sơ? Không thể khôi phục.'))void run(deleteAllProfiles);}}>Xóa tất cả</button>}
    </div></div>
    {profiles.length>=25&&<p role="status" className="study-notice">Đã dùng {profiles.length}/30 hồ sơ. Khi đầy, cần xóa hoặc xuất bản sao trước khi lưu thêm.</p>}

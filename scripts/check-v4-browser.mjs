@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {mkdirSync,writeFileSync} from 'node:fs';
+import {mkdirSync,writeFileSync,readFileSync} from 'node:fs';
 const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'playwright');
 const base='http://127.0.0.1:4173';
-const browser=await chromium.launch({headless:true});const results=[],contrast=[];
+const browser=await chromium.launch({headless:true});const results=[],contrast=[],mobileSmokes=[];
 mkdirSync('qa-artifacts/v4',{recursive:true});
 try{
  for(const width of [360,1280]){
@@ -53,6 +53,23 @@ try{
   await page.getByRole('button',{name:'Lưu lá số'}).click();await page.getByText(/Đã lưu hồ sơ/).waitFor();
   await page.screenshot({path:'qa-artifacts/v4/chart-'+width+'.png',fullPage:true});
   await page.emulateMedia({media:'print'});await page.locator('.chart-scroll').waitFor({state:'visible'});await page.pdf({path:'qa-artifacts/v4/chart-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});await page.emulateMedia({media:'screen'});
+  // JSON backup must download the real saved profile; importing it again is idempotent.
+  await open('/ho-so');
+  page.once('dialog',dialog=>dialog.accept());
+  const [backup]=await Promise.all([
+   page.waitForEvent('download'),
+   page.getByRole('button',{name:'Xuất JSON'}).click()
+  ]);
+  assert.equal(backup.suggestedFilename(),'ho-so-tu-vi.json');
+  const exported=JSON.parse(readFileSync(await backup.path(),'utf8'));
+  assert.equal(exported.format,'tuvivn-profiles');
+  assert.ok(exported.profiles.some(p=>p.birth?.name==='V4 QA'));
+  await page.getByLabel('Nhập JSON').setInputFiles({
+   name:'test-import.json',mimeType:'application/json',
+   buffer:Buffer.from(JSON.stringify(exported))
+  });
+  await page.getByText(/Đã nhập 0 hồ sơ mới/).waitFor();
+  await page.getByRole('heading',{name:'V4 QA'}).waitFor();
   await open('/ho-so');await page.getByLabel('Mã PIN',{exact:true}).fill('73918426');await page.getByLabel('Nhập lại PIN').fill('73918426');await page.getByRole('button',{name:'Mã hóa và khóa'}).click();
   await page.getByRole('heading',{name:'Kho hồ sơ đang khóa'}).waitFor();
   assert.ok(!(await page.evaluate(()=>localStorage.getItem('tuvivn.profiles.v2'))).includes('V4 QA'));
@@ -69,5 +86,41 @@ try{
   await page.screenshot({path:'qa-artifacts/v4/hex-'+width+'.png',fullPage:true});
   results.push({width,profileEncryption:true,profileComparison:true,calendar:true,hexagram:true,overflow:false});await ctx.close();
  }
-}finally{writeFileSync('qa-artifacts/v4/results.json',JSON.stringify(results,null,2));writeFileSync('qa-artifacts/v4/contrast.json',JSON.stringify(contrast,null,2));await browser.close();}
+
+ // Additional real mobile widths requested at the audit stage.
+ // Preserve the deep interaction/contrast suite at 360/1280 above.
+ for(const width of [320,390,430]){
+  const ctx=await browser.newContext({viewport:{width,height:840},reducedMotion:'reduce',acceptDownloads:true});
+  const page=await ctx.newPage(),pageErrors=[];
+  page.on('pageerror',e=>pageErrors.push(e.message));
+  await ctx.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
+  const paths=['/','/chart','/hop-ban','/lich-van-nien','/thien-ky/que/1','/dia-ky','/nhan-ky','/ho-so','/library','/cong-cu'];
+  for(const route of paths){
+   const response=await page.goto(base+route,{waitUntil:'domcontentloaded'});
+   assert.equal(response?.status(),200,'Mobile '+width+' unexpected HTTP '+route);
+   await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true');
+   const sizes=await page.evaluate(()=>({
+    scroll:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth,
+    heading:document.querySelector('h1')?.textContent?.trim()||'',
+    bottom:document.querySelector('.bottom-nav')?getComputedStyle(document.querySelector('.bottom-nav')).display:null
+   }));
+   assert.ok(sizes.heading,'Mobile '+width+' missing heading '+route);
+   assert.ok(sizes.scroll<=sizes.viewport+1,'Mobile '+width+' overflow '+route+' '+JSON.stringify(sizes));
+   assert.equal(sizes.bottom,'grid','Mobile '+width+' navigation invisible '+route);
+   mobileSmokes.push({width,route,status:response.status(),scroll:sizes.scroll,viewport:sizes.viewport});
+   if(['/','/chart','/lich-van-nien'].includes(route)){
+    await page.screenshot({path:'qa-artifacts/v4/mobile-'+width+'-'+(route==='/'?'home':route.slice(1))+'.png',fullPage:false});
+   }
+   if(route==='/'){
+    await page.getByRole('button',{name:'Mở menu'}).click();
+    await page.getByRole('navigation',{name:'Menu toàn website'}).waitFor();
+    await page.keyboard.press('Escape');
+    await page.getByRole('navigation',{name:'Menu toàn website'}).waitFor({state:'hidden'});
+   }
+  }
+  assert.deepEqual(pageErrors,[],'Mobile '+width+' runtime errors');
+  console.log('MOBILE_SMOKE '+JSON.stringify({width,routes:paths.length,errors:pageErrors.length}));
+  await ctx.close();
+ }
+}finally{writeFileSync('qa-artifacts/v4/results.json',JSON.stringify(results,null,2));writeFileSync('qa-artifacts/v4/contrast.json',JSON.stringify(contrast,null,2));writeFileSync('qa-artifacts/v4/mobile-smokes.json',JSON.stringify(mobileSmokes,null,2));await browser.close();}
 assert.ok(contrast.every(x=>x.violations.length===0),'WCAG AA contrast violations: '+JSON.stringify(contrast.filter(x=>x.violations.length)));

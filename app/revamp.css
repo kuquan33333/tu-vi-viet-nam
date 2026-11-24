@@ -399,3 +399,16 @@ button,select,input,summary{max-width:100%;box-sizing:border-box}
 html[data-theme="dark"]{--tx-1:#e4e7e7}
 html[data-theme="dark"] .birth-form summary,
 html[data-theme="dark"] .calendar-print label{color:#e4e7e7}
+
+
+/* Đợt hậu kiểm: nhập JSON dùng nút chạm, giữ input file trong thứ tự tab
+   và outline khi truy cập qua bàn phím. Không dùng display:none. */
+.profile-import-label{position:relative;cursor:pointer;min-height:44px}
+.profile-import-input{
+ position:absolute!important;width:1px!important;height:1px!important;
+ min-width:1px!important;min-height:1px!important;max-width:1px!important;
+ padding:0!important;margin:-1px!important;border:0!important;
+ overflow:hidden!important;clip:rect(0,0,0,0)!important;
+ clip-path:inset(50%)!important;white-space:nowrap!important
+}
+.profile-import-label:focus-within{outline:3px solid var(--ac-dim);outline-offset:3px}

@@ -1,164 +1,67 @@
-<div align="center">
+# Tử Vi Đẩu Số Việt Nam · Thư quán phương Đông
 
-# Tử Vi Đẩu Số · Việt Nam
-### Hệ Thống An Sao & Luận Đoán Tử Vi Đẩu Số Chuẩn Hóa Toàn Diện Cho Người Việt
+Bản fork của dự án [naot7/tu-vi-viet-nam](https://github.com/naot7/tu-vi-viet-nam), triển khai Next.js + TypeScript trên Cloudflare Pages.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Next.js 16](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![CI](https://github.com/kuquan33333/tu-vi-viet-nam/actions/workflows/ci.yml/badge.svg?branch=revamp-v2)](https://github.com/kuquan33333/tu-vi-viet-nam/actions/workflows/ci.yml)
+**Trải nghiệm:** https://lichvannien-9sv.pages.dev/  
+**Mã đang vận hành:** nhánh [revamp-v2](https://github.com/kuquan33333/tu-vi-viet-nam/tree/revamp-v2) (không phải mặc định \`main\`).  
+**Đối chiếu yêu cầu bốn đợt:** [docs/audit-four-phases-2026-11-24.md](docs/audit-four-phases-2026-11-24.md).
 
-**Tiếng Việt** · [English](./README.en.md)
+Ứng dụng nghiên cứu **văn hóa và thuật số truyền thống**, không phải công cụ chứng minh khả năng dự đoán tương lai. Phân hệ y thư chỉ để học tập, không chẩn đoán hoặc hướng dẫn tự điều trị.
 
-</div>
+## Tính năng thực tế trên bản Cloudflare tĩnh
 
----
+| Phân hệ | Đang cung cấp | Giới hạn cần biết |
+|---|---|---|
+| **Tử Vi /chart** | Lập lá số, 12 cung, an sao, đại hạn/lưu niên, tra cứu sao/cung, giờ sinh không rõ (12 phương án), in A4 | Giờ và kinh độ không chắc chắn có thể cho kết quả khác; thuật số không có giá trị dự báo được xác nhận |
+| **Hợp Bàn /hop-ban** | Nhập hai người hoặc chọn hồ sơ; so sánh dữ liệu 12 cung **offline**, không tự đặt điểm hợp nhau | Đối chiếu mang tính cấu trúc, không đánh giá chất lượng quan hệ thực tế |
+| **Hồ sơ /ho-so** | Tối đa 30 hồ sơ cục bộ, JSON nhập/xuất, xóa, mã hóa AES-GCM qua PIN Web Crypto tùy chọn | PIN không khôi phục được, bản xuất JSON **không mã hóa**, dữ liệu không tự đồng bộ |
+| **Lịch Vạn Niên /lich-van-nien** | Âm dương lịch Việt Nam 1900–2050, Can Chi, mùng 1/rằm, ngày lễ, 24 tiết khí và giờ giao tiết, in lịch | Lịch cố định UTC+7 theo phương pháp nêu trong tài liệu; mốc sát nửa đêm cần thẩm định, không tự tính nghỉ bù |
+| **Thiên Kỷ /thien-ky** | Chu Dịch 64 quẻ, 6 hào/quẻ nguyên văn Hán có ghi nguồn, gieo quẻ và địa bàn Kỳ Môn | Chưa có toàn bộ bản dịch Việt có bản quyền; Kỳ Môn **chưa phải thời gia bàn hoàn chỉnh** |
+| **Địa Kỷ /dia-ky** | La Kinh 24 sơn, Bát Trạch, biểu mẫu khảo sát địa hình, nhập góc và hỗ trợ cảm biến khi trình duyệt cho phép | Chưa có bản đồ GIS/Huyền Không Phi Tinh đầy đủ; cảm biến di động chưa nghiệm thu trên mọi máy |
+| **Nhân Kỷ /nhan-ky** | 16 chuyên đề giới thiệu, 14 kinh/361 mã huyệt, sơ đồ 2D có giới hạn, liên kết atlas 3D từ tác giả | Chưa phải toàn văn y thư hay atlas 361 huyệt có vị trí giải phẫu được thẩm định |
+| **Thư viện /library** | Ba bộ tư liệu Tử Vi trong số **21 chương đang có**; tìm kiếm và URL slug chương | Không tuyên bố sở hữu toàn văn mọi ấn bản |
+| **Kho kiến thức /knowledge** | Giới thiệu **14 chính tinh** | Các trang 182 chuyên đề động có trong mã gốc **không phát hành** trên Pages tĩnh vì thiếu dữ liệu |
 
-## 🌟 Giới Thiệu & Triết Lý
+**Không có API AI trên bản Pages tĩnh.** Hai route trong \`app/api/\` chỉ dùng khi vận hành Next.js ở chế độ máy chủ tương thích. Không đưa API key vào trình duyệt hoặc tuyên bố AI offline.
 
-**Tử Vi Đẩu Số Việt Nam (`tu-vi-viet-nam`)** là hệ thống an sao và luận giải mệnh lý Tử Vi Đẩu Số mã nguồn mở được phát triển và chuẩn hóa chuyên sâu dành riêng cho người Việt Nam. 
+### Chính sách lịch và hồ sơ cũ
 
-Hệ thống kế thừa tinh hoa học thuật **Chính Tông của Thầy Nghê Hải Hạ (Ni Haixia - 《Thiên Kỷ》)**, kết hợp cùng 3 bộ cổ thư kinh điển: *《Tử Vi Đẩu Số Cốt Tủy Phú》*, *《Tử Vi Đẩu Số Toàn Tập》* và *《Tử Vi Đẩu Số Toàn Thư》*.
+Lá số mới trong phạm vi 1900–2050 dùng provider âm lịch Việt Nam UTC+7 theo tài liệu phương pháp. Hồ sơ đã lưu với \`calendarVersion=legacy-cn\` tiếp tục giữ phương pháp gốc, **không tự đổi kết quả**. Kinh độ huyện chỉ là điểm tham khảo có nguồn; người dùng nên nhập tọa độ chính xác nếu sinh gần ranh giờ. Các trường hợp lịch sử gần giờ chuyển múi, tiết khí và mốc sóc được đánh dấu theo mức độ chắc chắn.
 
-> *"Thuật toán là tinh hoa trí tuệ truyền thống được chia sẻ công khai, không nên bị giam cầm phía sau những bức tường đóng kín."*
+## Khởi chạy và build
 
----
+Yêu cầu: **Node.js 22**, npm và môi trường có thể cài phụ thuộc.
 
-## 🇻🇳 Các Điểm Chuẩn Hóa Đột Phá Cho Việt Nam
-
-Dự án khắc phục toàn diện những hạn chế của các phần mềm an sao ngoại quốc khi áp dụng vào Việt Nam:
-
-1. **Bản đồ Địa lý 34 Tỉnh/Thành phố sau sáp nhập (NQ 202/2025/QH15)**:
-   - Tích hợp chuẩn xác dữ liệu tọa độ kinh độ và vĩ độ của 34 tỉnh/thành phố theo **Nghị quyết số 202/2025/QH15 của Quốc hội** (có hiệu lực từ ngày 12/6/2025).
-   - Hỗ trợ tra cứu nhanh theo tên 63 tỉnh thành cũ hoặc tên 34 tỉnh thành mới sau sáp nhập.
-
-2. **Quy chuẩn Chân Thái Dương Thời (True Solar Time) theo Kinh tuyến 105°E (UTC+7)**:
-   - Sử dụng kinh tuyến gốc chuẩn của Việt Nam ($\lambda_0 = 105^\circ\text{E}$, tương ứng UTC+7 / 420 phút).
-   - Tự động bù trừ Phương trình thời gian (Equation of Time - EoT) và chênh lệch kinh độ thực tế tại nơi sinh đến từng giây.
-
-3. **Chuẩn hóa 4 Mốc Đổi Giờ Lịch Sử Việt Nam**:
-   - Xử lý tự động và cảnh báo đối với 4 giai đoạn điều chỉnh giờ trong lịch sử Việt Nam:
-     - **1943 - 1945**: Giờ Pháp/Đông Dương (UTC+8).
-     - **1945**: Nhật đảo chính (UTC+9).
-     - **1960 - 1975**: Phân định múi giờ theo Hiệp định Genève và vĩ tuyến 17 (Miền Bắc UTC+7, Miền Nam UTC+8).
-     - **1975 đến nay**: Thống nhất toàn quốc theo giờ chuẩn UTC+7.
-   - Cung cấp nút tự động chuyển đổi giờ sinh về giờ thực tế chuẩn xác.
-
-4. **Định dạng Thời Gian Chuẩn Việt Nam `DD/MM/YYYY HH:mm:ss`**:
-   - Giao diện nhập liệu và hiển thị thời gian tuân thủ nghiêm ngặt thói quen của người Việt (Ngày/Tháng/Năm Giờ:Phút:Giây).
-   - Hỗ trợ nhập liệu song hành và chuyển đổi mượt mà giữa Dương lịch và Âm lịch có hiển thị Can Chi.
-
-5. **Việt Hóa 100% Thuật Ngữ & Hiển thị Tên Cung**:
-   - Tên cung hiển thị song hành tôn trọng truyền thống: **"Nô Bộc (Giao Hữu)"**.
-   - Việt hóa toàn diện 14 chính tinh, 100+ phụ tinh, tứ hóa (Lộc, Quyền, Khoa, Kỵ), ngũ hành nạp âm cục và hệ thống miếu hãm (Miếu, Vượng, Đắc, Bình, Nhàn, Hãm).
-
-6. **Toàn Văn 3 Bộ Cổ Thư Kinh Điển (Chữ Quốc Ngữ kèm Hán-Việt)**:
-   - 《Tử Vi Đẩu Số Cốt Tủy Phú》
-   - 《Tử Vi Đẩu Số Toàn Tập》
-   - 《Tử Vi Đẩu Số Toàn Thư》
-   - Tích hợp công cụ tìm kiếm toàn văn câu phú, đối chiếu cổ thư ngay trong ứng dụng (`/library`).
-
-7. **Kho Dữ Liệu Ngày Giờ Sinh Danh Nhân Lịch Sử Việt Nam**:
-   - Tích hợp lá số mẫu chuẩn xác của 10 danh nhân lịch sử - văn hóa Việt Nam (Chủ tịch Hồ Chí Minh, Đại tướng Võ Nguyên Giáp, Đại thi hào Nguyễn Du, Hưng Đạo Đại Vương Trần Quốc Tuấn, Nguyễn Trãi, Lê Lợi, Quang Trung...).
-
-8. **Cơ Chế Luận Đoán Mệnh Lý Linh Hoạt (Hybrid Engine)**:
-   - **Tự động ngoại tuyến (Offline Rule-based)**: Tự động phân tích lá số, cách cục, tam phương tứ chính ngay lập tức mà không cần kết nối internet hay tài khoản API.
-   - **Tùy chọn AI trực tiếp**: Hỗ trợ kết nối với Claude, OpenAI, Gemini hoặc DeepSeek khi người dùng cấu hình API Key.
-
----
-
-## 🛠️ Hướng Dẫn Cài Đặt & Khởi Chạy
-
-### Yêu cầu môi trường
-- **Node.js**: phiên bản `>= 18.18.0`
-- **npm** / **pnpm** / **yarn**
-
-### 1. Sao chép kho mã nguồn (Clone Repository)
-```bash
-git clone https://github.com/naot7/tu-vi-viet-nam.git
+\`\`\`bash
+git clone https://github.com/kuquan33333/tu-vi-viet-nam.git
 cd tu-vi-viet-nam
-```
-
-### 2. Cài đặt các gói phụ thuộc
-```bash
-npm install
-```
-
-### 3. Khởi động môi trường phát triển (Development)
-```bash
-npm run dev
-```
-→ Mở trình duyệt và truy cập: **`http://localhost:3000`**
-
-### 4. Kiểm tra kiểu dữ liệu tĩnh (TypeScript Typecheck)
-```bash
+git checkout revamp-v2
+npm ci
 npm run typecheck
-```
-
-### 5. Chạy bộ kiểm thử hồi quy tự động (Unit / Regression Tests)
-```bash
 npm test
-```
-*(Kiểm tra thuật toán an sao, kinh độ 34 tỉnh thành, 4 mốc giờ lịch sử VN và giờ sinh danh nhân).*
+npm run dev
+\`\`\`
 
-### 6. Biên dịch và chạy bản hoàn chỉnh (Production Build)
-```bash
-npm run build
-npm run start
-```
+Mở http://localhost:3000 để chạy ứng dụng Next.js chế độ phát triển.
 
----
+Bản Cloudflare Pages dùng static export, \`out/\`:
 
-## ⚙️ Cấu Hình Biến Môi Trường (Tùy Chọn)
+\`\`\`bash
+npx tsx scripts/test-triad.ts
+npx tsx scripts/test-revamp.ts
+node scripts/prepare-cloudflare-demo.mjs
+NEXT_PUBLIC_SITE_URL=https://lichvannien-9sv.pages.dev npm run build
+\`\`\`
 
-Hệ thống hoạt động hoàn chỉnh 100% ngoại tuyến mà không cần cấu hình thêm bất kỳ biến môi trường nào. Nếu bạn muốn kích hoạt tính năng **AI Đàm Đạo Trực Tiếp**, sao chép file cấu hình:
+**Lưu ý:** \`prepare-cloudflare-demo.mjs\` sửa \`next.config.js\`, metadata export và **loại route API/knowledge động trong bản checkout hiện tại**. Hãy chạy trên checkout/branch build riêng và không commit các thay đổi sinh ra từ bước chuẩn bị. Cloudflare Pages đã có cấu hình build tự động riêng; project hiện đặt tự động triển khai ở chế độ tắt để tránh tiêu hao quota ngoài ý muốn.
 
-```bash
-cp .env.example .env.local
-```
+QA thực hiện trên GitHub Actions: \`.github/workflows/ci.yml\`, \`.github/workflows/seo.yml\` và script dưới \`scripts/regression/\`. Lighthouse được đo trên môi trường QA mô phỏng nén CDN, **không thay thế đo trực tiếp trên thiết bị thật hoặc hiện trường mạng của người dùng**.
 
-Sau đó mở `.env.local` và điền API Key mong muốn:
-- `ANTHROPIC_API_KEY`: Dùng cho Claude 3.5 Haiku / Sonnet.
-- `OPENAI_API_KEY` hoặc `DEEPSEEK_API_KEY`: Dùng cho OpenAI GPT hoặc DeepSeek.
+## Phương pháp, nguồn và giấy phép
 
----
+- [docs/methodology.md](docs/methodology.md): lịch pháp, nguồn đối chiếu thiên văn, múi giờ lịch sử, trường hợp chưa chắc chắn.
+- [docs/triad-implementation.md](docs/triad-implementation.md): phạm vi thực của Thiên Kỷ/Địa Kỷ/Nhân Kỷ và nguồn thư viện.
+- [docs/licenses/yijing-data.txt](docs/licenses/yijing-data.txt): giấy phép dữ liệu 64 quẻ và ghi chú dị bản.
+- [docs/tianji-ziwei/LICENSE.md](docs/tianji-ziwei/LICENSE.md): nội dung nghiên cứu thuộc **CC BY-NC-SA 4.0 riêng**, **không** được coi là MIT và không mặc nhiên thích hợp cho sản phẩm thương mại.
 
-## 🏛️ Cấu Trúc Dự Án
-
-```text
-tu-vi-viet-nam/
-├── app/                      # Next.js 16 App Router (37 static/SSG routes)
-│   ├── api/                  # API endpoints (/api/interpret, /api/heming)
-│   ├── chart/                # Trang An sao lá số Tử Vi chính
-│   ├── heming/               # Trang Hợp bàn đối chiếu 2 lá số
-│   ├── library/              # Thư viện toàn văn 3 bộ Cổ thư kinh điển
-│   └── knowledge/            # 182 chuyên đề tri thức Tử Vi (14 chính tinh x 13 cung)
-├── components/               # Giao diện người dùng (BirthForm, ChartBoard, PalaceCell...)
-├── lib/
-│   ├── ziwei/                # Engine thuật toán an sao, 34 tỉnh thành, Chân Thái Dương Thời
-│   │   ├── cities.ts         # Danh sách 34 tỉnh thành NQ 202/2025/QH15
-│   │   ├── dst-vn.ts         # 4 mốc giờ lịch sử Việt Nam
-│   │   ├── datetime-vn.ts    # Xử lý định dạng thời gian DD/MM/YYYY HH:mm:ss
-│   │   ├── algorithm.ts      # Thuật toán an sao & Boundary Mapping Việt hóa
-│   │   └── patterns.ts       # Nhận diện 38+ cách cục Tử Vi
-│   └── classics/             # Dữ liệu Quốc ngữ toàn văn Cốt Tủy Phú, Toàn Tập, Toàn Thư
-└── scripts/regression/       # Bộ kiểm thử hồi quy tự động
-```
-
----
-
-## 👥 Tác Giả & Lời Tri Ân
-
-### Tác giả phát triển & Việt hóa:
-- **Toàn Võ** ([@naot7](https://github.com/naot7)) — Trưởng dự án, chuẩn hóa địa lý 34 tỉnh thành Việt Nam (NQ 202/2025/QH15), tích hợp Chân Thái Dương Thời 105°E, xử lý 4 mốc đổi giờ lịch sử Việt Nam và Việt hóa toàn diện hệ thống.
-
-### Kế thừa học thuật & Tri ân:
-- **Thầy Nghê Hải Hạ (Ni Haixia - 倪海厦)**: Đại sư Trung y và Dịch số, tác giả hệ thống 《Thiên Kỷ - Tử Vi Đẩu Số》 chân truyền.
-- **Renhuai123 / [ouranic.cn](https://ouranic.cn)**: Tác giả dự án mã nguồn mở nguyên bản đã đóng góp thuật toán ban đầu cho cộng đồng.
-- **SylarLong ([iztro](https://github.com/SylarLong/iztro))** & **6tail ([lunar-javascript](https://github.com/6tail/lunar-javascript))**: Các tác giả của các thư viện mã nguồn mở nền tảng về an sao và âm dương lịch.
-
----
-
-## 📜 Giấy Phép Bản Quyền (License)
-
-Dự án được phân phối dưới giấy phép **[MIT License](./LICENSE)**. Bạn được toàn quyền sử dụng, sửa đổi và triển khai cho mục đích cá nhân lẫn thương mại.
+Mã nguồn do [naot7](https://github.com/naot7) phát triển, có đóng góp và thư viện từ cộng đồng, gồm [iztro](https://github.com/SylarLong/iztro), [lunar-javascript](https://github.com/6tail/lunar-javascript) cùng các tác giả được ghi trong tài liệu nguồn. Phần **mã riêng của repository** sử dụng MIT theo [LICENSE](LICENSE); giấy phép của các tệp dữ liệu, thư tịch, hình ảnh và các trang nhúng bên ngoài áp dụng **riêng theo từng nguồn**. Việc GitHub hiển thị một tệp không đồng nghĩa có quyền tái sử dụng thương mại nội dung của tệp đó.
