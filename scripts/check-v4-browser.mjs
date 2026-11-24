@@ -9,7 +9,33 @@ try{
  for(const width of [360,1280]){
   const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});const page=await ctx.newPage();
   await ctx.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
-  const open=async path=>{await page.goto(base+path);await page.waitForLoadState('networkidle');await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true');};
+  // Diagnose hydration failures without treating a server-rendered 200 page as interactive.
+  const browserErrors=[],failedRequests=[];
+  page.on('pageerror',err=>browserErrors.push(err.message));
+  page.on('requestfailed',request=>failedRequests.push({url:request.url(),reason:request.failure()?.errorText}));
+  const open=async path=>{
+   const response=await page.goto(base+path,{waitUntil:'domcontentloaded'});
+   await page.waitForLoadState('networkidle');
+   try{
+    await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true',null,{timeout:12000});
+   }catch(err){
+    const details=await page.evaluate(()=>({
+     title:document.title,
+     theme:document.documentElement.getAttribute('data-theme'),
+     themeReady:document.documentElement.dataset.themeReady||null,
+     navigation:location.pathname,
+     heading:[...document.querySelectorAll('h1')].map(x=>x.textContent?.slice(0,100)),
+     buttons:[...document.querySelectorAll('.theme-switch')].map(x=>({name:x.getAttribute('aria-label'),disabled:x.disabled})),
+     scripts:document.scripts.length,
+     loadedScripts:[...document.scripts].filter(x=>x.src).length,
+     bodyText:document.body?.innerText?.slice(0,400)
+    })).catch(e=>({readError:String(e)}));
+    console.error('V4_HYDRATION_DIAGNOSTIC '+JSON.stringify({path,width,status:response?.status(),details,browserErrors,failedRequests:failedRequests.slice(-20)}));
+    await page.screenshot({path:'qa-artifacts/v4/hydration-failure-'+width+'.png',fullPage:false}).catch(()=>{});
+    throw err;
+   }
+   assert.equal(response?.status(),200,'Unexpected status '+path);
+  };
   const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal page overflow '+page.url());
   for(const path of ['/','/chart','/lich-van-nien','/hop-ban','/ho-so','/thien-ky/que/1','/nhan-ky']){
    await open(path);await noOverflow();console.log('V4_THEME '+width+' '+path);
