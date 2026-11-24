@@ -53,6 +53,8 @@ jobs:
             actual=$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' "http://127.0.0.1:4173$from")
             test "$actual" = "301 http://127.0.0.1:4173$to"
           done < out/_redirects
+      - name: Verify URL-encoded dynamic Next.js assets in static QA server
+        run: node scripts/check-qa-encoded-assets.mjs
       - name: Lighthouse SEO, Accessibility và Performance mobile
         run: |
           mkdir -p qa-artifacts/lighthouse

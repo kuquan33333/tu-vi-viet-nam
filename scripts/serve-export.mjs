@@ -11,10 +11,17 @@ const mime={'.html':'text/html; charset=utf-8','.css':'text/css','.js':'text/jav
 http.createServer((req,res)=>{
  let url;
  try{url=new URL(req.url,'http://127.0.0.1');}catch{res.writeHead(400);return res.end();}
- const pathname=url.pathname.replace(/\/$/,'')||'/';
+ // URL.pathname retains percent encoding (e.g. %5Bso%5D), while Next.js
+ // exports route-specific JS chunks under physical folders named [so].
+ // Decode once before mapping to the filesystem; otherwise pages may SSR as 200
+ // yet never hydrate because their client chunk responds with 404.
+ let decodedPath;
+ try{decodedPath=decodeURIComponent(url.pathname);}catch{res.writeHead(400);return res.end('Đường dẫn không hợp lệ');}
+ if(decodedPath.includes('\\0')||decodedPath.includes('\\\\')){res.writeHead(400);return res.end('Đường dẫn không hợp lệ');}
+ const pathname=decodedPath.replace(/\/$/,'')||'/';
  const redir=redirects.get(pathname);
  if(redir){res.writeHead(redir.status,{Location:redir.to+url.search});return res.end();}
- const file=path.resolve(root,'.'+url.pathname);
+ const file=path.resolve(root,'.'+decodedPath);
  if(file!==root&&!file.startsWith(root+path.sep)){res.writeHead(400);return res.end();}
  const candidate=[file,file+'.html',path.join(file,'index.html')].find(p=>fs.existsSync(p)&&fs.statSync(p).isFile());
  if(!candidate){res.writeHead(404,{'Content-Type':'text/html; charset=utf-8'});return res.end(fs.existsSync(path.join(root,'404.html'))?fs.readFileSync(path.join(root,'404.html')):'Không tìm thấy trang');}
