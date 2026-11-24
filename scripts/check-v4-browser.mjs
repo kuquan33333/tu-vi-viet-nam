@@ -7,16 +7,17 @@ const browser=await chromium.launch({headless:true});const results=[],contrast=[
 mkdirSync('qa-artifacts/v4',{recursive:true});
 try{
  for(const width of [360,1280]){
-  const ctx=await browser.newContext({viewport:{width,height:900}});const page=await ctx.newPage();
+  const ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});const page=await ctx.newPage();
   await ctx.route('**/*',r=>r.request().url().startsWith(base)?r.continue():r.abort());
-  const open=async path=>{await page.goto(base+path);await page.waitForLoadState('networkidle');};
+  const open=async path=>{await page.goto(base+path);await page.waitForLoadState('networkidle');await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true');};
   const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal page overflow '+page.url());
   for(const path of ['/','/chart','/lich-van-nien','/hop-ban','/ho-so','/thien-ky/que/1','/nhan-ky']){
-   await open(path);await noOverflow();
+   await open(path);await noOverflow();console.log('V4_THEME '+width+' '+path);
    const checkContrast=async theme=>{if(!['/','/chart','/lich-van-nien'].includes(path)||!process.env.AXE_SCRIPT)return;await page.addScriptTag({path:process.env.AXE_SCRIPT});const result=await page.evaluate(async()=>await window.axe.run({runOnly:{type:'rule',values:['color-contrast']}}));contrast.push({path,width,theme,violations:result.violations.flatMap(v=>v.nodes.map(n=>({target:n.target,summary:n.failureSummary})))});};
-   await checkContrast('light');
-   await page.getByRole('button',{name:'Chuyển sang chế độ tối'}).click();await noOverflow();await checkContrast('dark');
-   await page.getByRole('button',{name:'Chuyển sang chế độ sáng'}).click();
+   async function chooseTheme(theme){const root=page.locator('html');const old=await root.getAttribute('data-theme');if(old!==theme)await page.getByRole('button',{name:theme==='dark'?'Chuyển sang chế độ tối':'Chuyển sang chế độ sáng'}).click();await page.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);await page.getByRole('button',{name:theme==='dark'?'Chuyển sang chế độ sáng':'Chuyển sang chế độ tối'}).waitFor();await page.evaluate(()=>Promise.all(document.getAnimations().filter(a=>a.effect?.getTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{}))));}
+   await chooseTheme('light');await checkContrast('light');
+   await chooseTheme('dark');await noOverflow();await checkContrast('dark');
+   await chooseTheme('light');
   }
   await open('/chart');await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
   await page.getByLabel('Ngày sinh dương lịch').selectOption('6');await page.getByLabel('Tháng sinh dương lịch').selectOption('5');await page.getByLabel('Năm sinh',{exact:true}).fill('1990');
@@ -31,7 +32,7 @@ try{
   assert.ok(!(await page.evaluate(()=>localStorage.getItem('tuvivn.profiles.v2'))).includes('V4 QA'));
   await page.getByLabel('Mã PIN',{exact:true}).fill('00000000');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByText(/PIN không đúng/).waitFor();
   await page.getByLabel('Mã PIN',{exact:true}).fill('73918426');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByRole('heading',{name:'V4 QA'}).waitFor();
-  await page.getByRole('link',{name:'Hợp bàn',exact:true}).first().click();await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
+  await page.getByRole('link',{name:'Hợp bàn',exact:true}).filter({visible:true}).first().click();await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
   if(width===360)await page.getByRole('button',{name:/Người thứ hai/}).click();
   await page.getByLabel('Chọn hồ sơ người B').selectOption({label:await page.getByLabel('Chọn hồ sơ người B').locator('option').nth(1).textContent()});
   await page.getByRole('button',{name:'Đối chiếu hai lá số'}).click();await page.getByRole('heading',{name:'Báo cáo đối chiếu 12 cung'}).waitFor();await noOverflow();

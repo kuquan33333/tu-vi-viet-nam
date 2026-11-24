@@ -387,3 +387,8 @@ button,select,input,summary{max-width:100%;box-sizing:border-box}
 .form-spinner{animation:form-spin 1s linear infinite}
 @keyframes form-spin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.form-spinner{animation:none}}
+
+/* Explicit theme colors; no transition during theme change. */
+[data-theme=dark]{color-scheme:dark}
+[data-theme=light]{color-scheme:light}
+.calendar-print select{background:var(--bg-card);color:var(--tx-0);border:1px solid var(--bdr-med);border-radius:8px;padding:6px 10px}

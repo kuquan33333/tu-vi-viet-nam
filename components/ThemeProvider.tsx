@@ -1,50 +1,20 @@
 'use client';
-import { createContext, useContext, useEffect, useState } from 'react';
-
-export type Theme = 'dark' | 'light';
-
-const ThemeContext = createContext<{
-  theme: Theme;
-  toggle: () => void;
-}>({ theme: 'light', toggle: () => {} });
-
-function getInitialTheme(): Theme {
-  if (typeof document !== 'undefined') {
-    const attr = document.documentElement.getAttribute('data-theme');
-    if (attr === 'light' || attr === 'dark') return attr;
-  }
-  return 'light';
+import {createContext,useContext,useEffect,useState} from 'react';
+export type Theme='dark'|'light';
+const ThemeContext=createContext<{theme:Theme;toggle:()=>void}>({theme:'light',toggle:()=>{}});
+export function ThemeProvider({children}:{children:React.ReactNode}){
+ const [theme,setTheme]=useState<Theme>('light');
+ useEffect(()=>{
+  const root=document.documentElement;
+  const current=root.getAttribute('data-theme')==='dark'?'dark':'light';
+  setTheme(current);root.setAttribute('data-theme',current);root.dataset.themeReady='true';
+ },[]);
+ function toggle(){
+  const root=document.documentElement;
+  const next:Theme=root.getAttribute('data-theme')==='dark'?'light':'dark';
+  root.setAttribute('data-theme',next);setTheme(next);
+  try{localStorage.setItem('ziwei-theme',next)}catch{}
+ }
+ return <ThemeContext.Provider value={{theme,toggle}}>{children}</ThemeContext.Provider>;
 }
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>(getInitialTheme);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const saved = localStorage.getItem('ziwei-theme') as Theme | null;
-    if (saved === 'light' || saved === 'dark') setTheme(saved);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const root = document.documentElement;
-    root.setAttribute('data-theme', theme);
-    localStorage.setItem('ziwei-theme', theme);
-  }, [theme, mounted]);
-
-  const toggle = () => {
-    const root = document.documentElement;
-    root.classList.add('theme-transitioning');
-    setTheme(t => t === 'dark' ? 'light' : 'dark');
-    setTimeout(() => root.classList.remove('theme-transitioning'), 420);
-  };
-
-  return (
-    <ThemeContext.Provider value={{ theme, toggle }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
-
-export const useTheme = () => useContext(ThemeContext);
+export const useTheme=()=>useContext(ThemeContext);
