@@ -45,12 +45,13 @@ const CHANG_QU = ['Văn Xương', 'Văn Khúc', '文昌', '文曲'];
 const KUI_YUE = ['Thiên Khôi', 'Thiên Việt', '天魁', '天钺'];
 
 // ────────────────── 辅助函数 ──────────────────
+// Use the stable numeric star IDs already defined by school-data at the boundary.
+// Unknown names retain their exact identity; do not collapse unrelated minor stars.
+function starKey(name: string): number | string {
+  return SCHOOL_NAME_TO_ID[name] ?? SCHOOL_NAME_TO_ID[translateStarCnToVi(name)] ?? translateStarCnToVi(name);
+}
 function matchStarName(starName: string, queryName: string): boolean {
-  if (starName === queryName) return true;
-  const viQuery = translateStarCnToVi(queryName);
-  if (starName === viQuery) return true;
-  const viStar = translateStarCnToVi(starName);
-  return viStar === viQuery;
+  return starKey(starName) === starKey(queryName);
 }
 
 function getMajorStarNames(palace: Palace): string[] {
@@ -92,15 +93,12 @@ function getJiaPalaces(chart: ZiweiChart, branch: number): { prev?: Palace; next
     next: getPalaceByBranch(chart, (branch + 1) % 12),
   };
 }
-function sanFangAllStars(chart: ZiweiChart): Set<string> {
-  const set = new Set<string>();
+function sanFangAllStars(chart: ZiweiChart): { has(name: string): boolean } {
+  const set = new Set<number | string>();
   getSanFangPalaces(chart).forEach(p => {
-    p.stars.forEach(s => {
-      set.add(s.name);
-      set.add(translateStarCnToVi(s.name));
-    });
+    p.stars.forEach(s => set.add(starKey(s.name)));
   });
-  return set;
+  return { has: name => set.has(starKey(name)) };
 }
 function sanFangShaCount(chart: ZiweiChart, list: string[] = SHA_HARD): number {
   return getSanFangPalaces(chart).reduce((sum, p) => sum + shaCountInPalace(p, list), 0);
@@ -337,7 +335,7 @@ function detectShaPoLang(chart: ZiweiChart, ming: Palace, patterns: Pattern[]) {
     name: '杀破狼',
     level: breaking.length ? 'caution' : 'good',
     description: '七杀、破军、贪狼三星会命，开创闯荡之命格。一生变动多、不甘平凡，宜创业、军警、业务、销售。中年后才能稳定守成，年轻时易因冲动失利。',
-    palaces: getSanFangPalaces(chart).filter(p => has.some(s => matchStarName(getMajorStarNames(p)[0] || '', s))).map(p => p.name),
+    palaces: getSanFangPalaces(chart).filter(p => has.some(s => getMajorStarNames(p).some(ms => matchStarName(ms, s)))).map(p => p.name),
     conditions: { required, bonus, breaking },
     source: '《紫微斗数全书·杀破狼》',
   });
@@ -1064,6 +1062,7 @@ export const PATTERN_NAME_VI: Record<string, string> = {
   '廉相同宫': 'Liêm Tướng Đồng Cung',
   '廉贞天相格': 'Liêm Tướng Đồng Cung',
   '武杀同宫': 'Vũ Sát Đồng Cung',
+  '武曲七杀': 'Vũ Sát Đồng Cung',
   '同梁同宫': 'Đồng Lương Đồng Cung',
   '天同天梁格': 'Đồng Lương Đồng Cung',
   '日月同宫': 'Nhật Nguyệt Đồng Cung',
@@ -1073,6 +1072,7 @@ export const PATTERN_NAME_VI: Record<string, string> = {
   '明珠出海': 'Minh Châu Xuất Hải',
   '极向离明': 'Cực Hướng Ly Minh',
   '紫微居子': 'Tử Vi Cư Tý',
+  '紫微入命': 'Tử Vi Nhập Mệnh',
   '辅弼夹命': 'Phụ Bật Giáp Mệnh',
   '昌曲夹命': 'Xương Khúc Giáp Mệnh',
   '魁钺夹命': 'Khôi Việt Giáp Mệnh',
@@ -1087,21 +1087,32 @@ export const PATTERN_NAME_VI: Record<string, string> = {
   '巨火羊': 'Cự Hỏa Kình',
   '铃昌陀武': 'Linh Xương Đà Vũ',
   '马头带剑': 'Mã Đầu Đới Kiếm',
+  '马头带箭': 'Mã Đầu Đới Tiễn',
   '禄存守身': 'Lộc Tồn Thủ Thân',
+  '禄存守命': 'Lộc Tồn Thủ Mệnh',
   '天马入命': 'Thiên Mã Nhập Mệnh',
+  '天马在迁': 'Thiên Mã Tại Thiên Di',
   '化禄入财': 'Hóa Lộc Nhập Tài',
   '化权入官': 'Hóa Quyền Nhập Quan',
   '化科入命': 'Hóa Khoa Nhập Mệnh',
   '化科入身': 'Hóa Khoa Nhập Thân',
   '化科入命身': 'Hóa Khoa Nhập Mệnh Thân',
   '机月同梁偏格': 'Cơ Nguyệt Đồng Lương Biến Cách',
+  '机月同梁三星会': 'Cơ Nguyệt Đồng Lương – hội ba sao',
   '昌曲同会': 'Xương Khúc Đồng Hội',
   '辅弼同会': 'Phụ Bật Đồng Hội',
   '魁钺同会': 'Khôi Việt Đồng Hội',
   '科权双会': 'Khoa Quyền Song Hội',
 };
 
+const EXACT_CONDITION_VI: Record<string,string> = {
+  '命宫见禄': 'Cung Mệnh có Lộc Tồn hoặc Hóa Lộc',
+  '三方有化禄或化权（动得有力）': 'Tam phương có Hóa Lộc hoặc Hóa Quyền',
+  '再会化科': 'Hội thêm Hóa Khoa',
+  '七杀、破军、贪狼三星齐入命宫三方四正': 'Thất Sát, Phá Quân và Tham Lang cùng hội tam phương tứ chính của Mệnh',
+};
 function translateConditionText(text: string): string {
+  if (EXACT_CONDITION_VI[text]) return EXACT_CONDITION_VI[text];
   let s = text;
   // Thay thế tên sao
   for (const [id, viName] of Object.entries(SCHOOL_STAR_ID_TO_NAME)) {
@@ -1146,6 +1157,10 @@ function translatePattern(p: Pattern): Pattern {
   return {
     ...p,
     name: PATTERN_NAME_VI[p.name] ?? p.name,
+    // Describe the verified detector condition, not an unverified quotation or prediction.
+    description: p.name === '杀破狼'
+      ? 'Thất Sát, Phá Quân và Tham Lang cùng hội tam phương tứ chính của cung Mệnh. Đây là cách phân loại tổ hợp sao theo tử vi truyền thống, chỉ dùng để tham khảo.'
+      : p.description,
     palaces: p.palaces.map(pl => CN_TO_VI_PALACE[pl] ?? pl),
     conditions: p.conditions ? {
       required: p.conditions.required.map(translateConditionText),

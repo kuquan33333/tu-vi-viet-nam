@@ -81,7 +81,7 @@ function satPhaFixture(): ZiweiChart {
   return chart;
 }
 
-test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', known('L2: sanFangAllStars chỉ thêm khóa tiếng Việt nhưng detector hỏi khóa Hán; chạy --strict-audit để thấy lỗi đỏ'), async () => {
+test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', async () => {
   const { detectPatterns } = await import('../../lib/ziwei/patterns');
   const chart = satPhaFixture();
   const pattern = detectPatterns(chart).find(p => p.name === 'Sát Phá Tham');
@@ -89,7 +89,7 @@ test('L2: Sát Phá Tham phải nhận đủ tên sao tiếng Việt', known('L2
   assert.equal(pattern.palaces.length, 3);
 });
 
-test('L2: mô tả cách cục không còn chữ Hán', known('L2: translatePattern không dịch description; chưa sửa nội dung/nguồn'), async () => {
+test('L2: mô tả cách cục không còn chữ Hán', async () => {
   const { detectPatterns } = await import('../../lib/ziwei/patterns');
   const chart = satPhaFixture();
   // Tách lỗi dịch mô tả khỏi lỗi khóa VI/CN: cung cấp tên gốc detector đang tra.
@@ -173,4 +173,13 @@ test('L8: npm test phải bao phủ toàn bộ regression scripts', known('L8: 1
   const files = readdirSync(new URL('.', import.meta.url)).filter(x => x.endsWith('.test.ts'));
   const missing = files.filter(x => !pkg.scripts.test.includes('scripts/regression/' + x));
   assert.deepEqual(missing, [], 'Test chưa chạy: ' + missing.join(', '));
+});
+
+test('L2: Sát Phá Tham vẫn xác định đủ cung khi sao không đứng đầu danh sách chính tinh', async () => {
+  const {detectPatterns}=await import('../../lib/ziwei/patterns');
+  const chart=satPhaFixture();
+  chart.palaces.find(p=>p.branch===chart.mingGongBranch)!.stars.unshift({name:'Thiên Phủ',type:'major'} as Star);
+  const p=detectPatterns(chart).find(x=>x.name==='Sát Phá Tham');
+  assert.ok(p);
+  assert.equal(p.palaces.length,3);
 });
