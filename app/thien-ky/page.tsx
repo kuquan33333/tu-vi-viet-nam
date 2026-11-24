@@ -45,7 +45,7 @@ function IChingTool(){
  const [filter,setFilter]=useState('');
  const [manual,setManual]=useState<LineValue[]>([7,8,7,8,7,8]);
  useEffect(()=>{
-  try {const saved=localStorage.getItem(STORAGE_KEY);if(saved){const val=JSON.parse(saved);if(Array.isArray(val))setHistory(val.filter((x:Saved)=>Array.isArray(x.lines)&&x.lines.length===6).slice(0,10));}}
+  try {const saved=localStorage.getItem(STORAGE_KEY);if(saved){const val=JSON.parse(saved);if(Array.isArray(val))setHistory(val.filter((x:Saved)=>x&&Array.isArray(x.lines)&&x.lines.length===6&&x.lines.every(v=>[6,7,8,9].includes(v))&&typeof x.question==='string'&&typeof x.date==='string').slice(0,10));}}
   catch {}
  },[]);
  const primary=useMemo(()=>lines?hexFromLines(lines):null,[lines]);

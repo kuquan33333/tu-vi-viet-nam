@@ -3,7 +3,7 @@ import {createRequire} from 'node:module';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const {chromium}=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'playwright');
 const base='http://127.0.0.1:4173';
-const browser=await chromium.launch({headless:true});const results=[];
+const browser=await chromium.launch({headless:true});const results=[],contrast=[];
 mkdirSync('qa-artifacts/v4',{recursive:true});
 try{
  for(const width of [360,1280]){
@@ -13,7 +13,9 @@ try{
   const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'Horizontal page overflow '+page.url());
   for(const path of ['/','/chart','/lich-van-nien','/hop-ban','/ho-so','/thien-ky/que/1','/nhan-ky']){
    await open(path);await noOverflow();
-   await page.getByRole('button',{name:'Chuyển sang chế độ tối'}).click();await noOverflow();
+   const checkContrast=async theme=>{if(!['/','/chart','/lich-van-nien'].includes(path)||!process.env.AXE_SCRIPT)return;await page.addScriptTag({path:process.env.AXE_SCRIPT});const result=await page.evaluate(async()=>await window.axe.run({runOnly:{type:'rule',values:['color-contrast']}}));contrast.push({path,width,theme,violations:result.violations.flatMap(v=>v.nodes.map(n=>({target:n.target,summary:n.failureSummary})))});};
+   await checkContrast('light');
+   await page.getByRole('button',{name:'Chuyển sang chế độ tối'}).click();await noOverflow();await checkContrast('dark');
    await page.getByRole('button',{name:'Chuyển sang chế độ sáng'}).click();
   }
   await open('/chart');await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
@@ -23,6 +25,7 @@ try{
   if(width===360){assert.equal(await page.locator('.mobile-palace').count(),12);assert.equal(await page.locator('.chart-scroll').isVisible(),false);}
   await page.getByRole('button',{name:'Lưu lá số'}).click();await page.getByText(/Đã lưu hồ sơ/).waitFor();
   await page.screenshot({path:'qa-artifacts/v4/chart-'+width+'.png',fullPage:true});
+  await page.emulateMedia({media:'print'});await page.locator('.chart-scroll').waitFor({state:'visible'});await page.pdf({path:'qa-artifacts/v4/chart-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});await page.emulateMedia({media:'screen'});
   await open('/ho-so');await page.getByLabel('Mã PIN',{exact:true}).fill('73918426');await page.getByLabel('Nhập lại PIN').fill('73918426');await page.getByRole('button',{name:'Mã hóa và khóa'}).click();
   await page.getByRole('heading',{name:'Kho hồ sơ đang khóa'}).waitFor();
   assert.ok(!(await page.evaluate(()=>localStorage.getItem('tuvivn.profiles.v2'))).includes('V4 QA'));
@@ -39,4 +42,5 @@ try{
   await page.screenshot({path:'qa-artifacts/v4/hex-'+width+'.png',fullPage:true});
   results.push({width,profileEncryption:true,profileComparison:true,calendar:true,hexagram:true,overflow:false});await ctx.close();
  }
-}finally{writeFileSync('qa-artifacts/v4/results.json',JSON.stringify(results,null,2));await browser.close();}
+}finally{writeFileSync('qa-artifacts/v4/results.json',JSON.stringify(results,null,2));writeFileSync('qa-artifacts/v4/contrast.json',JSON.stringify(contrast,null,2));await browser.close();}
+assert.ok(contrast.every(x=>x.violations.length===0),'WCAG AA contrast violations: '+JSON.stringify(contrast.filter(x=>x.violations.length)));

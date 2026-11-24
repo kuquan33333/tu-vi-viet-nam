@@ -66,11 +66,12 @@ jobs:
           done
           node scripts/check-seo-lighthouse.mjs
       - name: Kiểm thử tương tác trình duyệt 360px và 1280px
+        if: ${{ !cancelled() }}
         run: |
-          npm install --prefix "$RUNNER_TEMP/browser-qa" --ignore-scripts --no-save --no-audit --no-fund playwright@1.51.1
+          npm install --prefix "$RUNNER_TEMP/browser-qa" --ignore-scripts --no-save --no-audit --no-fund playwright@1.51.1 axe-core@4.10.3
           "$RUNNER_TEMP/browser-qa/node_modules/.bin/playwright" install chromium
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" node scripts/check-browser-interaction.mjs
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" node scripts/check-v4-browser.mjs
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/browser-qa/node_modules/playwright" AXE_SCRIPT="$RUNNER_TEMP/browser-qa/node_modules/axe-core/axe.min.js" node scripts/check-v4-browser.mjs
       - name: Capture responsive screenshots
         if: always()
         run: |

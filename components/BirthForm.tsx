@@ -294,9 +294,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'blur(20px)' }}
     >
       {/* Tiêu đề */}
-      <h3 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.12em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
+      <h2 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.12em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
         NHẬP THÔNG TIN SINH THẦN <TermTooltip term="Sinh thần" />
-      </h3>
+      </h2>
 
       {/* ── Tiến trình hoàn thành ── */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>

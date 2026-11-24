@@ -47,3 +47,17 @@ test('C14: encrypted storage, wrong PIN, atomic writes and JSON roundtrip',async
  await disableProfileLock();assert.equal(profileStatus(),'plain');
  assert.equal(await importProfiles(backup),1);assert.equal(readProfiles()[0].birth.name,'QA-private');
 });
+
+test('C14: corrupted authentication tag cannot unlock or overwrite encrypted vault',async()=>{
+ clearProfiles();saveProfile(birth);await lockProfiles('73918426');
+ const key='tuvivn.profiles.v2',good=store.get(key)!;
+ const v=JSON.parse(good);const buf=Uint8Array.from(atob(v.ciphertext),x=>x.charCodeAt(0));buf[buf.length-1]^=1;v.ciphertext=btoa(Array.from(buf,x=>String.fromCharCode(x)).join(''));
+ const bad=JSON.stringify(v);store.set(key,bad);
+ await assert.rejects(unlockProfiles('73918426'),/PIN/);assert.equal(store.get(key),bad);
+ await assert.rejects(saveProfiles([birth]));assert.equal(store.get(key),bad);
+ store.set(key,good);await unlockProfiles('73918426');await disableProfileLock();
+ clearProfiles();
+ for(let i=0;i<29;i++)saveProfile({...birth,name:'Q'+i});
+ const before=exportProfiles();await assert.rejects(saveProfiles([birth,birth]),/30/);assert.equal(exportProfiles(),before);
+ clearProfiles();
+});

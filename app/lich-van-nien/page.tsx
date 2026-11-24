@@ -1,5 +1,5 @@
 'use client';
-import {useMemo,useState} from 'react';
+import {useEffect,useMemo,useState} from 'react';
 import Link from 'next/link';
 import Icon from '@/components/Icon';
 import {Solar} from 'lunar-javascript';
@@ -30,6 +30,7 @@ const TERMS_VI:Record<string,string>={
 
 const date=(y:number,m:number,d:number)=>new Date(y,m-1,d);
 export default function CalendarPage(){
+ const [ready,setReady]=useState(false);useEffect(()=>{setReady(true);},[]);
  const vnToday=vietnamToday();const today=date(vnToday.year,vnToday.month,vnToday.day);
  const [year,setYear]=useState(today.getFullYear());
  const [month,setMonth]=useState(today.getMonth()+1);
@@ -73,7 +74,7 @@ export default function CalendarPage(){
   <div className="tool-hero"><div className="eyebrow">LỊCH PHÁP VIỆT NAM</div><h1 className="display-small">Lịch Vạn Niên</h1>
    <p className="lead" style={{maxWidth:750}}>Tra cứu ngày Dương lịch, Âm lịch, Can Chi và tiết khí trong phạm vi 1900–2050. Không đưa ra kết luận ngày tốt/xấu không có căn cứ thuật toán.</p>
   </div>
-  <div className="workspace-layout">
+  {!ready?<p role="status" className="surface-card reading-panel">Đang chuẩn bị lịch tháng…</p>:<div className="workspace-layout">
    <section className="surface-card calendar-print" style={{padding:18}}>
     <div className="calendar-toolbar">
      <h2 className="display-small" style={{fontSize:24}}>Tháng {month} / {year}</h2>
@@ -122,6 +123,6 @@ export default function CalendarPage(){
      <Link className="action-outline" href="/chart">Lập lá số →</Link>
     </div>
    </aside>
-  </div>
+  </div>}
  </main>;
 }

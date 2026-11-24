@@ -22,3 +22,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Correction: quẻ 1, hào 2, 见龙再田 → 见龙在田, checked against ancient text at https://zh.wikisource.org/wiki/周易/乾 and https://ctext.org/book-of-changes/qian/zh . Remaining transcription variants are not fully reviewed.

@@ -76,7 +76,7 @@ export default function HemingPage(){
     <div className="site-actions" style={{display:'flex',gap:8,flexWrap:'wrap'}}>
      <button type="button" className="action-outline" onClick={()=>window.print()}>↧ In / PDF</button>
      <button type="button" className="action-outline" onClick={saveBoth}>＋ Lưu 2 hồ sơ</button>
-     <button type="button" className="action-primary" onClick={()=>{setChartA(null);setChartB(null);}}>↶ Đổi dữ liệu</button>
+     <button type="button" className="action-primary" onClick={()=>{setChartA(null);setChartB(null);setSavedA(null);setSavedB(null);setA(null);setB(null);setSelected('A');}}>↶ Đổi dữ liệu</button>
     </div>
    </div>
    {message&&<p role="status" className="study-notice">{message}</p>}
