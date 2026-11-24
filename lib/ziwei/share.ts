@@ -1,6 +1,6 @@
 import type { BirthFormState } from '@/components/BirthForm';
 import type { BirthInfo } from './types';
-import { calculateTrueSolarTime, resolveZiweiDayOffset, shiftGregorianDate, isValidGregorianDate } from './true-solar-time';
+import { calculateTrueSolarTime, shiftGregorianDate, isValidGregorianDate } from './true-solar-time';
 
 /** Kinh độ chuẩn của Thủ đô Hà Nội (làm mốc mặc định) */
 export const DEFAULT_LONGITUDE = 105.85;
@@ -122,7 +122,7 @@ export function searchParamsToForm(params: URLSearchParams): Partial<BirthFormSt
     clockSecond: params.get('s') || '0',
     province: params.get('p') || '',
     city: params.get('c') || '',
-    longitude: parseFloat(params.get('lo') || String(DEFAULT_LONGITUDE)),
+    longitude: params.has('lo')?Number(params.get('lo')):NaN,
     trueSolar:params.get('ts')!=='0',
     lateZishi:params.get('zi')==='same'?'current-day':'next-day',
     utcOffsetMinutes:params.has('tz')?Number(params.get('tz')):undefined,

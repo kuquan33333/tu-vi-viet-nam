@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
-import { PROVINCES, DEFAULT_LONGITUDE } from '@/lib/ziwei/cities';
+import { PROVINCES } from '@/lib/ziwei/cities';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
 import { lunarToSolarVN, solarToLunarVN } from '@/lib/ziwei/lunar-solar';
 import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
@@ -71,7 +71,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     unknownTime: initialData?.unknownTime ?? false,
     province: initialData?.province ?? '',
     city: initialData?.city ?? '',
-    longitude: initialData?.longitude ?? DEFAULT_LONGITUDE,
+    longitude: initialData?.longitude ?? NaN,
     trueSolar: initialData?.trueSolar ?? true,
     lateZishi: initialData?.lateZishi ?? 'next-day',
     utcOffsetMinutes: initialData?.utcOffsetMinutes,
@@ -123,7 +123,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   const actualOffset=civil?.offsets.length===1?civil.offsets[0]:civil?.offsets.includes(chosen??NaN)?chosen:undefined;
   const civilTimeIssue=civil?.offsets.length===0?'Giờ địa phương này không tồn tại do đổi múi giờ. Hãy kiểm tra lại giờ sinh.':civil&&actualOffset===undefined?'Giờ địa phương này lặp lại khi đổi múi giờ; cần chọn múi giờ ghi nhận.':civil?.uncertain?'Mốc chuyển giờ tháng 10/1954 tại miền Bắc chưa có ngày chính xác; chưa thể lập lá số chắc chắn với quy đổi tự động.':'';
   const effectiveForm = {...form,utcOffsetMinutes:form.province==='Nước ngoài'?form.utcOffsetMinutes:actualOffset??historicalTz?.actualOffsetMinutes??420,civilTimeIssue};
-  const preview = !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' && form.year && form.month && form.day && form.province && form.city ? solarPreview(effectiveForm) : null;
+  const preview = !civilTimeIssue && Number.isFinite(form.longitude) && !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' && form.year && form.month && form.day && form.province && form.city ? solarPreview(effectiveForm) : null;
   const branch=preview?.branch;
   const offsetMin=preview?.longitudeCorrectionMinutes??0;
   const shichenInfo=branch===undefined?null:SHICHEN[branch];
@@ -208,7 +208,6 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     : '';
 
   const handleProvince = (prov: string) => {
-    const provData = PROVINCES.find(p => p.name === prov);
     setForm({ ...form, province: prov, city: '', longitude: NaN,utcOffsetMinutes:undefined });
   };
 
@@ -508,7 +507,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
               exit={{ opacity: 0 }}
               style={{ fontSize: '10px', color: isDark ? 'rgba(165,185,210,0.7)' : 'rgba(140,100,20,0.45)', marginTop: '5px' }}
             >
-              * Tự động tính Chân Thái Dương Thời theo kinh tuyến 105°E (UTC+7) chuẩn xác.
+              * Chọn địa danh gần nơi sinh hoặc nhập kinh độ chính xác để hạn chế sai số ở biên giờ.
             </motion.p>
           )}
         </AnimatePresence>
@@ -552,7 +551,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <details style={{marginTop:8}}><summary>Tùy chọn nâng cao</summary>
           <label>Giây sinh<input type="number" min={0} max={59} disabled={form.unknownTime} value={form.clockSecond||'0'} onChange={e=>setForm({...form,clockSecond:e.target.value})} style={inputStyle}/></label>
           <label style={{display:'block',marginTop:6}}><input type="checkbox" checked={form.trueSolar!==false} onChange={e=>setForm({...form,trueSolar:e.target.checked})}/> Dùng Chân Thái Dương Thời</label>
-          <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng giờ đồng hồ.</p>
+          <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng nguyên giờ đồng hồ địa phương, không hiệu chỉnh lịch sử.</p>
           {preview&&<p>Kinh độ: {preview.longitudeCorrectionMinutes.toFixed(2)} phút · EoT: {preview.equationOfTimeMinutes.toFixed(2)} phút · Tổng: {preview.totalCorrectionMinutes.toFixed(2)} phút · Giờ tính: {String(preview.hour).padStart(2,'0')}:{String(preview.minute).padStart(2,'0')}:{String(preview.second).padStart(2,'0')}</p>}
           <label>Quy ước giờ Tý muộn (23:00–23:59)<select style={inputStyle} value={form.lateZishi??'next-day'} onChange={e=>setForm({...form,lateZishi:e.target.value as 'next-day'|'current-day'})}><option value="next-day">Tý muộn tính ngày hôm sau; Tý sớm giữ ngày</option><option value="current-day">Tý muộn giữ ngày hiện tại</option></select></label>
           <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
@@ -560,7 +559,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
             <span style={{ fontSize: '11px', color: isDark ? 'rgba(170,195,220,0.75)' : 'rgba(140,100,20,0.5)' }}>Chân Thái Dương Thời → </span>
             <span style={{ fontSize: '15px', color: goldText, fontWeight: 700, letterSpacing: '0.08em' }}>
-              Giờ {BRANCHES[branch]}
+              {branch===undefined?'Chưa xác định':`Giờ ${BRANCHES[branch]}`}
             </span>
             {shichenInfo && (
               <span style={{ fontSize: '11px', color: isDark ? 'rgba(170,195,220,0.75)' : 'rgba(140,100,20,0.5)', marginLeft: '4px' }}>
