@@ -98,22 +98,8 @@ test('L2: mô tả cách cục không còn chữ Hán', async () => {
   assert.doesNotMatch(pattern.description, /\p{Script=Han}/u);
 });
 
-test('L3: tỉnh và thành phố mặc định của BirthForm tồn tại cùng một mục', () => {
-  const text = source('components/BirthForm.tsx');
-  const province = text.match(/province:\s*initialData\?\.province\s*\?\?\s*'([^']+)'/)?.[1];
-  const city = text.match(/city:\s*initialData\?\.city\s*\?\?\s*'([^']+)'/)?.[1];
-  assert.ok(province && city);
-  assert.ok(PROVINCES.find(p => p.name === province)?.cities.some(c => c.name === city));
-});
-
-test('L4: biểu thức quy đổi lịch sử cộng delta âm, không đảo dấu (kiểm tra nguồn)', () => {
-  const text = source('components/BirthForm.tsx');
-  assert.match(text, /adjustedMinutes\s*=\s*\(totalMinutes\s*\+\s*historicalTz\.deltaMinutes\s*\+\s*1440\)\s*%\s*1440/);
-  assert.match(text, /Tự động quy đổi về UTC\+7 \(\{historicalTz\.deltaMinutes\} phút\)/);
-  assert.equal((9 * 60 + 15 - 60 + 1440) % 1440, 8 * 60 + 15);
-  assert.equal((9 * 60 + 15 - 120 + 1440) % 1440, 7 * 60 + 15);
-});
-
+test('L3: form không gán địa danh hay giờ mặc định',()=>{const text=source('components/BirthForm.tsx');for(const k of ['province','city','clockHour','clockMinute'])assert.ok(text.includes(k+": initialData?."+k+" ?? ''"));});
+test('L4: hiệu chỉnh lịch sử sử dụng đúng offset thay vì sửa giờ nhập',()=>{const text=source('components/BirthForm.tsx');assert.match(text,/historicalTz\?\.actualOffsetMinutes\?\?420/);assert.doesNotMatch(text,/adjustedMinutes\s*=/);});
 test('L5: tọa độ 12 cung thẻ chia sẻ khớp bàn lá số (kiểm tra nguồn)', () => {
   const share = source('components/ShareCardCanvas.tsx').split('const ZHIWEI_LAYOUT')[1].split('];')[0];
   const board = source('components/ChartBoard.tsx').split('const BRANCH_GRID_POS')[1].split('};')[0];

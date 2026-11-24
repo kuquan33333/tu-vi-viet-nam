@@ -40,7 +40,7 @@ export const KUA:Record<number,Kua>={
  9:{number:9,name:'Ly',group:'Đông tứ',home:'S',good:{'Sinh Khí':'E','Thiên Y':'SE','Diên Niên':'N','Phục Vị':'S'}},
 };
 export function kuaFromYear(year:number,gender:Gender):Kua {
- if(!Number.isInteger(year)||year<1800||year>2100)throw Error('Năm chỉ hỗ trợ 1800–2100.');
+ if(!Number.isInteger(year)||year<1900||year>2099)throw Error('Năm chỉ hỗ trợ 1900–2099.');
  const digits=REDUCE(year%100);
  let value=year>=2000?(gender==='nam'?9-digits:6+digits):(gender==='nam'?10-digits:5+digits);
  while(value<=0)value+=9;

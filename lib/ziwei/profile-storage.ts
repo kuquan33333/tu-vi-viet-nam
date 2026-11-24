@@ -14,6 +14,7 @@ export function readProfiles():SavedProfile[]{
  }catch{return []}
 }
 export function saveProfile(birth:BirthInfo):SavedProfile{
+ if(birth.assumedHour)throw new Error('Không lưu phương án giờ sinh chưa xác định.');
  if(!canUseStorage())throw new Error('Bộ nhớ trình duyệt không khả dụng.');
  const now=new Date();
  const item:SavedProfile={
