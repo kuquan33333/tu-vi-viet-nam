@@ -25,3 +25,13 @@
 - Tất cả sửa đổi trên nhánh revamp-v2; main và cloudflare-demo giữ nguyên.
 - Build command Cloudflare: kiểm thử triad, kiểm thử revamp, chuẩn bị export, Next.js build.
 - Trạng thái chỉ được xác nhận sau khi deployment qua và kiểm tra trình duyệt.
+
+## QA mobile V2 (24/11/2026)
+
+- Cloudflare build/deploy success Next.js 16 trên nhánh revamp-v2.
+- Trên viewport 390px: trang chủ không tràn ngang, CTA không bị cắt, bottom navigation hiển thị.
+- /chart: chọn ngày sinh và submit tạo lá số, chỉ một TimeNav, panel chú giải hiển thị, không tràn ngang.
+- /heming: chuyển A/B trên mobile đúng, không tràn ngang.
+- /lich-van-nien: lịch 42 ô tháng hiện tại, Can Chi và dữ liệu âm lịch hiển thị; tên Can Chi và tiết khí được Việt hóa tại lớp hiển thị.
+- 11 URL chính đều trả HTTP 200 qua browser render.
+- Kiểm thử độc lập P3–P5 chuyên sâu và thử trên iPhone vật lý vẫn cần bổ sung.
