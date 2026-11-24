@@ -7,3 +7,11 @@ for(const route of routes){const report=JSON.parse(fs.readFileSync('qa-artifacts
  console.log(route,Math.round(score*100));
  assert.ok(score>=0.95,route+' SEO below 95');
 }
+
+for(const route of ['home','chart','lich-van-nien']){
+ const report=JSON.parse(fs.readFileSync('qa-artifacts/lighthouse/'+route+'.json','utf8'));
+ for(const [key,threshold] of [['accessibility',.95],['performance',.85]]){
+  const score=report.categories?.[key]?.score;assert.equal(typeof score,'number',route+' '+key);
+  console.log(route,key,Math.round(score*100));assert.ok(score>=threshold,route+' '+key+' below '+threshold);
+ }
+}

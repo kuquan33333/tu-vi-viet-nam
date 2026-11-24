@@ -1,6 +1,7 @@
 'use client';
 import {useMemo,useState} from 'react';
 import Link from 'next/link';
+import Icon from '@/components/Icon';
 import {Solar} from 'lunar-javascript';
 import {dayMarks,solarTermsForYear,vietnamToday} from '@/lib/ziwei/calendar-events';
 import {solarToLunarVN,calendarUncertainty} from '@/lib/ziwei/lunar-solar';
@@ -77,9 +78,9 @@ export default function CalendarPage(){
     <div className="calendar-toolbar">
      <h2 className="display-small" style={{fontSize:24}}>Tháng {month} / {year}</h2>
      <div className="no-print" style={{display:'flex',gap:6,flexWrap:'wrap'}}>
-      <button className="action-outline" type="button" onClick={()=>shift(-1)} aria-label="Tháng trước">‹</button>
+      <button className="action-outline" type="button" onClick={()=>shift(-1)} aria-label="Tháng trước"><span style={{transform:'rotate(180deg)',display:'inline-flex'}}><Icon name="arrow"/></span></button>
       <button className="action-outline" type="button" onClick={()=>{const n=vietnamToday();setYear(n.year);setMonth(n.month);setSelected(date(n.year,n.month,n.day));}}>Hôm nay</button>
-      <button className="action-outline" type="button" onClick={()=>shift(1)} aria-label="Tháng sau">›</button>
+      <button className="action-outline" type="button" onClick={()=>shift(1)} aria-label="Tháng sau"><Icon name="arrow"/></button>
       <button className="action-outline" type="button" onClick={()=>window.print()}>In lịch tháng A4</button>
      </div>
     </div>
@@ -87,12 +88,12 @@ export default function CalendarPage(){
      <label>Tháng <select aria-label="Tháng tra cứu" value={month} onChange={e=>{const m=Number(e.target.value);setMonth(m);setSelected(date(year,m,1));}}>{Array.from({length:12},(_,i)=><option key={i+1} value={i+1}>{i+1}</option>)}</select></label>
      <label>Năm <select aria-label="Năm tra cứu" value={year} onChange={e=>{const y=Number(e.target.value);setYear(y);setSelected(date(y,month,1));}}>{Array.from({length:151},(_,i)=><option key={1900+i} value={1900+i}>{1900+i}</option>)}</select></label>
     </div>
-    <div className="calendar-month-grid" role="grid" aria-label="Lịch tháng">
+    <div className="calendar-month-grid" role="group" aria-label="Lịch tháng">
      {DAYS.map(d=><div className="calendar-week" key={d}>{d}</div>)}
      {days.map(({d,within,lunar:l},i)=>{
       const chosen=selected.toDateString()===d.toDateString();
       const marks=dayMarks(d.getFullYear(),d.getMonth()+1,d.getDate(),within?terms:solarTermsForYear(d.getFullYear()));
-      return <button type="button" role="gridcell" aria-label={d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()} aria-selected={chosen} key={i}
+      return <button type="button" aria-label={d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()} aria-pressed={chosen} disabled={d.getFullYear()<1900||d.getFullYear()>2050} key={i}
        className={'calendar-day'+(!within?' outside':'')+(chosen?' selected':'')+(today.toDateString()===d.toDateString()?' today':'')+(marks.some(m=>m.kind==='holiday')?' has-holiday':'')+(marks.some(m=>m.kind==='term')?' has-term':'')}
        onClick={()=>{setSelected(d);if(!within){setMonth(d.getMonth()+1);setYear(d.getFullYear());}}}>
        <span className="solar-day">{d.getDate()}</span>
@@ -105,11 +106,11 @@ export default function CalendarPage(){
     <div className="calendar-legend"><span>Ngày lễ / ngày kỷ niệm</span><span>Tiết khí</span><span>Mùng 1 / rằm</span></div>
     <p className="workspace-note">Các mốc lễ theo lịch, không phải lịch nghỉ chính thức của từng năm. Tết và Quốc khánh có ngày nghỉ liền kề theo thông báo hằng năm.</p>
    </section>
-   <aside className="surface-card reading-panel">
+   <aside className="surface-card reading-panel no-print">
     <div className="eyebrow">CHI TIẾT NGÀY</div>
     <h2 className="display-small" style={{fontSize:30,margin:'10px 0'}}>{selected.toLocaleDateString('vi-VN')}</h2>
     <p className="lead">Âm lịch: <strong>{lunar?(lunar.lunarDay+'/'+lunar.lunarMonth+'/'+lunar.lunarYear+(lunar.isLeapMonth?' (tháng nhuận)':'')):'—'}</strong></p>
-    <div className="calendar-facts">
+    <p>{dayMarks(selected.getFullYear(),selected.getMonth()+1,selected.getDate(),terms).map(m=>m.label).join(' · ')}</p><div className="calendar-facts">
      <div><span>Năm Can Chi</span><strong>{ganZhiVi(ganZhi?.year)}</strong></div>
      <div><span>Tháng Can Chi (tiết khí, tham khảo)</span><strong>{ganZhiVi(ganZhi?.month)}</strong></div>
      <div><span>Ngày Can Chi</span><strong>{ganZhiVi(ganZhi?.day)}</strong></div>

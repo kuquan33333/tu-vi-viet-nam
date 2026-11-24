@@ -61,7 +61,7 @@ try{
   await goto('/lich-van-nien');
   await page.getByLabel('Năm tra cứu').selectOption('1985');
   await page.getByLabel('Tháng tra cứu').selectOption('1');
-  await page.getByRole('gridcell',{name:'21/1/1985',exact:true}).click();
+  await page.getByRole('button',{name:'21/1/1985',exact:true}).click();
   await page.getByText('1/1/1985',{exact:true}).waitFor();
   await page.getByText('Ất Sửu',{exact:true}).waitFor();
   await goto('/chart');await fillNormal(page);await fillDate(page,'1985','1','21');

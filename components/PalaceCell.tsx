@@ -74,6 +74,7 @@ export default function PalaceCell({
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.35, delay, ease: 'easeOut' }}
       onClick={onClick}
+      tabIndex={0} role="group" aria-label={'Cung '+name} onKeyDown={e=>{if(e.target===e.currentTarget&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onClick?.();}}}
       className="relative flex flex-col p-1.5 cursor-pointer transition-all duration-200 h-full"
       style={{
         minHeight: '90px',
@@ -138,6 +139,7 @@ export default function PalaceCell({
             <div
               key={star.name}
               className="flex items-center"
+              role="button" tabIndex={0} aria-label={star.name} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();onStarClick?.(star);}}}
               onClick={e => { e.stopPropagation(); onStarClick?.(star); }}
             >
               <span className={clsx(
