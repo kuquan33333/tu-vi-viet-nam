@@ -1,4 +1,5 @@
 import {BRANCHES,STAR_DESCRIPTIONS} from '@/lib/ziwei/constants';
+import {palaceId,starId,siHuaId} from './identity';
 import type {Palace,Star,ZiweiChart,BirthInfo} from '@/lib/ziwei/types';
 
 export function getMajorStars(palace:Palace):Star[]{
@@ -36,16 +37,18 @@ export interface SynastryRow {
  shared:string[];
  uniqueA:string[];
  uniqueB:string[];
+ branchA:string;branchB:string;huaA:string[];huaB:string[];
 }
 export function compareCharts(a:ZiweiChart,b:ZiweiChart):SynastryRow[]{
  const names=['Mệnh','Phu Thê','Phúc Đức','Tài Bạch','Quan Lộc','Thiên Di','Điền Trạch','Tử Tức','Phụ Mẫu','Huynh Đệ','Tật Ách','Nô Bộc'];
  return names.map(name=>{
-  const find=(chart:ZiweiChart)=>chart.palaces.find(p=>p.name===name||p.name.startsWith(name+' '));
+  const find=(chart:ZiweiChart)=>chart.palaces.find(p=>(p.id??palaceId(p.name))===palaceId(name));
   const aa=find(a),bb=find(b);
-  const aStars=aa?getMajorStars(aa).map(s=>s.name):[];
-  const bStars=bb?getMajorStars(bb).map(s=>s.name):[];
-  return {name,a:aStars,b:bStars,shared:aStars.filter(x=>bStars.includes(x)),
-  uniqueA:aStars.filter(x=>!bStars.includes(x)),uniqueB:bStars.filter(x=>!aStars.includes(x))};
+  const as=aa?getMajorStars(aa):[],bs=bb?getMajorStars(bb):[];
+  const key=(s:Star)=>s.id??starId(s.name)??s.name;
+  const ak=new Set(as.map(key)),bk=new Set(bs.map(key));
+  const hua=(p:Palace|undefined)=>p?.stars.filter(s=>s.siHua||s.siHuaId).map(s=>s.name+' Hóa '+(['','Lộc','Quyền','Khoa','Kỵ'][s.siHuaId??siHuaId(s.siHua)??0]||s.siHua))??[];
+  return {name,a:as.map(s=>s.name),b:bs.map(s=>s.name),shared:as.filter(s=>bk.has(key(s))).map(s=>s.name),uniqueA:as.filter(s=>!bk.has(key(s))).map(s=>s.name),uniqueB:bs.filter(s=>!ak.has(key(s))).map(s=>s.name),branchA:aa?BRANCHES[aa.branch]:'—',branchB:bb?BRANCHES[bb.branch]:'—',huaA:hua(aa),huaB:hua(bb)};
  });
 }
 export function getSynastryFacts(a:ZiweiChart,b:ZiweiChart){

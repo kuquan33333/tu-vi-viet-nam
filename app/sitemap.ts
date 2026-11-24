@@ -1,6 +1,7 @@
 import type {MetadataRoute} from 'next';
 import {ALL_BOOKS} from '@/lib/classics';
 import {chapterPath} from '@/lib/classics/chapter-slugs';
+import {HEXAGRAMS} from '@/lib/triad/iching';
 import {SITE_URL} from '@/lib/site';
 
 export const dynamic = 'force-static';
@@ -19,5 +20,5 @@ export default function sitemap():MetadataRoute.Sitemap {
    url:SITE_URL+chapterPath(book.slug,index),priority:.55,changeFrequency:'yearly' as const
   }))
  ]);
- return [...top,...books];
+ return [...top,...books,...HEXAGRAMS.map(h=>({url:SITE_URL+'/thien-ky/que/'+h.number,priority:.55,changeFrequency:'yearly' as const}))];
 }

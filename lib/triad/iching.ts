@@ -44,7 +44,7 @@ export const HEXAGRAMS: Hexagram[] = KWW.flatMap((row, r) =>
   }))
 ).sort((a,b)=>a.number-b.number);
 export function hexFromLines(lines: readonly number[]): Hexagram {
-  if (lines.length !== 6) throw new Error('Lá quẻ phải có đủ sáu hào.');
+  if (lines.length !== 6 || lines.some(v=>![6,7,8,9].includes(v))) throw new Error('Lá quẻ phải có đủ sáu hào.');
   const lowerBits = lines.slice(0,3).map(v => (v === 7 || v === 9) ? '1' : '0').join('');
   const upperBits = lines.slice(3,6).map(v => (v === 7 || v === 9) ? '1' : '0').join('');
   const lower = TRIGRAMS.findIndex(t => t.bits === lowerBits);

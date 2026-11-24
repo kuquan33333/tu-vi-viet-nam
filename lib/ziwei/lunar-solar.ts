@@ -103,10 +103,4 @@ export function lunarToSolarVN(year:number,month:number,day:number,isLeapMonth=f
 export const solarToLunar=solarToLunarVN;
 export const lunarToSolar=lunarToSolarVN;
 /** Historical near-midnight boundaries: JPL DE440s supports the chosen civil day, but fixed UTC+7 is a convention. */
-export function calendarUncertainty(year:number,month:number,day:number):string|undefined{
- const k=year*10000+month*100+day;
- if(k>=19380825&&k<=19381022)return 'Thu phân 1938 sát nửa đêm; JPL DE440s ủng hộ ngày đã chọn theo UTC+7 cố định.';
- if(k>=19440620&&k<=19440719)return 'Sóc tháng 6/1944 sát nửa đêm; JPL DE440s ủng hộ ngày 20/6 theo UTC+7 cố định.';
- if(k>=19670707&&k<=19670806)return 'Sóc tháng 7/1967 chỉ khoảng 4 giây sau nửa đêm theo JPL DE440s; lưu ý quy ước thời gian lịch sử.';
- return undefined;
-}
+export {calendarUncertainty} from './calendar-display';

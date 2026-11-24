@@ -2,13 +2,16 @@
 import {useEffect,useState} from 'react';
 import Link from 'next/link';
 import BirthForm,{type BirthFormState} from '@/components/BirthForm';
-import ChartBoard from '@/components/ChartBoard';
-import TimeNav,{type TimeView} from '@/components/TimeNav';
-import {generateChart} from '@/lib/ziwei/algorithm';
+import dynamic from 'next/dynamic';
+import Icon from '@/components/Icon';
+const ChartBoard=dynamic(()=>import('@/components/ChartBoard'),{loading:()=> <p role="status">Đang tải bàn lá số…</p>});
+import type {TimeView} from '@/components/TimeNav';
+const TimeNav=dynamic(()=>import('@/components/TimeNav'));
+
 import {uncertainBirthOptions} from '@/lib/ziwei/share';
 import {STAR_DESCRIPTIONS,BRANCHES} from '@/lib/ziwei/constants';
 import {chartLabel,getPalaceFact,getStudyReading,READING_NOTICE} from '@/lib/ziwei/client-reading';
-import {saveProfile,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
+import {saveProfiles,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
 import type {BirthInfo,ZiweiChart,Palace,Star} from '@/lib/ziwei/types';
 
 export default function ChartPage(){
@@ -21,25 +24,23 @@ export default function ChartPage(){
  const [feedback,setFeedback]=useState('');
  useEffect(()=>{
   const queued=takeQueuedProfile();if(!queued)return;
-  try {
-   const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});
-   setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
-  } catch {setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.');}
+  void import('@/lib/ziwei/algorithm').then(({generateChart})=>{const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);}).catch(()=>setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.'));
  },[]);
- function onUncertain(form:BirthFormState){try{setOptions(uncertainBirthOptions(form).map(b=>generateChart(b)));setFeedback('');}catch{setFeedback('Không thể tạo các phương án; kiểm tra ngày và nơi sinh.');}}
- function onGenerated(birth:BirthInfo){
+ async function onUncertain(form:BirthFormState){try{const {generateChart}=await import('@/lib/ziwei/algorithm');setOptions(uncertainBirthOptions(form).map(b=>generateChart(b)));setFeedback('');}catch{setFeedback('Không thể tạo các phương án; kiểm tra ngày và nơi sinh.');}}
+ async function onGenerated(birth:BirthInfo){
   setOptions([]);
   try{
+   const {generateChart}=await import('@/lib/ziwei/algorithm');
    const next=generateChart(birth);
    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
    setStar(null);setFeedback('');
    window.scrollTo({top:0,behavior:'smooth'});
   }catch{setFeedback('Chưa tính được lá số với dữ liệu vừa nhập. Hãy kiểm tra ngày và giờ sinh.');}
  }
- function save(){
+ async function save(){
   if(!chart)return;
-  try {saveProfile(chart.birthInfo);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
-  catch {setFeedback('Không lưu được. Trình duyệt có thể đang chặn bộ nhớ hoặc đã hết dung lượng.');}
+  try {await saveProfiles([chart.birthInfo]);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
+  catch(e) {setFeedback(e instanceof Error?e.message:'Không lưu được hồ sơ.');}
  }
  async function copy(){
   if(!chart)return;
@@ -68,10 +69,10 @@ export default function ChartPage(){
      <p style={{color:'var(--tx-3)',fontSize:12,marginTop:5}}>{chart.birthInfo.day}/{chart.birthInfo.month}/{chart.birthInfo.year} · {chart.wuxingJuName} · {chart.birthInfo.gender==='male'?'Nam':'Nữ'}</p>
     </div>
     <div className="site-actions" style={{display:'flex',flexWrap:'wrap',gap:7}}>
-     <button className="action-outline" onClick={save}>＋ Lưu lá số</button>
-     <button className="action-outline" onClick={copy}>⧉ Sao chép</button>
-     <button className="action-outline" onClick={()=>window.print()}>↧ In / PDF</button>
-     <button className="action-primary" onClick={()=>{setChart(null);setPalace(null);setStar(null);}}>↶ Lập lại</button>
+     <button className="action-outline" onClick={save}><Icon name="save"/> Lưu lá số</button>
+     <button className="action-outline" onClick={copy}><Icon name="copy"/> Sao chép</button>
+     <button className="action-outline" onClick={()=>window.print()}><Icon name="print"/> In / PDF A4</button>
+     <button className="action-primary" onClick={()=>{setChart(null);setPalace(null);setStar(null);}}><Icon name="reset"/> Lập lại</button>
     </div>
    </div>
    {feedback&&<p role="status" className="study-notice" style={{marginBottom:14}}>{feedback}</p>}
@@ -81,14 +82,15 @@ export default function ChartPage(){
     <TimeNav chart={chart} view={view} liunianYear={year} onViewChange={setView} onYearChange={setYear}/>
    </div>
    <div className="workspace-layout">
-    <section className="workspace-surface" aria-label="Bàn lá số 12 cung">
-     <div className="workspace-toolbar"><span className="eyebrow">LÁ SỐ TRỰC QUAN</span><span className="workspace-note">Trên điện thoại, vuốt ngang để xem đủ 12 cung →</span></div>
+    <section className="workspace-surface chart-print" aria-label="Bàn lá số 12 cung">
+     <div className="workspace-toolbar"><span className="eyebrow">LÁ SỐ TRỰC QUAN</span><span className="workspace-note">Chọn cung hoặc sao để xem chi tiết.</span></div>
      <div className="chart-scroll"><ChartBoard chart={chart} view={view} liunianYear={year}
       onPalaceSelect={p=>{setPalace(p);setStar(null);}} onStarSelect={(s,p)=>{setStar(s);setPalace(p);}}
       onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){setPalace(p);setStar(p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+name+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
+     <div className="mobile-palaces" aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>{setPalace(p);setStar(null);}}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>{setPalace(p);setStar(s);}}>{s.name}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
     </section>
     <aside className="workspace-surface workspace-aside reading-panel" aria-label="Chi tiết cung và sao">
-     <div className="reading-head"><div style={{fontSize:24,color:'var(--ac-dim)'}}>✧</div><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?star.name:(shown?.name||'Tổng quan')}</h2></div></div>
+     <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?star.name:(shown?.name||'Tổng quan')}</h2></div></div>
      {star?<>
       <div className="reading-pills"><span>{star.type==='major'?'Chính tinh':'Phụ tinh'}</span>{star.brightnessRaw&&<span>{star.brightnessRaw}</span>}{star.siHua&&<span>Hóa {star.siHua}</span>}</div>
       <h3>Đặc tính trong tư liệu truyền thống</h3>

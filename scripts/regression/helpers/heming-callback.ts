@@ -17,7 +17,7 @@ const find=(name:string):ts.FunctionDeclaration=>{
  walk(ast);assert.ok(found,'Missing callback '+name);return found;
 };
 const complete=find('complete').getText(ast),run=find('run').getText(ast);
-const moduleCode='exports.makeRun = function(ctx){const {formA,formB,generateChart,formToBirthInfo,birthFormProblem,setError,setMessage,setChartA,setChartB,window,fetch} = ctx;\n'+complete+'\n'+run+'\nreturn run;}';
+const moduleCode='exports.makeRun = function(ctx){const {formA,formB,savedA,savedB,generateChart,formToBirthInfo,birthFormProblem,setError,setMessage,setChartA,setChartB,window,fetch} = ctx;\n'+complete+'\n'+run+'\nreturn run;}';
 const exp:{makeRun?:(ctx:object)=>()=>void}={};
 new Function('exports',ts.transpileModule(moduleCode,{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(exp);
 assert.ok(exp.makeRun);
