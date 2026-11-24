@@ -11,7 +11,7 @@ export default function TermTooltip({term}:{term:keyof typeof TERM_EXPLANATIONS}
  const id=useId();const root=useRef<HTMLSpanElement>(null);
  useEffect(()=>{if(!open)return;const onPointer=(e:PointerEvent)=>{if(e.target instanceof Node&&!root.current?.contains(e.target))setOpen(false);};document.addEventListener('pointerdown',onPointer);return()=>document.removeEventListener('pointerdown',onPointer);},[open]);
  return <span className="term-help" ref={root}>
-  <button className="term-help-button" type="button" aria-label={'Giải thích: '+term} aria-expanded={open} aria-controls={id}
+  <button className="term-help-button" type="button" aria-label={'Giải thích: '+term} aria-expanded={open} aria-controls={id} aria-describedby={id}
    onClick={()=>setOpen(v=>!v)} onKeyDown={e=>{if(e.key==='Escape'){setOpen(false);e.stopPropagation();}}}>ⓘ</button>
   <span id={id} className={'term-help-popup'+(open?' is-open':'')} role="tooltip">{TERM_EXPLANATIONS[term]}</span>
  </span>;

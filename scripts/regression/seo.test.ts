@@ -45,3 +45,11 @@ test('D1: breadcrumb dùng chung cho thư viện, chương sách và trang pháp
  for(const p of ['app/library/page.tsx','app/library/[book]/page.tsx','app/library/[book]/[chapter]/page.tsx','app/library/search/page.tsx','app/privacy/page.tsx','app/terms/page.tsx'])assert.match(read(p),/<Breadcrumb items=/,p);
  assert.match(read('components/Breadcrumb.tsx'),/BreadcrumbList/);
 });
+
+test('D4, D9: không còn ký hiệu mở ngoài trong link nội bộ hay nhãn an lá số',()=>{
+ for(const p of ['app/page.tsx','app/chart/page.tsx','app/hop-ban/page.tsx','app/lich-van-nien/page.tsx','app/ho-so/page.tsx','app/knowledge/page.tsx','app/preview/page.tsx','app/thien-ky/page.tsx','app/nhan-ky/page.tsx','app/dia-ky/page.tsx','components/AppChrome.tsx','components/ShareCardCanvas.tsx']){
+  const src=read(p);
+  assert.doesNotMatch(src,/<Link\b[^>]*>[^<]*↗/i,p);
+  assert.doesNotMatch(src,/[Aa]n [Ll]á [Ss]ố/,p);
+ }
+});
