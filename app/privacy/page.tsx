@@ -1,7 +1,5 @@
-export const metadata = { 
-  title: 'Chính Sách Quyền Riêng Tư · Tử Vi Đẩu Số', 
-  description: 'Chính sách bảo vệ quyền riêng tư và dữ liệu người dùng trên nền tảng Tử Vi Đẩu Số' 
-};
+import { pageMetadata } from '@/lib/seo/metadata';
+export const metadata = pageMetadata({title:"Chính sách quyền riêng tư – Tử Vi Đẩu Số",description:"Tìm hiểu cách nền tảng xử lý và lưu trữ thông tin người dùng.",path:"/privacy"});
 
 export default function PrivacyPage() {
   return (

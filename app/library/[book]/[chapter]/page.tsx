@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book]/[chapter] — Trang đọc toàn văn từng chương / quyển
  */
@@ -16,10 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ book: str
   const { book: bookSlug, chapter: chIdx } = await params;
   const result = getChapter(bookSlug, parseInt(chIdx));
   if (!result) return {};
-  return {
-    title: `${result.chapter.title} · 《${result.book.title}》· Cổ Thư Tử Vi Đẩu Số`,
-    description: result.chapter.subtitle || `Nguyên văn và bản dịch nghĩa 《${result.book.title}》${result.chapter.title}`,
-  };
+  return pageMetadata({title:`${result.chapter.title} · 《${result.book.title}》`,description:result.chapter.subtitle || `Nội dung chương ${result.chapter.title} trong 《${result.book.title}》`,path:`/library/${result.book.slug}/${chIdx}`,type:'article'});
 }
 
 export default async function ChapterPage({ params }: { params: Promise<{ book: string; chapter: string }> }) {

@@ -1,9 +1,7 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 import Link from 'next/link';
 import {STAR_DESCRIPTIONS} from '@/lib/ziwei/constants';
-export const metadata={
- title:'Kho kiến thức 14 chính tinh · Tử Vi Đẩu Số',
- description:'Tra cứu 14 chính tinh, ngũ hành, đặc tính và từ khóa trong hệ thống Tử Vi truyền thống. Nội dung học thuật có nguồn tham khảo.'
-};
+export const metadata = pageMetadata({title:"Kho kiến thức 14 chính tinh – Tử Vi Đẩu Số",description:"Tra cứu 14 chính tinh, ngũ hành và đặc tính theo hệ thống Tử Vi truyền thống.",path:"/knowledge"});
 const names=Object.keys(STAR_DESCRIPTIONS);
 export default function KnowledgePage(){
  return <main className="site-wrap page-content">

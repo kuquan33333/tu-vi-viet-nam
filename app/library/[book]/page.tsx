@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book] — Trang mục lục tác phẩm cổ thư
  */
@@ -14,10 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ book: str
   const { book: slug } = await params;
   const book = getBookBySlug(slug);
   if (!book) return {};
-  return {
-    title: `《${book.title}》· ${book.dynasty} · Thư Viện Cổ Thư Tử Vi Đẩu Số`,
-    description: book.intro,
-  };
+  return pageMetadata({title: `《${book.title}》 · Thư viện Tử Vi Đẩu Số`,description:book.intro,path:`/library/${book.slug}`});
 }
 
 export default async function BookPage({ params }: { params: Promise<{ book: string }> }) {

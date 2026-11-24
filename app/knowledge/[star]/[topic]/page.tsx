@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /knowledge/[star]/[topic] — Trang chi tiết luận giải chuyên đề
  * 14 Chính Tinh × 13 Cung Vị / Chuyên đề
@@ -35,24 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ star: str
   const description = data.parsed.dingdiao
     || `Luận giải sao ${star} tọa thủ ${data.palaceName} trong Tử Vi Đẩu Số — Dựa trên hệ thống《Thiên Kỷ》Thầy Nghê Hải Hạ và cổ thư《Tử Vi Đẩu Số Toàn Tập》,《Cốt Tủy Phú》.`;
 
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      url: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    },
-    alternates: {
-      canonical: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    },
-    keywords: [
-      'Tử Vi Đẩu Số', 'Nghê Hải Hạ', star, data.palaceName, data.topicLabel,
-      `Sao ${star} ${data.palaceName}`,
-      'Tử Vi Đẩu Số Toàn Tập', 'Cốt Tủy Phú',
-    ],
-  };
+  return pageMetadata({title,description,path:`/knowledge/${slug}/${topic}`,type:'article'});
 }
 
 export default async function KnowledgePage({ params }: { params: Promise<{ star: string; topic: string }> }) {
@@ -65,27 +49,9 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
   const otherTopicsForStar = ALL_TOPICS.filter(t => t !== topic && getKnowledge(star, t).exists);
   const otherStarsForTopic = ALL_STARS.filter(s => s !== star && getKnowledge(s, topic as TopicKey).exists);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: `Sao ${star} tại ${data.palaceName} · ${data.topicLabel}`,
-    description: data.parsed.dingdiao,
-    author: { '@type': 'Organization', name: 'Tử Vi Đẩu Số · Nghê Hải Hạ Chính Tông' },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Tử Vi Đẩu Số',
-      url: SITE_URL,
-    },
-    datePublished: '2026-04-28',
-    dateModified: '2026-04-28',
-    mainEntityOfPage: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    articleSection: 'Tử Vi Đẩu Số · Nghê Hải Hạ Hệ Thống',
-    keywords: [`Tử Vi Đẩu Số`, star, data.palaceName, data.topicLabel].join(', '),
-  };
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* Thanh Header */}
       <div className="px-6 py-4 flex items-center justify-between"

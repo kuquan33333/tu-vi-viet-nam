@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * Thư Viện Cổ Thư Toàn Văn · Trang Chủ
  * Danh sách 3 bộ cổ thư: Cốt Tủy Phú, Tử Vi Đẩu Số Toàn Tập, Tử Vi Đẩu Số Toàn Thư
@@ -7,10 +8,7 @@ import Link from 'next/link';
 import { ALL_BOOKS, TOTAL_PARAGRAPHS } from '@/lib/classics';
 import LibrarySearch from './LibrarySearch';
 
-export const metadata = {
-  title: 'Thư Viện Cổ Thư Toàn Văn · Tử Vi Đẩu Số Toàn Tập / Toàn Thư / Cốt Tủy Phú',
-  description: 'Tra cứu toàn văn ba bộ cổ thư kinh điển của Tử Vi Đẩu Số: 《Tử Vi Đẩu Số Toàn Tập》, 《Tử Vi Đẩu Số Toàn Thư》, 《Cốt Tủy Phú》kèm âm Hán-Việt và bản dịch nghĩa.',
-};
+export const metadata = pageMetadata({title:"Thư viện cổ thư Tử Vi Đẩu Số",description:"Tra cứu các bộ cổ thư Cốt Tủy Phú, Tử Vi Đẩu Số Toàn Tập và Toàn Thư trong thư viện hiện có.",path:"/library"});
 
 export default function LibraryHomePage() {
   return (

@@ -1,7 +1,5 @@
-export const metadata = {
-  title: 'Điều Khoản Sử Dụng · Tử Vi Đẩu Số',
-  description: 'Điều khoản sử dụng và thỏa thuận người dùng của nền tảng Tử Vi Đẩu Số'
-};
+import { pageMetadata } from '@/lib/seo/metadata';
+export const metadata = pageMetadata({title:"Điều khoản sử dụng – Tử Vi Đẩu Số",description:"Điều khoản sử dụng và phạm vi tham khảo của các công cụ cổ học.",path:"/terms"});
 
 export default function TermsPage() {
   return (

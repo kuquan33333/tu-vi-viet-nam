@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { pageMetadata, SITE_DESCRIPTION, websiteSchema } from '@/lib/seo/metadata';
+export const metadata = pageMetadata({title:'Tử Vi Đẩu Số – Lá số, lịch pháp và cổ học phương Đông',description:SITE_DESCRIPTION,path:'/'});
 
 const palaces = [
  ['Mệnh',1,1],['Phụ Mẫu',1,2],['Phúc Đức',1,3],['Điền Trạch',1,4],
@@ -22,6 +24,7 @@ const tools = [
 
 export default function HomePage(){
  return <main>
+   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema()).replace(/</g,'\\u003c')}} />
   <section className="home-hero">
    <div className="site-wrap home-hero-grid">
     <div>
