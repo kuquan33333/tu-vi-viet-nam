@@ -1,5 +1,5 @@
 /**
- * Chuyển đổi qua lại giữa Âm lịch và Dương lịch (chuẩn múi giờ Việt Nam UTC+7).
+ * Chuyển đổi qua lại giữa Âm lịch và Dương lịch (bộ lịch legacy lunar-javascript; chưa đạt đối chiếu UTC+7).
  */
 import { Lunar, LunarMonth, Solar } from 'lunar-javascript';
 
@@ -93,11 +93,11 @@ export function solarToLunar(year: number, month: number, day: number): LunarDat
 }
 
 /**
- * Chuyển đổi Âm lịch sang Dương lịch chuẩn Việt Nam (UTC+7).
+ * Chuyển đổi Âm lịch sang Dương lịch qua alias tương thích cũ; chưa đạt chuẩn đối chiếu UTC+7.
  */
 export const lunarToSolarVN = lunarToSolar;
 
 /**
- * Chuyển đổi Dương lịch sang Âm lịch chuẩn Việt Nam (UTC+7).
+ * Chuyển đổi Dương lịch sang Âm lịch qua alias tương thích cũ; chưa đạt chuẩn đối chiếu UTC+7.
  */
 export const solarToLunarVN = solarToLunar;

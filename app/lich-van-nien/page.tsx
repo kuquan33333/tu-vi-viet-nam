@@ -104,7 +104,7 @@ export default function CalendarPage(){
      <div><span>Ngày Can Chi</span><strong>{ganZhiVi(ganZhi?.day)}</strong></div>
      <div><span>Tiết khí tham khảo</span><strong>{ganZhi?.term?(TERMS_VI[ganZhi.term]||ganZhi.term):'Không có mốc giao tiết'}</strong></div>
     </div>
-    <div className="study-notice">Can Chi và tiết khí hiển thị theo bộ lịch hiện có của dự án; tại thời điểm chuyển tiết cần đối chiếu nguồn lịch pháp chuyên môn.</div>
+    <div className="study-notice">Bộ lịch hiện tại chưa đạt đối chiếu lịch Việt Nam UTC+7 trên toàn phạm vi 1900–2050. Kết quả chỉ tham khảo; một số ngày âm, tháng nhuận và thời điểm giao tiết có thể khác lịch Việt Nam.</div>
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
      <Link className="action-outline" href="/thien-ky">Thiên Kỷ →</Link>
      <Link className="action-outline" href="/chart">Lập lá số →</Link>

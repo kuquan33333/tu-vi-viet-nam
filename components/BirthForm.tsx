@@ -517,6 +517,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       </div>
 
       {civil&&civil.offsets.length>1&&<div className="study-notice" role="alert"><p>Giờ này xuất hiện hai lần trong lịch sử. Chọn múi giờ đã xác nhận từ hồ sơ:</p>{civil.offsets.map(offset=><label key={offset} style={{display:'block'}}><input type="radio" checked={chosen===offset} onChange={()=>{setChosenKey(civilKey);setChosenOffset(offset);}}/> UTC{offset>=0?'+':''}{offset/60}</label>)}</div>}
+      <p className="study-notice">Lịch âm hiện tại chưa đạt đối chiếu UTC+7 toàn phạm vi; lá số tại các ngày khác biệt cần kiểm tra theo lịch Việt Nam trước khi sử dụng.</p>
       {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}
       {/* ── Banner cảnh báo đổi múi giờ lịch sử Việt Nam ── */}
       {historicalTz && historicalTz.deltaMinutes !== 0 && (

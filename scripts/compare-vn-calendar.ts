@@ -5,8 +5,10 @@ import assert from 'node:assert/strict';
 import {solarToLunarVN,lunarToSolarVN} from '../lib/ziwei/lunar-solar';
 
 async function main(){
- // Independent UTC+7 reference, pinned code under scripts/reference. Not a runtime dependency.
- const {LichTa}=await import(pathToFileURL(resolve('scripts/reference/lichta-2.2.1.mjs')).href);
+ // External reference is used only in QA, not redistributed or shipped.
+ const referencePath=process.env.VN_CALENDAR_REFERENCE;
+ assert.ok(referencePath,'Set VN_CALENDAR_REFERENCE to the pinned, hash-verified reference file.');
+ const {LichTa}=await import(pathToFileURL(resolve(referencePath)).href);
  const start=Date.UTC(1900,0,1), end=Date.UTC(2051,0,1),day=86400000;
  const diff:string[]=['solar,current_y,current_m,current_d,current_leap,reference_y,reference_m,reference_d,reference_leap'];
  const reverse:string[]=['solar,current_or_reference,back_solar'];

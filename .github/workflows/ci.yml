@@ -56,7 +56,11 @@ jobs:
           npx tsx scripts/test-revamp.ts
       - name: Đối chiếu lịch UTC+7 toàn phạm vi 1900–2050
         if: ${{ !cancelled() }}
-        run: npx --no-install tsx scripts/compare-vn-calendar.ts
+        run: |
+          reference="$RUNNER_TEMP/lichta-2.2.1.mjs"
+          curl --fail --silent --show-error --location --retry 2 'https://raw.githubusercontent.com/zeforc/lichta/6f656383f9eb525373ea6a7ef327fdd3fdc3ac54/packages/core/dist/index.mjs' --output "$reference"
+          test "$(git hash-object "$reference")" = baff4984d0603db3d2b7ce97eec8c38ad92907f3
+          VN_CALENDAR_REFERENCE="$reference" npx --no-install tsx scripts/compare-vn-calendar.ts
       - name: Build mã nguồn nguyên trạng
         if: ${{ !cancelled() }}
         run: npm run build

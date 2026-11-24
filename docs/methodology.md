@@ -1,0 +1,36 @@
+# Phương pháp, kiểm chứng và điều kiện nghiệm thu đợt 1–3
+
+## Nguồn và quy ước
+
+- An sao: iztro từ lockfile. Golden tests dùng tiến trình độc lập, đối chiếu Mệnh, Thân, Cục, vị trí 14 chính tinh với cùng quy ước. Không xem giờ sinh danh nhân giả định là dữ liệu lịch sử xác thực.
+- E5: identity.ts giữ StarId theo bảng school-data, PalaceId, SiHuaId, BrightnessId; trường ID bổ sung để tương thích dữ liệu cũ. patterns.ts dùng ID khi nhận dạng sao/cung/Tứ Hóa và vẫn hỗ trợ tên legacy. Chưa loại hết so sánh tên hoặc xác minh riêng toàn bộ 38 cách cục, chưa dịch hết lời bình Hán.
+- C1–C8: validate ngày Gregorian 1900 đến hôm nay (tối đa 2050), giờ/phút/giây, kinh độ và offset. Không mặc định Hà Nội/08:00; UTC+7 chỉ áp dụng khi có địa điểm Việt Nam xác định. Không rõ giờ: 12 giả định đánh dấu assumedHour, không lưu như hồ sơ xác định; Hợp bàn yêu cầu giờ rõ. Địa danh cũ tìm không dấu, danh mục hiện hữu chưa đủ mọi huyện/xã; nhập tọa độ thủ công không thay cho xác minh tọa độ lịch sử.
+- Chân Thái Dương Thời: phút hiệu chỉnh = 4 × kinh độ Đông − offset UTC tính theo phút + phương trình thời gian; ngày thực tế và thời điểm sinh được dùng, có thể tắt. Nguồn công thức NOAA General Solar Position Calculations https://gml.noaa.gov/grad/solcalc/solareqns.PDF . Đây là công thức xấp xỉ. Quy ước Tý muộn mặc định 23h–23h59 thuộc ngày kế tiếp, có lựa chọn ngày hiện tại; Tý sớm 00h–00h59 thuộc ngày hiện tại. Không khẳng định một trường phái là duy nhất.
+- E7: IANA tzdb 2025b https://github.com/eggert/tz/blob/2025b/asia và https://github.com/eggert/tz/blob/2025b/backzone (Asia/Ho_Chi_Minh, Asia/Hanoi). Dùng offset chính xác kể cả giây trước 1911; phân biệt giờ lặp/giờ bị bỏ qua khi chuyển offset. IANA ghi thời điểm chuyển miền Bắc tháng 10/1954 không rõ ngày, không đoán. Tzdb là lịch sử vùng đại diện, không bảo đảm mọi địa phương; địa danh gần vĩ tuyến 17 và trường hợp trước 1970 cần đối chiếu hồ sơ gốc. Không đồng nhất địa giới hiện nay với địa giới quá khứ.
+- C10–C12: tọa = hướng + 180° modulo 360. 24 sơn mỗi sơn 15°, ranh Quý/Tý 7,5°, Nhâm/Tý 352,5°. Cung phi sử dụng năm nhập 1900–2099 và công thức hiện có được kiểm tra với công thức tổng chữ số tương đương; trung cung 5 nam quy Khôn 2, nữ quy Cấn 8. Phạm vi ngoài này bị từ chối; chưa áp dụng tự động mốc Lập Xuân thay năm âm lịch. Tham khảo truyền thống, không phải dự báo khoa học.
+
+## E6 — điều kiện chặn phát hành
+
+Bộ chuyển đổi lunar-solar.ts hiện chỉ là alias lunar-javascript, chưa phải bộ lịch Việt Nam UTC+7 đã xác minh. Audit độc lập theo ngày từ 01/01/1900 đến 31/12/2050 ở run 45373629949: 55.152 ngày, 1.944 ngày khác nhau, 0 lỗi chuyển đổi ngược trong phạm vi có kiểm tra, 0 sai trong 4 mốc Tết của bộ tham chiếu. Chạy được audit không có nghĩa là thuật toán đã đạt. Kết quả log: https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45373629949 .
+
+| Mốc | Ngày Tết theo legacy | Ngày Tết theo tham chiếu UTC+7 |
+|---|---|---|
+| 1968 (miền Bắc) | 30/01/1968 | 29/01/1968 |
+| 1985 | 21/01 vẫn là 1/12/1984 (chưa chốt ngày Tết legacy) | 21/01/1985 |
+| 2007 | 18/02/2007 | 17/02/2007 |
+| 2030 | 03/02/2030 | 02/02/2030 |
+
+Nguồn audit: LichTa 2.2.1 commit 6f656383f9eb525373ea6a7ef327fdd3fdc3ac54, blob baff4984d0603db3d2b7ce97eec8c38ad92907f3. Upstream công bố MIT và ghi dựa trên thuật toán Hồ Ngọc Đức/Meeus; chưa xác minh được quyền tái phân phối mã nguồn gốc. Không giữ bản sao bundle trong cây tích hợp, không dùng ở runtime. CI đọc bản tham chiếu ghim hash trong thư mục tạm, không gửi dữ liệu sinh. Bản sao trước đã tồn tại trong lịch sử QA; không rewrite lịch sử. Kết quả chỉ là đối chiếu, không coi mọi sai khác là lỗi legacy. Cần nguồn lịch độc lập có giấy phép phù hợp và kiểm tra năm 1968 theo vùng, tháng nhuận, Can Chi, luồng an sao iztro, nhập/xuất hồ sơ. Chưa thay engine chỉ để làm xanh test.
+
+## Bằng chứng test-first và tích hợp
+
+- 45372991872: test C1,C2,C3,C10,C11 đỏ trước vá. C12 đã pass.
+- 45373303297: test offset lịch sử trước 1911 đỏ trước vá.
+- 45373395369: hồi quy 21 file, từng file, strict và Triad pass; typecheck còn lỗi optional index. Sửa 9ade549; run 45373722641 typecheck, hồi quy, strict, audit lịch, build thường đã pass tại lúc kiểm tra.
+- 45373890445: ID ổn định, typecheck/npm test đã pass lúc kiểm tra.
+- 71291aa: merge hai nhánh bằng commit hai parent. PR #4: https://github.com/kuquan33333/tu-vi-viet-nam/pull/4 . 23 tệp regression; typecheck/npm test và static SEO export pass tại thời điểm ghi nhận. Xem run 45374002137 và 45374002173 cho kết luận cuối.
+- SEO riêng run 45371855256 thành công; 6 trang đạt 100/100 ở run 45371394331, 39 route và 22 redirect mô phỏng. Không xác nhận HTTP edge hoặc UI tương tác chỉ bằng static HTML.
+
+## Trạng thái phát hành
+
+Chưa nghiệm thu: sai khác lịch Việt Nam, phạm vi xác minh E5 và danh mục địa danh cũ, browser form 360/1280 và preview/HTTP edge. Không merge main/revamp-v2 hoặc bật auto deploy. Các dữ liệu nguồn thiếu không được bịa. Không thay đổi production.

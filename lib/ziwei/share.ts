@@ -1,5 +1,6 @@
 import type { BirthFormState } from '@/components/BirthForm';
 import type { BirthInfo } from './types';
+import { PROVINCES } from './cities';
 import { calculateTrueSolarTime, shiftGregorianDate, isValidGregorianDate } from './true-solar-time';
 
 /** Kinh độ chuẩn của Thủ đô Hà Nội (làm mốc mặc định) */
@@ -95,7 +96,7 @@ export function formToSearchParams(form: BirthFormState): URLSearchParams {
   }
   if (form.province) p.set('p', form.province);
   if (form.city) p.set('c', form.city);
-  if (form.longitude && form.longitude !== DEFAULT_LONGITUDE) {
+  if (Number.isFinite(form.longitude)) {
     p.set('lo', String(form.longitude));
   }
   if(form.trueSolar===false)p.set('ts','0');
@@ -111,6 +112,9 @@ export function searchParamsToForm(params: URLSearchParams): Partial<BirthFormSt
   const month = params.get('m');
   const day = params.get('d');
   if (!year || !month || !day) return null;
+  const province=params.get('p')||'',city=params.get('c')||'';
+  const known=PROVINCES.find(p=>p.name===province)?.cities.find(c=>c.name===city)?.longitude;
+  const longitudeParam=params.get('lo');
   return {
     name: params.get('n') || '',
     year,
@@ -122,7 +126,7 @@ export function searchParamsToForm(params: URLSearchParams): Partial<BirthFormSt
     clockSecond: params.get('s') || '0',
     province: params.get('p') || '',
     city: params.get('c') || '',
-    longitude: params.has('lo')?Number(params.get('lo')):NaN,
+    longitude: longitudeParam!==null&&longitudeParam.trim()!==''?Number(longitudeParam):known??NaN,
     trueSolar:params.get('ts')!=='0',
     lateZishi:params.get('zi')==='same'?'current-day':'next-day',
     utcOffsetMinutes:params.has('tz')?Number(params.get('tz')):undefined,

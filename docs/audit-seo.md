@@ -58,3 +58,6 @@ Cần Actions hoạt động và log mới trước nghiệm thu; DNS terminal h
 - [Run 45371394331](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45371394331): 39 HTML routes đạt canonical/OG/Twitter/JSON-LD/sitemap/robots/link; 22 redirect 301 mô phỏng đạt; Lighthouse mobile SEO /, /chart, /hop-ban, /lich-van-nien, /library, /cong-cu đều 100/100. Báo cáo gốc: [artifact 14909875434](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45371394331/artifacts/14909875434). Đây là bản export chạy cục bộ trên CI, không phải production đã đổi.
 - Bước ảnh lỗi `Playwright does not support chromium on ubuntu26.04-x64`. Khóa runner ubuntu-24.04 tương thích Playwright 1.51.1; không bỏ bước screenshot. Cần kết quả run mới để xác nhận.
 - Không triển khai hoặc merge. HTTP edge và preview chia sẻ mạng xã hội bên ngoài chưa được xác nhận.
+
+## Tích hợp 24/11/2026
+Run 45371855256 trên dabc6b3 hoàn tất xanh (SEO và ảnh responsive). Merge 71291aa trên qa/integration-v3 đã pass typecheck, npm test và build export SEO ở thời điểm kiểm tra; các bước tiếp theo theo dõi https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45374002173 . Không dùng ảnh của bản SEO cũ để chứng nhận form mới.

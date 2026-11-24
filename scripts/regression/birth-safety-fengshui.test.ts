@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {readFileSync} from 'node:fs';
-import {formToBirthInfo,searchParamsToForm,uncertainBirthOptions,birthFormProblem} from '../../lib/ziwei/share';
+import {formToBirthInfo,formToSearchParams,searchParamsToForm,uncertainBirthOptions,birthFormProblem} from '../../lib/ziwei/share';
 import {saveProfile} from '../../lib/ziwei/profile-storage';
 import {mountainAt,kuaFromYear} from '../../lib/triad/fengshui';
 import type {BirthFormState} from '../../components/BirthForm';
@@ -48,4 +48,10 @@ test('C4–C8: ngày tương lai, thiếu địa danh, kinh độ và múi giờ
  assert.ok(birthFormProblem({...f,province:'Nước ngoài',city:'Paris',longitude:2.35}));
  assert.equal(birthFormProblem({...f,province:'Nước ngoài',city:'Paris',longitude:2.35,utcOffsetMinutes:60}),'');
  assert.ok(birthFormProblem({...f,province:'Nước ngoài',city:'Paris',longitude:NaN,utcOffsetMinutes:60}));
+});
+
+test('C5: giữ kinh độ 0 và Hà Nội khi chia sẻ, không đoán địa danh thiếu',()=>{
+ for(const longitude of [0,105.85,-75.5])assert.equal(searchParamsToForm(formToSearchParams({...f,longitude}))?.longitude,longitude);
+ assert.equal(searchParamsToForm(new URLSearchParams({y:'2000',m:'1',d:'1',p:'Thành phố Hà Nội',c:'Trung tâm Hà Nội (Hoàn Kiếm)'}))?.longitude,105.85);
+ assert.ok(Number.isNaN(searchParamsToForm(new URLSearchParams('y=2000&m=1&d=1'))?.longitude));
 });

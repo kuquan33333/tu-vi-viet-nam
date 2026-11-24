@@ -143,3 +143,8 @@ Rủi ro test cũ: `pan-integrity.test.ts` so sánh tên cung Hán với kết q
 GitHub Actions đã trả về hai lượt chạy trên nhánh SEO ngày 24/11/2026: CI [45369629097](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45369629097) thành công với typecheck và hồi quy cũ; SEO [45369629230](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45369629230) đã cài npm, typecheck, npm test, test SEO, Triad/V2 và compile static thành công, nhưng thất bại tại assertion canonical HTML trang chủ. Đây **không phải** kết quả của nhánh baseline.
 
 Workflow baseline bổ sung kiểm tra riêng từng file regression, bao gồm 11 test bị bỏ sót; ghi log từng file và exit lỗi nếu bất kỳ test nào thất bại. Chạy strict audit, build độc lập với kết quả test, đo Lighthouse mobile trên ba route production, lưu artifact. Không sửa hành vi sản phẩm. Kết quả của nhánh baseline cần được đọc từ run mới; không suy ra PASS từ nhánh SEO.
+
+## Cập nhật kiểm thử thực tế 24/11/2026
+- Baseline run 45370491897: 9/19 regression files lỗi; các mẫu golden và ngày 24/11/2026 pass. Giữ log đỏ trước sửa tại https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45370491897 .
+- Bản vá L2/L8 run 45371695870: tất cả regression, strict audit, Triad/V2, build thường và tĩnh pass. Không xóa lịch sử đỏ. https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45371695870 .
+- Đợt 2 bổ sung C1–C12, E5–E7; xem docs/methodology.md. Nhánh tích hợp PR #4, merge commit 71291aa; lúc ghi nhận typecheck/npm test (23 file) và static SEO export pass. Không coi các bước đang chạy là thành công. Lịch UTC+7 chưa đạt, chặn nghiệm thu.
