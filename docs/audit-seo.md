@@ -51,3 +51,10 @@ Workflow `.github/workflows/seo.yml` chạy trên PR: npm ci, typecheck, npm tes
 
 ## Rủi ro còn lại
 Cần Actions hoạt động và log mới trước nghiệm thu; DNS terminal hiện không truy cập GitHub/npm. Cần đo Lighthouse, kiểm tra Open Graph thực qua công cụ chia sẻ, đối chiếu HTML canonical và HTTP 301 trên preview/production được duyệt. Cần kiểm tra tooltip, menu không tràn và link động sau hydration ở 360/1280. Đợt 1/2 chưa nghiệm thu; không được suy ra tính chính xác thuật toán từ đợt SEO. Không tự merge hoặc triển khai production.
+
+## Cập nhật CI thực tế (24/11/2026)
+
+- [Run 45369629230](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45369629230): npm ci, typecheck, npm test, test SEO, Triad/V2 và static build thành công. Gate HTML thất bại vì canonical trang chủ thiếu dấu slash cuối; hai dạng URL có cùng nghĩa. Sửa so sánh WHATWG URL ở commit 690e38c, không nới điều kiện canonical của các trang con.
+- [Run 45371394331](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45371394331): 39 HTML routes đạt canonical/OG/Twitter/JSON-LD/sitemap/robots/link; 22 redirect 301 mô phỏng đạt; Lighthouse mobile SEO /, /chart, /hop-ban, /lich-van-nien, /library, /cong-cu đều 100/100. Báo cáo gốc: [artifact 14909875434](https://github.com/kuquan33333/tu-vi-viet-nam/actions/runs/45371394331/artifacts/14909875434). Đây là bản export chạy cục bộ trên CI, không phải production đã đổi.
+- Bước ảnh lỗi `Playwright does not support chromium on ubuntu26.04-x64`. Khóa runner ubuntu-24.04 tương thích Playwright 1.51.1; không bỏ bước screenshot. Cần kết quả run mới để xác nhận.
+- Không triển khai hoặc merge. HTTP edge và preview chia sẻ mạng xã hội bên ngoài chưa được xác nhận.
