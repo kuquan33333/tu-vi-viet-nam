@@ -65,7 +65,7 @@ export default function HemingPage(){
    </div>
    {error&&<p role="alert" className="study-notice">{error}</p>}
    <div className="surface-card" style={{padding:25,marginTop:17,textAlign:'center'}}>
-    <button type="button" className="action-primary" onClick={run}>Phân tích cấu trúc hai lá số ↗</button>
+    <button type="button" className="action-primary" onClick={run}>Phân tích cấu trúc hai lá số →</button>
     <p className="workspace-note" style={{marginTop:12}}>Không gửi dữ liệu sinh tới AI; có thể phân tích ngay trên bản Cloudflare tĩnh.</p>
    </div>
   </div>:<>
@@ -112,6 +112,6 @@ export default function HemingPage(){
    </div>
    <div className="home-note">{READING_NOTICE} Công cụ không cung cấp tỷ lệ phần trăm hay lời khuyên bắt buộc về hôn nhân, công việc hoặc lựa chọn cá nhân.</div>
   </>}
-  <div style={{padding:'20px 0'}}><Link href="/chart" className="section-link">Lập lá số riêng ↗</Link></div>
+  <div style={{padding:'20px 0'}}><Link href="/chart" className="section-link">Lập lá số riêng →</Link></div>
  </main>;
 }

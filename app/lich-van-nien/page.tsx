@@ -106,8 +106,8 @@ export default function CalendarPage(){
     </div>
     <div className="study-notice">Can Chi và tiết khí hiển thị theo bộ lịch hiện có của dự án; tại thời điểm chuyển tiết cần đối chiếu nguồn lịch pháp chuyên môn.</div>
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
-     <Link className="action-outline" href="/thien-ky">Thiên Kỷ ↗</Link>
-     <Link className="action-outline" href="/chart">Lập lá số ↗</Link>
+     <Link className="action-outline" href="/thien-ky">Thiên Kỷ →</Link>
+     <Link className="action-outline" href="/chart">Lập lá số →</Link>
     </div>
    </aside>
   </div>

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { pageMetadata, SITE_DESCRIPTION, websiteSchema } from '@/lib/seo/metadata';
+export const metadata = pageMetadata({title:'Tử Vi Đẩu Số – Lá số, lịch pháp và cổ học phương Đông',description:SITE_DESCRIPTION,path:'/'});
 
 const palaces = [
  ['Mệnh',1,1],['Phụ Mẫu',1,2],['Phúc Đức',1,3],['Điền Trạch',1,4],
@@ -12,7 +14,7 @@ const modules = [
  {href:'/nhan-ky',mark:'✺',title:'Nhân Kỷ',sub:'Y thư · Huyệt đạo',desc:'Tìm hiểu kinh điển Đông y và tra cứu danh mục 361 huyệt.',tag:'TRA CỨU'},
 ];
 const tools = [
- {href:'/heming',icon:'∞',title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
+ {href:'/hop-ban',icon:'∞',title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
  {href:'/lich-van-nien',icon:'◷',title:'Lịch Vạn Niên',desc:'Âm dương lịch, Can Chi và các mốc tiết khí'},
  {href:'/thien-ky',icon:'☰',title:'Tra cứu Kinh Dịch',desc:'Danh mục 64 quẻ cùng sơ đồ hào động'},
  {href:'/dia-ky',icon:'⌖',title:'La Kinh 24 sơn',desc:'La bàn số theo 360° và tám hướng'},
@@ -22,6 +24,7 @@ const tools = [
 
 export default function HomePage(){
  return <main>
+   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema()).replace(/</g,'\\u003c')}} />
   <section className="home-hero">
    <div className="site-wrap home-hero-grid">
     <div>
@@ -29,8 +32,8 @@ export default function HomePage(){
      <h1 className="hero-display" style={{marginTop:20}}>Thấu hiểu cổ học.<span style={{display:'block',color:'var(--ac-dim)'}}>Khám phá cùng bạn.</span></h1>
      <p className="lead">Tử Vi Đẩu Số, Thiên Kỷ, Địa Kỷ và Nhân Kỷ — một không gian nghiên cứu thống nhất, nơi mỗi công cụ có phương pháp tính và tư liệu tham khảo rõ ràng.</p>
      <div className="hero-actions">
-      <Link href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">↗</span></Link>
-      <Link href="/thien-ky" className="action-outline">Khám phá công cụ</Link>
+      <Link href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">→</span></Link>
+      <Link href="/cong-cu" className="action-outline">Khám phá công cụ</Link>
      </div>
      <div className="hero-trust"><span>Không cần đăng ký</span><span>Tính toán trên thiết bị</span><span>Giao diện Việt hóa</span></div>
     </div>
@@ -55,7 +58,7 @@ export default function HomePage(){
        <h3>{m.title}</h3>
        <div style={{fontSize:11,fontWeight:800,color:'var(--ac-dim)',marginBottom:10}}>{m.sub}</div>
        <p>{m.desc}</p>
-       <div className="arrow"><span>{m.tag}</span><span>↗</span></div>
+       <div className="arrow"><span>{m.tag}</span><span>→</span></div>
       </Link>)}
     </div>
    </div>
@@ -69,7 +72,7 @@ export default function HomePage(){
       <h2 className="display-small" style={{margin:'15px 0'}}>Không chỉ lập lá số, mà còn giúp bạn hiểu cấu trúc.</h2>
       <p className="lead">Tính lá số từ ngày giờ sinh và địa phương tại Việt Nam, xem 12 cung, các chính tinh, đại hạn và lưu niên. Chạm vào từng sao để tìm hiểu ý nghĩa truyền thống.</p>
       <div className="feature-list"><span>Âm lịch và Chân Thái Dương Thời</span><span>12 cung · 14 chính tinh · Tứ Hóa</span><span>Lưu hồ sơ và xuất bản in</span></div>
-      <div><Link href="/chart" className="action-primary">Mở bàn lá số ↗</Link></div>
+      <div><Link href="/chart" className="action-primary">Mở bàn lá số →</Link></div>
      </div>
      <div className="surface-card feature-board">
       <div className="eyebrow" style={{marginBottom:18}}>CHẾ ĐỘ NGHIÊN CỨU LÁ SỐ</div>
@@ -87,11 +90,11 @@ export default function HomePage(){
    <div className="site-wrap">
     <div className="section-head">
      <div><div className="eyebrow">CÔNG CỤ NỔI BẬT</div><h2 className="display-small">Tìm hiểu theo cách của bạn.</h2><p>Các công cụ được tổ chức theo nhu cầu sử dụng, không yêu cầu học hết lý thuyết trước khi bắt đầu.</p></div>
-     <Link className="section-link" href="/library">Mở thư viện ↗</Link>
+     <Link className="section-link" href="/library">Mở thư viện →</Link>
     </div>
     <div className="tools-grid">
      {tools.map(t=><Link key={t.href+t.title} href={t.href} className="surface-card tools-card">
-       <div className="icon-round">{t.icon}</div><div><strong>{t.title}</strong><span>{t.desc}</span></div><span style={{marginLeft:'auto',color:'var(--ac-dim)'}}>↗</span>
+       <div className="icon-round">{t.icon}</div><div><strong>{t.title}</strong><span>{t.desc}</span></div><span style={{marginLeft:'auto',color:'var(--ac-dim)'}}>→</span>
      </Link>)}
     </div>
    </div>

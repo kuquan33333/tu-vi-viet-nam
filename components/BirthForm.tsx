@@ -1,4 +1,5 @@
 'use client';
+import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { BirthInfo } from '@/lib/ziwei/types';
@@ -287,7 +288,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     >
       {/* Tiêu đề */}
       <h3 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.3em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
-        ── NHẬP THÔNG TIN SINH THẦN ──
+        NHẬP THÔNG TIN SINH THẦN <TermTooltip term="Sinh thần" />
       </h3>
 
       {/* ── Tiến trình hoàn thành ── */}
@@ -341,6 +342,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           Âm lịch (Mặt trăng)
         </button>
       </div>
+      <div className="calendar-term-help"><span>Dương lịch <TermTooltip term="Dương lịch (Mặt trời)" /></span><span>Âm lịch <TermTooltip term="Âm lịch (Mặt trăng)" /></span></div>
 
       {/* ── Họ và tên ── */}
       <div style={{ marginBottom: '16px' }}>
@@ -455,6 +457,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>
           Nơi sinh (Hiệu chỉnh Chân Thái Dương Thời theo kinh độ)
         </label>
+        <div className="form-term-note">Chân Thái Dương Thời <TermTooltip term="Chân Thái Dương Thời" /></div>
         <input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>
         {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,utcOffsetMinutes:undefined});setLocationQuery('');}}>{c.name} · {p.name}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>

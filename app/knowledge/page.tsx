@@ -1,9 +1,7 @@
+import { pageMetadata } from '@/lib/seo/metadata';
 import Link from 'next/link';
 import {STAR_DESCRIPTIONS} from '@/lib/ziwei/constants';
-export const metadata={
- title:'Kho kiến thức 14 chính tinh · Tử Vi Đẩu Số',
- description:'Tra cứu 14 chính tinh, ngũ hành, đặc tính và từ khóa trong hệ thống Tử Vi truyền thống. Nội dung học thuật có nguồn tham khảo.'
-};
+export const metadata = pageMetadata({title:"Kho kiến thức 14 chính tinh – Tử Vi Đẩu Số",description:"Tra cứu 14 chính tinh, ngũ hành và đặc tính theo hệ thống Tử Vi truyền thống.",path:"/knowledge"});
 const names=Object.keys(STAR_DESCRIPTIONS);
 export default function KnowledgePage(){
  return <main className="site-wrap page-content">
@@ -27,7 +25,7 @@ export default function KnowledgePage(){
    <div className="eyebrow">HƯỚNG DẪN TRA CỨU</div>
    <h2 className="display-small" style={{fontSize:25,margin:'9px 0'}}>Từ sao đến lá số thực tế</h2>
    <p className="lead" style={{fontSize:13}}>Mỗi chính tinh có thể mang ý nghĩa khác nhau trong các cung và trường phái. Để hiểu cấu trúc của một lá số, cần xem chính tinh, các sao cùng cung, đối cung, tam hợp, Tứ Hóa và dữ liệu năm sinh thay vì tách một từ khóa thành kết luận chắc chắn.</p>
-   <Link href="/chart" className="action-primary" style={{marginTop:17}}>Lập lá số và chọn sao ↗</Link>
+   <Link href="/chart" className="action-primary" style={{marginTop:17}}>Lập lá số và chọn sao →</Link>
   </section>
   <div className="home-note">Giải thích mang tính giáo dục theo hệ thống thuật số truyền thống. Những lời trích được gán cho nhân vật lịch sử cần được xác minh nguồn và quyền sử dụng trước khi xuất bản; chưa bao gồm cơ sở dữ liệu luận giải chuyên sâu của tác giả gốc.</div>
  </main>;

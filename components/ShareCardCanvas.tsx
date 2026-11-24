@@ -261,7 +261,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                 Tiền nhân khai đạo · AI luận giải đồng hành
               </div>
               <div style={{ fontSize: '8px', color: '#a89b7c', letterSpacing: '0.08em', marginTop: '4px' }}>
-                Tra cứu và an lá số chi tiết →
+                Tra cứu và lập lá số chi tiết →
               </div>
             </div>
           </div>
