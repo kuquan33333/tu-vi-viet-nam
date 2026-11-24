@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { searchClassics, getParagraphById } from '@/lib/classics';
+import { chapterPath } from '@/lib/classics/chapter-slugs';
 
 // Trang tìm kiếm xử lý ở trình duyệt để hoạt động trên Cloudflare Pages tĩnh.
 export default function SearchPage() {
@@ -55,9 +56,10 @@ export default function SearchPage() {
           <div className="flex flex-col gap-3">
             {hits.map((hit, i) => {
               const ctx = getParagraphById(hit.paragraphId);
-              const chapterIdx = ctx?.chapterIdx ?? 0;
+              if (!ctx) return null;
+               const chapterIdx = ctx.chapterIdx;
               return (
-                <Link key={i} href={`/library/${hit.bookSlug}/${chapterIdx}#${hit.paragraphId}`}
+                <Link key={i} href={`${chapterPath(hit.bookSlug,chapterIdx)}#${hit.paragraphId}`}
                   style={{ display: 'block', padding: '17px 20px', background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.18)', borderRadius: 10, textDecoration: 'none', color: 'inherit' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ac)', marginBottom: 8 }}>
                     《{hit.bookTitle}》 · {hit.chapterTitle}

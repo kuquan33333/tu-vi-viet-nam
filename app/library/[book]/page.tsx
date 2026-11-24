@@ -1,3 +1,4 @@
+import { chapterPath } from '@/lib/classics/chapter-slugs';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book] — Trang mục lục tác phẩm cổ thư
@@ -60,7 +61,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
           {book.chapters.map((chapter, i) => (
             <Link
               key={i}
-              href={`/library/${book.slug}/${i}`}
+              href={chapterPath(book.slug,i)}
               style={{
                 display: 'flex',
                 alignItems: 'baseline',

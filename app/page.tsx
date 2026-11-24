@@ -14,7 +14,7 @@ const modules = [
  {href:'/nhan-ky',mark:'✺',title:'Nhân Kỷ',sub:'Y thư · Huyệt đạo',desc:'Tìm hiểu kinh điển Đông y và tra cứu danh mục 361 huyệt.',tag:'TRA CỨU'},
 ];
 const tools = [
- {href:'/heming',icon:'∞',title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
+ {href:'/hop-ban',icon:'∞',title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
  {href:'/lich-van-nien',icon:'◷',title:'Lịch Vạn Niên',desc:'Âm dương lịch, Can Chi và các mốc tiết khí'},
  {href:'/thien-ky',icon:'☰',title:'Tra cứu Kinh Dịch',desc:'Danh mục 64 quẻ cùng sơ đồ hào động'},
  {href:'/dia-ky',icon:'⌖',title:'La Kinh 24 sơn',desc:'La bàn số theo 360° và tám hướng'},
@@ -33,7 +33,7 @@ export default function HomePage(){
      <p className="lead">Tử Vi Đẩu Số, Thiên Kỷ, Địa Kỷ và Nhân Kỷ — một không gian nghiên cứu thống nhất, nơi mỗi công cụ có phương pháp tính và tư liệu tham khảo rõ ràng.</p>
      <div className="hero-actions">
       <Link href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">↗</span></Link>
-      <Link href="/thien-ky" className="action-outline">Khám phá công cụ</Link>
+      <Link href="/cong-cu" className="action-outline">Khám phá công cụ</Link>
      </div>
      <div className="hero-trust"><span>Không cần đăng ký</span><span>Tính toán trên thiết bị</span><span>Giao diện Việt hóa</span></div>
     </div>

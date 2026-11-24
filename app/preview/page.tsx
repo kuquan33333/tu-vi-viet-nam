@@ -89,7 +89,7 @@ export default function PreviewPage() {
             <span>·</span>
             <Link href="/chart" style={{ color: 'inherit', textDecoration: 'none' }}>An Lá Số</Link>
             <span>·</span>
-            <Link href="/heming" style={{ color: 'inherit', textDecoration: 'none' }}>Hợp Bàn</Link>
+            <Link href="/hop-ban" style={{ color: 'inherit', textDecoration: 'none' }}>Hợp Bàn</Link>
           </div>
         </main>
       )}
