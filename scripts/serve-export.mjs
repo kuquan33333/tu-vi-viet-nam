@@ -17,7 +17,7 @@ http.createServer((req,res)=>{
  // yet never hydrate because their client chunk responds with 404.
  let decodedPath;
  try{decodedPath=decodeURIComponent(url.pathname);}catch{res.writeHead(400);return res.end('Đường dẫn không hợp lệ');}
- if(decodedPath.includes('\\0')||decodedPath.includes('\\\\')){res.writeHead(400);return res.end('Đường dẫn không hợp lệ');}
+ if(decodedPath.includes(String.fromCharCode(0))||decodedPath.includes(String.fromCharCode(92))){res.writeHead(400);return res.end('Đường dẫn không hợp lệ');}
  const pathname=decodedPath.replace(/\/$/,'')||'/';
  const redir=redirects.get(pathname);
  if(redir){res.writeHead(redir.status,{Location:redir.to+url.search});return res.end();}

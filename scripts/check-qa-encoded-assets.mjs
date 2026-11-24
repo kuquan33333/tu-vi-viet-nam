@@ -22,4 +22,6 @@ assert.ok((await res.text()).length>100,'Encoded client chunk was unexpectedly e
 const page=await fetch('http://127.0.0.1:4173/thien-ky/que/1');
 assert.equal(page.status,200,'Quẻ 1 must have an HTML page');
 assert.match(await page.text(),/Thuần Càn/);
+const malformed=await fetch('http://127.0.0.1:4173/%00');
+assert.equal(malformed.status,400,'Malformed NUL path must be rejected by local QA server');
 console.log('✓ Encoded Next.js [so] JavaScript chunk and quẻ page both return HTTP 200');

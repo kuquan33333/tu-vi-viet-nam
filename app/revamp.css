@@ -392,3 +392,10 @@ button,select,input,summary{max-width:100%;box-sizing:border-box}
 [data-theme=dark]{color-scheme:dark}
 [data-theme=light]{color-scheme:light}
 .calendar-print select{background:var(--bg-card);color:var(--tx-0);border:1px solid var(--bdr-med);border-radius:8px;padding:6px 10px}
+
+
+/* V4 WCAG AA: native details summary and calendar select labels do not
+   inherit the light-theme text color when toggled to the dark palette. */
+html[data-theme="dark"]{--tx-1:#e4e7e7}
+html[data-theme="dark"] .birth-form summary,
+html[data-theme="dark"] .calendar-print label{color:#e4e7e7}
