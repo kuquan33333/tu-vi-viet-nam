@@ -68,7 +68,7 @@ function formAt(
     unknownTime: false,
     province: '',
     city: '',
-    longitude: 120,
+    longitude: 108.4, // Near the UTC+7 apparent solar meridian on 31 Jan; the EoT matters.
     gender: 'male',
     ...overrides,
   };

@@ -14,8 +14,8 @@
 import { generateChart } from '../../lib/ziwei/algorithm';
 import type { BirthInfo, ZiweiChart } from '../../lib/ziwei/types';
 
-const BR = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
-const PALACE_12 = ['命宫','兄弟','夫妻','子女','财帛','疾厄','迁移','仆役','官禄','田宅','福德','父母'];
+const BR = ['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const PALACE_12 = ['Mệnh','Huynh Đệ','Phu Thê','Tử Tức','Tài Bạch','Tật Ách','Thiên Di','Nô Bộc (Giao Hữu)','Quan Lộc','Điền Trạch','Phúc Đức','Phụ Mẫu'];
 
 let failures = 0;
 const fail = (msg: string) => { console.error(`  ✗ ${msg}`); failures++; };
@@ -59,8 +59,8 @@ for (const bi of samples) {
   }
 
   // 铁律 4: 命宫唯一 + isMingGong 标记一致
-  const mingByName = chart.palaces.filter(p => p.name === '命宫');
-  if (mingByName.length !== 1) { fail(`${tag}: 命宫数量 ${mingByName.length}`); continue; }
+  const mingByName = chart.palaces.filter(p => p.name === 'Mệnh');
+  if (mingByName.length !== 1 || !mingByName[0].isMingGong || mingByName[0].branch !== chart.mingGongBranch) { fail(`${tag}: 命宫数量 ${mingByName.length}`); continue; }
 
   // 铁律 5: 十二宫逆时针排布 — 从命宫地支起, 第 k 宫地支 = (命宫地支 - k + 12) % 12
   const mingBranch = mingByName[0].branch;
@@ -77,7 +77,7 @@ for (const bi of samples) {
   // 铁律 6: 机梁同宫只可能在 辰 或 戌
   const jl = chart.palaces.find(p => {
     const ms = p.stars.filter(s => s.type === 'major').map(s => s.name);
-    return ms.includes('天机') && ms.includes('天梁');
+    return ms.includes('Thiên Cơ') && ms.includes('Thiên Lương');
   });
   if (jl) {
     jiliangCount++;
@@ -92,9 +92,10 @@ for (const bi of samples) {
   //   等价: (紫微branch + 天府branch) % 12 === 4)
   let ziB = -1, fuB = -1;
   for (const p of chart.palaces) for (const s of p.stars) {
-    if (s.name === '紫微') ziB = p.branch;
-    if (s.name === '天府') fuB = p.branch;
+    if (s.name === 'Tử Vi') ziB = p.branch;
+    if (s.name === 'Thiên Phủ') fuB = p.branch;
   }
+  if (ziB < 0 || fuB < 0) { fail(`${tag}: thiếu Tử Vi hoặc Thiên Phủ`); continue; }
   if (ziB >= 0 && fuB >= 0) {
     ziFuOppCount++;
     if ((ziB + fuB) % 12 !== 4) {
@@ -105,6 +106,8 @@ for (const bi of samples) {
 
 console.log(`\n采样统计: 机梁同宫盘 ${jiliangCount} 个(均验证辰/戌), 紫府盘 ${ziFuOppCount} 个(均验证对称)`);
 
+if (jiliangCount === 0) fail('Không có mẫu Cơ Lương đồng cung');
+if (ziFuOppCount !== samples.length) fail('Không kiểm tra đủ Tử Phủ');
 if (failures === 0) {
   console.log(`\n✅ 排盘完整性回归全过 (${samples.length} 盘 × 7 条紫微铁律)\n`);
   process.exit(0);

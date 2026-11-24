@@ -5,7 +5,7 @@ import { formToBirthInfo } from '../../lib/ziwei/share';
 import type { BirthInfo } from '../../lib/ziwei/types';
 import type { BirthFormState } from '../../components/BirthForm';
 
-const EXPECTED_BRANCHES = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+const EXPECTED_BRANCHES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 const baseBirthInfo: BirthInfo = {
   year: 2000,
   month: 1,
@@ -41,7 +41,7 @@ function formAt(clockHour: string): BirthFormState {
     unknownTime: false,
     province: '',
     city: '',
-    longitude: 120,
+    longitude: 105, // UTC+7 central meridian, not the UTC+8 meridian.
     gender: 'male',
   };
 }

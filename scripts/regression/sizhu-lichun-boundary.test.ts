@@ -20,26 +20,26 @@ const sizhu = (y: number, mo: number, d: number, h: number) =>
 
 // ① 会员案例：2004-02-04 丑时(立春19:56前) → 节气年柱癸未、月柱乙丑
 const m = sizhu(2004, 2, 4, 1);
-ok('会员案例 节气四柱年柱=癸未（立春前，不是甲申）', m.fourPillars?.[0] === '癸未');
-ok('会员案例 节气四柱月柱=乙丑（连带修正，不是丙寅）', m.fourPillars?.[1] === '乙丑');
-ok('会员案例 非节气四柱年柱=甲申（农历正月初一口径，保持不变）', m.fourPillarsLunar?.[0] === '甲申');
+ok('会员案例 节气四柱年柱=癸未（立春前，不是甲申）', m.fourPillars?.[0] === 'Quý Mùi');
+ok('会员案例 节气四柱月柱=乙丑（连带修正，不是丙寅）', m.fourPillars?.[1] === 'Ất Sửu');
+ok('会员案例 非节气四柱年柱=甲申（农历正月初一口径，保持不变）', m.fourPillarsLunar?.[0] === 'Giáp Thân');
 
 // ② 立春前一天/后一天：边界两侧正确
-ok('2004-02-03 丑时（立春前一天）节气年柱=癸未', sizhu(2004, 2, 3, 1).fourPillars?.[0] === '癸未');
-ok('2004-02-05 丑时（立春后一天）节气年柱=甲申', sizhu(2004, 2, 5, 1).fourPillars?.[0] === '甲申');
+ok('2004-02-03 丑时（立春前一天）节气年柱=癸未', sizhu(2004, 2, 3, 1).fourPillars?.[0] === 'Quý Mùi');
+ok('2004-02-05 丑时（立春后一天）节气年柱=甲申', sizhu(2004, 2, 5, 1).fourPillars?.[0] === 'Giáp Thân');
 
 // ③ 立春当天「时刻前 vs 时刻后」正确分档（同一天不同时辰）
 //    立春=19:56（戌时19-21）。丑时(idx1=02点)在前→癸未；亥时(idx11=22点)在后→甲申。
-ok('2004-02-04 丑时(立春前) → 癸未', sizhu(2004, 2, 4, 1).fourPillars?.[0] === '癸未');
-ok('2004-02-04 亥时(立春后) → 甲申', sizhu(2004, 2, 4, 11).fourPillars?.[0] === '甲申');
+ok('2004-02-04 丑时(立春前) → 癸未', sizhu(2004, 2, 4, 1).fourPillars?.[0] === 'Quý Mùi');
+ok('2004-02-04 亥时(立春后) → 甲申', sizhu(2004, 2, 4, 11).fourPillars?.[0] === 'Giáp Thân');
 
 // ④ 非节气日不被误伤（固定期望值，防回归时被动）
 const c = sizhu(1990, 6, 15, 6);
 ok('非节气日 1990-06-15 午时 节气四柱稳定=庚午/壬午/辛亥/甲午',
-   JSON.stringify(c.fourPillars) === JSON.stringify(['庚午', '壬午', '辛亥', '甲午']));
+   JSON.stringify(c.fourPillars) === JSON.stringify(['Canh Ngọ', 'Nhâm Ngọ', 'Tân Hợi', 'Giáp Ngọ']));
 
 // ⑤ 日柱、时柱不受立春影响（会员案例日柱癸丑、时柱癸丑）
-ok('日柱不受立春边界影响（会员案例=癸丑）', m.fourPillars?.[2] === '癸丑');
-ok('时柱不受立春边界影响（会员案例丑时=癸丑）', m.fourPillars?.[3] === '癸丑');
+ok('日柱不受立春边界影响（会员案例=癸丑）', m.fourPillars?.[2] === 'Quý Sửu');
+ok('时柱不受立春边界影响（会员案例丑时=癸丑）', m.fourPillars?.[3] === 'Quý Sửu');
 
 console.log(`\n[sizhu-lichun-boundary] ${passed} 项断言全部通过`);

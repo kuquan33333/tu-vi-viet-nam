@@ -11,8 +11,6 @@ import type { ZiweiChart, Star } from '../../lib/ziwei/types';
 // Chỉ test; không thay đổi thuật toán hay cung cấp dữ liệu sinh qua mạng.
 // Các test nguồn (L3–L6) không thay thế kiểm thử trình duyệt/ảnh PNG/API.
 const source = (p: string) => readFileSync(new URL('../../' + p, import.meta.url), 'utf8');
-const strict = process.argv.includes('--strict-audit');
-const known = (reason: string) => ({ todo: strict ? false : reason });
 const sample = () => generateChart({ year: 1990, month: 5, day: 6, hour: 4, gender: 'male' });
 
 // Cùng cơ chế với patterns-sihua-bonus.test.ts hiện có: chỉ vô hiệu hóa
@@ -168,7 +166,7 @@ test('L8: 34 tỉnh thành, cờ Đông Hà/Quảng Trị, không còn hai tệp
   }
 });
 
-test('L8: npm test phải bao phủ toàn bộ regression scripts', known('L8: 11 test cũ chưa được kiểm chứng và vẫn không có trong npm test; không đánh dấu chúng là đã pass'), () => {
+test('L8: npm test phải bao phủ toàn bộ regression scripts', () => {
   const pkg = JSON.parse(source('package.json')) as { scripts: { test: string } };
   const files = readdirSync(new URL('.', import.meta.url)).filter(x => x.endsWith('.test.ts'));
   const missing = files.filter(x => !pkg.scripts.test.includes('scripts/regression/' + x));
