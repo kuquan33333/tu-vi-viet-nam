@@ -2,6 +2,7 @@
 import {useMemo,useState} from 'react';
 import Link from 'next/link';
 import {Solar} from 'lunar-javascript';
+import {dayMarks,solarTermsForYear,vietnamToday} from '@/lib/ziwei/calendar-events';
 import {solarToLunarVN,calendarUncertainty} from '@/lib/ziwei/lunar-solar';
 const DAYS=['T2','T3','T4','T5','T6','T7','CN'];
 const HOLIDAYS:Record<string,string>={'1-1':'Tết Dương lịch','4-30':'Ngày Giải phóng miền Nam','5-1':'Quốc tế Lao động','9-2':'Quốc khánh'};
@@ -28,10 +29,11 @@ const TERMS_VI:Record<string,string>={
 
 const date=(y:number,m:number,d:number)=>new Date(y,m-1,d);
 export default function CalendarPage(){
- const today=new Date();
+ const vnToday=vietnamToday();const today=date(vnToday.year,vnToday.month,vnToday.day);
  const [year,setYear]=useState(today.getFullYear());
  const [month,setMonth]=useState(today.getMonth()+1);
  const [selected,setSelected]=useState(date(today.getFullYear(),today.getMonth()+1,today.getDate()));
+ const terms=useMemo(()=>solarTermsForYear(year),[year]);
  const days=useMemo(()=>{
   const offset=(date(year,month,1).getDay()+6)%7;
   const count=Math.ceil((offset+new Date(year,month,0).getDate())/7)*7;
@@ -40,6 +42,7 @@ export default function CalendarPage(){
    return {d,within:d.getMonth()===month-1,lunar:solarToLunarVN(d.getFullYear(),d.getMonth()+1,d.getDate())};
   });
  },[year,month]);
+ const selectedTerms=terms.filter(t=>t.year===selected.getFullYear()&&t.month===selected.getMonth()+1&&t.day===selected.getDate());
  const lunar=useMemo(()=>solarToLunarVN(selected.getFullYear(),selected.getMonth()+1,selected.getDate()),[selected]);
  const ganZhi=useMemo(()=>{
   try {
@@ -70,16 +73,17 @@ export default function CalendarPage(){
    <p className="lead" style={{maxWidth:750}}>Tra cứu ngày Dương lịch, Âm lịch, Can Chi và tiết khí trong phạm vi 1900–2050. Không đưa ra kết luận ngày tốt/xấu không có căn cứ thuật toán.</p>
   </div>
   <div className="workspace-layout">
-   <section className="surface-card" style={{padding:18}}>
+   <section className="surface-card calendar-print" style={{padding:18}}>
     <div className="calendar-toolbar">
      <h2 className="display-small" style={{fontSize:24}}>Tháng {month} / {year}</h2>
-     <div style={{display:'flex',gap:6}}>
+     <div className="no-print" style={{display:'flex',gap:6,flexWrap:'wrap'}}>
       <button className="action-outline" type="button" onClick={()=>shift(-1)} aria-label="Tháng trước">‹</button>
-      <button className="action-outline" type="button" onClick={()=>{const n=new Date();setYear(n.getFullYear());setMonth(n.getMonth()+1);setSelected(n);}}>Hôm nay</button>
+      <button className="action-outline" type="button" onClick={()=>{const n=vietnamToday();setYear(n.year);setMonth(n.month);setSelected(date(n.year,n.month,n.day));}}>Hôm nay</button>
       <button className="action-outline" type="button" onClick={()=>shift(1)} aria-label="Tháng sau">›</button>
+      <button className="action-outline" type="button" onClick={()=>window.print()}>In lịch tháng A4</button>
      </div>
     </div>
-    <div style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
+    <div className="no-print" style={{display:'flex',gap:8,flexWrap:'wrap',marginBottom:12}}>
      <label>Tháng <select aria-label="Tháng tra cứu" value={month} onChange={e=>{const m=Number(e.target.value);setMonth(m);setSelected(date(year,m,1));}}>{Array.from({length:12},(_,i)=><option key={i+1} value={i+1}>{i+1}</option>)}</select></label>
      <label>Năm <select aria-label="Năm tra cứu" value={year} onChange={e=>{const y=Number(e.target.value);setYear(y);setSelected(date(y,month,1));}}>{Array.from({length:151},(_,i)=><option key={1900+i} value={1900+i}>{1900+i}</option>)}</select></label>
     </div>
@@ -87,16 +91,19 @@ export default function CalendarPage(){
      {DAYS.map(d=><div className="calendar-week" key={d}>{d}</div>)}
      {days.map(({d,within,lunar:l},i)=>{
       const chosen=selected.toDateString()===d.toDateString();
-      const holiday=(l&&!l.isLeapMonth&&l.lunarDay===1&&l.lunarMonth===1?'Tết':l&&!l.isLeapMonth&&l.lunarDay===15&&l.lunarMonth===8?'Trung Thu':HOLIDAYS[(d.getMonth()+1)+'-'+d.getDate()]||'');
+      const marks=dayMarks(d.getFullYear(),d.getMonth()+1,d.getDate(),within?terms:solarTermsForYear(d.getFullYear()));
       return <button type="button" role="gridcell" aria-label={d.getDate()+"/"+(d.getMonth()+1)+"/"+d.getFullYear()} aria-selected={chosen} key={i}
-       className={'calendar-day'+(!within?' outside':'')+(chosen?' selected':'')+(today.toDateString()===d.toDateString()?' today':'')}
+       className={'calendar-day'+(!within?' outside':'')+(chosen?' selected':'')+(today.toDateString()===d.toDateString()?' today':'')+(marks.some(m=>m.kind==='holiday')?' has-holiday':'')+(marks.some(m=>m.kind==='term')?' has-term':'')}
        onClick={()=>{setSelected(d);if(!within){setMonth(d.getMonth()+1);setYear(d.getFullYear());}}}>
        <span className="solar-day">{d.getDate()}</span>
        <span className="lunar-day">{l?(l.lunarDay===1?l.lunarDay+'/'+l.lunarMonth:l.lunarDay+' âm'):'—'}</span>
-       {holiday&&<span className="calendar-holiday">{holiday}</span>}
+       {marks.filter(m=>m.kind!=='lunar').map(m=><span key={m.label} className={'calendar-holiday mark-'+m.kind}>{m.label}</span>)}
+       {marks.some(m=>m.kind==='lunar')&&<span className="calendar-lunar-mark">{l?.lunarDay===1?'Mùng 1':'Rằm'}</span>}
       </button>;
      })}
     </div>
+    <div className="calendar-legend"><span>Ngày lễ / ngày kỷ niệm</span><span>Tiết khí</span><span>Mùng 1 / rằm</span></div>
+    <p className="workspace-note">Các mốc lễ theo lịch, không phải lịch nghỉ chính thức của từng năm. Tết và Quốc khánh có ngày nghỉ liền kề theo thông báo hằng năm.</p>
    </section>
    <aside className="surface-card reading-panel">
     <div className="eyebrow">CHI TIẾT NGÀY</div>
@@ -106,9 +113,9 @@ export default function CalendarPage(){
      <div><span>Năm Can Chi</span><strong>{ganZhiVi(ganZhi?.year)}</strong></div>
      <div><span>Tháng Can Chi (tiết khí, tham khảo)</span><strong>{ganZhiVi(ganZhi?.month)}</strong></div>
      <div><span>Ngày Can Chi</span><strong>{ganZhiVi(ganZhi?.day)}</strong></div>
-     <div><span>Tiết khí tham khảo</span><strong>{ganZhi?.term?(TERMS_VI[ganZhi.term]||ganZhi.term):'Không có mốc giao tiết'}</strong></div>
+     <div><span>Giờ giao tiết (UTC+7)</span><strong>{selectedTerms.length?selectedTerms.map(t=>t.name+' · '+t.clock).join(', '):'Không có mốc giao tiết'}</strong></div>
     </div>
-    <div className="study-notice">Ngày âm và năm Can Chi sử dụng lịch Việt Nam UTC+7 (1900–2050). Can Chi theo tiết khí và mốc giao tiết dùng thư viện tham khảo, chưa kiểm chứng độ chính xác đến giờ/phút. Lịch lịch sử áp dụng quy ước UTC+7 cố định.</div>{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())&&<p className="study-notice">{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())}</p>}
+    <p className="workspace-note">Ngày lễ: Điều 112 Bộ luật Lao động 2019; không thay thế thông báo ngày nghỉ từng năm.</p><div className="study-notice">Ngày âm và năm Can Chi sử dụng lịch Việt Nam UTC+7 (1900–2050). Giờ giao tiết lấy từ lunar-javascript 1.7.7, quy đổi UTC+7 và làm tròn đến phút. Sai số mô hình lịch sử có thể ảnh hưởng những mốc sát nửa đêm. Lịch lịch sử áp dụng quy ước UTC+7 cố định.</div>{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())&&<p className="study-notice">{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())}</p>}
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
      <Link className="action-outline" href="/thien-ky">Thiên Kỷ →</Link>
      <Link className="action-outline" href="/chart">Lập lá số →</Link>
