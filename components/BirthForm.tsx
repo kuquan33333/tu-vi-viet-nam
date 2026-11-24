@@ -2,14 +2,13 @@
 import {BirthDateFields,BirthClockInput} from './BirthDateTimeFields';
 import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES } from '@/lib/ziwei/cities';
 import {birthLocationsForProvince,searchBirthplaces,birthRegion,type BirthRegion} from '@/lib/ziwei/legacy-birthplaces';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
-import { lunarToSolarVN, solarToLunarVN } from '@/lib/ziwei/lunar-solar';
+import { candidateLunarToSolar as lunarToSolarVN, candidateSolarToLunar as solarToLunarVN } from '@/lib/ziwei/vn-calendar-candidate';
 import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
 
 export interface BirthFormState {
@@ -266,32 +265,25 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
   function FieldError({ msg }: { msg: string }) {
     return (
-      <AnimatePresence>
+      <>
         {msg && (
-          <motion.p
-            initial={{ opacity: 0, y: -4, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto' }}
-            exit={{ opacity: 0, y: -4, height: 0 }}
-            transition={{ duration: 0.18 }}
+          <p
             style={{ color: errorClr, fontSize: '11px', marginTop: '4px' }}
           >
             ✕ {msg}
-          </motion.p>
+          </p>
         )}
-      </AnimatePresence>
+      </>
     );
   }
 
   const showErr = (field: string) => touched[field] || submitAttempted;
 
   return (
-    <motion.form
+    <form
       className="birth-form"
       onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'blur(20px)' }}
+      style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'none' }}
     >
       {/* Tiêu đề */}
       <h2 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.12em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
@@ -301,11 +293,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       {/* ── Tiến trình hoàn thành ── */}
       <div style={{ display: 'flex', gap: '4px', marginBottom: '20px' }}>
         {steps.map((done, i) => (
-          <motion.div
+          <div
             key={i}
-            animate={{ background: done ? (isDark ? '#d4a843' : '#b07820') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(200,160,60,0.15)') }}
-            transition={{ duration: 0.3 }}
-            style={{ flex: 1, height: '2px', borderRadius: '2px' }}
+            style={{background: done ? (isDark ? '#d4a843' : '#b07820') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(200,160,60,0.15)'),flex: 1, height: '2px', borderRadius: '2px',transition:'background .3s'}}
           />
         ))}
       </div>
@@ -442,29 +432,23 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <p style={{marginTop:6}}>Nguồn: <a href={'https://www.geonames.org/'+currentCityData.reference.geonamesId+'/'} target="_blank" rel="noopener noreferrer">GeoNames ↗</a> · CC BY 4.0</p>
           {form.longitudeReferenceId===currentCityData.reference.geonamesId&&<p role="status">Đang dùng kinh độ tham khảo. Có thể sửa bằng tọa độ nơi sinh chính xác.</p>}
         </div>}
-        <AnimatePresence mode="wait">
+        <>
           {form.province ? (
-            <motion.p
+            <p
               key="location-info"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={{ fontSize: '10px', color: isDark ? 'rgba(180,210,235,0.85)' : 'rgba(100,70,10,0.5)', marginTop: '5px' }}
+              style={{ fontSize: '10px', color: 'var(--tx-2)', marginTop: '5px' }}
             >
               {form.city || form.province} · Kinh độ {Number.isFinite(form.longitude)?form.longitude.toFixed(4)+'°':'chưa nhập'} · Hiệu chỉnh kinh độ: {offsetMin.toFixed(2)} phút
-            </motion.p>
+            </p>
           ) : (
-            <motion.p
+            <p
               key="location-hint"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
               style={{ fontSize: '10px', color: 'var(--tx-2)', marginTop: '5px' }}
             >
               * Chọn địa danh gần nơi sinh hoặc nhập kinh độ chính xác để hạn chế sai số ở biên giờ.
-            </motion.p>
+            </p>
           )}
-        </AnimatePresence>
+        </>
       </div>
 
       {form.province==='Tỉnh Quảng Trị'&&form.city&&y>=1900&&y<=1975&&currentCityData?.isSouthOf17thParallel===undefined&&<label style={{display:'block',margin:'10px 0'}}>Vị trí lịch sử so với sông Bến Hải<select aria-label="Khu vực lịch sử" value={form.historicalRegion||''} onChange={e=>setForm({...form,historicalRegion:e.target.value?e.target.value as BirthRegion:undefined})} style={inputStyle}><option value="">Chưa xác định</option><option value="north">Phía Bắc</option><option value="south">Phía Nam</option></select></label>}
@@ -473,9 +457,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}
       {/* ── Banner cảnh báo đổi múi giờ lịch sử Việt Nam ── */}
       {historicalTz && historicalTz.deltaMinutes !== 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
+        <div
           style={{
             background: isDark ? 'rgba(234, 179, 8, 0.12)' : 'rgba(234, 179, 8, 0.1)',
             border: '1px solid rgba(234, 179, 8, 0.35)',
@@ -494,7 +476,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             Giờ ghi trên giấy khai sinh có thể chạy sớm hơn giờ chuẩn thiên văn UTC+7 là {Math.abs(historicalTz.deltaMinutes)} phút.
           </div>
           <div>Giữ nguyên ngày giờ trên giấy khai sinh; hệ thống áp dụng múi giờ lịch sử một lần khi tính. Dữ liệu lịch sử có thể không chính xác ở mọi địa phương.</div>
-        </motion.div>
+        </div>
       )}
 
       {/* ── Thời gian sinh (Giờ : Phút : Giây) ── */}
@@ -533,7 +515,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             onChange={e => setForm({ ...form, unknownTime: e.target.checked })}
             style={{ width: '14px', height: '14px', borderRadius: '4px', cursor: 'pointer' }}
           />
-          <span style={{ fontSize: '11px', color: isDark ? 'rgba(165,185,210,0.7)' : 'rgba(140,100,20,0.45)' }}>
+          <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>
             Không rõ giờ sinh cụ thể
           </span>
         </label>
@@ -550,11 +532,10 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             const isMale = g === 'male';
             const accent = isMale ? '37,99,235' : '225,29,72';
             return (
-              <motion.button
+              <button
                 key={g}
                 type="button"
                 onClick={() => setForm({ ...form, gender: g })}
-                whileTap={{ scale: 0.97 }}
                 style={{
                   flex: 1,
                   padding: '11px',
@@ -569,20 +550,16 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
                 }}
               >
                 {isMale ? 'Nam Mệnh' : 'Nữ Mệnh'}
-              </motion.button>
+              </button>
             );
           })}
         </div>
       </div>
 
       {/* ── Thanh tóm tắt thông tin đã chọn ── */}
-      <AnimatePresence>
+      <>
         {showSummary && (
-          <motion.div
-            initial={{ opacity: 0, y: -8, height: 0, marginBottom: 0 }}
-            animate={{ opacity: 1, y: 0, height: 'auto', marginBottom: 12 }}
-            exit={{ opacity: 0, y: -8, height: 0, marginBottom: 0 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+          <div
           >
             <div style={{
               background: summaryBg,
@@ -598,17 +575,15 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
                 {summaryText}
               </span>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      </>
 
       {/* ── Nút xác nhận lập lá số ── */}
       {!hideSubmit && (
-        <motion.button
+        <button
           type="submit"
           disabled={loading}
-          whileHover={loading ? {} : { scale: 1.01 }}
-          whileTap={loading ? {} : { scale: 0.98 }}
           style={{
             width: '100%',
             padding: '14px',
@@ -630,16 +605,14 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         >
           {loading ? (
             <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-              <motion.span
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
-                style={{ display: 'inline-block', width: '12px', height: '12px', border: '2px solid currentColor', borderTopColor: 'transparent', borderRadius: '50%' }}
+              <span
+                className="form-spinner" style={{ display: 'inline-block', width: '12px', height: '12px', border: '2px solid currentColor', borderTopColor: 'transparent', borderRadius: '50%' }}
               />
               Đang an sao lập lá số…
             </span>
           ) : form.unknownTime?'XEM 12 PHƯƠNG ÁN THAM KHẢO':'LẬP LÁ SỐ TỬ VI'}
-        </motion.button>
+        </button>
       )}
-    </motion.form>
+    </form>
   );
 }

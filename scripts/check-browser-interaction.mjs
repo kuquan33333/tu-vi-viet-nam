@@ -67,7 +67,7 @@ try{
   await goto('/chart');await fillNormal(page);await fillDate(page,'1985','1','21');
   await page.getByRole('button',{name:/LẬP LÁ SỐ TỬ VI/}).click();
   await page.getByLabel('Bàn lá số 12 cung').waitFor();
-  await page.getByText(/Âm lịch: 1\/1\/1985/).waitFor();
+  if(width===360){await page.locator('.mobile-lunar-date').waitFor();assert.match(await page.locator('.mobile-lunar-date').innerText(),/Âm lịch: 1\/1\/1985/);}else await page.locator('.chart-scroll').getByText(/Âm lịch: 1\/1\/1985/).waitFor();
   await goto('/hop-ban');
   const a=page.locator('.compare-a'),b=page.locator('.compare-b');
   await fillNormal(a);

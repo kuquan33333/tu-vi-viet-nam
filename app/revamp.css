@@ -378,3 +378,12 @@ button,select,input,summary{max-width:100%;box-sizing:border-box}
 /* Touch targets, no horizontal swipe required for section tabs. */
 .footer-grid a{min-height:44px;display:flex;align-items:center}
 @media(max-width:700px){.study-tabs{flex-wrap:wrap;overflow:visible}.study-tab{white-space:normal;flex:1 1 120px}.calendar-print{padding:5px!important}.calendar-month-grid{gap:2px}.calendar-day{min-width:0}.calendar-toolbar{gap:8px}.calendar-toolbar .action-outline{flex:1 1 auto}.calendar-day.outside.selected{color:var(--bg-0)}}
+
+/* V4 audit: reduce paint work and keep AA text contrast. */
+:root{--tx-2:#52616f}
+[data-theme=dark]{--tx-2:#b4bdc6}
+.global-header{backdrop-filter:none;background:var(--bg-card)}
+.home-note{color:var(--tx-1)}
+.form-spinner{animation:form-spin 1s linear infinite}
+@keyframes form-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.form-spinner{animation:none}}

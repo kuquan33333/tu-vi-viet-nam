@@ -32,7 +32,7 @@ export default function HomePage(){
      <h1 className="hero-display" style={{marginTop:20}}>Thấu hiểu cổ học.<span style={{display:'block',color:'var(--ac-dim)'}}>Khám phá cùng bạn.</span></h1>
      <p className="lead">Tử Vi Đẩu Số, Thiên Kỷ, Địa Kỷ và Nhân Kỷ — một không gian nghiên cứu thống nhất, nơi mỗi công cụ có phương pháp tính và tư liệu tham khảo rõ ràng.</p>
      <div className="hero-actions">
-      <Link href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">→</span></Link>
+      <Link prefetch={false} href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">→</span></Link>
 
      </div>
      <div className="hero-trust"><span>Không cần đăng ký</span><span>Tính toán trên thiết bị</span><span>Giao diện Việt hóa</span></div>
@@ -53,7 +53,7 @@ export default function HomePage(){
      <div><div className="eyebrow">BỐN NHÁNH TRI THỨC</div><h2 className="display-small">Một hệ thống, bốn cánh cửa.</h2><p>Chọn lĩnh vực bạn quan tâm. Mỗi phân hệ có công cụ tương tác và tư liệu đi kèm.</p></div>
     </div>
     <div className="module-grid">
-     {modules.map(m=><Link key={m.href} href={m.href} className="surface-card module-card">
+     {modules.map(m=><Link prefetch={false} key={m.href} href={m.href} className="surface-card module-card">
        <div className="module-symbol"><Icon name={m.mark} size={26}/></div>
        <h3>{m.title}</h3>
        <div style={{fontSize:11,fontWeight:800,color:'var(--ac-dim)',marginBottom:10}}>{m.sub}</div>
@@ -68,10 +68,10 @@ export default function HomePage(){
    <div className="site-wrap">
     <div className="section-head">
      <div><div className="eyebrow">CÔNG CỤ NỔI BẬT</div><h2 className="display-small">Tìm hiểu theo cách của bạn.</h2><p>Các công cụ được tổ chức theo nhu cầu sử dụng, không yêu cầu học hết lý thuyết trước khi bắt đầu.</p></div>
-     <Link className="section-link" href="/library">Mở thư viện →</Link>
+     <Link prefetch={false} className="section-link" href="/library">Mở thư viện →</Link>
     </div>
     <div className="tools-grid">
-     {tools.map(t=><Link key={t.href+t.title} href={t.href} className="surface-card tools-card">
+     {tools.map(t=><Link prefetch={false} key={t.href+t.title} href={t.href} className="surface-card tools-card">
        <div className="icon-round"><Icon name={t.icon} size={22}/></div><div><strong>{t.title}</strong><span>{t.desc}</span></div><span style={{marginLeft:'auto',color:'var(--ac-dim)'}}>→</span>
      </Link>)}
     </div>

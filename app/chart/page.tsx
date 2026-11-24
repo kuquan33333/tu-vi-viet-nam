@@ -5,7 +5,8 @@ import BirthForm,{type BirthFormState} from '@/components/BirthForm';
 import dynamic from 'next/dynamic';
 import Icon from '@/components/Icon';
 const ChartBoard=dynamic(()=>import('@/components/ChartBoard'),{loading:()=> <p role="status">Đang tải bàn lá số…</p>});
-import TimeNav,{type TimeView} from '@/components/TimeNav';
+import type {TimeView} from '@/components/TimeNav';
+const TimeNav=dynamic(()=>import('@/components/TimeNav'));
 
 import {uncertainBirthOptions} from '@/lib/ziwei/share';
 import {STAR_DESCRIPTIONS,BRANCHES} from '@/lib/ziwei/constants';
@@ -86,7 +87,7 @@ export default function ChartPage(){
      <div className="chart-scroll"><ChartBoard chart={chart} view={view} liunianYear={year}
       onPalaceSelect={p=>{setPalace(p);setStar(null);}} onStarSelect={(s,p)=>{setStar(s);setPalace(p);}}
       onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){setPalace(p);setStar(p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+name+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
-     <div className="mobile-palaces" aria-label="Danh sách 12 cung">{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>{setPalace(p);setStar(null);}}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>{setPalace(p);setStar(s);}}>{s.name}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
+     <div className="mobile-palaces" aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>{setPalace(p);setStar(null);}}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>{setPalace(p);setStar(s);}}>{s.name}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
     </section>
     <aside className="workspace-surface workspace-aside reading-panel" aria-label="Chi tiết cung và sao">
      <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?star.name:(shown?.name||'Tổng quan')}</h2></div></div>

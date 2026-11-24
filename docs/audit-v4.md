@@ -14,3 +14,7 @@ Base c5dbcf4 / qa/integration-v3. Nhánh qa/features-ui-v4, PR #5, chưa merge h
 - Nguồn kinh văn cần thẩm định toàn bộ và bản dịch Việt có quyền sử dụng; không tự chế lời luận.
 - Không có cơ chế bảo vệ PIN khỏi mã độc hoặc người đã mở khóa tab; file xuất không mã hóa. Mã hóa chỉ áp dụng kho hồ sơ lá số, không áp dụng lịch sử gieo quẻ.
 - In PDF qua hộp thoại trình duyệt và CSS A4; kiểm thử tạo PDF bằng Playwright. Preview/production giữ nguyên đến khi nghiệm thu.
+
+### Lighthouse đo lần đầu (19e6c5e)
+- `/`: Accessibility 95, Performance 78; `/chart`: 94, 78; `/lich-van-nien`: 100, 86. Cả sáu route SEO 100. Run 45393587701, artifact 14920496565. Chưa đạt gate.
+- Báo cáo cho thấy LCP chủ yếu là render delay; tải trước route khác, các chunk JS chưa dùng và contrast chữ ghi chú chưa đạt. Giảm prefetch ở chrome/home, bỏ animation JS của form (giữ trạng thái và hành vi), dùng trực tiếp hai hàm chuyển đổi UTC+7 đã có, tải TimeNav khi cần, sửa màu và accessible name. Không thay thuật toán an sao hoặc bảng lịch. Thêm ngày âm trong danh sách mobile và giữ test ngày Tết 1985 ở cả hai layout. Cần đo lại trước nghiệm thu.
