@@ -6,24 +6,39 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   check:
-    name: 类型检查 + 排盘回归
+    name: Kiểm tra kiểu, hồi quy và build
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
     steps:
       - uses: actions/checkout@v4
-
-      # 仓库已提交 package-lock.json：按锁定版本安装，并开 npm 缓存
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
-
-      - name: 安装依赖
+      - name: Cài phụ thuộc theo lockfile
         run: npm ci --no-audit --no-fund
-
-      - name: 类型检查
+      - name: Kiểm tra kiểu
         run: npm run typecheck
-
-      - name: 排盘引擎回归
+      - name: Hồi quy
         run: npm test
+      - name: Kiểm thử Triad và V2
+        run: |
+          npx tsx scripts/test-triad.ts
+          npx tsx scripts/test-revamp.ts
+      - name: Build mã nguồn nguyên trạng
+        run: npm run build
+      - name: Build tĩnh giống production
+        env:
+          NEXT_PUBLIC_SITE_URL: https://lichvannien-9sv.pages.dev
+        run: |
+          rm -rf .next out
+          node scripts/prepare-cloudflare-demo.mjs
+          npm run build
+          test -d out
