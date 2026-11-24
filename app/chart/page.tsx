@@ -76,6 +76,7 @@ export default function ChartPage(){
    </div>
    {feedback&&<p role="status" className="study-notice" style={{marginBottom:14}}>{feedback}</p>}
    <p className="study-notice">{chart.birthInfo.calendarVersion==='legacy-cn'?'Hồ sơ dùng lịch cũ (không tự đổi kết quả đã lưu). Chọn Lập lại nếu muốn tính theo lịch Việt Nam UTC+7.':'Lịch Việt Nam UTC+7 · ngày âm thực tế hiển thị riêng với quy tắc an sao tháng nhuận.'} {chart.birthInfo.calendarUncertain||''}</p>
+   {chart.birthInfo.longitudeReferenceId&&<p className="study-notice">Lá số sử dụng kinh độ tham khảo của huyện. Nếu giờ sinh gần ranh chi giờ, hãy nhập kinh độ nơi sinh chính xác để đối chiếu.</p>}
    <div className="workspace-toolbar workspace-surface" style={{padding:'11px 15px'}}>
     <TimeNav chart={chart} view={view} liunianYear={year} onViewChange={setView} onYearChange={setYear}/>
    </div>

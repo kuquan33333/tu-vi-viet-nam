@@ -36,8 +36,11 @@ try{
   await fillDate(page);await page.getByLabel('Tìm nơi sinh theo địa danh cũ').fill('krong pa');
   await page.getByRole('button',{name:/Krông Pa.*cần nhập kinh độ/}).first().click();
   assert.equal(await page.getByLabel('Kinh độ',{exact:true}).inputValue(),'');
-  // Confirm user must supply longitude for a district without verified coordinates.
+  await page.getByRole('button',{name:'Dùng kinh độ tham khảo của huyện'}).click();
+  assert.ok(Number(await page.getByLabel('Kinh độ',{exact:true}).inputValue())>102);
+  await page.getByText(/Đang dùng kinh độ tham khảo/).waitFor();
   await page.getByLabel('Kinh độ',{exact:true}).fill('108.65');
+  await page.getByText(/Đang dùng kinh độ tham khảo/).waitFor({state:'hidden'});
   await page.getByLabel('Không rõ giờ sinh cụ thể').check();
   await page.getByRole('button',{name:/XEM 12 PHƯƠNG ÁN/}).click();
   await page.getByRole('heading',{name:'12 phương án chưa xác định'}).waitFor();

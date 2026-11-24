@@ -1,6 +1,7 @@
 import {PROVINCES,type CityInfo,type ProvinceInfo} from './cities';
 import {LEGACY_PROVINCES,LEGACY_DISTRICT_ROWS} from './legacy-birthplaces.generated';
-export type BirthLocation=CityInfo&{legacyCode?:string;oldProvince?:string;requiresLongitude?:boolean};
+import {DISTRICT_REFERENCE} from './district-reference.generated';
+export type BirthLocation=CityInfo&{legacyCode?:string;oldProvince?:string;requiresLongitude?:boolean;reference?:{longitude:number;geonamesId:number}};
 export type BirthRegion='north'|'south';
 export const LEGACY_BIRTHPLACES=LEGACY_DISTRICT_ROWS.split('\n').map(row=>{
  const [code,name,provinceCode]=row.split('|'),p=LEGACY_PROVINCES[provinceCode];
@@ -12,7 +13,7 @@ export function birthLocationsForProvince(province:string):BirthLocation[]{
  const p=PROVINCES.find(p=>p.name===province);if(!p)return [];
  return [...p.cities,...LEGACY_BIRTHPLACES.filter(x=>x.currentProvince===province).map(x=>({
   name:x.name+' ('+x.oldProvince+' cũ)',
-  longitude:NaN,legacyCode:x.code,oldProvince:x.oldProvince,requiresLongitude:true,
+  longitude:NaN,legacyCode:x.code,oldProvince:x.oldProvince,requiresLongitude:true,reference:DISTRICT_REFERENCE[x.code],
   // Old Quảng Bình is north; old Quảng Trị straddles the historical division.
   isSouthOf17thParallel:x.provinceCode==='44'?false:x.provinceCode==='45'?undefined:p.isSouthOf17thParallel,
  }))];

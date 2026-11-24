@@ -23,6 +23,7 @@ export interface BirthFormState {
   province: string;
   city: string;
   longitude: number;
+  longitudeReferenceId?: number;
   gender: 'male' | 'female';
   trueSolar?: boolean;
   lateZishi?: 'next-day' | 'current-day';
@@ -75,6 +76,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     province: initialData?.province ?? '',
     city: initialData?.city ?? '',
     longitude: initialData?.longitude ?? NaN,
+    longitudeReferenceId:initialData?.longitudeReferenceId,
     trueSolar: initialData?.trueSolar ?? true,
     lateZishi: initialData?.lateZishi ?? 'next-day',
     utcOffsetMinutes: initialData?.utcOffsetMinutes,
@@ -212,13 +214,13 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     : '';
 
   const handleProvince = (prov: string) => {
-    setForm({ ...form, province: prov, city: '', longitude: NaN,utcOffsetMinutes:undefined,historicalRegion:undefined });
+    setForm({ ...form, province: prov, city: '', longitude: NaN,longitudeReferenceId:undefined,utcOffsetMinutes:undefined,historicalRegion:undefined });
   };
 
   const handleCity = (cityName: string) => {
     const prov = PROVINCES.find(p => p.name === form.province);
     const cityData = prov?.cities.find(c => c.name === cityName);
-    setForm({ ...form, city: cityName, longitude: cityData?.longitude ?? NaN,historicalRegion:undefined });
+    setForm({ ...form, city: cityName, longitude: cityData?.longitude ?? NaN,longitudeReferenceId:undefined,historicalRegion:undefined });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -466,7 +468,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </label>
         <div className="form-term-note">Chân Thái Dương Thời <TermTooltip term="Chân Thái Dương Thời" /></div>
         <input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>
-        {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
+        {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,longitudeReferenceId:undefined,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <select
             aria-label="Tỉnh hoặc thành phố nơi sinh"
@@ -499,7 +501,13 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           </select>}
         </div>
         {form.province==='Nước ngoài'&&<label>Múi giờ UTC tại thời điểm sinh (giờ)<input type="number" step="0.25" min={-12} max={14} value={form.utcOffsetMinutes===undefined?'':form.utcOffsetMinutes/60} onChange={e=>setForm({...form,utcOffsetMinutes:e.target.value===''?undefined:Number(e.target.value)*60})} style={inputStyle}/></label>}
-        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'||currentCityData?.requiresLongitude?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value)})} style={inputStyle}/></details>}
+        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'||currentCityData?.requiresLongitude?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value),longitudeReferenceId:undefined})} style={inputStyle}/></details>}
+        {currentCityData?.reference&&<div className="study-notice" style={{marginTop:8}}>
+          <p>Điểm tham khảo của huyện: {currentCityData.reference.longitude.toFixed(4)}° Đông. Đây không phải tọa độ chính xác nơi sinh; sai số vị trí có thể làm đổi chi giờ nếu sinh gần ranh giờ.</p>
+          <button type="button" className="action-outline" onClick={()=>{const r=currentCityData.reference;if(r)setForm({...form,longitude:r.longitude,longitudeReferenceId:r.geonamesId});}}>Dùng kinh độ tham khảo của huyện</button>
+          <p style={{marginTop:6}}>Nguồn: <a href={'https://www.geonames.org/'+currentCityData.reference.geonamesId+'/'} target="_blank" rel="noopener noreferrer">GeoNames ↗</a> · CC BY 4.0</p>
+          {form.longitudeReferenceId===currentCityData.reference.geonamesId&&<p role="status">Đang dùng kinh độ tham khảo. Có thể sửa bằng tọa độ nơi sinh chính xác.</p>}
+        </div>}
         <AnimatePresence mode="wait">
           {form.province ? (
             <motion.p

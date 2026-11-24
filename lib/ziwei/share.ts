@@ -70,12 +70,12 @@ export function formToBirthInfo(form: BirthFormState): BirthInfo {
   // Apply day rollover and late Zi independently, including a solar shift across midnight.
   const dayOffset=solar.dayOffset+(lateZishi==='next-day'&&solar.branch===0&&solar.normalizedMinutes>=1380?1:0);
   ({year:y,month:m,day:d}=shiftGregorianDate({year:y,month:m,day:d},dayOffset));
-  return {year:y,month:m,day:d,hour:solar.branch,gender:form.gender,name:form.name||undefined,province:form.province||undefined,city:form.city||undefined,longitude:form.province?form.longitude:undefined,origInput,
+  return {year:y,month:m,day:d,hour:solar.branch,gender:form.gender,name:form.name||undefined,province:form.province||undefined,city:form.city||undefined,longitude:form.province?form.longitude:undefined,longitudeReferenceId:form.longitudeReferenceId,origInput,
     timeConvention:{trueSolar:form.trueSolar!==false,lateZishi,utcOffsetMinutes:form.utcOffsetMinutes??420}};
 }
 export function uncertainBirthOptions(form:BirthFormState):BirthInfo[]{
   if(!form.unknownTime||birthFormProblem(form))throw new RangeError('Thiếu thông tin sinh.');
-  return Array.from({length:12},(_,hour)=>({year:Number(form.year),month:Number(form.month),day:Number(form.day),hour,gender:form.gender,name:form.name||undefined,province:form.province,city:form.city,longitude:form.longitude,assumedHour:true}));
+  return Array.from({length:12},(_,hour)=>({year:Number(form.year),month:Number(form.month),day:Number(form.day),hour,gender:form.gender,name:form.name||undefined,province:form.province,city:form.city,longitude:form.longitude,longitudeReferenceId:form.longitudeReferenceId,assumedHour:true}));
 }
 
 /** BirthFormState → URLSearchParams (lưu thông tin trên URL) */
@@ -99,6 +99,7 @@ export function formToSearchParams(form: BirthFormState): URLSearchParams {
   if (Number.isFinite(form.longitude)) {
     p.set('lo', String(form.longitude));
   }
+  if(form.longitudeReferenceId)p.set('lr',String(form.longitudeReferenceId));
   if(form.trueSolar===false)p.set('ts','0');
   if(form.lateZishi==='current-day')p.set('zi','same');
   if(form.utcOffsetMinutes!==undefined)p.set('tz',String(form.utcOffsetMinutes));
@@ -128,6 +129,7 @@ export function searchParamsToForm(params: URLSearchParams): Partial<BirthFormSt
     province: params.get('p') || '',
     city: params.get('c') || '',
     longitude: longitudeParam!==null&&longitudeParam.trim()!==''?Number(longitudeParam):known??NaN,
+    longitudeReferenceId:params.has('lr')&&Number.isSafeInteger(Number(params.get('lr')))&&Number(params.get('lr'))>0?Number(params.get('lr')):undefined,
     historicalRegion:params.get('hr')==='north'?'north':params.get('hr')==='south'?'south':undefined,
     trueSolar:params.get('ts')!=='0',
     lateZishi:params.get('zi')==='same'?'current-day':'next-day',
