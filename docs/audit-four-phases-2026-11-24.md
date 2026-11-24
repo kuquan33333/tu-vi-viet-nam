@@ -74,3 +74,12 @@
 - Chỉ merge và deploy sau khi **CI + SEO/Browser QA cùng xanh** trên đúng commit; so sánh tree SHA; kiểm tra CDN. Cloudflare auto-deploy phải duy trì tắt để tiết kiệm quota.
 
 Bản này là audit mã nguồn/tài liệu, không thay thế thẩm định văn bản truyền thống, hiệu năng hiện trường hay rà soát pháp lý chuyên môn.
+
+
+## Hậu kiểm điều khoản, chính sách và địa chỉ
+
+- **Phát hiện đã sửa:** \`app/terms/page.tsx\` của phiên bản trước cấm "đảo ngược mã nguồn" và giới hạn mục đích cá nhân chung cho toàn nền tảng, mâu thuẫn với phạm vi MIT đã công bố. Bản mới tách quyền mã nguồn MIT khỏi dữ liệu nguồn có giấy phép riêng, không cấm việc nghiên cứu code hợp pháp.
+- **Phát hiện đã sửa:** \`app/privacy/page.tsx\` cũ chưa giải thích kết nối khi chủ động nhúng atlas 3D/Kỳ Môn bên ngoài. Bản mới nêu rõ dữ liệu sinh tại trình duyệt, PIN Web Crypto, tệp JSON bản rõ và thông tin kỹ thuật hạ tầng.
+- **Phát hiện đã sửa:** \`README.en.md\` cũ có tuyên bố về toàn văn cổ thư, giờ sinh danh nhân "verified", AI trực tiếp và 100% Việt hóa mà không đủ cơ sở. Bản mới đồng bộ trạng thái đã triển khai với README tiếng Việt.
+- **Chưa đúng mục tiêu tên miền ngắn:** production đang là \`lichvannien-9sv.pages.dev\`, chưa xác minh khả năng sử dụng \`lichvannien.pages.dev\`. Không tự đổi domain khi chưa kiểm chứng quyền sở hữu.
+- **Ngoài bốn đợt web:** repo chưa có ứng dụng Android/iOS native; trình duyệt điện thoại dùng bản web responsive, không tương đương ứng dụng cài trên máy.
