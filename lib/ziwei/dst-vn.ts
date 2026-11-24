@@ -125,8 +125,13 @@ export function getVietnamDSTInfo(
   day: number,
   isSouthOf17thParallel = false,
 ): VietnamDSTInfo | null {
+  // The date-only compatibility API samples noon; use resolveHistoricalCivilTime for a birth clock.
+  const offsets=resolveHistoricalCivilTime(year,month,day,12,0,0,isSouthOf17thParallel).offsets;
+  const actual=offsets[0];
+  if(actual===undefined||actual===420)return null;
+  if(actual!==480&&actual!==540)return {active:true,periodId:'vn-local-mean-time',actualOffsetMinutes:actual,standardOffsetMinutes:420,deltaMinutes:420-actual,periodLabel:'Giờ địa phương lịch sử (IANA tzdb 2025b)',startDate:'01/01/1900',endDate:'30/04/1911'};
   for (const p of VN_TIMEZONE_PERIODS) {
-    if (!isDateInRange(year, month, day, p)) continue;
+    if (!isDateInRange(year, month, day, p) || p.actualOffsetMinutes!==actual) continue;
 
     // Giai đoạn sau 10/10/1954 của thời kỳ 1947–1955 chỉ áp dụng cho Miền Nam
     if (p.id === 'vn-indochina-1947' && (year > 1954 || (year === 1954 && (month > 10 || (month === 10 && day > 10))))) {
@@ -149,7 +154,7 @@ export function getVietnamDSTInfo(
       endDate: `${String(p.endDay).padStart(2, '0')}/${String(p.endMonth).padStart(2, '0')}/${p.endYear}`,
     };
   }
-  return null;
+  return {active:true,periodId:'vn-transition',actualOffsetMinutes:actual,standardOffsetMinutes:420,deltaMinutes:420-actual,periodLabel:'Múi giờ lịch sử IANA tzdb 2025b',startDate:'',endDate:''};
 }
 
 /**
@@ -163,14 +168,14 @@ export function isVietnamDST(year: number, month: number, day: number, isSouthOf
  * Năm có thuộc bất kỳ giai đoạn đổi múi giờ lịch sử nào không
  */
 export function isVietnamDSTYear(year: number): boolean {
-  return VN_TIMEZONE_PERIODS.some((p) => year >= p.startYear && year <= p.endYear);
+  return (year>=1900&&year<=1911)||year===1942||year===1959||VN_TIMEZONE_PERIODS.some((p) => year >= p.startYear && year <= p.endYear);
 }
 
 /**
  * Danh sách các năm có biến động múi giờ trong lịch sử Việt Nam
  */
 export function vietnamDSTYears(): number[] {
-  const years = new Set<number>();
+  const years = new Set<number>([1942,1959,...Array.from({length:12},(_,i)=>1900+i)]);
   for (const p of VN_TIMEZONE_PERIODS) {
     for (let y = p.startYear; y <= p.endYear; y++) {
       years.add(y);
@@ -184,3 +189,36 @@ export const getHistoricalTzPeriod = getVietnamDSTInfo;
 export const isChinaDST = (y: number, m: number, d: number) => isVietnamDST(y, m, d, false);
 export const isChinaDSTYear = isVietnamDSTYear;
 export const chinaDSTYears = vietnamDSTYears;
+
+// Source: IANA tzdb 2025b, asia (Asia/Ho_Chi_Minh) and backzone (Asia/Hanoi).
+// https://github.com/eggert/tz/blob/2025b/asia
+// https://github.com/eggert/tz/blob/2025b/backzone
+// Transition UNTIL is in the old local time. Convert to UTC using the old offset.
+// Hanoi represents northern history only approximately: Oct 1954 exact date/time
+// is unknown, and pre-1970 regional records are incomplete.
+type LocalBoundary = readonly [number,number,number,number,number,number];
+type Era = {offsetSeconds:number;until?:LocalBoundary};
+const boundary=(y:number,m:number,d:number,h=0,min=0,sec=0):LocalBoundary=>[y,m,d,h,min,sec];
+const shared=(first:number):Era[]=>[
+ {offsetSeconds:first,until:boundary(1906,7,1)},
+ {offsetSeconds:25590,until:boundary(1911,5,1)},
+ {offsetSeconds:25200,until:boundary(1942,12,31,23)},
+ {offsetSeconds:28800,until:boundary(1945,3,14,23)},
+ {offsetSeconds:32400,until:boundary(1945,9,2)},
+ {offsetSeconds:25200,until:boundary(1947,4,1)},
+];
+const north:Era[]=[...shared(25404),{offsetSeconds:28800,until:boundary(1954,10,1)},{offsetSeconds:25200}];
+const south:Era[]=[...shared(25590),{offsetSeconds:28800,until:boundary(1955,7,1,1)},{offsetSeconds:25200,until:boundary(1959,12,31,23)},{offsetSeconds:28800,until:boundary(1975,6,13)},{offsetSeconds:25200}];
+const epoch=([y,m,d,h,min,sec]:LocalBoundary)=>Date.UTC(y,m-1,d,h,min,sec)/1000;
+export function resolveHistoricalCivilTime(year:number,month:number,day:number,hour:number,minute:number,second:number,isSouth:boolean){
+ const local=epoch(boundary(year,month,day,hour,minute,second));
+ let start=-Infinity;
+ const candidates:number[]=[];
+ for(const era of isSouth?south:north){
+  const end=era.until?epoch(era.until)-era.offsetSeconds:Infinity;
+  const utc=local-era.offsetSeconds;
+  if(utc>=start&&utc<end)candidates.push(era.offsetSeconds/60);
+  start=end;
+ }
+ return {offsets:[...new Set(candidates)].sort((a,b)=>a-b),uncertain:!isSouth&&year===1954&&month===10};
+}

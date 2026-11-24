@@ -7,7 +7,7 @@ import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES, DEFAULT_LONGITUDE } from '@/lib/ziwei/cities';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
 import { lunarToSolarVN, solarToLunarVN } from '@/lib/ziwei/lunar-solar';
-import { getHistoricalTzPeriod } from '@/lib/ziwei/dst-vn';
+import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
 
 export interface BirthFormState {
   name: string;
@@ -25,6 +25,7 @@ export interface BirthFormState {
   trueSolar?: boolean;
   lateZishi?: 'next-day' | 'current-day';
   utcOffsetMinutes?: number;
+  civilTimeIssue?: string;
   calendarType?: 'solar' | 'lunar';
   isLeapMonth?: boolean;
 }
@@ -114,15 +115,22 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   }, [y, m, d, isSouth,form.province,form.city]);
 
   // Keep the original local civil clock and its date. Apply the historical UTC offset once in solarPreview.
-  const effectiveForm = {...form,utcOffsetMinutes:form.province==='Nước ngoài'?form.utcOffsetMinutes:historicalTz?.actualOffsetMinutes??420};
+  const civil = form.province && form.province!=='Nước ngoài' && form.city && y>=1900 && m && d && !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' ? resolveHistoricalCivilTime(y,m,d,Number(form.clockHour),Number(form.clockMinute),Number(form.clockSecond||0),isSouth) : null;
+  const [chosenOffset,setChosenOffset]=useState<number|undefined>(undefined);
+  const civilKey=[form.province,form.city,y,m,d,form.clockHour,form.clockMinute,form.clockSecond].join('|');
+  const [chosenKey,setChosenKey]=useState('');
+  const chosen=chosenKey===civilKey?chosenOffset:undefined;
+  const actualOffset=civil?.offsets.length===1?civil.offsets[0]:civil?.offsets.includes(chosen??NaN)?chosen:undefined;
+  const civilTimeIssue=civil?.offsets.length===0?'Giờ địa phương này không tồn tại do đổi múi giờ. Hãy kiểm tra lại giờ sinh.':civil&&actualOffset===undefined?'Giờ địa phương này lặp lại khi đổi múi giờ; cần chọn múi giờ ghi nhận.':civil?.uncertain?'Mốc chuyển giờ tháng 10/1954 tại miền Bắc chưa có ngày chính xác; chưa thể lập lá số chắc chắn với quy đổi tự động.':'';
+  const effectiveForm = {...form,utcOffsetMinutes:form.province==='Nước ngoài'?form.utcOffsetMinutes:actualOffset??historicalTz?.actualOffsetMinutes??420,civilTimeIssue};
   const preview = !form.unknownTime && form.clockHour!=='' && form.clockMinute!=='' && form.year && form.month && form.day && form.province && form.city ? solarPreview(effectiveForm) : null;
   const branch=preview?.branch;
   const offsetMin=preview?.longitudeCorrectionMinutes??0;
   const shichenInfo=branch===undefined?null:SHICHEN[branch];
 
   useEffect(() => {
-    onFormSave?.({...form,calendarType,isLeapMonth,utcOffsetMinutes:form.province==='Nước ngoài'?form.utcOffsetMinutes:historicalTz?.actualOffsetMinutes??420});
-  }, [form,calendarType,isLeapMonth,onFormSave,historicalTz?.actualOffsetMinutes]);
+    onFormSave?.({...effectiveForm,calendarType,isLeapMonth});
+  }, [form,calendarType,isLeapMonth,onFormSave,effectiveForm.utcOffsetMinutes,civilTimeIssue]);
   // ─── Đồng bộ tab Âm lịch ↔ Dương lịch ──────────────────────────
   const handleSwitchToLunar = () => {
     setCalendarType('lunar');
@@ -506,6 +514,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </AnimatePresence>
       </div>
 
+      {civil&&civil.offsets.length>1&&<div className="study-notice" role="alert"><p>Giờ này xuất hiện hai lần trong lịch sử. Chọn múi giờ đã xác nhận từ hồ sơ:</p>{civil.offsets.map(offset=><label key={offset} style={{display:'block'}}><input type="radio" checked={chosen===offset} onChange={()=>{setChosenKey(civilKey);setChosenOffset(offset);}}/> UTC{offset>=0?'+':''}{offset/60}</label>)}</div>}
+      {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}
       {/* ── Banner cảnh báo đổi múi giờ lịch sử Việt Nam ── */}
       {historicalTz && historicalTz.deltaMinutes !== 0 && (
         <motion.div

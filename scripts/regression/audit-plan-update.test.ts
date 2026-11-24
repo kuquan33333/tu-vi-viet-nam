@@ -99,7 +99,7 @@ test('L2: mô tả cách cục không còn chữ Hán', async () => {
 });
 
 test('L3: form không gán địa danh hay giờ mặc định',()=>{const text=source('components/BirthForm.tsx');for(const k of ['province','city','clockHour','clockMinute'])assert.ok(text.includes(k+": initialData?."+k+" ?? ''"));});
-test('L4: hiệu chỉnh lịch sử sử dụng đúng offset thay vì sửa giờ nhập',()=>{const text=source('components/BirthForm.tsx');assert.match(text,/historicalTz\?\.actualOffsetMinutes\?\?420/);assert.doesNotMatch(text,/adjustedMinutes\s*=/);});
+test('L4: hiệu chỉnh lịch sử sử dụng đúng offset thay vì sửa giờ nhập',()=>{const text=source('components/BirthForm.tsx');assert.match(text,/actualOffset\?\?historicalTz\?\.actualOffsetMinutes\?\?420/);assert.doesNotMatch(text,/adjustedMinutes\s*=/);});
 test('L5: tọa độ 12 cung thẻ chia sẻ khớp bàn lá số (kiểm tra nguồn)', () => {
   const share = source('components/ShareCardCanvas.tsx').split('const ZHIWEI_LAYOUT')[1].split('];')[0];
   const board = source('components/ChartBoard.tsx').split('const BRANCH_GRID_POS')[1].split('};')[0];

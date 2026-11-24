@@ -39,10 +39,11 @@ export function calcTrueSolarBranch(
  */
 export function birthFormProblem(form: BirthFormState | null, now = new Date()): string {
   if (!form) return 'Vui lòng nhập đủ thông tin sinh.';
+  if(form.civilTimeIssue)return form.civilTimeIssue;
   const y=Number(form.year),m=Number(form.month),d=Number(form.day);
   if(y<1900||y>Math.min(2050,now.getFullYear())||!isValidGregorianDate(y,m,d)||new Date(y,m-1,d)>new Date(now.getFullYear(),now.getMonth(),now.getDate()))return 'Ngày sinh phải hợp lệ, từ năm 1900 đến hôm nay.';
   if(!form.province||!form.city||!Number.isFinite(form.longitude)||Math.abs(form.longitude)>180)return 'Vui lòng chọn nơi sinh hoặc nhập kinh độ hợp lệ.';
-  if(form.province==='Nước ngoài'&&(!Number.isFinite(form.utcOffsetMinutes)||Math.abs(form.utcOffsetMinutes!)>14*60))return 'Vui lòng nhập múi giờ UTC tại thời điểm sinh.';
+  if(form.province==='Nước ngoài'&&(!Number.isFinite(form.utcOffsetMinutes)||form.utcOffsetMinutes! < -12*60||form.utcOffsetMinutes! > 14*60))return 'Vui lòng nhập múi giờ UTC tại thời điểm sinh.';
   if(!form.unknownTime&&(!form.clockHour.trim()||!form.clockMinute.trim()||!Number.isInteger(Number(form.clockHour))||Number(form.clockHour)<0||Number(form.clockHour)>23||!Number.isInteger(Number(form.clockMinute))||Number(form.clockMinute)<0||Number(form.clockMinute)>59||!Number.isInteger(Number(form.clockSecond||0))||Number(form.clockSecond||0)<0||Number(form.clockSecond||0)>59))return 'Vui lòng nhập giờ, phút và giây hợp lệ.';
   return '';
 }
@@ -56,6 +57,7 @@ export function solarPreview(form: BirthFormState) {
   });
 }
 export function formToBirthInfo(form: BirthFormState): BirthInfo {
+  if(form.civilTimeIssue)throw new RangeError(form.civilTimeIssue);
   if(form.unknownTime)throw new RangeError('Chưa xác định giờ sinh; không thể lập một lá số chắc chắn.');
   let y=Number(form.year),m=Number(form.month),d=Number(form.day);
   if(!isValidGregorianDate(y,m,d)||!form.clockHour.trim()||!form.clockMinute.trim())throw new RangeError('Ngày hoặc giờ sinh không hợp lệ.');
