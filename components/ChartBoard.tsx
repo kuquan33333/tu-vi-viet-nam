@@ -4,10 +4,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart, Palace, Star } from '@/lib/ziwei/types';
 import { BRANCHES, STEMS } from '@/lib/ziwei/constants';
 import PalaceCell from './PalaceCell';
-import TimeNav, { type TimeView, getYearStemIndex, buildSiHuaOverlay } from './TimeNav';
+import { type TimeView, getYearStemIndex, buildSiHuaOverlay } from './TimeNav';
 
 interface ChartBoardProps {
   chart: ZiweiChart;
+  view?: TimeView;
+  liunianYear?: number;
   onStarSelect?: (star: Star, palace: Palace) => void;
   onPalaceSelect?: (palace: Palace) => void;
   onSiHuaClick?: (starName: string, siHua: string, view: TimeView) => void;
@@ -52,10 +54,8 @@ function getSanFangSiZheng(branch: number): [number, number, number, number] {
 
 const ANIMATION_ORDER = [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4];
 
-export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHuaClick }: ChartBoardProps) {
+export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new Date().getFullYear(), onStarSelect, onPalaceSelect, onSiHuaClick }: ChartBoardProps) {
   const [selectedBranch, setSelectedBranch] = useState<number | null>(null);
-  const [timeView, setTimeView] = useState<TimeView>('mingpan');
-  const [liunianYear, setLiunianYear] = useState<number>(new Date().getFullYear());
 
   const palaceMap: Record<number, Palace> = {};
   chart.palaces.forEach(p => { palaceMap[p.branch] = p; });
@@ -63,16 +63,16 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
   // 计算当前叠加四化数据（大限或流年）
   const currentDx = chart.daXians[chart.currentDaXianIndex];
   const overlayData: Record<string, string> = (() => {
-    if (timeView === 'daxian' && currentDx) {
+    if (view === 'daxian' && currentDx) {
       const dxPalace = chart.palaces.find(p => p.branch === currentDx.palaceBranch);
       if (dxPalace) return buildSiHuaOverlay(dxPalace.stem);
     }
-    if (timeView === 'liunian') {
+    if (view === 'liunian') {
       return buildSiHuaOverlay(getYearStemIndex(liunianYear));
     }
     return {};
   })();
-  const overlayLabel = timeView === 'daxian' ? '限' : timeView === 'liunian' ? '年' : undefined;
+  const overlayLabel = view === 'daxian' ? '限' : view === 'liunian' ? '年' : undefined;
 
   const handlePalaceClick = (branch: number) => {
     const isDeselecting = selectedBranch === branch;
@@ -89,14 +89,6 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
 
   return (
     <div className="w-full select-none">
-      {/* 时间导航轴 */}
-      <TimeNav
-        chart={chart}
-        view={timeView}
-        liunianYear={liunianYear}
-        onViewChange={setTimeView}
-        onYearChange={setLiunianYear}
-      />
 
       {/* 命盘标题 */}
       <motion.div
@@ -139,7 +131,7 @@ export default function ChartBoard({ chart, onStarSelect, onPalaceSelect, onSiHu
                 delay={i * 0.04}
                 overlayStarSiHua={Object.keys(overlayData).length > 0 ? overlayData : undefined}
                 overlayLabel={overlayLabel}
-                onSiHuaClick={(starName, siHua) => onSiHuaClick?.(starName, siHua, timeView)}
+                onSiHuaClick={(starName, siHua) => onSiHuaClick?.(starName, siHua, view)}
               />
             </div>
           );
