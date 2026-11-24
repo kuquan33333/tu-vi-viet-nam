@@ -1,111 +1,74 @@
-/**
- * /library/search?q=xxx — Trang kết quả tra cứu cổ thư
- */
+'use client';
 
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { searchClassics, getParagraphById } from '@/lib/classics';
 
-export const metadata = {
-  title: 'Kết Quả Tra Cứu · Thư Viện Cổ Thư Tử Vi Đẩu Số',
-};
+// Trang tìm kiếm xử lý ở trình duyệt để hoạt động trên Cloudflare Pages tĩnh.
+export default function SearchPage() {
+  const [q, setQ] = useState('');
 
-export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
-  const sp = await searchParams;
-  const q = sp.q?.trim() || '';
-  const hits = q ? searchClassics(q, 50) : [];
+  useEffect(() => {
+    setQ(new URLSearchParams(window.location.search).get('q')?.trim() || '');
+  }, []);
+
+  const hits = useMemo(() => q ? searchClassics(q, 50) : [], [q]);
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
       <div className="px-6 py-4 flex items-center justify-between"
         style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/library" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Thư Viện Cổ Thư
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em', fontWeight: 600 }}>
-          KẾT QUẢ TRA CỨU
-        </div>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          Trang Chủ →
-        </Link>
+        <Link href="/library" style={{ fontSize: 12, color: 'var(--ac)', textDecoration: 'none' }}>← Thư Viện Cổ Thư</Link>
+        <span style={{ fontSize: 12, color: 'var(--tx-3)' }}>KẾT QUẢ TRA CỨU</span>
+        <Link href="/" style={{ fontSize: 12, color: 'var(--ac)', textDecoration: 'none' }}>Trang Chủ →</Link>
       </div>
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
-        <div className="text-center mb-10">
-          <div style={{ fontSize: '13px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '4px' }}>
-            Từ khóa tra cứu
-          </div>
-          <h1 style={{ fontSize: 'clamp(22px, 3.5vw, 32px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.04em' }}>
-            "{q || '（Trống）'}"
+      <main className="max-w-3xl mx-auto px-6 py-12">
+        <header className="text-center mb-10">
+          <div style={{ fontSize: 12, color: 'var(--tx-3)', letterSpacing: '0.1em' }}>THƯ VIỆN CỔ THƯ</div>
+          <h1 style={{ fontSize: 'clamp(24px,4vw,34px)', fontWeight: 700, color: 'var(--tx-0)', margin: '10px 0 20px' }}>
+            Tra cứu toàn văn
           </h1>
-          <div style={{ fontSize: '12px', color: 'var(--tx-3)', marginTop: '8px' }}>
-            Tìm thấy <strong style={{ color: 'var(--ac)' }}>{hits.length}</strong> đoạn văn bản cổ thư tương ứng
-          </div>
-        </div>
+          <form action="/library/search" method="GET" className="flex gap-2 max-w-xl mx-auto">
+            <input
+              aria-label="Từ khóa tra cứu"
+              name="q"
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              placeholder="Nhập tên sao, cách cục, cung mệnh..."
+              className="flex-1 min-w-0"
+              style={{ padding: '12px 14px', background: 'var(--bg-card)', color: 'var(--tx-0)', border: '1px solid var(--t-border)', borderRadius: 9 }}
+            />
+            <button type="submit" style={{ padding: '11px 18px', borderRadius: 9, background: 'var(--ac)', color: 'var(--bg-page)', fontWeight: 600 }}>Tìm kiếm</button>
+          </form>
+          <p style={{ fontSize: 12, color: 'var(--tx-3)', marginTop: 14 }}>
+            {q ? <>Tìm thấy <strong style={{ color: 'var(--ac)' }}>{hits.length}</strong> kết quả cho “{q}”</> : 'Nhập từ khóa để xem kết quả.'}
+          </p>
+        </header>
 
         {hits.length === 0 ? (
-          <div style={{
-            background: 'var(--bg-card)',
-            padding: '40px 20px',
-            borderRadius: '12px',
-            textAlign: 'center',
-            color: 'var(--tx-2)',
-            border: '1px solid rgba(184,146,42,0.15)',
-          }}>
-            <div style={{ fontSize: '40px', marginBottom: '12px', opacity: 0.4 }}>📜</div>
-            {q ? (
-              <>
-                <div style={{ fontSize: '14px', marginBottom: '6px' }}>Tạm thời chưa tìm thấy đoạn văn nào chứa từ khóa này</div>
-                <div style={{ fontSize: '11px', color: 'var(--tx-3)', lineHeight: 1.7 }}>
-                  Quý bạn có thể thử tra cứu các từ khóa phổ biến:<br />
-                  <span style={{ color: 'var(--ac)' }}>Thất Sát Triều Đẩu / Song Lộc Triều Viên / Hóa Kỵ / Tử Vi / Mệnh cung / Cơ Nguyệt Đồng Lương</span>
-                </div>
-              </>
-            ) : (
-              <div style={{ fontSize: '13px' }}>Vui lòng nhập từ khóa cần tìm kiếm</div>
-            )}
+          <div style={{ background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.15)', borderRadius: 12, padding: '36px 24px', textAlign: 'center', color: 'var(--tx-2)' }}>
+            <div style={{ fontSize: 32, marginBottom: 12 }}>📜</div>
+            {q ? 'Chưa tìm thấy nội dung phù hợp. Hãy thử từ khóa khác.' : 'Hãy nhập từ khóa cần tra cứu.'}
           </div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div className="flex flex-col gap-3">
             {hits.map((hit, i) => {
               const ctx = getParagraphById(hit.paragraphId);
               const chapterIdx = ctx?.chapterIdx ?? 0;
               return (
-                <Link
-                  key={i}
-                  href={`/library/${hit.bookSlug}/${chapterIdx}#${hit.paragraphId}`}
-                  style={{
-                    display: 'block',
-                    background: 'var(--bg-card)',
-                    padding: '16px 20px',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(184,146,42,0.18)',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                    transition: 'border-color 0.15s',
-                  }}
-                >
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontSize: '11px',
-                    color: 'var(--tx-3)',
-                    marginBottom: '8px',
-                    letterSpacing: '0.05em',
-                  }}>
-                    <span style={{ color: 'var(--ac)', fontWeight: 600 }}>《{hit.bookTitle}》</span>
-                    <span style={{ opacity: 0.5 }}>·</span>
-                    <span>{hit.chapterTitle}</span>
+                <Link key={i} href={`/library/${hit.bookSlug}/${chapterIdx}#${hit.paragraphId}`}
+                  style={{ display: 'block', padding: '17px 20px', background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.18)', borderRadius: 10, textDecoration: 'none', color: 'inherit' }}>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ac)', marginBottom: 8 }}>
+                    《{hit.bookTitle}》 · {hit.chapterTitle}
                   </div>
-                  <div style={{ fontSize: '14px', color: 'var(--tx-0)', lineHeight: 1.7 }}>
-                    {hit.text}
-                  </div>
+                  <div style={{ color: 'var(--tx-0)', fontSize: 14, lineHeight: 1.8 }}>{hit.text}</div>
                 </Link>
               );
             })}
           </div>
         )}
-      </div>
+      </main>
     </div>
   );
 }
