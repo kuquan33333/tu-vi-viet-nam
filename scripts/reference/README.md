@@ -1,0 +1,7 @@
+# Nguồn đối chiếu độc lập — chỉ dùng trong QA
+
+- LichTa @lichta/core 2.2.1, commit https://github.com/zeforc/lichta/tree/6f656383f9eb525373ea6a7ef327fdd3fdc3ac54, tệp packages/core/dist/index.mjs, blob baff4984d0603db3d2b7ce97eec8c38ad92907f3.
+- Không phân phối bundle tham chiếu trong cây mã nguồn hiện tại. CI tải tệp upstream đã ghim commit vào thư mục tạm của runner, xác nhận Git blob SHA trước khi đọc/chạy, chỉ để đối chiếu không thương mại. Repo upstream ghi MIT; giấy phép thuật toán nguồn Hồ Ngọc Đức chưa được xác minh là cho phép mọi hình thức tái sử dụng, vì vậy không dùng làm phụ thuộc sản phẩm.
+- Tài liệu: https://github.com/zeforc/lichta/blob/6f656383f9eb525373ea6a7ef327fdd3fdc3ac54/docs/ALGORITHM.md. Tác giả thư viện ghi dựa trên thuật toán Hồ Ngọc Đức và Jean Meeus. Mã là phép xấp xỉ; không coi là lịch chính thức độc lập đã được xác minh. Trang gốc Leipzig không truy cập được trong phiên audit; không tuyên bố xác minh giấy phép mã gốc ngoài giấy phép MIT của chính bundle.
+- Các mốc cần đối chiếu: 29/01/1968 (lịch miền Bắc UTC+7), 21/01/1985, 17/02/2007, 02/02/2030. Dữ liệu lịch sử miền Nam 1968 có thể khác. Xem https://lichamviet.com/blog/am-lich-viet-nam-khac-trung-quoc/ và https://amlichvietnam.vn/kien-thuc/lich-am/lich-am-viet-nam-va-trung-quoc .
+- Chạy `VN_CALENDAR_REFERENCE=/path/to/pinned-reference.mjs npx tsx scripts/compare-vn-calendar.ts` sau khi xác nhận blob SHA; xuất CSV toàn bộ ngày khác nhau, roundtrip, JSON biên tháng nhuận và các mốc Tết. Sai khác cần thẩm định, không tự đổi thuật toán an sao.

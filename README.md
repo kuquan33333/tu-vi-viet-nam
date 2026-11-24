@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black.svg)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
-[![Coverage](https://img.shields.io/badge/Regression_Tests-100%25_Pass-success.svg)](./scripts/regression)
+[![CI](https://github.com/kuquan33333/tu-vi-viet-nam/actions/workflows/ci.yml/badge.svg?branch=revamp-v2)](https://github.com/kuquan33333/tu-vi-viet-nam/actions/workflows/ci.yml)
 
 **Tiếng Việt** · [English](./README.en.md)
 

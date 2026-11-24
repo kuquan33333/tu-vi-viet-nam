@@ -68,7 +68,7 @@ function formAt(
     unknownTime: false,
     province: '',
     city: '',
-    longitude: 120,
+    longitude: 108.4, // Near the UTC+7 apparent solar meridian on 31 Jan; the EoT matters.
     gender: 'male',
     ...overrides,
   };
@@ -120,11 +120,6 @@ assert.deepEqual(
   '22:59 是亥时，不应换日',
 );
 
-// 时辰不详：不换日、支取 0
-assert.deepEqual(
-  pick(formToBirthInfo(formAt('2000', '1', '31', '23', '30', { unknownTime: true }))),
-  { year: 2000, month: 1, day: 31, hour: 0 },
-  '时辰不详时不应按晚子时换日',
-);
-
+// Không rõ giờ: không tự tạo lá số giờ Tý.
+assert.throws(()=>formToBirthInfo(formAt('2000','1','31','23','30',{unknownTime:true})),RangeError);
 console.log('✅ BirthForm→BirthInfo 转换一致性：单一实现 + 晚子时边界（跨月/跨年）均正确');

@@ -1,0 +1,23 @@
+# Permanent redirects from legacy public routes
+/heming /hop-ban 301
+/library/gusuifu/0 /library/gusuifu/tong-luan-thien 301
+/library/gusuifu/1 /library/gusuifu/tu-vi-tinh-luan 301
+/library/gusuifu/2 /library/gusuifu/that-sat-tinh-luan 301
+/library/gusuifu/3 /library/gusuifu/sat-pha-tham-cach 301
+/library/gusuifu/4 /library/gusuifu/co-nguyet-dong-luong-cach 301
+/library/gusuifu/5 /library/gusuifu/tu-hoa-tinh-luan 301
+/library/gusuifu/6 /library/gusuifu/phu-bat-khoi-viet-luan 301
+/library/gusuifu/7 /library/gusuifu/luc-sat-tinh-luan 301
+/library/gusuifu/8 /library/gusuifu/thap-nhi-cung-luan 301
+/library/quanji/0 /library/quanji/tong-luan 301
+/library/quanji/1 /library/quanji/tu-vi-tinh-luan 301
+/library/quanji/2 /library/quanji/nam-dau-luc-tinh-luan 301
+/library/quanji/3 /library/quanji/bac-dau-luc-tinh-luan 301
+/library/quanji/4 /library/quanji/tu-hoa-va-cach-cuc-luan 301
+/library/quanshu/0 /library/quanshu/cung-menh 301
+/library/quanshu/1 /library/quanshu/cung-tai-bach 301
+/library/quanshu/2 /library/quanshu/cung-quan-loc 301
+/library/quanshu/3 /library/quanshu/cung-phu-the 301
+/library/quanshu/4 /library/quanshu/tu-hoa-luan 301
+/library/quanshu/5 /library/quanshu/co-nguyet-dong-luong-cach 301
+/library/quanshu/6 /library/quanshu/song-loc-trieu-vien-cach 301

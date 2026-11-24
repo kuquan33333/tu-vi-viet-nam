@@ -30,8 +30,8 @@ function HexCard({hex,lines}:{hex:Hexagram;lines:readonly LineValue[]}) {
    <div className="study-pill">Quẻ số {hex.number} · {hex.upper.label} trên {hex.lower.label} dưới</div>
    <h2 style={{marginTop:13}}>{hex.name}</h2>
    <HexFigure lines={lines}/>
-   <p style={{textAlign:'center',fontSize:13,marginTop:12}}>{hex.upper.symbol} {hex.upper.nature} / {hex.lower.symbol} {hex.lower.nature}</p>
-   <p style={{textAlign:'center',fontWeight:600}}>{hex.theme}</p>
+   <p style={{textAlign:'center',fontSize:13,marginTop:12}}>{hex.upper.nature} / {hex.lower.nature}</p>
+   <p style={{textAlign:'center',fontWeight:600}}>{hex.theme}</p><Link className="action-outline" href={'/thien-ky/que/'+hex.number}>Xem kinh văn quẻ {hex.number}</Link>
  </div>;
 }
 function linesForHex(hex:Hexagram):LineValue[] {
@@ -45,7 +45,7 @@ function IChingTool(){
  const [filter,setFilter]=useState('');
  const [manual,setManual]=useState<LineValue[]>([7,8,7,8,7,8]);
  useEffect(()=>{
-  try {const saved=localStorage.getItem(STORAGE_KEY);if(saved){const val=JSON.parse(saved);if(Array.isArray(val))setHistory(val.filter((x:Saved)=>Array.isArray(x.lines)&&x.lines.length===6).slice(0,10));}}
+  try {const saved=localStorage.getItem(STORAGE_KEY);if(saved){const val=JSON.parse(saved);if(Array.isArray(val))setHistory(val.filter((x:Saved)=>x&&Array.isArray(x.lines)&&x.lines.length===6&&x.lines.every(v=>[6,7,8,9].includes(v))&&typeof x.question==='string'&&typeof x.date==='string').slice(0,10));}}
   catch {}
  },[]);
  const primary=useMemo(()=>lines?hexFromLines(lines):null,[lines]);
@@ -68,7 +68,7 @@ function IChingTool(){
     <input id="dich-question" className="study-input" maxLength={150} value={question}
       onChange={e=>setQuestion(e.target.value)} placeholder="Ví dụ: Nên cân nhắc điều gì trước quyết định?"/>
     <div className="study-actions" style={{margin:'16px 0'}}>
-     <button className="study-btn" type="button" onClick={()=>saveCast(castHexagram())}>◉ Gieo ba đồng xu × 6</button>
+     <button className="study-btn" type="button" onClick={()=>saveCast(castHexagram())}>Gieo ba đồng xu × 6</button>
      <button type="button" className="study-btn secondary" onClick={()=>saveCast([...manual])}>Lập từ 6 hào nhập tay</button>
     </div>
     <div className="study-picks" role="group" aria-label="Sáu hào nhập thủ công">
@@ -90,7 +90,7 @@ function IChingTool(){
       <button type="button" className="study-btn secondary" style={{width:'100%',textAlign:'left',justifyContent:'flex-start'}}
        onClick={()=>{setLines(h.lines);setQuestion(h.question);}}>
        <span style={{flex:1}}>#{i+1} · {hexFromLines(h.lines).name}<small style={{display:'block',fontWeight:400}}>{h.date} {h.question?'· '+h.question:''}</small></span>
-       ↗
+       →
       </button>
      </li>)}</ul>}
     {!!history.length&&<button className="study-btn secondary" type="button" onClick={()=>{setHistory([]);try{localStorage.removeItem(STORAGE_KEY);}catch{}}}>Xóa lịch sử trên máy</button>}
@@ -105,7 +105,8 @@ function IChingTool(){
     <h2>Giải thích cách đọc</h2>
     <p>Quẻ chủ: <strong>{primary.name}</strong>. Quẻ biến: <strong>{secondary.name}</strong>. Có <strong>{moving} hào động</strong>
      {moving? ' (hào '+lines.map((n,i)=>(n===6||n===9)?i+1:null).filter(Boolean).join(', ')+')':''}.</p>
-    <div className="study-notice">{readingRule(moving)} Dữ liệu hiện gồm 64 quẻ và chủ đề khái quát, chưa bao gồm bộ bình giải hào từ có kiểm duyệt.</div>
+    {lines.map((n,i)=>(n===6||n===9)?<p key={i}>Hào {i+1} {n===6?'âm động chuyển dương':'dương động chuyển âm'} · <Link href={'/thien-ky/que/'+primary.number+'#hao-'+(i+1)}>Đọc hào từ có nguồn</Link></p>:null)}
+    <div className="study-notice">{readingRule(moving)} Đọc nguyên văn có ghi nguồn ở trang quẻ. Bản dịch và bình giải chưa thẩm định.</div>
    </div>
   </>}
   <div className="study-card" style={{marginTop:18}}>
@@ -132,7 +133,7 @@ function QimenTool(){
  return <>
   <div className="study-grid">
    <section className="study-card">
-    <h2>Địa bàn Kỳ Môn – 9 cung</h2>
+    <h2>Địa bàn Kỳ Môn – Cửu cung</h2>
     <p>Định âm/dương độn, cục số theo tiết khí và thượng/trung/hạ nguyên; an địa bàn Tam Kỳ Lục Nghi bằng phép thuận/nghịch phi 9 cung.</p>
     <div className="study-picks">
      <label className="study-label">Tiết khí
@@ -167,9 +168,9 @@ function QimenTool(){
   </div>
   <div className="study-card">
    <h2>Ghi chú trường phái và nguồn thuật toán</h2>
-   <p>Quy tắc ba nguyên và bảng 24 tiết khí được tham chiếu từ dự án MIT <a href="https://github.com/qilaidev/metaphysics-engine" target="_blank" rel="noreferrer">qilaidev/metaphysics-engine</a>. Với ứng dụng Kỳ Môn đầy đủ cần thêm các bước: xác định chính xác giao tiết theo phút, phù đầu, trực phù/trực sử, chuyển Thiên bàn – Bát môn – Bát thần, và bộ kiểm thử cho trường phái lựa chọn.</p>
-   <p>Để tham khảo một bộ tính thời gia Kỳ Môn đầy đủ, bạn có thể mở ứng dụng bên ngoài <a href="https://qimen-2i1.pages.dev" target="_blank" rel="noreferrer">qimen</a>. Ứng dụng đó có thuật toán và điều khoản riêng, không phải kết quả do module này tính.</p>
-   <button className="study-btn secondary" type="button" onClick={()=>setShowExternal(v=>!v)}>{showExternal?'Ẩn công cụ bên ngoài':'Thử bản Kỳ Môn đầy đủ tại đây ↗'}</button>
+   <p>Quy tắc ba nguyên và bảng 24 tiết khí được tham chiếu từ dự án MIT <a href="https://github.com/qilaidev/metaphysics-engine" target="_blank" rel="noopener noreferrer">qilaidev/metaphysics-engine</a>. Với ứng dụng Kỳ Môn đầy đủ cần thêm các bước: xác định chính xác giao tiết theo phút, phù đầu, trực phù/trực sử, chuyển Thiên bàn – Bát môn – Bát thần, và bộ kiểm thử cho trường phái lựa chọn.</p>
+   <p>Để tham khảo một bộ tính thời gia Kỳ Môn đầy đủ, bạn có thể mở ứng dụng bên ngoài <a href="https://qimen-2i1.pages.dev" target="_blank" rel="noopener noreferrer">qimen</a>. Ứng dụng đó có thuật toán và điều khoản riêng, không phải kết quả do module này tính.</p>
+   <button className="study-btn secondary" type="button" onClick={()=>setShowExternal(v=>!v)}>{showExternal?'Ẩn công cụ bên ngoài':'Thử bản Kỳ Môn đầy đủ tại đây →'}</button>
    {showExternal&&<div style={{marginTop:15}}>
     <iframe title="Ứng dụng Kỳ Môn tham khảo của tác giả idavailable" src="https://qimen-2i1.pages.dev" loading="lazy" referrerPolicy="no-referrer"
       sandbox="allow-scripts allow-same-origin" style={{width:'100%',height:580,border:'1px solid var(--ac-bdr)',borderRadius:12}}/>
@@ -188,15 +189,15 @@ export default function ThienKyPage(){
     <h1 className="study-title">Thiên Kỷ · Thiên cơ và thuật số</h1>
     <p className="study-lead">Từ Tử Vi Đẩu Số đến Chu Dịch và Kỳ Môn Độn Giáp. Tra cứu quy tắc, thao tác quẻ và khám phá cửu cung minh bạch.</p>
     <div className="study-tabs" role="tablist" aria-label="Chọn phân hệ Thiên Kỷ">
-     <button type="button" role="tab" aria-selected={tab==='dich'} onClick={()=>setTab('dich')} className={'study-tab'+(tab==='dich'?' active':'')}>☯ Chu Dịch · 64 quẻ</button>
-     <button type="button" role="tab" aria-selected={tab==='qimen'} onClick={()=>setTab('qimen')} className={'study-tab'+(tab==='qimen'?' active':'')}>⊞ Địa bàn Kỳ Môn</button>
-     <button type="button" role="tab" aria-selected={tab==='tuvi'} onClick={()=>setTab('tuvi')} className={'study-tab'+(tab==='tuvi'?' active':'')}>◉ Tử Vi Đẩu Số</button>
+     <button type="button" role="tab" aria-selected={tab==='dich'} onClick={()=>setTab('dich')} className={'study-tab'+(tab==='dich'?' active':'')}>Chu Dịch · 64 quẻ</button>
+     <button type="button" role="tab" aria-selected={tab==='qimen'} onClick={()=>setTab('qimen')} className={'study-tab'+(tab==='qimen'?' active':'')}>Địa bàn Kỳ Môn – Cửu cung</button>
+     <button type="button" role="tab" aria-selected={tab==='tuvi'} onClick={()=>setTab('tuvi')} className={'study-tab'+(tab==='tuvi'?' active':'')}>Tử Vi Đẩu Số</button>
     </div>
    </div>
    {tab==='dich'?<IChingTool/>:tab==='qimen'?<QimenTool/>:
     <section className="study-card" style={{textAlign:'center',maxWidth:680,margin:'auto'}}>
      <h2>Tử Vi Đẩu Số – hệ thống hiện có</h2><p>Lập mệnh bàn 12 cung, an sao, đại hạn, lưu niên và xem giải thích trong công cụ hiện hữu. Thiên Kỷ dùng chung nền tri thức, không tạo bản tính Tử Vi thứ hai.</p>
-     <Link className="study-btn" href="/chart">Mở công cụ lập lá số ↗</Link>
+     <Link className="study-btn" href="/chart">Mở công cụ lập lá số →</Link>
     </section>}
    <footer className="study-footer">Thiên Kỷ – công cụ nghiên cứu văn hóa và lịch sử thuật số. Nguồn thuật toán được ghi trong từng công cụ; không dùng các kết quả chiêm nghiệm thay cho chuyên gia hay bằng chứng thực tế.</footer>
   </main>

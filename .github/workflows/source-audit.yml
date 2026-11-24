@@ -1,0 +1,50 @@
+name: Calendar and historical location source audit
+
+on:
+  push:
+    branches: [qa/integration-v3]
+    paths:
+      - 'scripts/reference/audit-vn-jpl.py'
+      - 'scripts/reference/audit-geonames.py'
+      - '.github/workflows/source-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  jpl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch public ephemeris and calculate historical boundaries
+        run: |
+          python -m pip install --disable-pip-version-check skyfield==1.53
+          curl --fail --silent --show-error --location --retry 2 --max-time 180 'https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/de440s.bsp' -o "$RUNNER_TEMP/de440s.bsp"
+          python scripts/reference/audit-vn-jpl.py "$RUNNER_TEMP/de440s.bsp" qa-source/jpl-boundaries.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jpl-boundary-evidence
+          path: qa-source
+          if-no-files-found: warn
+  geonames:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and compare historical district labels
+        run: |
+          curl --fail --silent --show-error --location --retry 2 --max-time 120 'https://download.geonames.org/export/dump/VN.zip' -o "$RUNNER_TEMP/VN.zip"
+          curl --fail --silent --show-error --location --retry 2 --max-time 120 'https://download.geonames.org/export/dump/admin1CodesASCII.txt' -o "$RUNNER_TEMP/admin1CodesASCII.txt"
+          python3 scripts/reference/audit-geonames.py "$RUNNER_TEMP/VN.zip" "$RUNNER_TEMP/admin1CodesASCII.txt" lib/ziwei/legacy-birthplaces.generated.ts qa-source
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-location-evidence
+          path: qa-source
+          if-no-files-found: warn

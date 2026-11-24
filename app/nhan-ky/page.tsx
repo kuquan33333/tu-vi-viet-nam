@@ -142,10 +142,10 @@ function AtlasTool(){
   </div>
   <div className="study-card">
    <h2>Bản đồ huyệt đạo 3D từ dự án tham khảo</h2>
-   <p>Atlas 3D do cộng đồng <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noreferrer">aicuc/3d-acupoint-atlas</a> phát hành theo MIT. Bản 3D có mô hình tương tác riêng; liên kết ở đây chỉ nhúng nội dung từ trang tác giả, không sao chép hay cam kết mọi vị trí đều chuẩn giải phẫu.</p>
+   <p>Atlas 3D do cộng đồng <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noopener noreferrer">aicuc/3d-acupoint-atlas</a> phát hành theo MIT. Bản 3D có mô hình tương tác riêng; liên kết ở đây chỉ nhúng nội dung từ trang tác giả, không sao chép hay cam kết mọi vị trí đều chuẩn giải phẫu.</p>
    <div className="study-actions">
     <button className="study-btn" type="button" onClick={()=>setShow3d(v=>!v)}>{show3d?'Ẩn bản đồ 3D':'Mở bản đồ 3D tại đây'}</button>
-    <a className="study-btn secondary" target="_blank" rel="noreferrer" href="https://aicuc.github.io/3d-acupoint-atlas/">Mở trang gốc ↗</a>
+    <a className="study-btn secondary" target="_blank" rel="noopener noreferrer" href="https://aicuc.github.io/3d-acupoint-atlas/">Mở trang gốc ↗</a>
    </div>
    {show3d&&<div style={{marginTop:15}}>
     <iframe title="Atlas 3D nguồn mở của aicuc" src="https://aicuc.github.io/3d-acupoint-atlas/" loading="lazy"
@@ -190,21 +190,21 @@ export default function NhanKyPage(){
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Nhân Kỷ</div>
-    <h1 className="study-title">Nhân Kỷ · Y thư và kinh lạc</h1>
+    <h1 className="study-title">Nhân Kỷ · Y thư và kinh lạc</h1><div className="study-notice" role="note"><strong>Thông tin giáo dục, không thay thế tư vấn y tế.</strong> Không tự chẩn đoán, kê thuốc, châm cứu, cứu ngải hoặc tự điều trị dựa vào nội dung này. Khi cần chăm sóc sức khỏe hãy gặp nhân viên y tế được cấp phép.</div><div className="study-picks"><div><strong>Học thuyết cổ truyền</strong><p>Y thư và kinh lạc trình bày quan niệm lịch sử.</p></div><div><strong>Chứng cứ y học hiện đại</strong><p>Chưa có bộ tổng quan bằng chứng lâm sàng được thẩm định trong thư viện này.</p></div></div>
     <p className="study-lead">Học và tra cứu Nội Kinh, Thương Hàn, Kim Quỹ, Châm Cứu; khám phá danh mục huyệt đạo, thuật ngữ cổ học và sơ đồ giáo dục.</p>
     <div className="study-tabs" role="tablist" aria-label="Chọn phân hệ Nhân Kỷ">
-     <button role="tab" aria-selected={tab==='library'} className={'study-tab'+(tab==='library'?' active':'')} type="button" onClick={()=>setTab('library')}>▤ Thư viện y thư</button>
-     <button role="tab" aria-selected={tab==='atlas'} className={'study-tab'+(tab==='atlas'?' active':'')} type="button" onClick={()=>setTab('atlas')}>♧ Atlas 361 huyệt</button>
-     <button role="tab" aria-selected={tab==='glossary'} className={'study-tab'+(tab==='glossary'?' active':'')} type="button" onClick={()=>setTab('glossary')}>✧ Từ điển thuật ngữ</button>
+     <button role="tab" aria-selected={tab==='library'} className={'study-tab'+(tab==='library'?' active':'')} type="button" onClick={()=>setTab('library')}>Thư viện y thư</button>
+     <button role="tab" aria-selected={tab==='atlas'} className={'study-tab'+(tab==='atlas'?' active':'')} type="button" onClick={()=>setTab('atlas')}>Atlas 361 huyệt</button>
+     <button role="tab" aria-selected={tab==='glossary'} className={'study-tab'+(tab==='glossary'?' active':'')} type="button" onClick={()=>setTab('glossary')}>Từ điển thuật ngữ</button>
     </div>
    </div>
    {tab==='library'?<LibraryTool/>:tab==='atlas'?<AtlasTool/>:<GlossaryTool/>}
    <div className="study-card" style={{marginTop:16}}>
     <h2>Nguồn dữ liệu và giới hạn</h2>
-    <p>Danh mục tên và mã 361 huyệt, 14 kinh mạch được chuyển từ <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noreferrer">aicuc/3d-acupoint-atlas</a> (MIT, ghi công tác giả). Các mục giới thiệu y thư do dự án biên soạn mới, không sao chép nguyên văn giáo trình có bản quyền.</p>
-    <p>Nội dung chỉ dành cho học thuật; không chẩn đoán, không đề xuất thuốc hoặc hướng dẫn châm cứu. Khi cần tư vấn về tình trạng sức khỏe, hãy gặp bác sĩ hay nhân viên y tế được cấp phép.</p>
+    <p>Danh mục tên và mã 361 huyệt, 14 kinh mạch được chuyển từ <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noopener noreferrer">aicuc/3d-acupoint-atlas</a> (MIT, ghi công tác giả). Các mục giới thiệu y thư do dự án biên soạn mới, không sao chép nguyên văn giáo trình có bản quyền.</p>
+    
    </div>
-   <footer className="study-footer">Nhân Kỷ · Thư viện giáo dục, không phải dịch vụ y tế. Dữ liệu lịch sử, học thuyết cổ truyền và chứng cứ y học hiện đại phải được trình bày riêng biệt.</footer>
+   <footer className="study-footer">Nhân Kỷ · Thư viện giáo dục.</footer>
   </main>
  </div>;
 }

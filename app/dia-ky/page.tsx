@@ -44,6 +44,7 @@ function CompassPanel(){
  const [active,setActive]=useState(false);
  const [status,setStatus]=useState('Nhập số độ thủ công hoặc xin quyền cảm biến la bàn.');
  const mountain=mountainAt(degree),dir=directionAt(degree);
+ const sittingDegree=normalizeDegree(degree+180),sittingMountain=mountainAt(sittingDegree),sittingDir=directionAt(sittingDegree);
  useEffect(()=>{
   if(!active)return;
   function onAngle(ev:DeviceOrientationEvent){
@@ -76,8 +77,8 @@ function CompassPanel(){
    <h2>La Kinh 24 sơn hướng</h2>
    <Compass degree={degree}/>
    <div className="study-picks" style={{marginBottom:14}}>
-    <div><div className="study-muted">Hướng chính</div><strong>{dir.name}</strong></div>
-    <div><div className="study-muted">Sơn tọa hướng</div><strong style={{color:'var(--ac-dim)'}}>{mountain.name}</strong> · {mountain.center}°</div>
+    <div><div className="study-muted">Hướng (mặt nhìn ra)</div><strong>{dir.name} · {mountain.name}</strong> · {degree.toFixed(1)}°</div>
+    <div><div className="study-muted">Tọa (phía đối diện)</div><strong style={{color:'var(--ac-dim)'}}>{sittingDir.name} · {sittingMountain.name}</strong> · {sittingDegree.toFixed(1)}°</div>
    </div>
    <label className="study-label" htmlFor="degree-number">Hướng đo (0–359,9°)</label>
    <input id="degree-number" className="study-input" type="number" min={0} max={359.9} step={0.1} value={degree}
@@ -117,7 +118,7 @@ function BattrachPanel(){
    <p>Nhập năm quy đổi theo Bát Trạch (năm sau tiết Lập Xuân) và giới tính theo công thức truyền thống.</p>
    <div className="study-picks">
     <label className="study-label">Năm Bát Trạch
-     <input className="study-input" type="number" min={1800} max={2100} value={year} onChange={e=>setYear(Number(e.target.value))}/>
+     <input className="study-input" type="number" min={1900} max={2099} value={year} onChange={e=>setYear(Number(e.target.value))}/>
     </label>
     <label className="study-label">Quy ước giới tính truyền thống
      <select className="study-input" value={gender} onChange={e=>setGender(e.target.value as Gender)}>
@@ -125,7 +126,7 @@ function BattrachPanel(){
      </select>
     </label>
    </div>
-   {!kua?<p className="study-notice">Vui lòng nhập năm trong khoảng 1800–2100.</p>:<>
+   {!kua?<p className="study-notice">Vui lòng nhập năm trong khoảng 1900–2099.</p>:<>
     <div className="study-stat" style={{marginTop:18}}>Cung {kua.name} · {kua.number}</div>
     <p><strong>{kua.group} mệnh</strong> — Phục vị tại {directionName(kua.home)}.</p>
     <h3 style={{marginTop:20}}>Bốn hướng cát theo Bát Trạch</h3>
@@ -204,7 +205,7 @@ export default function DiaKyPage(){
    {tab==='compass'?<CompassPanel/>:tab==='battrach'?<BattrachPanel/>:<LandPanel/>}
    <div className="study-card" style={{marginTop:16}}>
     <h2>Nguồn tham khảo và phương pháp</h2>
-    <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
+    <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noopener noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
     <p>Một cung hướng cát theo phong thủy không đồng nghĩa nhà ở đạt yêu cầu an toàn hay hợp pháp. Công cụ không tự đánh giá “long mạch”, không thay thế bản đồ đo đạc.</p>
    </div>
    <footer className="study-footer">Địa Kỷ · Công cụ tham khảo văn hóa, kiến trúc và địa lý. Không dùng làm căn cứ pháp lý, địa chính hoặc xây dựng.</footer>

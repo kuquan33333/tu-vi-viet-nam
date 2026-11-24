@@ -1,27 +1,30 @@
 import Link from 'next/link';
+import Icon,{type IconName} from '@/components/Icon';
+import {generateChart} from '@/lib/ziwei/algorithm';
+import {BRANCHES} from '@/lib/ziwei/constants';
+import { pageMetadata, SITE_DESCRIPTION, websiteSchema } from '@/lib/seo/metadata';
+export const metadata = pageMetadata({title:'Tử Vi Đẩu Số – Lá số, lịch pháp và cổ học phương Đông',description:SITE_DESCRIPTION,path:'/'});
 
-const palaces = [
- ['Mệnh',1,1],['Phụ Mẫu',1,2],['Phúc Đức',1,3],['Điền Trạch',1,4],
- ['Huynh Đệ',2,1],['Quan Lộc',2,4],['Phu Thê',3,1],['Nô Bộc',3,4],
- ['Tử Tức',4,1],['Tài Bạch',4,2],['Tật Ách',4,3],['Thiên Di',4,4],
-] as const;
+const POS:Record<number,[number,number]>={5:[1,1],6:[1,2],7:[1,3],8:[1,4],4:[2,1],9:[2,4],3:[3,1],10:[3,4],2:[4,1],1:[4,2],0:[4,3],11:[4,4]};
 const modules = [
- {href:'/chart',mark:'☷',title:'Tử Vi Đẩu Số',sub:'12 cung · 14 chính tinh',desc:'Lập và khám phá lá số với lịch âm dương, an sao và chu kỳ đại hạn.',tag:'LẬP LÁ SỐ'},
- {href:'/thien-ky',mark:'☯',title:'Thiên Kỷ',sub:'Chu Dịch · Kỳ Môn',desc:'Gieo quẻ 64 quẻ, nghiên cứu biến hào và bảng địa bàn cửu cung.',tag:'KHÁM PHÁ'},
- {href:'/dia-ky',mark:'⊕',title:'Địa Kỷ',sub:'La Kinh · Bát Trạch',desc:'La bàn 24 sơn, định hướng và khảo sát phong thủy truyền thống.',tag:'XEM CÔNG CỤ'},
- {href:'/nhan-ky',mark:'✺',title:'Nhân Kỷ',sub:'Y thư · Huyệt đạo',desc:'Tìm hiểu kinh điển Đông y và tra cứu danh mục 361 huyệt.',tag:'TRA CỨU'},
+ {href:'/chart',mark:'chart' as IconName,title:'Tử Vi Đẩu Số',sub:'12 cung · 14 chính tinh',desc:'Lập và khám phá lá số với lịch âm dương, an sao và chu kỳ đại hạn.',tag:'LẬP LÁ SỐ'},
+ {href:'/thien-ky',mark:'tools' as IconName,title:'Thiên Kỷ',sub:'Chu Dịch · Kỳ Môn',desc:'Gieo quẻ 64 quẻ, nghiên cứu biến hào và bảng địa bàn cửu cung.',tag:'KHÁM PHÁ'},
+ {href:'/dia-ky',mark:'compass' as IconName,title:'Địa Kỷ',sub:'La Kinh · Bát Trạch',desc:'La bàn 24 sơn, định hướng và khảo sát phong thủy truyền thống.',tag:'XEM CÔNG CỤ'},
+ {href:'/nhan-ky',mark:'health' as IconName,title:'Nhân Kỷ',sub:'Y thư · Huyệt đạo',desc:'Tìm hiểu kinh điển Đông y và tra cứu danh mục 361 huyệt.',tag:'TRA CỨU'},
 ];
 const tools = [
- {href:'/heming',icon:'∞',title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
- {href:'/lich-van-nien',icon:'◷',title:'Lịch Vạn Niên',desc:'Âm dương lịch, Can Chi và các mốc tiết khí'},
- {href:'/thien-ky',icon:'☰',title:'Tra cứu Kinh Dịch',desc:'Danh mục 64 quẻ cùng sơ đồ hào động'},
- {href:'/dia-ky',icon:'⌖',title:'La Kinh 24 sơn',desc:'La bàn số theo 360° và tám hướng'},
- {href:'/nhan-ky',icon:'✳',title:'Atlas huyệt đạo',desc:'14 kinh mạch, tìm kiếm mã huyệt'},
- {href:'/library',icon:'▤',title:'Thư viện cổ thư',desc:'Tra cứu nội dung văn bản truyền thống'},
+ {href:'/hop-ban',icon:'compare' as IconName,title:'Đối chiếu hai lá số',desc:'Hai mệnh bàn, báo cáo yếu tố chung và khác biệt'},
+ {href:'/lich-van-nien',icon:'calendar' as IconName,title:'Lịch Vạn Niên',desc:'Âm dương lịch, Can Chi và các mốc tiết khí'},
+ {href:'/thien-ky',icon:'book' as IconName,title:'Tra cứu Kinh Dịch',desc:'Danh mục 64 quẻ cùng sơ đồ hào động'},
+ {href:'/dia-ky',icon:'compass' as IconName,title:'La Kinh 24 sơn',desc:'La bàn số theo 360° và tám hướng'},
+ {href:'/nhan-ky',icon:'health' as IconName,title:'Atlas huyệt đạo',desc:'14 kinh mạch, tìm kiếm mã huyệt'},
+ {href:'/library',icon:'book' as IconName,title:'Thư viện cổ thư',desc:'Tra cứu nội dung văn bản truyền thống'},
 ];
 
 export default function HomePage(){
+ const sample=generateChart({year:1990,month:5,day:6,hour:4,gender:'male',name:'Dữ liệu mẫu'});
  return <main>
+   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema()).replace(/</g,'\\u003c')}} />
   <section className="home-hero">
    <div className="site-wrap home-hero-grid">
     <div>
@@ -29,17 +32,17 @@ export default function HomePage(){
      <h1 className="hero-display" style={{marginTop:20}}>Thấu hiểu cổ học.<span style={{display:'block',color:'var(--ac-dim)'}}>Khám phá cùng bạn.</span></h1>
      <p className="lead">Tử Vi Đẩu Số, Thiên Kỷ, Địa Kỷ và Nhân Kỷ — một không gian nghiên cứu thống nhất, nơi mỗi công cụ có phương pháp tính và tư liệu tham khảo rõ ràng.</p>
      <div className="hero-actions">
-      <Link href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">↗</span></Link>
-      <Link href="/thien-ky" className="action-outline">Khám phá công cụ</Link>
+      <Link prefetch={false} href="/chart" className="action-primary">Lập lá số miễn phí <span aria-hidden="true">→</span></Link>
+
      </div>
      <div className="hero-trust"><span>Không cần đăng ký</span><span>Tính toán trên thiết bị</span><span>Giao diện Việt hóa</span></div>
     </div>
-    <div className="hero-visual" aria-label="Minh họa lá số Tử Vi 12 cung">
+    <div className="hero-visual" aria-label="Lá số mẫu được tính từ dữ liệu giả định">
      <div className="preview-board">
-      {palaces.map(([name,row,col])=><div className={'preview-palace'+(name==='Mệnh'?' main':'')} key={name} style={{gridRow:row,gridColumn:col}}>{name}</div>)}
-      <div className="preview-palace mid">☯<small>THIÊN · ĐỊA · NHÂN</small></div>
+      {sample.palaces.map(p=><div className={'preview-palace'+(p.isMingGong?' main':'')} key={p.branch} style={{gridRow:POS[p.branch][0],gridColumn:POS[p.branch][1]}}><strong>{p.name}</strong><small>{BRANCHES[p.branch]}</small><small>{p.stars.filter(s=>s.type==='major').map(s=>s.name).join(' · ')||'Vô chính diệu'}</small></div>)}
+      <div className="preview-palace mid"><Icon name="chart" size={28}/><small>DỮ LIỆU MẪU</small><small>06/05/1990 · giờ Thìn</small><small>{sample.wuxingJuName}</small></div>
      </div>
-     <div className="hero-float">✦ Tinh bàn · Can Chi · Tứ Hóa</div>
+     <p className="sample-caption">Lá số tính thật từ dữ liệu giả định, không phải hồ sơ cá nhân.</p>
     </div>
    </div>
   </section>
@@ -50,35 +53,13 @@ export default function HomePage(){
      <div><div className="eyebrow">BỐN NHÁNH TRI THỨC</div><h2 className="display-small">Một hệ thống, bốn cánh cửa.</h2><p>Chọn lĩnh vực bạn quan tâm. Mỗi phân hệ có công cụ tương tác và tư liệu đi kèm.</p></div>
     </div>
     <div className="module-grid">
-     {modules.map(m=><Link key={m.href} href={m.href} className="surface-card module-card">
-       <div className="module-symbol" aria-hidden="true">{m.mark}</div>
+     {modules.map(m=><Link prefetch={false} key={m.href} href={m.href} className="surface-card module-card">
+       <div className="module-symbol"><Icon name={m.mark} size={26}/></div>
        <h3>{m.title}</h3>
        <div style={{fontSize:11,fontWeight:800,color:'var(--ac-dim)',marginBottom:10}}>{m.sub}</div>
        <p>{m.desc}</p>
-       <div className="arrow"><span>{m.tag}</span><span>↗</span></div>
+       <div className="arrow"><span>{m.tag}</span><span>→</span></div>
       </Link>)}
-    </div>
-   </div>
-  </section>
-
-  <section className="home-section">
-   <div className="site-wrap">
-    <div className="feature-split">
-     <div className="surface-card feature-copy">
-      <div className="eyebrow">LÁ SỐ TỬ VI</div>
-      <h2 className="display-small" style={{margin:'15px 0'}}>Không chỉ lập lá số, mà còn giúp bạn hiểu cấu trúc.</h2>
-      <p className="lead">Tính lá số từ ngày giờ sinh và địa phương tại Việt Nam, xem 12 cung, các chính tinh, đại hạn và lưu niên. Chạm vào từng sao để tìm hiểu ý nghĩa truyền thống.</p>
-      <div className="feature-list"><span>Âm lịch và Chân Thái Dương Thời</span><span>12 cung · 14 chính tinh · Tứ Hóa</span><span>Lưu hồ sơ và xuất bản in</span></div>
-      <div><Link href="/chart" className="action-primary">Mở bàn lá số ↗</Link></div>
-     </div>
-     <div className="surface-card feature-board">
-      <div className="eyebrow" style={{marginBottom:18}}>CHẾ ĐỘ NGHIÊN CỨU LÁ SỐ</div>
-      <div className="preview-board" style={{width:'min(100%,350px)',transform:'none',margin:'auto'}}>
-       {palaces.map(([name,row,col])=><div className={'preview-palace'+(name==='Mệnh'?' main':'')} key={name} style={{gridRow:row,gridColumn:col}}>{name}</div>)}
-       <div className="preview-palace mid">☯<small>12 CUNG · TỬ VI</small></div>
-      </div>
-      <p style={{fontSize:11,lineHeight:1.8,color:'var(--tx-3)',textAlign:'center',marginTop:19}}>Minh họa bố cục 12 cung. Lá số thực được tính theo thông tin bạn nhập.</p>
-     </div>
     </div>
    </div>
   </section>
@@ -87,11 +68,11 @@ export default function HomePage(){
    <div className="site-wrap">
     <div className="section-head">
      <div><div className="eyebrow">CÔNG CỤ NỔI BẬT</div><h2 className="display-small">Tìm hiểu theo cách của bạn.</h2><p>Các công cụ được tổ chức theo nhu cầu sử dụng, không yêu cầu học hết lý thuyết trước khi bắt đầu.</p></div>
-     <Link className="section-link" href="/library">Mở thư viện ↗</Link>
+     <Link prefetch={false} className="section-link" href="/library">Mở thư viện →</Link>
     </div>
     <div className="tools-grid">
-     {tools.map(t=><Link key={t.href+t.title} href={t.href} className="surface-card tools-card">
-       <div className="icon-round">{t.icon}</div><div><strong>{t.title}</strong><span>{t.desc}</span></div><span style={{marginLeft:'auto',color:'var(--ac-dim)'}}>↗</span>
+     {tools.map(t=><Link prefetch={false} key={t.href+t.title} href={t.href} className="surface-card tools-card">
+       <div className="icon-round"><Icon name={t.icon} size={22}/></div><div><strong>{t.title}</strong><span>{t.desc}</span></div><span style={{marginLeft:'auto',color:'var(--ac-dim)'}}>→</span>
      </Link>)}
     </div>
    </div>

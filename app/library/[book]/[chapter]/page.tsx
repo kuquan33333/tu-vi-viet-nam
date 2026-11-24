@@ -1,30 +1,26 @@
+import Breadcrumb from '@/components/Breadcrumb';
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book]/[chapter] — Trang đọc toàn văn từng chương / quyển
  */
 
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ALL_BOOKS, getChapter } from '@/lib/classics';
+import { chapterParams, getChapterBySlug, chapterPath } from '@/lib/classics/chapter-slugs';
 
-export async function generateStaticParams() {
-  return ALL_BOOKS.flatMap(b =>
-    b.chapters.map((_, i) => ({ book: b.slug, chapter: String(i) }))
-  );
-}
+export const dynamicParams = false;
+export async function generateStaticParams() { return chapterParams(); }
 
 export async function generateMetadata({ params }: { params: Promise<{ book: string; chapter: string }> }) {
   const { book: bookSlug, chapter: chIdx } = await params;
-  const result = getChapter(bookSlug, parseInt(chIdx));
+  const result = getChapterBySlug(bookSlug, chIdx);
   if (!result) return {};
-  return {
-    title: `${result.chapter.title} · 《${result.book.title}》· Cổ Thư Tử Vi Đẩu Số`,
-    description: result.chapter.subtitle || `Nguyên văn và bản dịch nghĩa 《${result.book.title}》${result.chapter.title}`,
-  };
+  return pageMetadata({title:`${result.chapter.title} · 《${result.book.title}》`,description:result.chapter.subtitle || `Nội dung chương ${result.chapter.title} trong 《${result.book.title}》`,path:chapterPath(result.book.slug,result.chapterIdx),type:'article'});
 }
 
 export default async function ChapterPage({ params }: { params: Promise<{ book: string; chapter: string }> }) {
   const { book: bookSlug, chapter: chIdx } = await params;
-  const result = getChapter(bookSlug, parseInt(chIdx));
+  const result = getChapterBySlug(bookSlug, chIdx);
   if (!result) notFound();
 
   const { book, chapter, chapterIdx } = result;
@@ -33,18 +29,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href={`/library/${book.slug}`} style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Mục Lục 《{book.title}》
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.08em', fontWeight: 600 }}>
-          {chapter.title}
-        </div>
-        <Link href="/library" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          Thư Viện →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug},{label:chapter.title,href:chapterPath(book.slug,chapterIdx)}]} />
 
       <article className="max-w-3xl mx-auto px-6 py-12">
         {/* Tiêu đề chương */}
@@ -139,7 +124,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
         <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
           {prevIdx >= 0 ? (
             <Link
-              href={`/library/${book.slug}/${prevIdx}`}
+              href={chapterPath(book.slug,prevIdx)}
               style={{
                 flex: 1,
                 padding: '14px 18px',
@@ -156,7 +141,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
           ) : <div style={{ flex: 1 }} />}
           {nextIdx < book.chapters.length ? (
             <Link
-              href={`/library/${book.slug}/${nextIdx}`}
+              href={chapterPath(book.slug,nextIdx)}
               style={{
                 flex: 1,
                 padding: '14px 18px',

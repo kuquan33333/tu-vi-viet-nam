@@ -43,17 +43,17 @@ const { detectPatterns } = await import('../../lib/ziwei/patterns');
 
 // 盘上不存在名为「化X」的星
 const sample = generateChart({ year: 1988, month: 10, day: 8, hour: 7, gender: 'male' });
-assert.ok(sample.palaces.every(p => p.stars.every(s => !/^化[禄权科忌]$/.test(s.name))), '星名里出现了「化X」');
+assert.ok(sample.palaces.every(p => p.stars.every(s => !(/^(?:化[禄权科忌]|Hóa (?:Lộc|Quyền|Khoa|Kỵ))$/.test(s.name)))), '星名里出现了「化X」');
 
 // 逐日扫一年、固定午时，统计每个加分项「该出现」与「实际出现」的盘数
 const checks: { pattern: string; bonus: string; expect: (c: ZiweiChart) => boolean }[] = [
   {
-    pattern: '府相朝垣', bonus: '命宫见禄',
-    expect: c => c.palaces.some(p => p.branch === c.mingGongBranch && p.stars.some(s => s.name === '禄存' || s.siHua === '禄')),
+    pattern: 'Phủ Tướng Triều Viên', bonus: 'Cung Mệnh có Lộc Tồn hoặc Hóa Lộc',
+    expect: c => c.palaces.some(p => p.branch === c.mingGongBranch && p.stars.some(s => s.name === 'Lộc Tồn' || s.siHua === 'Lộc')),
   },
-  { pattern: '杀破狼', bonus: '三方有化禄或化权（动得有力）', expect: c => sanFangHasSiHua(c, '禄') || sanFangHasSiHua(c, '权') },
-  { pattern: '机月同梁', bonus: '再会化科', expect: c => sanFangHasSiHua(c, '科') },
-  { pattern: '阳梁昌禄', bonus: '再会化科', expect: c => sanFangHasSiHua(c, '科') },
+  { pattern: 'Sát Phá Tham', bonus: 'Tam phương có Hóa Lộc hoặc Hóa Quyền', expect: c => sanFangHasSiHua(c, 'Lộc') || sanFangHasSiHua(c, 'Quyền') },
+  { pattern: 'Cơ Nguyệt Đồng Lương', bonus: 'Hội thêm Hóa Khoa', expect: c => sanFangHasSiHua(c, 'Khoa') },
+  { pattern: 'Dương Lương Xương Lộc', bonus: 'Hội thêm Hóa Khoa', expect: c => sanFangHasSiHua(c, 'Khoa') },
 ];
 const hits = new Map<string, number>();
 const start = Date.UTC(1990, 0, 1);

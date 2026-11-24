@@ -1,3 +1,5 @@
+import Breadcrumb from '@/components/Breadcrumb';
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /knowledge/[star]/[topic] — Trang chi tiết luận giải chuyên đề
  * 14 Chính Tinh × 13 Cung Vị / Chuyên đề
@@ -35,24 +37,7 @@ export async function generateMetadata({ params }: { params: Promise<{ star: str
   const description = data.parsed.dingdiao
     || `Luận giải sao ${star} tọa thủ ${data.palaceName} trong Tử Vi Đẩu Số — Dựa trên hệ thống《Thiên Kỷ》Thầy Nghê Hải Hạ và cổ thư《Tử Vi Đẩu Số Toàn Tập》,《Cốt Tủy Phú》.`;
 
-  return {
-    title,
-    description,
-    openGraph: {
-      title,
-      description,
-      type: 'article',
-      url: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    },
-    alternates: {
-      canonical: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    },
-    keywords: [
-      'Tử Vi Đẩu Số', 'Nghê Hải Hạ', star, data.palaceName, data.topicLabel,
-      `Sao ${star} ${data.palaceName}`,
-      'Tử Vi Đẩu Số Toàn Tập', 'Cốt Tủy Phú',
-    ],
-  };
+  return pageMetadata({title,description,path:`/knowledge/${slug}/${topic}`,type:'article'});
 }
 
 export default async function KnowledgePage({ params }: { params: Promise<{ star: string; topic: string }> }) {
@@ -65,53 +50,13 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
   const otherTopicsForStar = ALL_TOPICS.filter(t => t !== topic && getKnowledge(star, t).exists);
   const otherStarsForTopic = ALL_STARS.filter(s => s !== star && getKnowledge(s, topic as TopicKey).exists);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: `Sao ${star} tại ${data.palaceName} · ${data.topicLabel}`,
-    description: data.parsed.dingdiao,
-    author: { '@type': 'Organization', name: 'Tử Vi Đẩu Số · Nghê Hải Hạ Chính Tông' },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Tử Vi Đẩu Số',
-      url: SITE_URL,
-    },
-    datePublished: '2026-04-28',
-    dateModified: '2026-04-28',
-    mainEntityOfPage: `${SITE_URL}/knowledge/${slug}/${topic}`,
-    articleSection: 'Tử Vi Đẩu Số · Nghê Hải Hạ Hệ Thống',
-    keywords: [`Tử Vi Đẩu Số`, star, data.palaceName, data.topicLabel].join(', '),
-  };
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-      {/* Thanh Header */}
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Trang Chủ
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em', fontWeight: 600 }}>
-          KHO TRI THỨC MỆNH LÝ
-        </div>
-        <Link href="/chart" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          An Lá Số →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Kho kiến thức',href:'/knowledge'},{label:`${star} · ${data.topicLabel}`,href:`/knowledge/${slug}/${topic}`}]} />
 
       <article className="max-w-3xl mx-auto px-6 py-12">
-        {/* Breadcrumb */}
-        <nav style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em', marginBottom: '16px' }}>
-          <Link href="/" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>Trang Chủ</Link>
-          <span style={{ margin: '0 8px' }}>/</span>
-          <Link href="/knowledge" style={{ color: 'var(--tx-3)', textDecoration: 'none' }}>Kho Tri Thức</Link>
-          <span style={{ margin: '0 8px' }}>/</span>
-          <span>{star}</span>
-          <span style={{ margin: '0 8px' }}>·</span>
-          <span style={{ color: 'var(--ac)' }}>{data.palaceName}</span>
-        </nav>
 
         {/* Tiêu đề trang */}
         <header style={{ marginBottom: '36px' }}>
@@ -188,7 +133,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             textDecoration: 'none',
             boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
           }}>
-            An Lá Số Ngay →
+            Lập lá số ngay →
           </Link>
         </div>
 

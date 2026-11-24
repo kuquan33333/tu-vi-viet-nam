@@ -1,3 +1,6 @@
+import Breadcrumb from '@/components/Breadcrumb';
+import { chapterPath } from '@/lib/classics/chapter-slugs';
+import { pageMetadata } from '@/lib/seo/metadata';
 /**
  * /library/[book] — Trang mục lục tác phẩm cổ thư
  */
@@ -14,10 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ book: str
   const { book: slug } = await params;
   const book = getBookBySlug(slug);
   if (!book) return {};
-  return {
-    title: `《${book.title}》· ${book.dynasty} · Thư Viện Cổ Thư Tử Vi Đẩu Số`,
-    description: book.intro,
-  };
+  return pageMetadata({title: `《${book.title}》 · Thư viện Tử Vi Đẩu Số`,description:book.intro,path:`/library/${book.slug}`});
 }
 
 export default async function BookPage({ params }: { params: Promise<{ book: string }> }) {
@@ -27,18 +27,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
 
   return (
     <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <div className="px-6 py-4 flex items-center justify-between"
-        style={{ borderBottom: '1px solid rgba(184,146,42,0.15)', background: 'var(--bg-page)' }}>
-        <Link href="/library" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          ← Thư Viện Cổ Thư
-        </Link>
-        <div style={{ fontSize: '12px', color: 'var(--tx-3)', letterSpacing: '0.1em', fontWeight: 600 }}>
-          《{book.title}》
-        </div>
-        <Link href="/" style={{ fontSize: '12px', color: 'var(--ac)', letterSpacing: '0.1em', textDecoration: 'none', fontWeight: 500 }}>
-          Trang Chủ →
-        </Link>
-      </div>
+      <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug}]} />
 
       <div className="max-w-3xl mx-auto px-6 py-12">
         {/* Thông tin tác phẩm */}
@@ -62,7 +51,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
           {book.chapters.map((chapter, i) => (
             <Link
               key={i}
-              href={`/library/${book.slug}/${i}`}
+              href={chapterPath(book.slug,i)}
               style={{
                 display: 'flex',
                 alignItems: 'baseline',
