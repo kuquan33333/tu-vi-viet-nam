@@ -66,6 +66,9 @@ jobs:
         run: |
           npm install --prefix "$RUNNER_TEMP/astronomy-qa" --no-audit --no-fund --ignore-scripts --no-save astronomy-engine@2.1.19
           ASTRONOMY_ENGINE_PATH="$RUNNER_TEMP/astronomy-qa/node_modules/astronomy-engine/astronomy.js" npx --no-install tsx scripts/audit-vn-astronomy.ts
+      - name: Kiểm thử adapter lịch UTC+7 với iztro 2.6.1 (bản cô lập)
+        if: ${{ !cancelled() }}
+        run: npx --no-install tsx scripts/audit-vn-iztro.ts
       - name: Build mã nguồn nguyên trạng
         if: ${{ !cancelled() }}
         run: npm run build

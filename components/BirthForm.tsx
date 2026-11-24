@@ -383,6 +383,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
             <div>
               <select
+                aria-label="Ngày sinh dương lịch"
                 value={form.day}
                 onChange={e => { setForm({ ...form, day: e.target.value }); setTouched(t => ({ ...t, day: true })); }}
                 style={showErr('day') && errors.day ? errorInputStyle : inputStyle}
@@ -397,6 +398,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             </div>
             <div>
               <select
+                aria-label="Tháng sinh dương lịch"
                 value={form.month}
                 onChange={e => { setForm({ ...form, month: e.target.value }); setTouched(t => ({ ...t, month: true })); }}
                 style={showErr('month') && errors.month ? errorInputStyle : inputStyle}
@@ -418,6 +420,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '8px' }}>
             <div>
               <select
+                aria-label="Ngày sinh âm lịch"
                 value={lunarDay}
                 onChange={e => handleLunarDateChange(lunarYear, lunarMonth, e.target.value, isLeapMonth)}
                 style={inputStyle}
@@ -431,6 +434,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             </div>
             <div>
               <select
+                aria-label="Tháng sinh âm lịch"
                 value={lunarMonth}
                 onChange={e => handleLunarDateChange(lunarYear, e.target.value, lunarDay, isLeapMonth)}
                 style={inputStyle}
@@ -465,6 +469,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
           <select
+            aria-label="Tỉnh hoặc thành phố nơi sinh"
             value={form.province}
             onChange={e => handleProvince(e.target.value)}
             style={inputStyle}
@@ -478,6 +483,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             ))}
           </select>
           {form.province==='Nước ngoài'?<input aria-label="Thành phố và quốc gia" placeholder="Thành phố, quốc gia" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inputStyle}/>:<select
+            aria-label="Quận huyện hoặc khu vực nơi sinh"
             value={form.city}
             onChange={e => handleCity(e.target.value)}
             disabled={!form.province}
@@ -580,6 +586,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <label style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '8px', cursor: 'pointer' }}>
           <input
             type="checkbox"
+            aria-label="Không rõ giờ sinh cụ thể"
             checked={form.unknownTime}
             onChange={e => setForm({ ...form, unknownTime: e.target.checked })}
             style={{ width: '14px', height: '14px', borderRadius: '4px', cursor: 'pointer' }}
