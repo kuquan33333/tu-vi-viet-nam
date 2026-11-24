@@ -16,9 +16,9 @@ Bản fork của dự án [naot7/tu-vi-viet-nam](https://github.com/naot7/tu-vi-
 | **Hợp Bàn /hop-ban** | Nhập hai người hoặc chọn hồ sơ; so sánh dữ liệu 12 cung **offline**, không tự đặt điểm hợp nhau | Đối chiếu mang tính cấu trúc, không đánh giá chất lượng quan hệ thực tế |
 | **Hồ sơ /ho-so** | Tối đa 30 hồ sơ cục bộ, JSON nhập/xuất, xóa, mã hóa AES-GCM qua PIN Web Crypto tùy chọn | PIN không khôi phục được, bản xuất JSON **không mã hóa**, dữ liệu không tự đồng bộ |
 | **Lịch Vạn Niên /lich-van-nien** | Âm dương lịch Việt Nam 1900–2050, Can Chi, mùng 1/rằm, ngày lễ, 24 tiết khí và giờ giao tiết, in lịch | Lịch cố định UTC+7 theo phương pháp nêu trong tài liệu; mốc sát nửa đêm cần thẩm định, không tự tính nghỉ bù |
-| **Thiên Kỷ /thien-ky** | Chu Dịch 64 quẻ, 6 hào/quẻ nguyên văn Hán có ghi nguồn, gieo quẻ và địa bàn Kỳ Môn | Chưa có toàn bộ bản dịch Việt có bản quyền; Kỳ Môn **chưa phải thời gia bàn hoàn chỉnh** |
-| **Địa Kỷ /dia-ky** | La Kinh 24 sơn, Bát Trạch, biểu mẫu khảo sát địa hình, nhập góc và hỗ trợ cảm biến khi trình duyệt cho phép | Chưa có bản đồ GIS/Huyền Không Phi Tinh đầy đủ; cảm biến di động chưa nghiệm thu trên mọi máy |
-| **Nhân Kỷ /nhan-ky** | 16 chuyên đề giới thiệu, 14 kinh/361 mã huyệt, sơ đồ 2D có giới hạn, liên kết atlas 3D từ tác giả | Chưa phải toàn văn y thư hay atlas 361 huyệt có vị trí giải phẫu được thẩm định |
+| **Thiên Kỷ /thien-ky** | 64 quẻ, dịch ý và bình giải quái từ; Kỳ Môn thời gia Chia bổ/Chuyển bàn, Địa bàn thủ công | 384 hào chưa được dịch/hiệu khảo, Kỳ Môn chưa gồm mọi trường phái |
+| **Địa Kỷ /dia-ky** | La Kinh/Bát Trạch, Huyền Không Phi Tinh Hạ quái, bản đồ OSM có đồng ý và lưới mặt bằng tải cục bộ | Không phải GIS địa chính, không có Thế quái/kiêm hướng; không nghiệm thu cảm biến mọi máy |
+| **Nhân Kỷ /nhan-ky** | 16 chuyên đề, danh mục 4 nguồn cổ thư Hán, 361 mã huyệt đối chiếu TARA, 2D/3D tham khảo | Vị trí lâm sàng thẩm định 0/361; không phải toàn văn y thư được dịch/cấp phép |
 | **Thư viện /library** | Ba bộ tư liệu Tử Vi trong số **21 chương đang có**; tìm kiếm và URL slug chương | Không tuyên bố sở hữu toàn văn mọi ấn bản |
 | **Kho kiến thức /knowledge** | Giới thiệu **14 chính tinh** | Các trang 182 chuyên đề động có trong mã gốc **không phát hành** trên Pages tĩnh vì thiếu dữ liệu |
 
