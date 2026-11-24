@@ -133,6 +133,8 @@ const FEATURES = [
 ];
 
 // ─── 4 Phân hệ nghiên cứu ─────────────────────────────────
+const sectionUrl = (key:string) => key === 'ziwei' ? '/chart' : key === 'tianji' ? '/thien-ky' : key === 'diji' ? '/dia-ky' : '/nhan-ky';
+
 const SECTIONS = [
   {
     key: 'ziwei',
@@ -148,9 +150,9 @@ const SECTIONS = [
     key: 'tianji',
     name: 'Thiên Kỷ',
     en: 'Tian Ji',
-    desc: 'Tử Vi · Chu Dịch · Kỳ Môn Độn Giáp',
-    status: 'soon' as const,
-    when: 'Sắp ra mắt',
+    desc: 'Tử Vi · Chu Dịch · Kỳ Môn (địa bàn)',
+    status: 'ready' as const,
+    when: 'Trải nghiệm',
     icon: '⊙',
     note: '',
   },
@@ -159,18 +161,18 @@ const SECTIONS = [
     name: 'Địa Kỷ',
     en: 'Di Ji',
     desc: 'Khảo sát địa lý · Sơn xuyên hình thế',
-    status: 'soon' as const,
-    when: 'Sắp ra mắt',
+    status: 'ready' as const,
+    when: 'Trải nghiệm',
     icon: '⊞',
-    note: 'Di cảo',
+    note: 'Mở rộng',
   },
   {
     key: 'renji',
     name: 'Nhân Kỷ',
     en: 'Ren Ji',
     desc: 'Nội Kinh · Thương Hàn · Kim Quỹ · Châm Cứu',
-    status: 'soon' as const,
-    when: 'Sắp ra mắt',
+    status: 'ready' as const,
+    when: 'Trải nghiệm',
     icon: '⊕',
     note: '',
   },
@@ -742,10 +744,10 @@ export default function HomePage() {
                         style={{ color: ready ? '#10b981' : c.textMuted, fontWeight: 500 }}>
                         {s.when}
                       </div>
-                      <div className="text-base lg:text-xl font-bold tracking-wide"
-                        style={{ color: c.textPrimary }}>
-                        {s.name}
-                      </div>
+                      <a className="text-base lg:text-xl font-bold tracking-wide"
+                        href={sectionUrl(s.key)} style={{ color: c.textPrimary, textDecoration: 'none' }}>
+                        {s.name} ↗
+                      </a>
                       {s.note && (
                         <div className="text-[9px] px-2 py-0.5 rounded-full lg:hidden"
                           style={{
@@ -1096,7 +1098,7 @@ export default function HomePage() {
               return (
                 <a
                   key={s.key}
-                  href={ready ? '/chart' : undefined}
+                  href={sectionUrl(s.key)}
                   onClick={ready ? undefined : (e) => e.preventDefault()}
                   className="rounded-lg px-3 py-3 text-center transition-all"
                   style={{
