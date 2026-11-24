@@ -208,7 +208,7 @@ export default function NhanKyPage(){
    </div>
    <section className="study-card" style={{marginTop:18}}>
     <h2>Kiểm chứng danh mục và thư mục có nguồn</h2>
-    <p className="study-notice"><strong>${acupointAudit.pointCodeMatch}/361 mã huyệt</strong> đã đối chiếu với TARA Ontology; ${acupointAudit.variantReviewCount} tên có biểu diễn Hán tự khác dạng, cần hiệu đính; vị trí huyệt được chuyên gia thẩm định: <strong>${acupointAudit.clinicallyVerifiedLocations}/361</strong>. Mã số trùng nhau không chứng minh tọa độ y khoa chính xác.</p>
+    <p className="study-notice"><strong>{acupointAudit.pointCodeMatch}/361 mã huyệt</strong> đã đối chiếu với TARA Ontology; {acupointAudit.variantReviewCount} tên có biểu diễn Hán tự khác dạng, cần hiệu đính; vị trí huyệt được chuyên gia thẩm định: <strong>{acupointAudit.clinicallyVerifiedLocations}/361</strong>. Mã số trùng nhau không chứng minh tọa độ y khoa chính xác.</p>
     <div className="study-grid">
      {MEDICAL_SOURCES.map(b=><article className="study-card" key={b.url}><h3>{b.title}</h3><p className="study-muted">{b.name}</p><p>{b.limits}</p><a className="study-btn secondary" href={b.url} target="_blank" rel="noopener noreferrer">Mở bản Hán cổ ở Wikisource</a></article>)}
     </div>
