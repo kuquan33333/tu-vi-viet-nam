@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -275,7 +276,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
               e.currentTarget.style.color = 'var(--on-dark-muted)';
             }}
           >
-            {skipLabel} →
+            {skipLabel} <Icon name="arrow" size={16}/>
           </button>
         </motion.div>
       )}

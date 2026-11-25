@@ -1,5 +1,6 @@
 'use client';
 
+import Icon from '@/components/Icon';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import TimeQimenTool from '@/components/TimeQimenTool';
@@ -90,7 +91,7 @@ function IChingTool(){
       <button type="button" className="study-btn secondary" style={{width:'100%',textAlign:'left',justifyContent:'flex-start'}}
        onClick={()=>{setLines(h.lines);setQuestion(h.question);}}>
        <span style={{flex:1}}>#{i+1} · {hexFromLines(h.lines).name}<small style={{display:'block',fontWeight:400}}>{h.date} {h.question?'· '+h.question:''}</small></span>
-       →
+       <Icon name="arrow" size={16}/>
       </button>
      </li>)}</ul>}
     {!!history.length&&<button className="study-btn secondary" type="button" onClick={()=>{setHistory([]);try{localStorage.removeItem(STORAGE_KEY);}catch{}}}>Xóa lịch sử trên máy</button>}
@@ -172,7 +173,7 @@ function QimenTool(){
    <h2>Ghi chú trường phái và nguồn thuật toán</h2>
    <p>Quy tắc ba nguyên và bảng 24 tiết khí được tham chiếu từ dự án MIT <a href="https://github.com/qilaidev/metaphysics-engine" target="_blank" rel="noopener noreferrer">qilaidev/metaphysics-engine</a>. Với ứng dụng Kỳ Môn đầy đủ cần thêm các bước: xác định chính xác giao tiết theo phút, phù đầu, trực phù/trực sử, chuyển Thiên bàn – Bát môn – Bát thần, và bộ kiểm thử cho trường phái lựa chọn.</p>
    <p>Để tham khảo một bộ tính thời gia Kỳ Môn đầy đủ, bạn có thể mở ứng dụng bên ngoài <a href="https://qimen-2i1.pages.dev" target="_blank" rel="noopener noreferrer">qimen</a>. Ứng dụng đó có thuật toán và điều khoản riêng, không phải kết quả do module này tính.</p>
-   <button className="study-btn secondary" type="button" onClick={()=>setShowExternal(v=>!v)}>{showExternal?'Ẩn công cụ bên ngoài':'Thử bản Kỳ Môn đầy đủ tại đây →'}</button>
+   <button className="study-btn secondary" type="button" onClick={()=>setShowExternal(v=>!v)}>{showExternal?'Ẩn công cụ bên ngoài':'Thử bản Kỳ Môn đầy đủ tại đây'}</button>
    {showExternal&&<div style={{marginTop:15}}>
     <iframe title="Ứng dụng Kỳ Môn tham khảo của tác giả idavailable" src="https://qimen-2i1.pages.dev" loading="lazy" referrerPolicy="no-referrer"
       sandbox="allow-scripts allow-same-origin" style={{width:'100%',height:580,border:'1px solid var(--ac-bdr)',borderRadius:12}}/>
@@ -199,7 +200,7 @@ export default function ThienKyPage(){
    {tab==='dich'?<IChingTool/>:tab==='qimen'?<QimenTool/>:
     <section className="study-card" style={{textAlign:'center',maxWidth:680,margin:'auto'}}>
      <h2>Tử Vi Đẩu Số – hệ thống hiện có</h2><p>Lập mệnh bàn 12 cung, an sao, đại hạn, lưu niên và xem giải thích trong công cụ hiện hữu. Thiên Kỷ dùng chung nền tri thức, không tạo bản tính Tử Vi thứ hai.</p>
-     <Link className="study-btn" href="/chart">Mở công cụ lập lá số →</Link>
+     <Link className="study-btn" href="/chart">Mở công cụ lập lá số <Icon name="arrow" size={16}/></Link>
     </section>}
    <p className="study-footer" role="note">Thiên Kỷ – công cụ nghiên cứu văn hóa và lịch sử thuật số. Nguồn thuật toán được ghi trong từng công cụ; không dùng các kết quả chiêm nghiệm thay cho chuyên gia hay bằng chứng thực tế.</p>
   </main>

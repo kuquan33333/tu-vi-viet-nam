@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -78,7 +79,7 @@ export default function LibraryHomePage() {
                 letterSpacing: '0.05em',
                 fontWeight: 600,
               }}>
-                Vào đọc tác phẩm →
+                Vào đọc tác phẩm <Icon name="arrow" size={16}/>
               </div>
             </Link>
           ))}

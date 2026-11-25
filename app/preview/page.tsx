@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -85,7 +86,7 @@ export default function PreviewPage() {
             letterSpacing: '0.1em',
             display: 'flex', gap: '20px',
           }}>
-            <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Trang Chủ →</Link>
+            <Link href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Trang Chủ <Icon name="arrow" size={16}/></Link>
             <span>·</span>
             <Link href="/chart" style={{ color: 'inherit', textDecoration: 'none' }}>Lập lá số</Link>
             <span>·</span>

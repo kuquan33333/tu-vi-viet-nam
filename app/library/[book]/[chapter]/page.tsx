@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -135,7 +136,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                 color: 'var(--tx-0)',
               }}
             >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>← Chương Trước</div>
+              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}><span className="inline-flex rotate-180"><Icon name="arrow" size={16}/></span> Chương Trước</div>
               <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[prevIdx].title}</div>
             </Link>
           ) : <div style={{ flex: 1 }} />}
@@ -153,7 +154,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                 textAlign: 'right',
               }}
             >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>Chương Kế Tiếp →</div>
+              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>Chương Kế Tiếp <Icon name="arrow" size={16}/></div>
               <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[nextIdx].title}</div>
             </Link>
           ) : <div style={{ flex: 1 }} />}

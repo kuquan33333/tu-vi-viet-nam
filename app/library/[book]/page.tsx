@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { chapterPath } from '@/lib/classics/chapter-slugs';
 import { pageMetadata } from '@/lib/seo/metadata';
@@ -80,7 +81,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
               <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
                 {chapter.paragraphs.length} đoạn
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--ac)' }}>→</div>
+              <div style={{ fontSize: '12px', color: 'var(--ac)' }}><Icon name="arrow" size={16}/></div>
             </Link>
           ))}
         </div>
