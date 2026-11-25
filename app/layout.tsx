@@ -7,6 +7,7 @@ import './revamp.css';
 import './ui.css';
 import './remaining-ui.css';
 import './brand.css';
+import './brand-desktop.css';
 import AppChrome from '@/components/AppChrome';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SITE_URL } from '@/lib/site';

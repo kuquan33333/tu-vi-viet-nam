@@ -12,7 +12,7 @@ const main=['/','/chart','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/lib
 function walk(d){return readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(d,e.name)):[join(d,e.name)]);}
 const routes=[...new Set(walk(root).filter(f=>f.endsWith('.html')).map(f=>relative(root,f).split('\\').join('/')).filter(f=>!f.startsWith('_next/')&&!f.startsWith('_not-found/')&&!/(^|\/)(500|_not-found)\.html$/.test(f)).map(f=>'/'+f.replace(/(?:^|\/)index\.html$/,'').replace(/\.html$/,'')).map(s=>s.replace(/\/$/,'')||'/'))].sort();
 if(mode==='all'){for(const r of main)assert.ok(routes.includes(r),'missing export '+r);assert.ok(routes.includes('/404'),'missing 404');}
-const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[360,768,1280].flatMap(width=>main.map(route=>({route,width}))):[360,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
+const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[... [360,768,1280].flatMap(width=>main.map(route=>({route,width}))),... [1440,1920].map(width=>({route:'/',width}))]:[360,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
 assert.ok(jobs.length>0);
 writeFileSync(dir+'/scope.json',JSON.stringify({mode,engine,shard,shards,totalExportRoutes:routes.length,jobs},null,2));
 const browser=await pw[engine].launch({headless:true});
@@ -43,7 +43,7 @@ async function keyboard(page,route,width){
 }
 try{
  for(const {route,width} of jobs){
-  const key=name(route,width),errors=[],external=[],ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
+  const key=name(route,width),errors=[],external=[],ctx=await browser.newContext({viewport:{width,height:width>=1440?1000:900},reducedMotion:'reduce'});
   const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
   await ctx.route('**/*',r=>{const req=r.request(),url=req.url();if(url.startsWith(base+'/')||url.startsWith('data:')||url.startsWith('blob:'))return r.continue();external.push({url,type:req.resourceType()});return r.abort();});
   try{
@@ -75,8 +75,23 @@ try{
      assert.equal(await page.locator('.home-chart .home-palace-name,.home-chart .ui-chart-cell strong').count(),12);
      assert.match(await page.locator('.brand-date').getAttribute('data-date'),/^\d{4}-\d{2}-\d{2}$/);
      await page.locator('.hero-art img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('missing study artwork')});
-     if(width>=1100){const toggle=page.locator('.brand-tools-toggle');await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('#desktop-tools-menu a').count(),6);await page.keyboard.press('Escape');assert.equal(await toggle.getAttribute('aria-expanded'),'false');await page.locator('.skip-link').focus();}
+     if(width>=1100){const toggle=page.locator('.brand-tools-toggle');await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('#desktop-tools-menu a').count(),6);await page.keyboard.press('Escape');assert.equal(await toggle.getAttribute('aria-expanded'),'false');await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement)document.activeElement.blur()});}
     }
+   }
+   if(width>=1100&&route==='/'){
+    const pc=await page.evaluate(async()=>{
+     const rect=s=>{const e=document.querySelector(s),r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
+     const brand=document.querySelector('.global-header .brand-emblem'),art=document.querySelector('.hero-art img');await Promise.all([brand.decode(),art.decode()]);
+     return {brand:rect('.brand-wordmark'),nav:rect('.desktop-links'),cta:rect('.header-cta'),links:[...document.querySelectorAll('.desktop-links>a,.brand-tools-toggle')].map(e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width}}),hero:rect('.home2-hero'),title:rect('#home2-title'),titleSize:parseFloat(getComputedStyle(document.querySelector('#home2-title')).fontSize),cards:[...document.querySelectorAll('.home-primary-card')].map(e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right}}),asset:{logo:brand.currentSrc,logoNatural:brand.naturalWidth,book:art.currentSrc,bookNatural:art.naturalWidth,bookRendered:art.getBoundingClientRect().width},frame:getComputedStyle(document.querySelector('.home-primary-card'),'::before').borderImageSource};
+    });
+    writeFileSync(dir+'/pc-layout-'+width+'.json',JSON.stringify(pc,null,2));
+    assert.ok(pc.brand.width>160&&pc.brand.right<=pc.nav.left+1,'desktop logo/nav collision');
+    assert.ok(pc.nav.right<=pc.cta.left+1&&pc.cta.right<=width+1,'desktop nav/CTA collision');
+    assert.ok(pc.links.every((l,i)=>l.width>30&&l.left>=pc.nav.left-1&&l.right<=pc.nav.right+1&&(!i||l.left>=pc.links[i-1].right-1)),'desktop links overlap or leave nav');
+    assert.ok(pc.titleSize>=29,'desktop hero type too small');
+    assert.equal(pc.cards.length,4);assert.ok(pc.cards.every(c=>Math.abs(c.top-pc.cards[0].top)<2),'desktop feature card row');
+    assert.match(pc.asset.logo,/emblem-pc\.svg$/);assert.match(pc.asset.book,/study-pc\.webp$/);assert.ok(pc.asset.bookNatural>=pc.asset.bookRendered-1,'book artwork scaled beyond source');
+    assert.match(pc.frame,/frame-pc\.svg/);
    }
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});

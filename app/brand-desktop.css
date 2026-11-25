@@ -1,0 +1,102 @@
+/* Desktop visual refinement. Source: approved 1448x1086 PC artwork (including browser chrome).
+   No whole-page bitmap, no changes to business logic, no desktop rules below 1100px. */
+.brand-emblem-picture{display:contents}
+.hero-blossom-picture{display:contents}
+.hero-art picture{display:contents}
+@media screen and (min-width:1100px){
+ :root{--header-height:76px}
+ header.brand-header.ui-header.global-header{height:76px!important;min-height:76px!important;background:var(--brand-surface) url('/brand/paper.svg');box-shadow:0 1px 7px rgba(99,58,16,.12);border-bottom:1px solid var(--brand-gold-line)}
+ header.brand-header.ui-header .header-inner{display:grid!important;grid-template-columns:clamp(218px,20vw,280px) minmax(0,1fr) max-content;align-items:center;justify-content:normal;gap:16px;width:calc(100% - 72px)!important;max-width:1440px!important;height:100%!important;margin-inline:auto;padding:0!important}
+ header.brand-header .brand-wordmark{width:auto!important;max-width:100%;min-width:0;justify-self:start;display:inline-flex!important;align-items:center;white-space:nowrap;visibility:visible;opacity:1}
+ header.brand-header .brand-mark{display:inline-flex!important;flex-direction:row;gap:10px;align-items:center;width:auto;max-width:100%}
+ header.brand-header .brand-emblem{width:clamp(49px,5.1vw,69px);height:auto;mix-blend-mode:normal}
+ header.brand-header .brand-type{display:flex!important;align-items:center;gap:2px;min-width:0}
+ header.brand-header .brand-name{font-family:var(--font-serif);font-weight:700;font-size:clamp(20px,1.95vw,28px);letter-spacing:-.06em;line-height:1.1;color:var(--brand-red)}
+ header.brand-header .brand-subtitle{font-family:var(--font-serif);font-weight:700;font-style:italic;font-size:clamp(10px,1.03vw,14px);line-height:1.15;letter-spacing:0}
+ header.brand-header .brand-type .brand-ornament{max-width:90px}
+ header.brand-header .desktop-links{display:flex!important;min-width:0;flex:initial;align-items:center;justify-content:space-between;gap:clamp(5px,1.05vw,18px);padding:0 clamp(7px,1.15vw,20px);height:42px;border-inline:1px solid var(--brand-gold-line)}
+ header.brand-header .desktop-links>a,header.brand-header .brand-tools-toggle{display:inline-flex!important;align-items:center;flex:none;min-height:44px;max-width:none;gap:5px;white-space:nowrap;font-family:var(--font-serif);font-weight:700;font-size:clamp(12px,1.12vw,16px);line-height:1.2;background:none;padding:0 0 2px!important;color:var(--brand-navy);border-radius:0;text-decoration:none}
+ header.brand-header .desktop-links>a.is-active,header.brand-header .brand-tools-toggle.is-active{color:var(--brand-red);border-bottom:2px solid var(--brand-red);background:none}
+ header.brand-header .desktop-links>a>svg,header.brand-header .brand-tools-toggle>svg{width:clamp(15px,1.45vw,21px);height:clamp(15px,1.45vw,21px);flex:none}
+ header.brand-header .header-utilities{display:flex!important;justify-content:flex-end;align-items:center;margin:0!important;gap:0}
+ header.brand-header .header-cta.brand-primary{display:inline-flex!important;position:relative;white-space:nowrap;min-height:43px;padding:0 13px!important;font-size:clamp(12px,1.12vw,16px);border:1px solid var(--brand-red);border-radius:9px;box-shadow:none;isolation:isolate}
+ header.brand-header .mobile-menu-button{display:none!important}
+ header.brand-header .brand-tools-dropdown{z-index:150}
+ .ui-home .home-brand{background:var(--brand-paper) url('/brand/paper.svg');color:var(--brand-navy)}
+ .ui-home .home-brand .home2-hero{position:relative;padding:0!important;min-height:340px;background:url('/brand/landscape-pc.svg') center bottom/100% 160px no-repeat;isolation:isolate;overflow:hidden}
+ .ui-home .home-brand .home2-hero-grid{display:grid!important;grid-template-columns:minmax(0,34fr) minmax(0,38fr) minmax(0,32fr);gap:24px;align-items:center;min-height:clamp(330px,25.5vw,375px);width:100%!important;max-width:1600px!important;padding:0 0 10px clamp(80px,9.5vw,145px)!important;margin:0 auto}
+ .ui-home .home-brand .hero-blossom{position:absolute;left:0;top:0;width:clamp(150px,16vw,230px);height:auto;opacity:1;mask-image:none;mix-blend-mode:normal;z-index:-1}
+ .ui-home .home-brand .hero-logo{display:flex!important;position:relative;justify-content:center;align-items:center;padding-right:22px;min-width:0}
+ .ui-home .home-brand .hero-logo::after{content:'';position:absolute;right:0;top:21%;height:56%;width:1px;background:linear-gradient(transparent,var(--brand-gold-line) 18%,var(--brand-gold-line) 82%,transparent)}
+ .ui-home .home-brand .brand-mark-hero{display:flex;flex-direction:column;gap:1px;align-items:center;max-width:100%;width:auto}
+ .ui-home .home-brand .brand-mark-hero .brand-emblem{width:clamp(168px,14.3vw,215px);height:auto;mix-blend-mode:normal}
+ .ui-home .home-brand .brand-mark-hero .brand-name{font-family:var(--font-serif);font-weight:700;font-size:clamp(31px,3.45vw,50px);letter-spacing:-.075em;line-height:1.12;color:var(--brand-red)}
+ .ui-home .home-brand .brand-mark-hero .brand-subtitle{font-family:var(--font-serif);font-weight:700;font-style:italic;font-size:clamp(16px,1.6vw,23px);line-height:1.2;letter-spacing:0}
+ .ui-home .home-brand .brand-mark-hero .brand-ornament{max-width:180px;margin-top:5px}
+ .ui-home .home-brand .home2-intro{padding:0;min-width:0;position:relative;background:none}
+ .ui-home .home-brand h1#home2-title{font-family:var(--font-serif)!important;font-weight:700!important;font-size:clamp(29px,2.65vw,40px)!important;line-height:1.15!important;letter-spacing:-.045em!important;color:var(--brand-red)!important;margin:0 0 8px!important;max-width:none}
+ .ui-home .home-brand h1#home2-title em{display:block;color:var(--brand-navy);font-weight:700;font-style:italic;line-height:1.14}
+ .ui-home .home-brand .home2-intro>.brand-ornament{width:100%;max-width:none;margin:7px 0 11px}
+ .ui-home .home-brand .home2-lead{font-family:var(--font);font-weight:400;font-size:clamp(13px,1.05vw,15px);line-height:1.52;margin:0 0 19px;max-width:none;color:var(--brand-navy)}
+ .ui-home .home-brand .home2-actions{display:flex;flex-wrap:nowrap;gap:12px;align-items:stretch}
+ .ui-home .home-brand .home2-actions .ui-button{font-family:var(--font-serif);font-size:clamp(12px,1.06vw,15px);font-weight:700;line-height:1.3;min-height:45px;white-space:nowrap;position:relative;padding:8px 12px;gap:7px;border-width:1px;border-radius:9px;box-shadow:none;isolation:isolate}
+ .ui-home .home-brand .home2-actions .brand-primary{border-color:var(--brand-red);background:var(--brand-red);color:var(--white)}
+ .ui-home .home-brand .home2-actions .brand-secondary{border-color:var(--brand-gold);background:var(--brand-surface);color:var(--brand-red)}
+ .ui-home .home-brand .home2-actions .ui-button svg{flex:none;width:18px;height:18px}
+ .ui-home .home-brand .hero-art{display:flex;align-self:stretch;align-items:center;justify-content:flex-end;min-width:0;overflow:visible;margin:0!important;z-index:0}
+ .ui-home .home-brand .hero-art picture{display:flex;align-items:center;justify-content:flex-end;width:100%;height:100%}
+ .ui-home .home-brand .hero-art img{display:block;width:min(100%,390px)!important;max-width:390px!important;height:auto!important;aspect-ratio:390/353;max-height:none!important;object-fit:contain;object-position:center right;mix-blend-mode:normal;mask-image:linear-gradient(to right,transparent,black 5%),linear-gradient(to bottom,black 94%,transparent);mask-composite:intersect;filter:none}
+ /* True nine-slice vector border: corners do not stretch, horizontal/vertical rules remain crisp. */
+ .ui-home .home-brand .brand-frame{border:0!important;border-radius:12px;background-color:var(--brand-surface);box-shadow:0 2px 5px rgba(126,78,27,.08);isolation:isolate}
+ .ui-home .home-brand .brand-frame::before,.ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{content:'';position:absolute;inset:0;width:auto;height:auto;pointer-events:none;z-index:1;border:18px solid transparent;border-image: url('/brand/frame-pc.svg') 24 / 18px / 0 stretch;border-radius:0}
+ .ui-home .home-brand .brand-frame::after{display:none}
+ .ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{border-width:12px;border-image-width:12px}
+ .ui-home .home-brand .home2-actions .brand-primary::before,header.brand-header .header-cta::before{border-image-source:url('/brand/frame-light-pc.svg')}
+ .ui-home .home-brand .home-primary-grid{width:calc(100% - clamp(90px,10.2vw,150px))!important;max-width:1390px!important;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:0 auto 22px!important}
+ .ui-home .home-brand .home-primary-card{display:flex;align-items:center;min-height:clamp(101px,8vw,117px);padding:15px 17px;gap:12px;background-image:url('/brand/cloud-pc.svg');background-position:6px bottom;background-size:130px auto;background-repeat:no-repeat}
+ .ui-home .home-brand .home-primary-card>svg{width:38px;height:38px;flex:none;stroke-width:1.45}
+ .ui-home .home-brand .home-primary-card h2{font-family:var(--font-serif);font-size:clamp(18px,1.63vw,24px);font-weight:700;line-height:1.16;letter-spacing:-.035em;margin:0 0 5px;color:var(--brand-red)}
+ .ui-home .home-brand .home-primary-card p{font-size:clamp(11px,.93vw,14px);line-height:1.42;margin:0;color:var(--brand-navy)}
+ .ui-home .home-brand .home-primary-arrow{width:23px;height:23px;border-color:var(--brand-gold)}
+ .ui-home .home-brand .home-preview-grid{width:calc(100% - clamp(76px,8.4vw,124px))!important;max-width:1420px!important;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:22px;margin:0 auto 34px!important}
+ .ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{padding:16px 19px 18px;background-image:url('/brand/cloud-pc.svg');background-position:right bottom;background-size:170px auto;background-repeat:no-repeat}
+ .ui-home .home-brand .home-panel-head{gap:12px;padding:0 0 5px;margin:0 0 12px;border-bottom:1px solid var(--brand-gold-line)}
+ .ui-home .home-brand .home-panel-head h2{font-family:var(--font-serif);font-size:clamp(20px,1.65vw,25px);font-weight:700;line-height:1.2;gap:8px;margin:0;color:var(--brand-red)}
+ .ui-home .home-brand .home-panel-head>a{font-size:13px;min-height:35px;white-space:nowrap}
+ .ui-home .home-brand .home-chart-body{grid-template-columns:minmax(0,1.2fr) minmax(0,.95fr);gap:15px}
+ .ui-home .home-brand .home-chart .ui-chart-grid{position:relative;grid-template-rows:repeat(4,minmax(59px,1fr));gap:0;border:1px solid var(--brand-gold);border-radius:7px;background:var(--brand-cream);overflow:visible}
+ .ui-home .home-brand .home-chart .ui-chart-grid::before{content:'';position:absolute;inset:-1px;z-index:1;pointer-events:none;border:13px solid transparent;border-image:url('/brand/frame-pc.svg') 24/13px/0 stretch}
+ .ui-home .home-brand .home-chart .ui-chart-cell{border-color:var(--brand-gold-line);font-size:12px;padding:6px 3px}
+ .ui-home .home-brand .home-chart .ui-chart-cell .home-palace-name,.ui-home .home-brand .home-chart .ui-chart-cell strong{font-size:11px;line-height:1.35}
+ .ui-home .home-brand .home-chart .ui-chart-center{background:var(--brand-surface) url('/brand/seal-pc.svg') center/88% auto no-repeat;border-color:var(--brand-gold-line)}
+ .ui-home .home-brand .home-chart .home2-sample-title{font-size:22px;color:var(--brand-red)}
+ .ui-home .home-brand .home-chart .ui-chart-center .brand-ornament{display:none}
+ .ui-home .home-brand .home-chart-facts h3,.ui-home .home-brand .brand-calendar-facts h3{font-family:var(--font-serif);font-size:15px;font-weight:700;line-height:1.3;color:var(--brand-red);margin:0 0 7px}
+ .ui-home .home-brand .home-chart-facts dl{font-size:12px;gap:7px 10px;line-height:1.5}
+ .ui-home .home-brand .home-chart-facts dd,.ui-home .home-brand .brand-calendar-facts dd{border-bottom:1px solid var(--line)}
+ .ui-home .home-brand .home-chart-note,.ui-home .home-brand .brand-calendar-note{font-size:11px;line-height:1.45;margin-top:9px}
+ .ui-home .home-brand .home-calendar-body{grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);gap:15px}
+ .ui-home .home-brand .brand-date{position:relative;border:0;border-radius:8px;background:var(--brand-cream) url('/brand/cloud-pc.svg') center bottom/100% auto no-repeat;isolation:isolate;min-height:239px}
+ .ui-home .home-brand .brand-date::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border:14px solid transparent;border-image:url('/brand/frame-pc.svg') 24/14px/0 stretch}
+ .ui-home .home-brand .brand-date-week{background:var(--brand-red);font-size:20px;padding:7px 5px;color:var(--white);border-radius:6px 6px 0 0}
+ .ui-home .home-brand .brand-date-number{font-family:var(--font-serif);font-size:clamp(75px,6.6vw,102px);line-height:1.02;letter-spacing:-.045em;padding:6px 0 0;color:var(--brand-red)}
+ .ui-home .home-brand .brand-date p{font-size:14px;margin:3px 0 9px}
+ .ui-home .home-brand .brand-date-lunar{border-color:var(--brand-gold-line);margin:0 13px;padding:8px 0 15px;font-size:16px}
+ .ui-home .home-brand .brand-calendar-facts dl{font-size:12px;gap:6px 9px}
+ .ui-home .home-brand .brand-calendar-facts>div{margin-top:9px;padding-top:8px}
+ .ui-home .home-brand .brand-calendar-facts>div p{font-size:12px;line-height:1.45}
+ .ui-home .home-brand .home2-modules,.ui-home .home-brand .home2-tools{padding-inline:0}
+}
+@media screen and (min-width:1100px) and (max-width:1199px){
+ header.brand-header.ui-header .header-inner{width:calc(100% - 40px)!important;gap:10px;grid-template-columns:218px minmax(0,1fr) max-content}
+ header.brand-header .desktop-links{gap:5px;padding-inline:8px}
+ header.brand-header .desktop-links>a,header.brand-header .brand-tools-toggle{gap:3px;font-size:12px}
+ header.brand-header .desktop-links>a>svg,header.brand-header .brand-tools-toggle>svg{width:15px;height:15px}
+ header.brand-header .header-cta.brand-primary{padding-inline:9px!important}
+ .ui-home .home-brand .home2-hero-grid{padding-left:74px!important;gap:16px}
+ .ui-home .home-brand .home2-actions{gap:8px}
+ .ui-home .home-brand .home2-actions .ui-button{padding-inline:8px}
+ .ui-home .home-brand .home-primary-card{padding:14px 12px;gap:9px}
+ .ui-home .home-brand .home-primary-card>svg{width:32px;height:32px}
+ .ui-home .home-brand .home-primary-arrow{width:20px;height:20px}
+}
