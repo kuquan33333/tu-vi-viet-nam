@@ -14,7 +14,7 @@
 .chart3-birth-form .calendar-term-help{font-size:14px}
 .chart3-birth-form .chart3-submit{font:600 16px/1.4 var(--font)!important;letter-spacing:0!important;border-radius:var(--radius-control)!important;min-height:var(--control-height)}
 .chart3-hint{font-size:14px;color:var(--muted);margin:6px 0}
-.chart3-foreign{color:var(--accent);font-size:14px;font-weight:600;text-align:left;text-decoration:underline;background:transparent;border:0;padding:8px 0}
+.chart3-foreign{color:var(--accent);font-size:14px;font-weight:600;text-align:left;text-decoration:none;background:transparent;border:0;padding:8px 0}
 .chart3-preview ol{font-family:var(--font-serif);font-size:18px;font-weight:700;line-height:2;padding-left:24px;list-style:decimal;margin:16px 0 24px}
 .chart3-preview .ui-chart-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,64px);gap:6px}
 .chart3-preview .ui-chart-cell{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-control)}

@@ -20,7 +20,7 @@ html,body{background-color:var(--brand-paper);background-image:url('/brand/paper
 .brand-header .desktop-links>a.is-active,.brand-header .brand-tools-toggle.is-active{color:var(--brand-red);border-bottom-color:var(--brand-red)}
 .brand-header .desktop-links svg,.brand-header .header-cta svg{flex:none}
 .brand-header .brand-tools-toggle{border-top:0;border-inline:0;background:transparent;cursor:pointer}
-.brand-header .brand-tools-toggle:hover{color:var(--brand-red);text-decoration:underline}
+.brand-header .brand-tools-toggle:hover{color:var(--brand-red);text-decoration:none}
 .brand-chevron{display:flex;transform:rotate(90deg)}
 .brand-tools-menu{position:relative}
 .brand-tools-dropdown{position:absolute;right:0;top:100%;width:212px;padding:8px;background:var(--brand-surface);border:1px solid var(--brand-gold-line);border-radius:8px;box-shadow:0 8px 24px color-mix(in srgb,var(--brand-navy) 15%,transparent)}

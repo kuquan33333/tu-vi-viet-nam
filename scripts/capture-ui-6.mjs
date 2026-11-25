@@ -142,6 +142,21 @@ try{
     }
     await page.evaluate(()=>window.scrollTo(0,0));
    }
+   // Text underlines are removed globally, but active navigation markers and focus remain.
+   const underlines=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).filter(e=>e instanceof HTMLElement&&e.getClientRects().length>0&&getComputedStyle(e).visibility==='visible'&&getComputedStyle(e).textDecorationLine.includes('underline')).map(e=>({tag:e.tagName,cls:String(e.className),text:e.textContent?.trim().slice(0,70)})));
+   assert.deepEqual(underlines,[],'unexpected visible text underline '+route);
+   if(route==='/'&&mode!=='all'){
+    if(width>=1100){
+     const active=page.locator('.desktop-links a[aria-current=page]');
+     assert.equal(await active.count(),1);
+     assert.ok(await active.evaluate(e=>parseFloat(getComputedStyle(e).borderBottomWidth)>=2&&getComputedStyle(e).borderBottomStyle==='solid'&&getComputedStyle(e).borderBottomColor!=='rgba(0, 0, 0, 0)'),'desktop active indicator retained');
+     await active.focus();assert.ok(await active.evaluate(e=>getComputedStyle(e).outlineStyle!=='none'&&!getComputedStyle(e).textDecorationLine.includes('underline')),'focus without underline');
+    }else if(width<640){
+     const active=page.locator('.ui-bottom-nav a[aria-current=page]');
+     assert.equal(await active.count(),1);
+     assert.ok(await active.evaluate(e=>{const s=getComputedStyle(e,'::before');return s.content!=='none'&&parseFloat(s.height)>=2}),'mobile active bar retained');
+    }
+   }
    await page.mouse.move(0,0);
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});

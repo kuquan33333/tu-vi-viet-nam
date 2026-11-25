@@ -31,7 +31,7 @@
 .home-primary-card p{font-size:13px;line-height:1.45;margin:0}
 .home-primary-arrow{display:grid;place-items:center;width:24px;height:24px;flex:none;border:1px solid var(--brand-gold);border-radius:50%;color:var(--brand-gold)}
 .home-primary-card:hover,.home2-module:hover,.home2-tool:hover{border-color:var(--brand-red);text-decoration:none;background-color:var(--brand-cream)}
-.home-primary-card:hover h2,.home2-module:hover h3,.home2-tool:hover strong{text-decoration:underline;text-underline-offset:3px}
+.home-primary-card:hover h2,.home2-module:hover h3,.home2-tool:hover strong{text-decoration:none}
 .home-preview-grid{display:grid;grid-template-columns:minmax(0,1.06fr) minmax(0,1fr);gap:22px;margin-bottom:36px}
 .home-chart,.home-calendar{padding:18px;background:var(--brand-surface) url('/brand/landscape.svg') center bottom/100% auto no-repeat}
 .home-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 0 8px;margin-bottom:12px;border-bottom:1px solid var(--brand-gold-line)}
