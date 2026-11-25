@@ -1,9 +1,12 @@
 'use client';
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useRef} from 'react';
 import Link from 'next/link';
 import BirthForm,{type BirthFormState} from '@/components/BirthForm';
 import dynamic from 'next/dynamic';
 import Icon from '@/components/Icon';
+import ChartGrid from '@/components/ui/ChartGrid';
+import './chart-ui.css';
+const ShareCard=dynamic(()=>import('@/components/ShareCardCanvas'));
 const ChartBoard=dynamic(()=>import('@/components/ChartBoard'),{loading:()=> <p role="status">Đang tải bàn lá số…</p>});
 import type {TimeView} from '@/components/TimeNav';
 const TimeNav=dynamic(()=>import('@/components/TimeNav'));
@@ -22,6 +25,32 @@ export default function ChartPage(){
  const [view,setView]=useState<TimeView>('mingpan');
  const [year,setYear]=useState(new Date().getFullYear());
  const [feedback,setFeedback]=useState('');
+ const [boardMode,setBoardMode]=useState(false);
+ const [detailOpen,setDetailOpen]=useState(false);
+ const detailClose=useRef<HTMLButtonElement>(null);
+ const trigger=useRef<HTMLElement|null>(null);
+ const shareDialog=useRef<HTMLDialogElement>(null);
+ const [shareOpen,setShareOpen]=useState(false);
+ const [sharing,setSharing]=useState(false);
+ const [shareError,setShareError]=useState('');
+ function showDetail(p:Palace,s:Star|null=null){
+  trigger.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
+  setPalace(p);setStar(s);setDetailOpen(true);
+  requestAnimationFrame(()=>detailClose.current?.focus());
+ }
+ function closeDetail(){setDetailOpen(false);setStar(null);requestAnimationFrame(()=>trigger.current?.focus());}
+ useEffect(()=>{
+  if(!detailOpen)return;
+  const key=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!shareDialog.current?.open){setDetailOpen(false);setStar(null);requestAnimationFrame(()=>trigger.current?.focus());}};
+  window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);
+ },[detailOpen]);
+ useEffect(()=>{if(shareOpen&&!shareDialog.current?.open)shareDialog.current?.showModal();},[shareOpen]);
+ async function downloadImage(){
+  setSharing(true);setShareError('');
+  try{const {captureShareCard,downloadDataURL}=await import('@/components/ShareCardCanvas');await document.fonts.ready;const png=await captureShareCard();if(!png)throw new Error('image');downloadDataURL(png,'La-so-tu-vi.png');}
+  catch{setShareError('Chưa tạo được ảnh. Vui lòng thử lại hoặc dùng In / PDF A4.');}
+  finally{setSharing(false);}
+ }
  useEffect(()=>{
   const queued=takeQueuedProfile();if(!queued)return;
   void import('@/lib/ziwei/algorithm').then(({generateChart})=>{const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);}).catch(()=>setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.'));
@@ -51,14 +80,22 @@ export default function ChartPage(){
  }
  const shown=chart?(palace||chart.palaces.find(p=>p.branch===chart.mingGongBranch)||null):null;
  const study=chart&&shown?getStudyReading(chart,shown):null;
- return <main className="site-wrap page-content" style={{minHeight:'70dvh'}}>
-  {!chart?<div style={{maxWidth:790,margin:'0 auto'}}>
+ return <main className="site-wrap page-content chart3" style={{minHeight:'70dvh'}}>
+  {!chart?<div className="chart3-form-view">
    <div className="tool-hero">
-    <div className="eyebrow">TỬ VI ĐẨU SỐ · BÀN MỆNH</div>
+    
     <h1 className="display-small">Lập lá số Tử Vi</h1>
-    <p className="lead" style={{maxWidth:680}}>Nhập ngày giờ sinh và nơi sinh để lập bàn 12 cung. Phần tính toán thực hiện trên thiết bị; không cần tài khoản.</p>
+    <p className="lead" style={{maxWidth:680}}>Nhập ngày giờ sinh. Dữ liệu chỉ xử lý trên thiết bị của bạn; không cần tài khoản. Mục có dấu * là bắt buộc.</p>
    </div>
-   <div className="workspace-surface"><BirthForm onSubmit={onGenerated} onUnknownTime={onUncertain}/></div>
+   <div className="chart3-form-grid">
+    <BirthForm chartLayout onSubmit={onGenerated} onUnknownTime={onUncertain}/>
+    <aside className="ui-card ui-card-large chart3-preview">
+      <p className="ui-eyebrow">Bạn sẽ nhận được</p>
+      <ol><li>12 cung và 14 chính tinh</li><li>Tứ Hóa, đại hạn, lưu niên</li><li>Giải nghĩa từng sao</li><li>Lưu hồ sơ, in khổ A4</li></ol>
+      <ChartGrid empty center={null}/>
+      <p className="chart3-hint">Lá số sẽ hiện ở đây sau khi bạn lập.</p>
+    </aside>
+   </div>
    {options.length>0&&<section className="workspace-surface" style={{marginTop:20,padding:16}}><h2>12 phương án chưa xác định</h2><p role="alert" className="study-notice">Giả định ngày an sao không đổi, lần lượt xét 12 chi giờ. Mệnh, Thân, Cục và đại hạn chỉ là khả năng; gần nửa đêm còn có thể đổi ngày. Không lưu phương án nào thành hồ sơ.</p><div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(145px,1fr))',gap:8}}>{options.map(c=><div key={c.birthInfo.hour} className="surface-card" style={{padding:10}}><strong>Giờ {BRANCHES[c.birthInfo.hour]}</strong><p>Mệnh: {BRANCHES[c.mingGongBranch]} · Thân: {BRANCHES[c.shenGongBranch]}</p><p>{c.wuxingJuName}</p><small>{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=>s.name).join(', ')||'Vô chính diệu'}</small></div>)}</div><button className="action-outline" onClick={()=>setOptions([])}>Đóng phương án</button></section>}
    {feedback&&<p role="status" className="study-notice">{feedback}</p>}
    <div className="home-note" style={{marginTop:23}}>Lưu ý: thông tin trong lá số là cách diễn giải văn hóa truyền thống, không phải khẳng định chính xác về tính cách, tương lai, sức khỏe hay tài chính. Bạn có thể lưu hồ sơ cục bộ sau khi lập xong.</div>
@@ -70,9 +107,10 @@ export default function ChartPage(){
     </div>
     <div className="site-actions" style={{display:'flex',flexWrap:'wrap',gap:7}}>
      <button className="action-outline" onClick={save}><Icon name="save"/> Lưu lá số</button>
+     <button className="action-outline" onClick={()=>{setShareError('');setShareOpen(true);}}><Icon name="external"/> Chia sẻ ảnh</button>
      <button className="action-outline" onClick={copy}><Icon name="copy"/> Sao chép</button>
      <button className="action-outline" onClick={()=>window.print()}><Icon name="print"/> In / PDF A4</button>
-     <button className="action-primary" onClick={()=>{setChart(null);setPalace(null);setStar(null);}}><Icon name="reset"/> Lập lại</button>
+     <button className="action-primary" onClick={()=>{setChart(null);setPalace(null);setStar(null);setBoardMode(false);setDetailOpen(false);}}><Icon name="reset"/> Lập lại</button>
     </div>
    </div>
    {feedback&&<p role="status" className="study-notice" style={{marginBottom:14}}>{feedback}</p>}
@@ -84,12 +122,14 @@ export default function ChartPage(){
    <div className="workspace-layout">
     <section className="workspace-surface chart-print" aria-label="Bàn lá số 12 cung">
      <div className="workspace-toolbar"><span className="eyebrow">LÁ SỐ TRỰC QUAN</span><span className="workspace-note">Chọn cung hoặc sao để xem chi tiết.</span></div>
-     <div className="chart-scroll"><ChartBoard chart={chart} view={view} liunianYear={year}
-      onPalaceSelect={p=>{setPalace(p);setStar(null);}} onStarSelect={(s,p)=>{setStar(s);setPalace(p);}}
-      onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){setPalace(p);setStar(p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+name+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
-     <div className="mobile-palaces" aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>{setPalace(p);setStar(null);}}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>{setPalace(p);setStar(s);}}>{s.name}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
+     <button className="action-outline chart3-board-toggle" aria-pressed={boardMode} onClick={()=>setBoardMode(v=>!v)}>{boardMode?"Xem danh sách":"Xem dạng bàn"}</button>
+     <div className={"chart-scroll"+(boardMode?" chart3-board-visible":"")}><ChartBoard chart={chart} view={view} liunianYear={year}
+      onPalaceSelect={p=>showDetail(p)} onStarSelect={(s,p)=>showDetail(p,s)}
+      onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){showDetail(p,p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+name+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
+     <div className={"mobile-palaces"+(boardMode?" chart3-list-hidden":"")} aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>showDetail(p)}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>showDetail(p,s)} className={s.type==='major'?'chart3-major':'chart3-minor'}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
     </section>
-    <aside className="workspace-surface workspace-aside reading-panel" aria-label="Chi tiết cung và sao">
+    <aside className={"workspace-surface workspace-aside reading-panel chart3-detail"+(detailOpen?" is-open":"")} aria-label="Chi tiết cung và sao">
+     <button ref={detailClose} type="button" className="action-outline chart3-close" onClick={closeDetail}><Icon name="close"/> Đóng chi tiết</button>
      <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?star.name:(shown?.name||'Tổng quan')}</h2></div></div>
      {star?<>
       <div className="reading-pills"><span>{star.type==='major'?'Chính tinh':'Phụ tinh'}</span>{star.brightnessRaw&&<span>{star.brightnessRaw}</span>}{star.siHua&&<span>Hóa {star.siHua}</span>}</div>
@@ -118,6 +158,7 @@ export default function ChartPage(){
      <Link href="/library" className="section-link">Tra cứu cổ thư liên quan <Icon name="arrow" size={16}/></Link>
     </aside>
    </div>
+   {shareOpen&&<dialog ref={shareDialog} className="chart3-share" aria-labelledby="chart3-share-title" onClose={()=>setShareOpen(false)}><h2 id="chart3-share-title">Chia sẻ ảnh lá số</h2><p>Ảnh chứa thông tin ngày giờ sinh; chỉ chia sẻ nếu bạn muốn. Ảnh được tạo trên thiết bị.</p><div className="chart3-share-scroll"><ShareCard chart={chart} birth={{year:String(chart.birthInfo.origInput?.year??chart.birthInfo.year),month:String(chart.birthInfo.origInput?.month??chart.birthInfo.month),day:String(chart.birthInfo.origInput?.day??chart.birthInfo.day),hour:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour):"--",minute:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockMinute):"--",gender:chart.birthInfo.gender,city:chart.birthInfo.city}}/></div>{shareError&&<p role="alert">{shareError}</p>}<div className="chart3-share-actions"><button className="action-primary" onClick={downloadImage} disabled={sharing}>{sharing?"Đang tạo ảnh…":"Tải ảnh PNG"}</button><button className="action-outline" onClick={()=>shareDialog.current?.close()}>Đóng</button></div></dialog>}
    <div className="home-note"><strong style={{color:'var(--tx-0)'}}>Quyền riêng tư:</strong> Lá số không được tự động tải lên máy chủ. Khi bạn chọn “Lưu lá số”, dữ liệu sinh được lưu trong bộ nhớ trình duyệt hiện tại và có thể xóa tại mục <Link href="/ho-so">Hồ sơ</Link>.</div>
   </>}
  </main>;

@@ -1,0 +1,62 @@
+/* UI-3: presentation only; use UI-1 tokens. */
+.chart3{padding-bottom:var(--section-gap);min-width:0}
+.chart3 .tool-hero{margin:0 0 32px;padding:0}
+.chart3 .tool-hero h1{margin:8px 0;font-size:var(--heading-page)}
+.chart3 .tool-hero .lead{font-size:var(--body-size);color:var(--muted)}
+.chart3-form-grid{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr);gap:32px;align-items:start}
+.chart3 .chart3-birth-form{min-width:0;display:flex;flex-direction:column;gap:12px;padding:var(--panel-padding)!important;border-radius:var(--radius-card)!important}
+.chart3-birth-form>div{min-width:0}
+.chart3-birth-form label{font-size:14px!important;font-weight:600;color:var(--ink)!important;letter-spacing:0!important}
+.chart3-birth-form input,.chart3-birth-form select{min-width:0;font:inherit}
+.chart3-birth-form button{min-height:44px}
+.chart3-birth-form [aria-invalid=true]{border:2px solid var(--accent)!important}
+.chart3-birth-form .field-error{color:var(--accent);font-size:14px;margin:6px 0}
+.chart3-birth-form .calendar-term-help{font-size:14px}
+.chart3-birth-form .chart3-submit{font:600 16px/1.4 var(--font)!important;letter-spacing:0!important;border-radius:var(--radius-control)!important;min-height:var(--control-height)}
+.chart3-hint{font-size:14px;color:var(--muted);margin:6px 0}
+.chart3-foreign{color:var(--accent);font-size:14px;font-weight:600;text-align:left;text-decoration:underline;background:transparent;border:0;padding:8px 0}
+.chart3-preview ol{font-family:var(--font-serif);font-size:18px;font-weight:700;line-height:2;padding-left:24px;list-style:decimal;margin:16px 0 24px}
+.chart3-preview .ui-chart-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,64px);gap:6px}
+.chart3-preview .ui-chart-cell{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius-control)}
+.chart3-preview .ui-chart-center{grid-row:2/4;grid-column:2/4;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-control)}
+.chart3-preview .chart3-hint{text-align:center;margin-top:12px}
+.chart3 .workspace-surface{border-radius:var(--radius-card)}
+.chart3 .workspace-layout{grid-template-columns:minmax(0,1fr) minmax(280px,32%);gap:20px}
+.chart3 .chart-scroll> *{min-width:640px}
+.chart3 .chart3-grid{border-radius:var(--radius-control);grid-auto-flow:row}
+.chart3 .chart3-palace{padding:8px;min-width:0;overflow-wrap:anywhere}
+.chart3-palace>div{min-width:0;flex-wrap:wrap}
+.chart3 .chart3-major-name,.chart3 .chart3-major{font-family:var(--font-serif);font-weight:700;font-size:14px;color:var(--ink)}
+.chart3 .chart3-brightness,.chart3 .chart3-minor-name,.chart3 .chart3-other-stars,.chart3 .chart3-minor{font-size:12px;color:var(--muted)}
+.chart3-minor-name button,.chart3-other-stars button{font:inherit;color:var(--muted);min-height:44px;text-align:left}
+.chart3 .chart3-hua{font-size:11px;max-width:100%;white-space:normal}
+.chart3-center{font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+.chart3-board-toggle{display:none}
+.chart3-close{margin-bottom:12px}
+.chart3-share{max-width:min(760px,calc(100% - 32px));width:100%;max-height:90dvh;overflow:auto;padding:24px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:var(--radius-card);margin:auto}
+.chart3-share::backdrop{background:var(--overlay)}
+.chart3-share-scroll{overflow:auto;margin:16px 0}
+.chart3-share-scroll>div{min-width:680px}
+.chart3-share-actions{display:flex;flex-wrap:wrap;gap:12px}
+@media(max-width:1023px){.chart3-form-grid,.chart3 .workspace-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:639px){
+ .chart3 .tool-hero h1{font-size:var(--heading-mobile)}
+ .chart3 .chart3-birth-form{padding:16px!important}
+ .chart3-preview.ui-card{padding:24px}
+ .chart3-location-grid{grid-template-columns:1fr!important}
+ .chart3 .chart3-board-toggle{display:flex;width:100%;margin-bottom:12px}
+ .chart3 .chart-scroll{display:none}
+ .chart3 .chart-scroll.chart3-board-visible{display:block}
+ .chart3 .mobile-palaces.chart3-list-hidden{display:none}
+ .chart3 .chart3-detail{display:none}
+ .chart3 .chart3-detail.is-open{display:block;position:fixed;z-index:100;inset:auto 0 calc(64px + env(safe-area-inset-bottom)) 0;max-height:65dvh;overflow:auto;border:1px solid var(--field);border-radius:var(--radius-card) var(--radius-card) 0 0;padding:20px!important;background:var(--card)}
+ .chart3 .site-actions>button{width:100%}
+}
+@media print{
+ .chart3 .chart3-board-toggle,.chart3 .chart3-detail,.chart3 .chart3-share{display:none!important}
+ .chart3 .chart3-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+ .chart3 .chart-scroll{display:block!important;overflow:visible!important}
+ .chart3 .chart-scroll>*{min-width:0!important}
+ .chart3 .chart3-palace button{min-height:0!important}
+ .chart3 .chart3-palace{padding:4px}
+}

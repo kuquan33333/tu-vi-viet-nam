@@ -44,15 +44,15 @@ const SiHuaBadge = ({
   return (
     <span
       className={clsx(
-        'inline-flex items-center text-[8px] px-1 rounded-full border leading-none py-px font-bold ml-1 flex-shrink-0',
+        'inline-flex items-center px-1 rounded border font-medium ml-1 chart3-hua',
         SIHUA_STYLES[siHua],
         overlay && 'border-dashed opacity-80',
         onClick && 'cursor-pointer hover:opacity-100',
       )}
       onClick={onClick}
     >
-      {overlay && label && <span className="mr-px opacity-70">{label}</span>}
-      {siHua}
+      {overlay && label && <span className="mr-px">{label==='年'?'Năm':label==='限'?'Hạn':label}</span>}
+      {({'禄':'Lộc','权':'Quyền','科':'Khoa','忌':'Kỵ'} as Record<string,string>)[siHua]||siHua}
     </span>
   );
 };
@@ -67,6 +67,7 @@ export default function PalaceCell({
   const majorStars = stars.filter(s => s.type === 'major');
   const luckyStars = stars.filter(s => s.type === 'lucky');
   const shaStars = stars.filter(s => s.type === 'sha');
+  const otherStars=stars.filter(s=>!['major','lucky','sha'].includes(s.type));
 
   return (
     <motion.div
@@ -75,7 +76,7 @@ export default function PalaceCell({
       transition={{ duration: 0.35, delay, ease: 'easeOut' }}
       onClick={onClick}
       tabIndex={0} role="group" aria-label={'Cung '+name} onKeyDown={e=>{if(e.target===e.currentTarget&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onClick?.();}}}
-      className="relative flex flex-col p-1.5 cursor-pointer transition-all duration-200 h-full"
+      className="relative flex flex-col p-1.5 cursor-pointer transition-all duration-200 h-full chart3-palace"
       style={{
         minHeight: '90px',
         background: isCurrentDaXian
@@ -143,13 +144,13 @@ export default function PalaceCell({
               onClick={e => { e.stopPropagation(); onStarClick?.(star); }}
             >
               <span className={clsx(
-                'text-[13px] leading-tight font-bold tracking-tight cursor-pointer hover:brightness-125 transition-all',
+                'text-[13px] leading-tight font-bold tracking-tight cursor-pointer chart3-major-name',
                 star.brightness === 'bright' ? 'text-accent' : star.brightness === 'dim' ? 'text-accent' : 'text-accent',
               )}>
                 {star.name}
               </span>
               {star.brightnessRaw && (
-                <span className="text-[8px] text-accent ml-0.5 font-normal">
+                <span className="chart3-brightness">
                   [{star.brightnessRaw}]
                 </span>
               )}
@@ -176,8 +177,7 @@ export default function PalaceCell({
           {luckyStars.map(s => {
             const overlaySiHua = overlayStarSiHua?.[s.name];
             return (
-              <span key={s.name} className="inline-flex items-center text-[9px] text-quan leading-tight">
-                {s.name}
+              <span key={s.name} className="inline-flex items-center text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>
                 {s.siHua && <SiHuaBadge siHua={s.siHua} />}
                 {overlaySiHua && (
                   <SiHuaBadge
@@ -200,13 +200,13 @@ export default function PalaceCell({
       {shaStars.length > 0 && (
         <div className="flex flex-wrap gap-x-1">
           {shaStars.map(s => (
-            <span key={s.name} className="text-[9px] text-ji leading-tight">
-              {s.name}{s.siHua && <SiHuaBadge siHua={s.siHua} />}
+            <span key={s.name} className="text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua && <SiHuaBadge siHua={s.siHua} />}
             </span>
           ))}
         </div>
       )}
 
+      {otherStars.length>0&&<div className="chart3-other-stars">{otherStars.map((s,i)=><span key={s.name+i}><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua&&<SiHuaBadge siHua={s.siHua}/>}</span>)}</div>}
     </motion.div>
   );
 }

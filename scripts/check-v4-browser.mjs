@@ -69,7 +69,7 @@ try{
     }
    }
   }
-  await open('/chart');await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
+  await open('/chart');await page.getByRole('button',{name:'Nam',exact:true}).click();await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
   await page.getByLabel('Ngày sinh dương lịch').selectOption('6');await page.getByLabel('Tháng sinh dương lịch').selectOption('5');await page.getByLabel('Năm sinh',{exact:true}).fill('1990');
   await page.getByLabel('Tỉnh hoặc thành phố nơi sinh').selectOption('Tỉnh Gia Lai');await page.getByLabel('Quận huyện hoặc khu vực nơi sinh').selectOption('TP. Pleiku');await page.getByLabel('Giờ và phút sinh').fill('08:00');
   await page.getByRole('button',{name:/LẬP LÁ SỐ TỬ VI/}).click();await page.getByLabel('Bàn lá số 12 cung').waitFor();await noOverflow();
