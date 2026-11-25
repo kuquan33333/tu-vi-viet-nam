@@ -38,7 +38,7 @@ try{
     await page.locator('select').first().selectOption('9');await page.getByRole('button',{name:'Lập từ 6 hào nhập tay'}).click();
     assert.equal(await page.getByRole('heading',{name:'Quẻ chủ',exact:true}).count(),1);assert.equal(await page.getByRole('heading',{name:'Quẻ biến',exact:true}).count(),1);
     assert.equal(await page.locator('svg.ui5-hexagram').first().locator('[data-line]').count(),6);assert.match(await page.locator('svg.ui5-hexagram').first().getAttribute('aria-label'),/hào động 1/);
-    const readingLink=page.locator('a[href*="#hao-"]').first();assert.match(await readingLink.evaluate(e=>getComputedStyle(e).textDecorationLine),/underline/);
+    const readingLink=page.locator('a[href*="#hao-"]').first();assert.ok(await readingLink.evaluate(e=>!getComputedStyle(e).textDecorationLine.includes('underline')&&Number(getComputedStyle(e).fontWeight)>=700),'inline reading link distinguished by weight without underline');
     await page.locator('#dich-search').fill('29');assert.equal(await page.locator('.ui5-dictionary-search .study-point-list button').count(),1);
    }
    if(route==='/dia-ky'){await page.locator('#degree-number').fill('90');assert.match(await page.locator('.ui5-direction-pair').innerText(),/90\.0°[\s\S]*270\.0°/);}

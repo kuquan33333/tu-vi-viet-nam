@@ -28,10 +28,10 @@ test('D3/D4: menu đầy đủ, header theo UI-BRIEF và không đánh dấu lin
  for(const path of ['/cong-cu','/hop-ban','/ho-so','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/library'])assert.ok(header.includes(path),path);
  assert.doesNotMatch(header+bottom+chrome,/↗/);
  assert.ok(header.includes('desktopLinks.map')&&header.includes('allLinks.map'));
- const expected=['/chart','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/library'];
+ const expected=['/','/chart','/lich-van-nien','/hop-ban','/library'];
  const list=header.match(/export const desktopLinks=\[([^\n]+)\];/)?.[1]||'';
  assert.deepEqual([...list.matchAll(/href:'([^']+)'/g)].map(m=>m[1]),expected);
- assert.match(bottom,/href:'\/lich-van-nien',label:'Lịch'/);
+ assert.ok(header.includes('toolLinks.map')&&header.includes('desktop-tools-menu'));assert.match(bottom,/href:'\/lich-van-nien',label:'Lịch'/);
  assert.match(chrome,/<Header path=/);assert.ok(chrome.includes('<Footer/>'));
  assert.match(header,/Escape/);assert.match(header,/menu\.current\?\.focus/);
 });

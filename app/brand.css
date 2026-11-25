@@ -1,0 +1,70 @@
+/* Approved Tử Vi Việt Nam brand, layered over the tested UI-1–6 system. */
+:root{--header-height:82px}
+html,body{background-color:var(--brand-paper);background-image:url('/brand/paper.svg');color:var(--brand-navy)}
+.brand-mark{display:inline-flex;align-items:center;gap:10px;min-width:0;white-space:nowrap;line-height:1}
+.brand-emblem{display:block;flex:none;width:66px;height:auto;object-fit:contain;mix-blend-mode:multiply}
+.brand-type{display:flex;flex-direction:column;align-items:center;min-width:0;gap:3px}
+.brand-name{font:700 24px/1.16 var(--font-serif);letter-spacing:-.055em;color:var(--brand-red)}
+.brand-subtitle{font:italic 600 13px/1.2 var(--font-serif);letter-spacing:.015em;color:var(--brand-navy)}
+.brand-ornament{display:flex;align-items:center;justify-content:center;gap:8px;color:var(--brand-gold);width:100%;max-width:210px}
+.brand-ornament>span{height:1px;background:currentColor;flex:1;opacity:.8}
+.brand-ornament svg{width:24px;height:14px;flex:none}
+.brand-type .brand-ornament{max-width:116px;gap:5px}
+.brand-type .brand-ornament svg{width:17px;height:10px}
+.brand-header.ui-header.global-header{background:var(--brand-surface) url('/brand/paper.svg');border-bottom:1px solid var(--brand-gold-line);box-shadow:0 2px 8px color-mix(in srgb,var(--brand-gold) 12%,transparent)}
+.brand-header .header-inner{width:calc(100% - 48px);max-width:1380px;gap:16px}
+.brand-header .brand-wordmark{min-width:0;gap:0;text-decoration:none}
+.brand-header .brand-wordmark:hover{text-decoration:none}
+.brand-header .desktop-links{gap:clamp(5px,1vw,18px);justify-content:space-between;min-width:0;border-inline:1px solid var(--brand-gold-line);padding-inline:clamp(8px,1.2vw,20px)}
+.brand-header .desktop-links>a,.brand-header .brand-tools-toggle{font:600 clamp(12px,1.1vw,15px)/1.2 var(--font-serif);gap:6px;min-height:48px;padding:8px 0;border-radius:0;border-bottom:2px solid transparent;color:var(--brand-navy);white-space:nowrap;display:inline-flex;align-items:center}
+.brand-header .desktop-links>a.is-active,.brand-header .brand-tools-toggle.is-active{color:var(--brand-red);border-bottom-color:var(--brand-red)}
+.brand-header .desktop-links svg,.brand-header .header-cta svg{flex:none}
+.brand-header .brand-tools-toggle{border-top:0;border-inline:0;background:transparent;cursor:pointer}
+.brand-header .brand-tools-toggle:hover{color:var(--brand-red);text-decoration:none}
+.brand-chevron{display:flex;transform:rotate(90deg)}
+.brand-tools-menu{position:relative}
+.brand-tools-dropdown{position:absolute;right:0;top:100%;width:212px;padding:8px;background:var(--brand-surface);border:1px solid var(--brand-gold-line);border-radius:8px;box-shadow:0 8px 24px color-mix(in srgb,var(--brand-navy) 15%,transparent)}
+.brand-tools-dropdown[hidden]{display:none!important}
+.brand-header .brand-tools-dropdown a{display:flex;white-space:normal;padding:8px 12px;border-bottom:0;min-height:44px;font:500 14px/1.4 var(--font)}
+.brand-header .header-utilities{gap:0}
+.brand-primary,.brand-header .header-cta.brand-primary{color:var(--white);background:var(--brand-red);border:3px double var(--brand-cream);border-radius:9px;box-shadow:0 0 0 1px var(--brand-red);font-family:var(--font-serif);font-weight:700;white-space:nowrap}
+.brand-header .header-cta.brand-primary{padding:0 12px;gap:6px;min-height:42px;font-size:14px}
+.brand-primary:hover,.brand-header .header-cta.brand-primary:hover{background:var(--brand-navy);color:var(--white);border-color:var(--brand-cream)}
+.brand-secondary{background:var(--brand-surface);color:var(--brand-navy);border:3px double var(--brand-gold-line);border-radius:9px;font-family:var(--font-serif);font-weight:700}
+.brand-secondary svg{color:var(--brand-gold)}
+.brand-header .mobile-menu-button{color:var(--brand-red)}
+.brand-header .mobile-site-menu{background:var(--brand-surface) url('/brand/paper.svg')}
+.ui-footer.global-footer{background:var(--brand-paper) url('/brand/paper.svg');border-color:var(--brand-gold-line)}
+.brand-footer-mark{display:inline-flex;align-items:center;min-height:44px;margin:0 0 12px;text-decoration:none}
+.brand-footer-mark .brand-emblem{width:52px}
+.brand-footer-mark .brand-name{font-size:20px}
+.brand-footer-mark .brand-subtitle{font-size:11px}
+.ui-bottom-nav.bottom-nav{background:var(--brand-surface);border-color:var(--brand-gold-line)}
+.ui-subpage{background:transparent}
+.ui-subpage h1{color:var(--brand-red)}
+.ui-subpage .ui-card,.ui-subpage .surface-card,.ui-subpage .study-card,.ui-subpage .workspace-surface{border-color:var(--brand-gold-line)}
+.brand-frame{position:relative;isolation:isolate;background:var(--brand-surface);border:3px double var(--brand-gold-line);border-radius:10px;box-shadow:0 2px 5px color-mix(in srgb,var(--brand-gold) 8%,transparent);min-width:0}
+.brand-frame:before,.brand-frame:after{content:'';position:absolute;pointer-events:none;width:15px;height:15px;border:1px solid var(--brand-gold-line);z-index:-1}
+.brand-frame:before{top:4px;left:4px;border-right:0;border-bottom:0;border-radius:3px 0 0 0}
+.brand-frame:after{bottom:4px;right:4px;border-top:0;border-left:0;border-radius:0 0 3px 0}
+@media(max-width:1199px) and (min-width:1100px){.brand-header .brand-emblem{width:54px}.brand-header .brand-name{font-size:20px}.brand-header .brand-subtitle{font-size:11px}.brand-header .header-inner{gap:12px}.brand-header .desktop-links{gap:8px;padding-inline:10px}.brand-header .desktop-links>a svg,.brand-header .brand-tools-toggle>svg{width:16px;height:16px}.brand-header .header-cta.brand-primary{font-size:12px;padding-inline:9px}}
+@media(max-width:1099px){:root{--header-height:76px}.brand-header .desktop-links,.brand-header .header-cta{display:none}.brand-header .mobile-menu-button{display:grid;place-items:center}.brand-header .mobile-site-menu:not([hidden]){display:block}.brand-header .header-inner{width:calc(100% - 32px)}.brand-header .header-utilities{margin-left:auto}}
+@media(max-width:639px){:root{--header-height:68px}.brand-header .header-inner{width:calc(100% - 24px);gap:8px}.brand-header .brand-wordmark{flex:1;justify-content:center}.brand-header .brand-mark{gap:6px}.brand-header .brand-emblem{width:52px}.brand-header .brand-name{font-size:clamp(18px,5.3vw,23px)}.brand-header .brand-subtitle{font-size:11px}.brand-header .mobile-menu-button{width:44px;height:44px;flex:none}.brand-header .header-utilities{flex:none}.brand-footer-mark .brand-name{font-size:19px}}
+@media(max-width:350px){.brand-header .brand-emblem{width:44px}.brand-header .brand-name{font-size:18px}.brand-header .brand-subtitle{font-size:10px}}
+@media print{html,body{background:white!important;background-image:none!important;color:var(--print-ink)!important}.brand-frame{background:white!important;box-shadow:none!important}.brand-frame:before,.brand-frame:after{display:none!important}}
+
+/* Approved author card, scoped to shared footer. */
+.ui-footer .author-contact-wrap{padding-block:24px 0}
+.ui-footer .author-contact{box-sizing:border-box;max-width:660px;margin-inline:auto;padding:27px 24px 24px;border:3px double var(--brand-gold-line);border-radius:10px;background:var(--brand-surface) url('/brand/cloud-detail-pc.svg') right 8px bottom 5px/130px auto no-repeat;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;color:var(--brand-navy)}
+.ui-footer .author-contact p{margin:0}
+.ui-footer .author-contact-eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;color:var(--brand-gold)}
+.ui-footer .author-contact h2{font:700 34px/1.2 var(--font-serif);color:var(--brand-red);margin:0}
+.ui-footer .author-contact-role{font:italic 600 16px/1.5 var(--font-serif);color:var(--brand-navy)}
+.ui-footer .author-contact-description{max-width:440px;font-size:14px;line-height:1.65;color:var(--brand-navy)}
+.ui-footer .author-contact .brand-ornament{max-width:180px;margin:3px 0}
+.ui-footer .author-contact-telegram{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;max-width:100%;box-sizing:border-box;padding:9px 21px;background:var(--brand-red);color:var(--white);border:3px double var(--brand-cream);border-radius:8px;box-shadow:0 0 0 1px var(--brand-red);font:600 15px/1.4 var(--font);text-decoration:none}
+.ui-footer .author-contact-telegram svg{flex:none}
+.ui-footer .author-contact-telegram:hover{background:var(--brand-navy);color:var(--white);text-decoration:none}
+.ui-footer .author-contact-telegram:focus-visible{outline:3px solid var(--brand-red);outline-offset:4px}
+.ui-footer .author-contact-handle{font-size:13px;color:var(--brand-navy);overflow-wrap:anywhere}
+@media(max-width:639px){.ui-footer .author-contact-wrap{padding-block:18px 0}.ui-footer .author-contact{padding:21px 14px 20px;gap:9px}.ui-footer .author-contact h2{font-size:29px}.ui-footer .author-contact-role{font-size:15px}.ui-footer .author-contact-telegram{padding-inline:13px}}
