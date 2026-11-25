@@ -44,8 +44,8 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
         </div>
 
         {/* Mục lục các chương / quyển */}
-        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid rgba(184,146,42,0.2)', overflow: 'hidden' }}>
-          <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(184,146,42,0.15)', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', fontWeight: 600 }}>
+        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--line)', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', fontWeight: 600 }}>
             MỤC LỤC TÁC PHẨM
           </div>
           {book.chapters.map((chapter, i) => (
@@ -57,7 +57,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
                 alignItems: 'baseline',
                 gap: '14px',
                 padding: '14px 20px',
-                borderBottom: i === book.chapters.length - 1 ? 'none' : '1px dashed rgba(184,146,42,0.15)',
+                borderBottom: i === book.chapters.length - 1 ? 'none' : '1px dashed var(--line)',
                 textDecoration: 'none',
                 color: 'inherit',
                 transition: 'background 0.15s',

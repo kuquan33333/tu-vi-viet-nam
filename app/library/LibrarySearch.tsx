@@ -26,9 +26,9 @@ export default function LibrarySearch() {
       gap: '8px',
       padding: '6px',
       background: 'var(--bg-card)',
-      border: '1px solid rgba(184,146,42,0.3)',
+      border: '1px solid var(--line)',
       borderRadius: '12px',
-      boxShadow: '0 4px 16px rgba(184,146,42,0.08)',
+      boxShadow: 'none',
     }}>
       <input
         value={q}
@@ -52,7 +52,7 @@ export default function LibrarySearch() {
           padding: '10px 22px',
           borderRadius: '8px',
           border: 'none',
-          background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
+          background: 'var(--accent)',
           color: 'white',
           fontSize: '13px',
           fontWeight: 600,

@@ -17,28 +17,28 @@ export default function PreviewPage() {
       {done && (
         <main style={{
           minHeight: '100vh',
-          background: '#0d0a08',
-          color: '#e8dcc4',
+          background: 'var(--ink)',
+          color: 'var(--on-dark)',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
           padding: '48px 24px',
-          fontFamily: '"Noto Serif", serif',
+          fontFamily: 'var(--font-serif)',
           textAlign: 'center',
         }}>
-          <div style={{ fontSize: '11px', letterSpacing: '0.3em', color: '#c89647', marginBottom: '16px' }}>
+          <div style={{ fontSize: '11px', letterSpacing: '0.3em', color: 'var(--on-dark-muted)', marginBottom: '16px' }}>
             HIỆU ỨNG CUỘN THƯ · XEM TRƯỚC
           </div>
           <h1 style={{
             fontSize: 'clamp(28px, 3.5vw, 40px)',
             letterSpacing: '0.08em',
-            color: '#e8dcc4',
+            color: 'var(--on-dark)',
             marginBottom: '16px',
             fontWeight: 700,
           }}>
             Khai Màn Tử Vi Đẩu Số
           </h1>
           <p style={{
-            fontSize: '14px', color: '#a89878',
+            fontSize: '14px', color: 'var(--on-dark-muted)',
             maxWidth: '520px', lineHeight: 1.9,
             letterSpacing: '0.04em',
             marginBottom: '40px',
@@ -50,8 +50,8 @@ export default function PreviewPage() {
             <button
               onClick={() => { setDone(false); setReplayKey(k => k + 1); }}
               style={{
-                background: '#a8302a',
-                color: '#f5ecd7',
+                background: 'var(--accent)',
+                color: 'var(--white)',
                 padding: '14px 28px',
                 fontSize: '14px',
                 letterSpacing: '0.1em',
@@ -67,11 +67,11 @@ export default function PreviewPage() {
               onClick={() => router.push('/')}
               style={{
                 background: 'transparent',
-                color: '#e8dcc4',
+                color: 'var(--on-dark)',
                 padding: '14px 28px',
                 fontSize: '14px',
                 letterSpacing: '0.1em',
-                border: '1px solid rgba(232,220,196,0.25)',
+                border: '1px solid var(--on-dark-muted)',
                 cursor: 'pointer',
                 borderRadius: '6px',
               }}
@@ -81,7 +81,7 @@ export default function PreviewPage() {
           </div>
 
           <div style={{
-            marginTop: '40px', fontSize: '12px', color: '#6e6048',
+            marginTop: '40px', fontSize: '12px', color: 'var(--on-dark-muted)',
             letterSpacing: '0.1em',
             display: 'flex', gap: '20px',
           }}>

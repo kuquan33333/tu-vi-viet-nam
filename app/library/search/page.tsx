@@ -45,7 +45,7 @@ export default function SearchPage() {
         </div>
 
         {hits.length === 0 ? (
-          <div style={{ background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.15)', borderRadius: 12, padding: '36px 24px', textAlign: 'center', color: 'var(--tx-2)' }}>
+          <div style={{ background: 'var(--bg-card)', border: '1px solid var(--line)', borderRadius: 12, padding: '36px 24px', textAlign: 'center', color: 'var(--tx-2)' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>📜</div>
             {q ? 'Chưa tìm thấy nội dung phù hợp. Hãy thử từ khóa khác.' : 'Hãy nhập từ khóa cần tra cứu.'}
           </div>
@@ -57,7 +57,7 @@ export default function SearchPage() {
                const chapterIdx = ctx.chapterIdx;
               return (
                 <Link key={i} href={`${chapterPath(hit.bookSlug,chapterIdx)}#${hit.paragraphId}`}
-                  style={{ display: 'block', padding: '17px 20px', background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.18)', borderRadius: 10, textDecoration: 'none', color: 'inherit' }}>
+                  style={{ display: 'block', padding: '17px 20px', background: 'var(--bg-card)', border: '1px solid var(--line)', borderRadius: 10, textDecoration: 'none', color: 'inherit' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--ac)', marginBottom: 8 }}>
                     《{hit.bookTitle}》 · {hit.chapterTitle}
                   </div>

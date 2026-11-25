@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Icon from '@/components/Icon';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart, Palace, Star } from '@/lib/ziwei/types';
 import { BRANCHES, STEMS } from '@/lib/ziwei/constants';
@@ -113,7 +114,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           gap: '1px',
           background: 'var(--t-border)',
           border: '1px solid var(--t-border)',
-          boxShadow: '0 4px 32px rgba(0,0,0,0.15)',
+          boxShadow: 'none',
         }}
       >
         {ANIMATION_ORDER.map((branch, i) => {
@@ -145,8 +146,8 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           className="flex flex-col items-center justify-center p-4 gap-3"
           style={{ gridRow: '2 / 4', gridColumn: '2 / 4', background: 'var(--t-bg)' }}
         >
-          <div className="text-5xl select-none leading-none" style={{ color: 'var(--t-gold)', opacity: 0.12, filter: 'drop-shadow(0 0 12px rgba(180,120,30,0.15))' }}>
-            ☯
+          <div className="text-5xl select-none leading-none" style={{ color: 'var(--t-gold)', opacity: 0.12 }}>
+            <Icon name="yin-yang" size={48}/>
           </div>
 
           <div className="text-center space-y-1">
@@ -162,7 +163,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
             const dx = chart.daXians[chart.currentDaXianIndex];
             return (
               <div className="border border-purple-500/30 rounded-lg px-3 py-1.5 text-center"
-                style={{ background: 'rgba(147,51,234,0.06)' }}>
+                style={{ background: 'var(--accent-soft)' }}>
                 <div className="text-[8px] text-purple-400 mb-0.5 tracking-wider font-medium">Đại Hạn Hiện Tại</div>
                 <div className="text-[12px] text-purple-400 font-semibold tabular-nums">{dx.startAge}–{dx.endAge} tuổi</div>
                 <div className="text-[9px] text-purple-300/80">{dx.palaceName}</div>
@@ -204,7 +205,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
                   const p2 = BRANCH_SVG_POS[sanFangBranches[2]]; // 三合1
                   const p3 = BRANCH_SVG_POS[sanFangBranches[3]]; // 三合2
                   const dash = "6,5";
-                  const stroke = "rgba(37,99,235,0.55)";
+                  const stroke = "var(--quan)";
                   const sw = "1.5";
                   return (
                     <>
@@ -240,7 +241,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
                           key={i}
                           cx={`${p[0]}%`} cy={`${p[1]}%`}
                           r="3"
-                          fill={i === 0 ? 'rgba(37,99,235,0.8)' : 'rgba(37,99,235,0.45)'}
+                          fill={i === 0 ? 'var(--quan)' : 'var(--quan)'}
                         />
                       ))}
                     </>
