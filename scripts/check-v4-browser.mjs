@@ -41,9 +41,20 @@ try{
    await open(path);await noOverflow();console.log('V4_THEME '+width+' '+path);
    const checkContrast=async theme=>{if(!['/','/chart','/lich-van-nien'].includes(path)||!process.env.AXE_SCRIPT)return;await page.addScriptTag({path:process.env.AXE_SCRIPT});const result=await page.evaluate(async()=>await window.axe.run({runOnly:{type:'rule',values:['color-contrast']}}));contrast.push({path,width,theme,violations:result.violations.flatMap(v=>v.nodes.map(n=>({target:n.target,summary:n.failureSummary})))});};
    async function chooseTheme(theme){const root=page.locator('html');const old=await root.getAttribute('data-theme');if(old!==theme)await page.getByRole('button',{name:theme==='dark'?'Chuyển sang chế độ tối':'Chuyển sang chế độ sáng'}).click();await page.waitForFunction(t=>document.documentElement.dataset.theme===t,theme);await page.getByRole('button',{name:theme==='dark'?'Chuyển sang chế độ sáng':'Chuyển sang chế độ tối'}).waitFor();await page.evaluate(()=>Promise.all(document.getAnimations().filter(a=>a.effect?.getTiming().iterations!==Infinity).map(a=>a.finished.catch(()=>{}))));}
-   await chooseTheme('light');await checkContrast('light');
-   await chooseTheme('dark');await noOverflow();await checkContrast('dark');
-   await chooseTheme('light');
+   if(await page.locator('.theme-switch').count()){
+    await chooseTheme('light');await checkContrast('light');
+    await chooseTheme('dark');await noOverflow();await checkContrast('dark');
+    await chooseTheme('light');
+   }else{
+    // UI-BRIEF explicitly defers dark mode. Verify old saved preferences do not
+    // override the new light-only presentation, and preserve contrast testing.
+    await page.evaluate(()=>localStorage.setItem('ziwei-theme','dark'));
+    await open(path);await noOverflow();
+    assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+    assert.equal(await page.evaluate(()=>localStorage.getItem('ziwei-theme')),'dark');
+    assert.equal(await page.locator('.theme-switch').count(),0);
+    await checkContrast('light');
+   }
   }
   await open('/chart');await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
   await page.getByLabel('Ngày sinh dương lịch').selectOption('6');await page.getByLabel('Tháng sinh dương lịch').selectOption('5');await page.getByLabel('Năm sinh',{exact:true}).fill('1990');
@@ -75,7 +86,7 @@ try{
   assert.ok(!(await page.evaluate(()=>localStorage.getItem('tuvivn.profiles.v2'))).includes('V4 QA'));
   await page.getByLabel('Mã PIN',{exact:true}).fill('00000000');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByText(/PIN không đúng/).waitFor();
   await page.getByLabel('Mã PIN',{exact:true}).fill('73918426');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByRole('heading',{name:'V4 QA'}).waitFor();
-  await page.getByRole('link',{name:'Hợp bàn',exact:true}).filter({visible:true}).first().click();await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
+  await open('/');await page.getByRole('link',{name:/Đối chiếu hai lá số/}).first().click();await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
   if(width===360)await page.getByRole('button',{name:/Người thứ hai/}).click();
   await page.getByLabel('Chọn hồ sơ người B').selectOption({label:await page.getByLabel('Chọn hồ sơ người B').locator('option').nth(1).textContent()});
   await page.getByRole('button',{name:'Đối chiếu hai lá số'}).click();await page.getByRole('heading',{name:'Báo cáo đối chiếu 12 cung'}).waitFor();await noOverflow();

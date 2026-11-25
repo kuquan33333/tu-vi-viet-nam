@@ -77,3 +77,7 @@ a:hover,a:focus-visible{text-decoration:underline;text-underline-offset:3px}
 .ui-header .desktop-links a:focus-visible,.ui-header .header-profile:focus-visible{outline-offset:2px}
 #nguon-va-giay-phep{scroll-margin-top:calc(var(--header-height) + 16px)}
 @media(max-width:639px){.ui-footer-inner nav a{white-space:normal}.ui-bottom-nav a{font-size:12px}.ui-header .mobile-site-menu{max-height:calc(100dvh - var(--header-height) - var(--tab-height) - env(safe-area-inset-bottom))}}
+
+.ui-header.global-header{height:var(--header-height)}
+.ui-header .header-inner{height:100%;min-height:0}
+.ui-header .mobile-menu-button:focus-visible{outline-offset:0}
