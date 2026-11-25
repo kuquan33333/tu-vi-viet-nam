@@ -44,7 +44,7 @@ export default function HomePage(){
  return <main className="home2 home-brand">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema()).replace(/</g,'\\u003c')}}/>
   <section className="home2-hero" aria-labelledby="home2-title">
-   <picture className="hero-blossom-picture"><source media="(min-width:1100px)" srcSet="/brand/blossom-pc.svg"/><Image unoptimized src="/brand/blossom.webp" alt="" width={100} height={61} className="hero-blossom" loading="eager"/></picture>
+   <picture className="hero-blossom-picture"><source srcSet="/brand/blossom-pc.svg" type="image/svg+xml"/><Image unoptimized src="/brand/blossom.webp" alt="" width={100} height={61} className="hero-blossom" loading="eager"/></picture>
    <Container className="home2-hero-grid">
     <div className="hero-logo"><BrandMark hero/></div>
     <div className="home2-intro">
@@ -53,7 +53,7 @@ export default function HomePage(){
      <p className="home2-lead">Kết hợp tinh hoa cổ học phương Đông và công nghệ hiện đại, giúp bạn khám phá lá số, lịch pháp và những quan niệm truyền thống. Mọi phép tính thực hiện trên thiết bị, ghi rõ nguồn và giới hạn.</p>
      <div className="home2-actions"><ButtonLink href="/chart" variant="primary" className="brand-primary"><Icon name="yin-yang" size={21}/> Lập lá số ngay <Icon name="arrow" size={16}/></ButtonLink><ButtonLink href="/library" variant="secondary" className="brand-secondary"><Icon name="book" size={21}/> Khám phá Thư viện <Icon name="arrow" size={16}/></ButtonLink></div>
     </div>
-    <div className="hero-art" aria-hidden="true"><picture><source media="(min-width:1100px)" srcSet="/brand/study-pc.webp"/><Image unoptimized src="/brand/study.webp" alt="" width={256} height={228} loading="eager"/></picture></div>
+    <div className="hero-art" aria-hidden="true"><picture><source srcSet="/brand/study-pc.webp" type="image/webp"/><Image unoptimized src="/brand/study.webp" alt="" width={256} height={228} loading="eager"/></picture></div>
    </Container>
   </section>
   <Container className="home-primary-grid" role="navigation" aria-label="Công cụ nổi bật">

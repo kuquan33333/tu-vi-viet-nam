@@ -12,7 +12,7 @@ const main=['/','/chart','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/lib
 function walk(d){return readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(d,e.name)):[join(d,e.name)]);}
 const routes=[...new Set(walk(root).filter(f=>f.endsWith('.html')).map(f=>relative(root,f).split('\\').join('/')).filter(f=>!f.startsWith('_next/')&&!f.startsWith('_not-found/')&&!/(^|\/)(500|_not-found)\.html$/.test(f)).map(f=>'/'+f.replace(/(?:^|\/)index\.html$/,'').replace(/\.html$/,'')).map(s=>s.replace(/\/$/,'')||'/'))].sort();
 if(mode==='all'){for(const r of main)assert.ok(routes.includes(r),'missing export '+r);assert.ok(routes.includes('/404'),'missing 404');}
-const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[... [360,768,1280].flatMap(width=>main.map(route=>({route,width}))),... [1440,1920].map(width=>({route:'/',width}))]:[360,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
+const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[... [360,768,1280].flatMap(width=>main.map(route=>({route,width}))),... [320,390,430,820,1024,1180,1440,1920].map(width=>({route:'/',width})),... [390,820,1024].flatMap(width=>['/chart','/lich-van-nien'].map(route=>({route,width})))]:[360,390,820,1024,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
 assert.ok(jobs.length>0);
 writeFileSync(dir+'/scope.json',JSON.stringify({mode,engine,shard,shards,totalExportRoutes:routes.length,jobs},null,2));
 const browser=await pw[engine].launch({headless:true});
@@ -23,7 +23,7 @@ async function tabTo(page,selector){
 }
 async function keyboard(page,route,width){
  if(route==='/'){
-  if(width===360){await tabTo(page,'.mobile-menu-button');await page.keyboard.press('Enter');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'true');await page.keyboard.press('Tab');await page.keyboard.press('Escape');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'false');assert.ok(await page.evaluate(()=>document.activeElement?.matches('.mobile-menu-button')));}
+  if(width<1100){await tabTo(page,'.mobile-menu-button');await page.keyboard.press('Enter');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'true');await page.keyboard.press('Tab');await page.keyboard.press('Escape');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'false');assert.ok(await page.evaluate(()=>document.activeElement?.matches('.mobile-menu-button')));}
   await tabTo(page,'.home2-actions a[href="/chart"]');await page.keyboard.press('Enter');await page.waitForURL('**/chart');await page.getByRole('heading',{name:'Lập lá số Tử Vi'}).waitFor();
  }else if(route==='/chart'){
   await tabTo(page,'.birth-form button[type=submit]');await page.keyboard.press('Enter');
@@ -43,7 +43,7 @@ async function keyboard(page,route,width){
 }
 try{
  for(const {route,width} of jobs){
-  const key=name(route,width),errors=[],external=[],ctx=await browser.newContext({viewport:{width,height:width>=1440?1000:900},reducedMotion:'reduce'});
+  const key=name(route,width),errors=[],external=[],ctx=await browser.newContext({viewport:{width,height:({320:568,360:780,390:844,430:932,768:1024,820:1180,1024:768,1180:820}[width]??(width>=1440?1000:900))},reducedMotion:'reduce'});
   const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
   await ctx.route('**/*',r=>{const req=r.request(),url=req.url();if(url.startsWith(base+'/')||url.startsWith('data:')||url.startsWith('blob:'))return r.continue();external.push({url,type:req.resourceType()});return r.abort();});
   try{
@@ -77,6 +77,24 @@ try{
      await page.locator('.hero-art img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('missing study artwork')});
      if(width>=1100){const toggle=page.locator('.brand-tools-toggle');await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('#desktop-tools-menu a').count(),6);await page.keyboard.press('Escape');assert.equal(await toggle.getAttribute('aria-expanded'),'false');await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement)document.activeElement.blur()});}
     }
+   }
+   if(mode!=='all'&&width<1100&&route==='/'){
+    const mobile=await page.evaluate(async()=>{
+     const rect=e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
+     const logo=document.querySelector('.global-header .brand-emblem'),art=document.querySelector('.hero-art img');await Promise.all([logo.decode(),art.decode()]);
+     const card=document.querySelector('.home-primary-card'),button=document.querySelector('.mobile-menu-button');
+     return {logo:logo.currentSrc,book:art.currentSrc,native:art.naturalWidth,rendered:art.getBoundingClientRect().width,header:rect(document.querySelector('.brand-wordmark')),menu:rect(button),cards:[...document.querySelectorAll('.home-primary-card')].map(rect),frame:getComputedStyle(card,'::before').backgroundImage,icon:getComputedStyle(card.querySelector('.icon-pc')).display,buttons:[...document.querySelectorAll('.home2-actions a')].map(rect),panel:rect(document.querySelector('.home-chart .ui-chart-grid')),paper:getComputedStyle(document.body).backgroundImage,bottom:getComputedStyle(document.querySelector('.ui-bottom-nav')).display};
+    });
+    writeFileSync(dir+'/responsive-layout-'+width+'.json',JSON.stringify(mobile,null,2));
+    assert.match(mobile.logo,/emblem-pc\.svg$/);assert.match(mobile.book,/study-pc\.webp$/);assert.ok(mobile.rendered>0&&mobile.rendered<=mobile.native+1,'art must be visible at native size or smaller');
+    assert.ok(mobile.header.right<=mobile.menu.left+1&&mobile.menu.height>=44,'header collision/touch size');
+    assert.ok(mobile.buttons.every(b=>b.height>=44&&b.left>=0&&b.right<=width+1),'hero touch targets');
+    for(const corner of ['tl','tr','br','bl'])assert.ok(mobile.frame.includes('corner-gold-'+corner+'.svg'),'missing responsive corner '+corner);
+    assert.equal(mobile.icon,'inline');assert.ok(mobile.paper.includes('paper-pc.svg'));
+    assert.equal(mobile.cards.length,4);assert.ok(mobile.cards.every(c=>c.left>=0&&c.right<=width+1&&c.height>=44));
+    if(width<640){assert.ok(mobile.cards.every((c,i)=>!i||c.top>=mobile.cards[i-1].bottom-1),'mobile card stack');assert.notEqual(mobile.bottom,'none');}
+    else{assert.ok(Math.abs(mobile.cards[0].top-mobile.cards[1].top)<2&&Math.abs(mobile.cards[2].top-mobile.cards[3].top)<2,'tablet 2x2 cards');}
+    assert.ok(mobile.panel.left>=0&&mobile.panel.right<=width+1,'sample chart visible');
    }
    if(width>=1100&&route==='/'){
     const pc=await page.evaluate(async()=>{
