@@ -5,6 +5,7 @@ import './globals.css';
 import './triad.css';
 import './revamp.css';
 import './ui.css';
+import './remaining-ui.css';
 import AppChrome from '@/components/AppChrome';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SITE_URL } from '@/lib/site';

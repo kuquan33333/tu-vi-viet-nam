@@ -1,6 +1,8 @@
 'use client';
+import {StudyTabs,StudyPanel} from '@/components/ui/StudyTabs';
 
 import Icon from '@/components/Icon';
+import HexagramFigure from '@/components/HexagramFigure';
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import TimeQimenTool from '@/components/TimeQimenTool';
@@ -15,17 +17,7 @@ import {
 type Tab = 'dich' | 'qimen' | 'tuvi';
 type Saved = {date:string;lines:LineValue[];question:string};
 const STORAGE_KEY='thienky-casts-v1';
-function HexFigure({lines}:{lines:readonly LineValue[]}) {
- return <div className="study-hex" role="img" aria-label="Sáu hào, từ dưới lên trên">
-  {[...lines].reverse().map((n,idx)=>{
-   const yang=n===7||n===9; const moving=n===6||n===9;
-   return <div key={idx} className={'study-hex-row'+(moving?' moving':'')} title={'Hào '+(6-idx)+': '+n}>
-    {yang?<span className="study-hex-seg"/>:<><span className="study-hex-seg half"/><span className="study-hex-seg half"/></>}
-    <small style={{width:22,textAlign:'right',color:'var(--tx-3)',fontSize:11}}>{moving?'●':String(6-idx)}</small>
-   </div>
-  })}
- </div>;
-}
+function HexFigure({lines}:{lines:readonly LineValue[]}) {return <HexagramFigure bits={lines.map(n=>n===7||n===9?'1':'0').join('')} label="Quẻ Chu Dịch" moving={lines.flatMap((n,i)=>n===6||n===9?[i+1]:[])}/>;}
 function HexCard({hex,lines}:{hex:Hexagram;lines:readonly LineValue[]}) {
  return <div className="study-card">
    <div className="study-pill">Quẻ số {hex.number} · {hex.upper.label} trên {hex.lower.label} dưới</div>
@@ -63,7 +55,7 @@ function IChingTool(){
  return <>
   <div className="study-grid">
    <section className="study-card">
-    <h2>Gieo quẻ Chu Dịch</h2>
+    <h2>Gieo quẻ Chu Dịch</h2><ol className="ui5-steps"><li>Nhập câu hỏi (tùy chọn).</li><li>Chọn gieo đồng xu hoặc nhập sáu hào.</li><li>Đọc quẻ chủ, hào động và quẻ biến.</li></ol>
     <p>Gieo ba đồng xu sáu lần, dựng các hào từ dưới lên trên. Xem quẻ chủ, hào động và quẻ biến.</p>
     <label className="study-label" htmlFor="dich-question">Điều bạn muốn chiêm nghiệm (không bắt buộc)</label>
     <input id="dich-question" className="study-input" maxLength={150} value={question}
@@ -99,8 +91,8 @@ function IChingTool(){
   </div>
   {lines&&primary&&secondary&&transformed&&<>
    <div className="study-grid" style={{marginTop:18}}>
-    <HexCard hex={primary} lines={lines}/>
-    <HexCard hex={secondary} lines={transformed}/>
+    <div><h2 className="ui5-result-label">Quẻ chủ</h2><HexCard hex={primary} lines={lines}/></div>
+    <div><h2 className="ui5-result-label">Quẻ biến</h2><HexCard hex={secondary} lines={transformed}/></div>
    </div>
    <div className="study-card">
     <h2>Giải thích cách đọc</h2>
@@ -112,14 +104,14 @@ function IChingTool(){
   </>}
   <div className="study-card" style={{marginTop:18}}>
    <h2>Từ điển 64 quẻ</h2>
-   <label className="study-label" htmlFor="dich-search">Tra cứu theo tên, số quẻ hoặc ý chính</label>
-   <input className="study-input" id="dich-search" value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Ví dụ: Thái, 29, hòa thuận..."/>
    <div className="study-grid study-dictionary-layout" style={{alignItems:'start'}}>
+    <div className="ui5-dictionary-search"><label className="study-label" htmlFor="dich-search">Tra cứu theo tên, số quẻ hoặc ý chính</label>
+   <input className="study-input" id="dich-search" value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Ví dụ: Thái, 29, hòa thuận..."/>
     <div className="study-point-list">
-     {listed.map(h=><button type="button" key={h.number} className={selected.number===h.number?'active':''} onClick={()=>setSelected(h)}>
+     {listed.map(h=><button type="button" key={h.number} className={selected.number===h.number?'active':''} aria-pressed={selected.number===h.number} onClick={()=>setSelected(h)}>
        {h.number}. {h.name}<small>{h.theme}</small>
      </button>)}
-    </div>
+    </div>{!listed.length&&<p role="status">Không tìm thấy quẻ phù hợp.</p>}</div>
     <HexCard hex={selected} lines={linesForHex(selected)}/>
    </div>
    <p className="study-muted">Bảng 64 quẻ theo thứ tự Văn Vương. Nội dung giải thích được viết để phục vụ nghiên cứu, không phải tiên đoán chắc chắn.</p>
@@ -184,24 +176,22 @@ function QimenTool(){
 }
 export default function ThienKyPage(){
  const [tab,setTab]=useState<Tab>('dich');
- return <div className="study-shell">
+ return <div className="study-shell ui5-page">
 
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Thiên Kỷ</div>
     <h1 className="study-title">Thiên Kỷ · Thiên cơ và thuật số</h1>
     <p className="study-lead">Từ Tử Vi Đẩu Số đến Chu Dịch và Kỳ Môn Độn Giáp. Tra cứu quy tắc, thao tác quẻ và khám phá cửu cung minh bạch.</p>
-    <div className="study-tabs" role="tablist" aria-label="Chọn phân hệ Thiên Kỷ">
-     <button type="button" role="tab" aria-selected={tab==='dich'} onClick={()=>setTab('dich')} className={'study-tab'+(tab==='dich'?' active':'')}>Chu Dịch · 64 quẻ</button>
-     <button type="button" role="tab" aria-selected={tab==='qimen'} onClick={()=>setTab('qimen')} className={'study-tab'+(tab==='qimen'?' active':'')}>Kỳ Môn thời gia · cửu cung</button>
-     <button type="button" role="tab" aria-selected={tab==='tuvi'} onClick={()=>setTab('tuvi')} className={'study-tab'+(tab==='tuvi'?' active':'')}>Tử Vi Đẩu Số</button>
-    </div>
+    <StudyTabs<Tab> id="thien" label="Chọn phân hệ Thiên Kỷ" tabs={[{"value":"dich","label":"Chu Dịch · 64 quẻ"},{"value":"qimen","label":"Kỳ Môn thời gia · cửu cung"},{"value":"tuvi","label":"Tử Vi Đẩu Số"}]} value={tab} onChange={setTab}/>
    </div>
+   <StudyPanel<Tab> id="thien" tabs={["dich","qimen","tuvi"]} value={tab}>
    {tab==='dich'?<IChingTool/>:tab==='qimen'?<QimenTool/>:
     <section className="study-card" style={{textAlign:'center',maxWidth:680,margin:'auto'}}>
      <h2>Tử Vi Đẩu Số – hệ thống hiện có</h2><p>Lập mệnh bàn 12 cung, an sao, đại hạn, lưu niên và xem giải thích trong công cụ hiện hữu. Thiên Kỷ dùng chung nền tri thức, không tạo bản tính Tử Vi thứ hai.</p>
      <Link className="study-btn" href="/chart">Mở công cụ lập lá số <Icon name="arrow" size={16}/></Link>
     </section>}
+   </StudyPanel>
    <p className="study-footer" role="note">Thiên Kỷ – công cụ nghiên cứu văn hóa và lịch sử thuật số. Nguồn thuật toán được ghi trong từng công cụ; không dùng các kết quả chiêm nghiệm thay cho chuyên gia hay bằng chứng thực tế.</p>
   </main>
  </div>;
