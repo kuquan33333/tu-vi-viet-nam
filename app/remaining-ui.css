@@ -65,7 +65,9 @@
 .ui5-legal-toc a{display:flex;align-items:center;min-height:44px;color:var(--ink);text-decoration:underline}
 .ui5-error{padding:48px 0 var(--section-gap);min-height:45vh}
 .ui5-error-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
-@media(max-width:1023px){.ui5-reader-layout{grid-template-columns:minmax(0,680px);gap:16px}.ui5-chapters{top:var(--header-height);z-index:5;max-height:36dvh;background:var(--card)}.ui5-chapters ol{max-height:22dvh;overflow:auto}}
+/* The stacked chapter list must scroll with the article, not cover it.
+   Wide desktop keeps its existing separate sticky sidebar. */
+@media(max-width:1099px){.ui5-reader-layout{grid-template-columns:minmax(0,680px);gap:16px}.ui5-chapters{position:static;top:auto;z-index:auto;max-height:none;overflow:visible;background:var(--card)}.ui5-chapters ol{max-height:none;overflow:visible}}
 @media(max-width:639px){.ui5-reader .ui5-reading-body{padding:16px}.ui5-chapters{padding:8px}.ui5-reader-nav{flex-direction:column}}
 
 .ui5-compare .profile-box{min-width:0;padding:var(--card-padding)}

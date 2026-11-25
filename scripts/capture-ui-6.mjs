@@ -13,6 +13,10 @@ function walk(d){return readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirec
 const routes=[...new Set(walk(root).filter(f=>f.endsWith('.html')).map(f=>relative(root,f).split('\\').join('/')).filter(f=>!f.startsWith('_next/')&&!f.startsWith('_not-found/')&&!/(^|\/)(500|_not-found)\.html$/.test(f)).map(f=>'/'+f.replace(/(?:^|\/)index\.html$/,'').replace(/\.html$/,'')).map(s=>s.replace(/\/$/,'')||'/'))].sort();
 if(mode==='all'){for(const r of main)assert.ok(routes.includes(r),'missing export '+r);assert.ok(routes.includes('/404'),'missing 404');}
 const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[... [360,768,1280].flatMap(width=>main.map(route=>({route,width}))),... [320,390,430,820,1024,1180,1440,1920].map(width=>({route:'/',width})),... [390,820,1024].flatMap(width=>['/chart','/lich-van-nien'].map(route=>({route,width})))]:[360,390,820,1024,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
+// Regression: the exact book/chapter reported by the owner, plus a second book.
+const chapterRoute='/library/quanji/tong-luan';
+if(mode==='screens')jobs.push(...[320,360,390,430,768,820,1024,1180,1280].map(width=>({route:chapterRoute,width})),{route:'/library/gusuifu/tong-luan-thien',width:390});
+if(mode==='compat')jobs.push(...[390,820,1024,1180].map(width=>({route:chapterRoute,width})));
 assert.ok(jobs.length>0);
 writeFileSync(dir+'/scope.json',JSON.stringify({mode,engine,shard,shards,totalExportRoutes:routes.length,jobs},null,2));
 const browser=await pw[engine].launch({headless:true});
@@ -112,6 +116,31 @@ try{
     for(const corner of ['tl','tr','br','bl'])assert.ok(pc.frame.includes('corner-gold-'+corner+'.svg'),'missing fixed vector corner '+corner);
     assert.equal(await page.locator('.home-primary-card svg .icon-pc').first().evaluate(e=>getComputedStyle(e).display),'inline');
     const art=await page.evaluate(async()=>{const paths=['paper-pc.svg','cloud-detail-pc.svg','hills-card-pc.svg','corner-gold-tl.svg','corner-gold-tr.svg','corner-gold-br.svg','corner-gold-bl.svg'];return Promise.all(paths.map(async p=>{const img=new Image();img.src='/brand/'+p;await img.decode();return {p,w:img.naturalWidth,h:img.naturalHeight}}));});assert.ok(art.every(x=>x.w>0&&x.h>0));
+   }
+   if(mode!=='all'&&route.startsWith('/library/')&&route.split('/').length===4){
+    const toc=page.locator('.ui5-chapters'),article=page.locator('.ui5-reader');
+    const summary=toc.locator('summary'),details=toc.locator('details');
+    assert.equal(await toc.locator('a[aria-current=page]').count(),1);
+    assert.equal(await details.getAttribute('open'),'');
+    await summary.click();assert.equal(await details.getAttribute('open'),null);
+    await summary.click();assert.equal(await details.getAttribute('open'),'');
+    await page.evaluate(()=>window.scrollTo(0,0));
+    const before=await page.evaluate(()=>{const t=document.querySelector('.ui5-chapters'),a=document.querySelector('.ui5-reader'),h=document.querySelector('.global-header');return {position:getComputedStyle(t).position,tocBottom:t.getBoundingClientRect().bottom,articleTop:a.getBoundingClientRect().top,articleLeft:a.getBoundingClientRect().left,tocRight:t.getBoundingClientRect().right,headerBottom:h.getBoundingClientRect().bottom}});
+    if(width<1100){
+     assert.equal(before.position,'static','chapter TOC cannot be sticky in single column');
+     assert.ok(before.tocBottom<=before.articleTop+1,'TOC overlaps article at rest');
+     await page.evaluate(()=>{const a=document.querySelector('.ui5-reader'),h=document.querySelector('.global-header');window.scrollTo(0,a.getBoundingClientRect().top+window.scrollY-h.getBoundingClientRect().height+180)});
+     const after=await page.evaluate(()=>{const t=document.querySelector('.ui5-chapters'),h=document.querySelector('.global-header'),p=document.querySelector('.ui5-reader .ui5-reading-body');const top=h.getBoundingClientRect().bottom,rect=p.getBoundingClientRect(),y=Math.max(top+12,rect.top+12),x=rect.left+rect.width/2,hit=document.elementFromPoint(x,y);return {tocBottom:t.getBoundingClientRect().bottom,headerBottom:top,scrollY,articleVisible:!!hit?.closest('.ui5-reader')}});
+     assert.ok(after.scrollY>0&&after.tocBottom<=after.headerBottom+1,'TOC did not scroll out of reading area');
+     assert.ok(after.articleVisible,'article is obscured after scroll');
+     writeFileSync(dir+'/chapter-scroll-'+key+'.json',JSON.stringify({before,after},null,2));
+     await page.screenshot({path:dir+'/chapter-scrolled-'+key+'.png',fullPage:false,animations:'disabled'});
+    }else{
+     assert.equal(before.position,'sticky','desktop sidebar must remain sticky');
+     assert.ok(before.tocRight<=before.articleLeft+1,'desktop sidebar overlaps article');
+     writeFileSync(dir+'/chapter-scroll-'+key+'.json',JSON.stringify({before},null,2));
+    }
+    await page.evaluate(()=>window.scrollTo(0,0));
    }
    await page.mouse.move(0,0);
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
