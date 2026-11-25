@@ -32,7 +32,7 @@ test('D3/D4: menu đầy đủ, header theo UI-BRIEF và không đánh dấu lin
  const list=header.match(/export const desktopLinks=\[([^\n]+)\];/)?.[1]||'';
  assert.deepEqual([...list.matchAll(/href:'([^']+)'/g)].map(m=>m[1]),expected);
  assert.match(bottom,/href:'\/lich-van-nien',label:'Lịch'/);
- assert.match(chrome,/<Header path=/);assert.match(chrome,/<Footer\/>);
+ assert.match(chrome,/<Header path=/);assert.ok(chrome.includes('<Footer/>'));
  assert.match(header,/Escape/);assert.match(header,/menu\.current\?\.focus/);
 });
 test('A: robots, sitemap loại URL cũ/hồ sơ',()=>{

@@ -205,10 +205,10 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
       </article>
 
       {/* Footer */}
-      <p role="note" style={{ borderTop: '1px solid var(--line)', padding: '20px 24px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
+      <div role="note" style={{ borderTop: '1px solid var(--line)', padding: '20px 24px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
         <div style={{ marginBottom: '6px' }}>Tử Vi Đẩu Số · Dựa trên hệ thống Nghê Hải Hạ Chính Tông · Phục vụ nghiên cứu học tập</div>
         <div style={{ opacity: 0.85 }}>Nền tảng không cấu thành bất kỳ lời khuyên y tế, đầu tư tài chính hay pháp lý nào</div>
-      </p>
+      </div>
     </div>
   );
 }
