@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Be_Vietnam_Pro, Noto_Serif } from 'next/font/google';
+import localFont from 'next/font/local';
 import './tokens.css';
 import './globals.css';
 import './triad.css';
@@ -10,9 +10,19 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { SITE_URL } from '@/lib/site';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/seo/metadata';
 
-// next/font fetches at build time and serves font files from this origin, never from Google in the browser.
-const sans = Be_Vietnam_Pro({weight:['400','500','600'],subsets:['latin','vietnamese'],display:'swap',variable:'--font-be-vietnam'});
-const serif = Noto_Serif({weight:'700',subsets:['latin','vietnamese'],display:'swap',variable:'--font-noto-serif'});
+// Licensed full-glyph fonts are pinned in the repository; no font download at build or runtime.
+const Be_Vietnam_Pro = localFont({
+  src: [
+    {path:'./fonts/BeVietnamPro-Regular.ttf',weight:'400',style:'normal'},
+    {path:'./fonts/BeVietnamPro-Medium.ttf',weight:'500',style:'normal'},
+    {path:'./fonts/BeVietnamPro-SemiBold.ttf',weight:'600',style:'normal'},
+  ],
+  display:'swap',variable:'--font-be-vietnam',preload:false,
+});
+const Noto_Serif = localFont({
+  src:'./fonts/NotoSerif-Bold.ttf',weight:'700',style:'normal',
+  display:'swap',variable:'--font-noto-serif',adjustFontFallback:'Times New Roman',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -28,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" data-theme="light" className={sans.variable+' '+serif.variable} suppressHydrationWarning>
+    <html lang="vi" data-theme="light" className={Be_Vietnam_Pro.variable+' '+Noto_Serif.variable} suppressHydrationWarning>
       <body className="min-h-screen">
         <ThemeProvider>
           <AppChrome>{children}</AppChrome>

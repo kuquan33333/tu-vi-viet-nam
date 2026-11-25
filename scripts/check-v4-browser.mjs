@@ -54,6 +54,19 @@ try{
     assert.equal(await page.evaluate(()=>localStorage.getItem('ziwei-theme')),'dark');
     assert.equal(await page.locator('.theme-switch').count(),0);
     await checkContrast('light');
+    if(path==='/chart'){
+      const solar=page.getByRole('button',{name:'Dương lịch (Mặt trời)',exact:true});
+      const lunar=page.getByRole('button',{name:'Âm lịch (Mặt trăng)',exact:true});
+      for(const toggle of [solar,lunar]){
+        await toggle.click();
+        assert.equal(await toggle.getAttribute('aria-pressed'),'true');
+        const other=toggle===solar?lunar:solar;
+        assert.equal(await other.getAttribute('aria-pressed'),'false');
+        for(const button of [solar,lunar])assert.ok((await button.boundingBox()).height>=44,'Calendar toggle touch target');
+        await noOverflow();
+        await checkContrast('light');
+      }
+    }
    }
   }
   await open('/chart');await page.getByLabel('Họ và tên (tùy chọn)').fill('V4 QA');
