@@ -6,6 +6,9 @@ import './triad.css';
 import './revamp.css';
 import './ui.css';
 import './remaining-ui.css';
+import './brand.css';
+import './brand-desktop.css';
+import './brand-responsive.css';
 import AppChrome from '@/components/AppChrome';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SITE_URL } from '@/lib/site';
@@ -39,6 +42,7 @@ const Noto_Serif_Extended = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_NAME,
+  icons: {icon:[{url:'/brand/favicon.svg',type:'image/svg+xml'},{url:'/brand/emblem.webp',type:'image/webp'}],apple:[{url:'/brand/apple-touch.png',sizes:'180x180',type:'image/png'}]},
   description: SITE_DESCRIPTION,
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,

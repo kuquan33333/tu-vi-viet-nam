@@ -33,7 +33,7 @@
 .calendar4-day.selected:focus-visible{outline-color:var(--white)!important}
 .calendar4-event,.calendar4-leap,.calendar4-today-label{font:600 11px/1.25 var(--font);color:var(--accent);max-width:100%;overflow-wrap:anywhere}
 .calendar4-event.event-term{color:var(--muted);font-weight:500}
-.calendar4-event.event-holiday,.calendar4-event.event-tradition{text-decoration:underline;text-underline-offset:2px}
+.calendar4-event.event-holiday,.calendar4-event.event-tradition{text-decoration:none;font-weight:600}
 .calendar4-day.selected .calendar4-event{color:var(--white)}
 .calendar4-notes{padding:14px var(--card-padding);font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
 .calendar4-notes p{margin:4px 0}
