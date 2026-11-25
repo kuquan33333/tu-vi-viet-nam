@@ -102,3 +102,15 @@
 
 /* Avoid scroll anchoring to the removed birth form while the result board hydrates. */
 .chart3:has(.workspace-head){overflow-anchor:none}
+
+/* Native WebKit controls can retain intrinsic widths from long option labels
+   or the internal time editor. Constrain the controls, not the page overflow. */
+.chart3-form-grid > *,
+.chart3-birth-form :is(.birth-date-grid,.birth-date-grid>div,.chart3-location-grid,details,label){min-inline-size:0;max-inline-size:100%;overflow-wrap:anywhere}
+.chart3-birth-form :is(select,input:not([type=checkbox]):not([type=radio])){display:block;box-sizing:border-box;inline-size:100%;min-inline-size:0;max-inline-size:100%}
+.chart3-birth-form select{white-space:nowrap;text-overflow:ellipsis}
+.chart3-birth-form input[type=time]::-webkit-date-and-time-value{min-width:0;text-align:left}
+.chart3-birth-form input[type=time]::-webkit-datetime-edit{min-width:0;padding-inline:0}
+@media(max-width:639px){
+ .chart3-birth-form select{contain:inline-size}
+}

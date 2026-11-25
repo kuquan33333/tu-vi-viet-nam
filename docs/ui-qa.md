@@ -13,3 +13,7 @@ Previous UI-5 HEAD c339252: CI, SEO, UI-5 QA passed; 42 route/viewport checks, 3
 
 ## Result
 Pending the first UI-6 run. Design-system documentation added. Source inventory and computed contrast JSON to be attached to the final report after execution.
+
+## Hậu kiểm 2a1a7f4 (25/11/2026)
+- CI và SEO/Lighthouse mở rộng PASS. UI-6: 4 shard Chromium all và Firefox compat PASS; WebKit compat FAIL ở /chart 360 (viewport client 355, scroll 420), các lượt còn lại đạt; screens Chromium dừng ở Inventory tokens ENOENT app/api/heming/route.ts vì prepare-cloudflare-demo.mjs xóa các route API/knowledge động trong working tree trước khi kiểm kê. Đã đọc lại mục UI-6 trong ZIP.
+- Di chuyển inventory trước prepare/build để quét đủ source Git, không bỏ file. Giới hạn intrinsic size của form, native select và time input (giả thuyết nguyên nhân WebKit; chưa có log từng phần tử của lần đầu). Không dùng overflow-x:hidden toàn trang, giữ native control và gate overflow. Bổ sung log bounding box phần tử vượt viewport và kiểm tra lại sau thao tác bàn phím. Cần chạy lại đủ workflow trước nghiệm thu.

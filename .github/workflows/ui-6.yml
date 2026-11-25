@@ -30,14 +30,14 @@ jobs:
           node-version: '22'
           cache: npm
       - run: npm ci --no-audit --no-fund
+      - name: Inventory tokens
+        if: matrix.mode == 'screens'
+        run: node scripts/audit-ui-6-tokens.mjs
       - name: Build static export
         run: |
           node scripts/prepare-cloudflare-demo.mjs
           npm run build
           node scripts/check-seo-export.mjs
-      - name: Inventory tokens
-        if: matrix.mode == 'screens'
-        run: node scripts/audit-ui-6-tokens.mjs
       - name: Serve export
         run: |
           node scripts/serve-export.mjs > "$RUNNER_TEMP/ui6-server.log" 2>&1 &

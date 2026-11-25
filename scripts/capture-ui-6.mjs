@@ -31,6 +31,7 @@ async function keyboard(page,route,width){
   assert.equal(await page.evaluate(()=>document.activeElement?.textContent?.trim()),'Nam');
   await page.keyboard.press('Space');assert.equal(await page.getByRole('button',{name:'Nam',exact:true}).getAttribute('aria-pressed'),'true');
   await tabTo(page,'.birth-form input[aria-label="Không rõ giờ sinh cụ thể"]');await page.keyboard.press('Space');assert.equal(await page.getByLabel('Giờ và phút sinh').isDisabled(),true);
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),'chart form overflow after keyboard validation');
  }else if(route==='/lich-van-nien'){
   await tabTo(page,'.calendar4-grid button[tabindex="0"]');const old=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));
   await page.keyboard.press('ArrowRight');const next=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));assert.notEqual(next,old);
@@ -47,6 +48,7 @@ try{
    const response=await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:20000});assert.equal(response?.status(),200,'export HTTP status '+route);
    await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true',null,{timeout:15000});await page.evaluate(()=>document.fonts.ready);
    const metrics=await page.evaluate(()=>({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,header:document.querySelectorAll('header.global-header').length,footer:document.querySelectorAll('footer').length,h1:document.querySelectorAll('h1').length,theme:document.documentElement.dataset.theme}));
+   if(metrics.scroll>metrics.width+1){const offenders=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).flatMap(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&(r.right>document.documentElement.clientWidth+1||r.left< -1)&&s.position!=='fixed'?[{tag:e.tagName,id:e.id,cls:String(e.className).slice(0,100),label:e.getAttribute('aria-label'),left:r.left,right:r.right,width:r.width,scroll:e.scrollWidth,client:e.clientWidth}]:[];}).slice(0,60));writeFileSync(dir+'/overflow-'+key+'.json',JSON.stringify(offenders,null,2));}
    assert.ok(metrics.scroll<=metrics.width+1,'horizontal overflow '+JSON.stringify(metrics));assert.equal(metrics.header,1);assert.equal(metrics.footer,1);assert.equal(metrics.h1,1);assert.equal(metrics.theme,'light');
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});
