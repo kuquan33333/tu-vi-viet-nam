@@ -16,11 +16,13 @@ for(const file of source){
  const src=git(['show',ref+':'+file]), lines=src.split('\n');
  inv.push('## '+file+' ('+lines.length+' lines)');
  const matches=lines.flatMap((line,i)=>{const findings=[];
-  const icons=[...new Set(line.match(/[☷☯⊕✺⌖✳☰☾✦◇⌂▤◷∞↗]/gu)||[])];
+  const icons=[...new Set(line.match(/[☷☯⊕✺⌖✳☰☾✦◇⌂▤◷∞↗◈♡◆◎✓✔★☆⬇⚠\u{1F300}-\u{1FAFF}]/gu)||[])];
   const color=[...new Set(line.match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g)||[])];
   if(icons.length)findings.push('glyph '+icons.join(' '));
   if(color.length)findings.push('color '+color.join(', '));
   if(/(?:linear|radial)-gradient\(/.test(line))findings.push('gradient');
+  const utility=[...new Set(line.match(/\b(?:text|bg|border|ring)-(?:red|green|blue|yellow|amber|gray|slate|purple|orange|pink|rose|indigo|emerald|sky|zinc|neutral|stone)-\d{2,3}(?:\/\d+)?/g)||[])];
+  if(utility.length)findings.push('legacy color utility '+utility.join(', '));
   return findings.length?[{line:i+1,findings}]:[];
  });
  for(const m of matches){inv.push('- '+m.line+': '+m.findings.join('; '));if(file!=='app/tokens.css')residual.push({file,...m});}
@@ -53,6 +55,9 @@ try{
       paper:getComputedStyle(document.documentElement).getPropertyValue('--paper').trim().toUpperCase(),
       accent:getComputedStyle(document.documentElement).getPropertyValue('--accent').trim().toUpperCase(),
       loadedFonts:[...document.fonts].filter(f=>f.status==='loaded').length,
+      fontBody:getComputedStyle(document.body).fontFamily,
+      fontHeading:document.querySelector('h1')?getComputedStyle(document.querySelector('h1')).fontFamily:'',
+      fontFamilies:[...new Set([...document.fonts].filter(f=>f.status==='loaded').map(f=>f.family))],
       bottom:document.querySelector('.bottom-nav')?getComputedStyle(document.querySelector('.bottom-nav')).display:null
     }));
     const name=(route==='/'?'home':route.slice(1))+'-'+width+'.png';
@@ -65,6 +70,10 @@ try{
       assert.equal(status.theme,'light');
       assert.equal(status.paper,'#F6F2E9');assert.equal(status.accent,'#9E2F26');
       assert.ok(status.loadedFonts>0,'No loaded self-hosted fonts');
+      assert.ok(/be[_ ]?vietnam[_ ]?pro/i.test(status.fontBody),'Body must use Be Vietnam Pro');
+      assert.ok(/noto[_ ]?serif/i.test(status.fontHeading),'Heading must use Noto Serif');
+      assert.ok(status.fontFamilies.some(f=>/be[_ ]?vietnam[_ ]?pro/i.test(f)),'Be Vietnam Pro must actually load');
+      assert.ok(status.fontFamilies.some(f=>/noto[_ ]?serif/i.test(f)),'Noto Serif must actually load');
       assert.ok(Math.abs(status.headerHeight-(width<640?56:72))<=1,'Header height');
       assert.equal(status.bottom,width<640?'grid':'none','Bottom tab breakpoint');
       assert.equal(outbound.filter(x=>x.type==='font'||x.type==='script').length,0,'Unexpected remote font/script');
@@ -87,7 +96,7 @@ try{
  await browser.close();
 }
 if(phase==='after'){
- const remaining=residual.filter(r=>r.findings.some(v=>v.startsWith('glyph ')||v.startsWith('color ')||v==='gradient'));
+ const remaining=residual.filter(r=>r.findings.some(v=>v.startsWith('glyph ')||v.startsWith('color ')||v.startsWith('legacy color utility ')||v==='gradient'));
  assert.deepEqual(remaining,[],'Specified UI literal colors, gradients or Unicode glyphs still present (see inventory)');
 }
 assert.deepEqual(errors,[],'Responsive screenshot QA');

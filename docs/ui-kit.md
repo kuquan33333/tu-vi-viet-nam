@@ -44,3 +44,10 @@ Header, BottomTabBar, Footer nằm tại `components/ui/`; AppChrome chỉ đi�
 
 ## Nghiệm thu
 Các bộ kiểm thử hiện có vẫn chạy. Browser QA kiểm tra light-only (kể cả localStorage có dark), responsive, điều hướng, contrast, font local, mọi chức năng sinh lá số/hồ sơ/lịch và chuyên sâu. Workflow UI-1 Visual QA chụp baseline cố định và PR head cùng 11 route × 3 viewport. Chưa được xem là đạt trước khi có kết quả.
+
+
+## Ghi chú contrast và điều hướng
+- Các cặp chính (tính theo WCAG): ink/paper 14.23:1; muted/paper 5.49:1; accent/paper 6.51:1; white/accent 7.27:1; chữ phụ dải tối/ink 10.74:1.
+- dim/paper 4.39:1 là xung đột trong đặc tả, chưa đổi mã màu. Dùng muted nếu chữ nhỏ trên paper cho tới khi thống nhất UI-4.
+- Kiểm tra font thực sự nạp (cả serif và sans), không chỉ có font request. Kiểm kê thêm emoji, class utility màu Tailwind cũ. Mọi kết quả thực tế nằm trong Actions artifacts, không dùng số liệu tự tạo.
+- Hồ sơ đã mở khóa chỉ tồn tại trong phiên JS. Hợp bàn phải được mở bằng điều hướng client khi cần chọn hồ sơ đã mở khóa; không tải lại toàn trang.

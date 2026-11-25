@@ -86,7 +86,11 @@ try{
   assert.ok(!(await page.evaluate(()=>localStorage.getItem('tuvivn.profiles.v2'))).includes('V4 QA'));
   await page.getByLabel('Mã PIN',{exact:true}).fill('00000000');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByText(/PIN không đúng/).waitFor();
   await page.getByLabel('Mã PIN',{exact:true}).fill('73918426');await page.getByRole('button',{name:'Mở khóa'}).click();await page.getByRole('heading',{name:'V4 QA'}).waitFor();
-  await open('/');await page.getByRole('link',{name:/Đối chiếu hai lá số/}).first().click();await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
+  // Do not reload the page: the encrypted vault deliberately relocks on a hard navigation.
+  // Exercise the real new shell via client-side navigation from the unlocked profile page.
+  await page.locator('.global-header .brand-wordmark').click();
+  await page.getByRole('link',{name:/Đối chiếu hai lá số/}).first().click();
+  await page.waitForURL('**/hop-ban');await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
   if(width===360)await page.getByRole('button',{name:/Người thứ hai/}).click();
   await page.getByLabel('Chọn hồ sơ người B').selectOption({label:await page.getByLabel('Chọn hồ sơ người B').locator('option').nth(1).textContent()});
   await page.getByRole('button',{name:'Đối chiếu hai lá số'}).click();await page.getByRole('heading',{name:'Báo cáo đối chiếu 12 cung'}).waitFor();await noOverflow();
