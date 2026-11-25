@@ -306,7 +306,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <button
           type="button"
           onClick={handleSwitchToSolar}
+          aria-pressed={calendarType === 'solar'}
           style={{
+            minHeight: 44,
             flex: 1,
             padding: '8px 12px',
             fontSize: '12px',
@@ -315,7 +317,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             border: 'none',
             cursor: 'pointer',
             background: calendarType === 'solar' ? (isDark ? 'var(--accent)' : 'var(--ink)') : 'transparent',
-            color: calendarType === 'solar' ? (isDark ? 'var(--white)' : 'var(--white)') : labelClr,
+            color: calendarType === 'solar' ? 'var(--white)' : 'var(--ink)',
             transition: 'all 0.2s',
           }}
         >
@@ -324,7 +326,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <button
           type="button"
           onClick={handleSwitchToLunar}
+          aria-pressed={calendarType === 'lunar'}
           style={{
+            minHeight: 44,
             flex: 1,
             padding: '8px 12px',
             fontSize: '12px',
@@ -333,7 +337,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             border: 'none',
             cursor: 'pointer',
             background: calendarType === 'lunar' ? (isDark ? 'var(--accent)' : 'var(--ink)') : 'transparent',
-            color: calendarType === 'lunar' ? (isDark ? 'var(--white)' : 'var(--white)') : labelClr,
+            color: calendarType === 'lunar' ? 'var(--white)' : 'var(--ink)',
             transition: 'all 0.2s',
           }}
         >
