@@ -44,13 +44,12 @@ export default function StarField() {
         if (p.alpha >= 1) { p.alpha = 1; p.alphaDir = -1; }
         if (p.alpha <= 0) { p.alpha = 0; p.alphaDir = 1; }
 
-        const color = isLight
-          ? `rgba(160, 110, 20, ${p.alpha})`   // 亮色: 金色尘埃
-          : `rgba(200, 220, 255, ${p.alpha})`;  // 暗色: 蓝白星光
+        const color = getComputedStyle(document.documentElement).getPropertyValue(isLight?'--accent':'--on-dark').trim();
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = color;
+        ctx.globalAlpha = p.alpha;
         ctx.fill();
       });
       animId = requestAnimationFrame(draw);

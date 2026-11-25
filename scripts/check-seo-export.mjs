@@ -39,6 +39,7 @@ for(const f of files){
  }
  const banners=[...html.matchAll(/<header\b[^>]*class="[^"]*\bglobal-header\b[^"]*"/g)];
  assert.equal(banners.length,1,f+' global header count');
+ assert.equal((html.match(/<footer\b/g)||[]).length,1,f+' footer count');
  visited.add(normalized);console.log('PASS',normalized);
 }
 required.push(...Array.from({length:64},(_,i)=>'/thien-ky/que/'+(i+1)));

@@ -1,4 +1,5 @@
 'use client';
+import Icon,{type IconName} from '@/components/Icon';
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart, Palace } from '@/lib/ziwei/types';
@@ -368,8 +369,8 @@ Hành động thực tế cần làm để đón nhận cát khí hoặc hóa gi
                 disabled={loading}
                 className="py-1.5 text-[10px] font-medium rounded-lg transition-all duration-150 disabled:opacity-40"
                 style={{
-                  background: isActive ? 'rgba(212,168,67,0.12)' : 'transparent',
-                  border: `1px solid ${isActive ? 'rgba(212,168,67,0.3)' : 'var(--t-border)'}`,
+                  background: isActive ? 'var(--accent-soft)' : 'transparent',
+                  border: `1px solid ${isActive ? 'var(--accent-border)' : 'var(--t-border)'}`,
                   color: isActive ? 'var(--t-gold)' : 'var(--t-faint)',
                 }}
               >
@@ -385,7 +386,7 @@ Hành động thực tế cần làm để đón nhận cát khí hoặc hóa gi
 
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.1 }}>✦</div>
+            <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.1 }}><Icon name="tools" size={32}/></div>
             <p className="text-[10px] animate-pulse" style={{ color: 'var(--t-faint)' }}>Đang tạo luận giải mệnh lý…</p>
           </div>
         )}
@@ -405,8 +406,8 @@ Hành động thực tế cần làm để đón nhận cát khí hoặc hóa gi
                   <div
                     className="max-w-[85%] rounded-xl px-3 py-2 text-[11px]"
                     style={{
-                      background: 'rgba(212,168,67,0.08)',
-                      border: '1px solid rgba(212,168,67,0.18)',
+                      background: 'var(--accent-soft)',
+                      border: '1px solid var(--accent-border)',
                       color: 'var(--t-gold)',
                     }}
                   >
@@ -428,7 +429,7 @@ Hành động thực tế cần làm để đón nhận cát khí hoặc hóa gi
                   className="text-[9px] tracking-widest mb-2 flex items-center gap-1.5"
                   style={{ color: 'var(--t-faint)' }}
                 >
-                  <span style={{ color: 'var(--t-gold)', opacity: 0.4 }}>✦</span>
+                  <span style={{ color: 'var(--t-gold)', opacity: 0.4 }}><Icon name="tools" size={16}/></span>
                   Luận Đoán Mệnh Lý
                 </div>
                 <AiContent text={msg.content} streaming={loading && isLastMsg} />
@@ -460,8 +461,8 @@ Hành động thực tế cần làm để đón nhận cát khí hoặc hóa gi
             disabled={loading || !input.trim()}
             className="px-3 py-2 rounded-lg text-[11px] font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
-              background: 'rgba(212,168,67,0.15)',
-              border: '1px solid rgba(212,168,67,0.25)',
+              background: 'var(--accent-border)',
+              border: '1px solid var(--accent-border)',
               color: 'var(--t-gold)',
             }}
           >

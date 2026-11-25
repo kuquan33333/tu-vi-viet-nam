@@ -71,7 +71,7 @@ export default function XuanKongGIS(){
     {plan&&<div style={{position:'relative',marginTop:12,overflow:'hidden',borderRadius:10}}>
      <img alt="Sơ đồ mặt bằng do bạn chọn, không gửi lên mạng" src={plan} style={{display:'block',width:'100%',height:'auto',maxHeight:440,objectFit:'contain'}}/>
      <div role="img" aria-label="Lưới cửu cung Bắc ở trên ảnh" style={{position:'absolute',inset:0,display:'grid',gridTemplateColumns:'repeat(3,1fr)',gridTemplateRows:'repeat(3,1fr)',pointerEvents:'none'}}>
-      {positions.map((pos,i)=><div key={pos} style={{border:'1px solid #fff',background:'rgba(15,23,42,.37)',display:'grid',placeItems:'center',color:'#fff',fontSize:11,textShadow:'0 1px 2px black',textAlign:'center',padding:3}}>{pos}{report?' · '+report.palaces[i].periodStar:''}</div>)}
+      {positions.map((pos,i)=><div key={pos} style={{border:'1px solid var(--white)',background:'var(--overlay)',display:'grid',placeItems:'center',color:'var(--white)',fontSize:11,textShadow: 'none',textAlign:'center',padding:3}}>{pos}{report?' · '+report.palaces[i].periodStar:''}</div>)}
      </div>
     </div>}
     {plan&&<button type="button" className="study-btn secondary" style={{marginTop:10}} onClick={()=>setPlan(null)}>Bỏ ảnh mặt bằng</button>}

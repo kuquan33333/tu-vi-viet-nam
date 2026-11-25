@@ -58,9 +58,9 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
     <div id="share-card" style={{
       width: '680px',
       height: '420px',
-      background: 'linear-gradient(135deg, #fef9eb 0%, #f7e8c4 60%, #efd8a0 100%)',
+      background: 'var(--paper)',
       padding: '20px 28px',
-      fontFamily: '"Be Vietnam Pro", system-ui, -apple-system, sans-serif',
+      fontFamily: 'var(--font)',
       position: 'relative',
       boxSizing: 'border-box',
       borderRadius: '14px',
@@ -72,12 +72,12 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
       <div style={{
         position: 'absolute', top: '-60px', left: '-60px',
         width: '180px', height: '180px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(184,146,42,0.18) 0%, transparent 70%)',
+        background: 'transparent',
       }} />
       <div style={{
         position: 'absolute', bottom: '-50px', right: '-50px',
         width: '160px', height: '160px', borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(196,90,45,0.12) 0%, transparent 70%)',
+        background: 'transparent',
       }} />
 
       {/* Đầu trang */}
@@ -85,23 +85,23 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <div style={{
             width: '34px', height: '34px', borderRadius: '50%',
-            background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
+            background: 'var(--accent)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'white', fontSize: '15px', fontWeight: 700,
           }}>Tử</div>
           <div>
-            <div style={{ fontSize: '15px', color: '#3d2f10', fontWeight: 700, letterSpacing: '0.06em', lineHeight: 1.2 }}>Lá Số Tử Vi</div>
-            <div style={{ fontSize: '9px', color: '#a89b7c', letterSpacing: '0.12em', marginTop: '2px' }}>Nghê Hải Hạ Chính Tông · TỬ VI ĐẨU SỐ</div>
+            <div style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.06em', lineHeight: 1.2 }}>Lá Số Tử Vi</div>
+            <div style={{ fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', marginTop: '2px' }}>Nghê Hải Hạ Chính Tông · TỬ VI ĐẨU SỐ</div>
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <div style={{ fontSize: '10px', color: '#6b5d3f', letterSpacing: '0.02em', fontWeight: 500 }}>
+          <div style={{ fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.02em', fontWeight: 500 }}>
             {birth.day.padStart(2,'0')}/{birth.month.padStart(2,'0')}/{birth.year} · {birth.hour.padStart(2,'0')}:{birth.minute.padStart(2,'0')}
-            <span style={{ margin: '0 4px', color: '#b8922a' }}>·</span>
+            <span style={{ margin: '0 4px', color: 'var(--accent)' }}>·</span>
             {birth.gender === 'male' ? 'Nam Mệnh' : 'Nữ Mệnh'}
-            {birth.city && <><span style={{ margin: '0 4px', color: '#b8922a' }}>·</span>{birth.city}</>}
+            {birth.city && <><span style={{ margin: '0 4px', color: 'var(--accent)' }}>·</span>{birth.city}</>}
           </div>
-          <div style={{ fontSize: '8px', color: '#b8922a', letterSpacing: '0.05em', marginTop: '2px' }}>
+          <div style={{ fontSize: '8px', color: 'var(--accent)', letterSpacing: '0.05em', marginTop: '2px' }}>
             {SITE_HOST}
           </div>
         </div>
@@ -113,8 +113,8 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
         <div style={{
           width: '300px',
           height: '288px',
-          background: 'rgba(255,255,255,0.5)',
-          border: '1px solid rgba(184,146,42,0.3)',
+          background: 'var(--card)',
+          border: '1px solid var(--accent-border)',
           borderRadius: '8px',
           padding: '6px',
           display: 'grid',
@@ -130,10 +130,10 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
               <div key={i} style={{
                 gridRow: cell.row + 1,
                 gridColumn: cell.col + 1,
-                background: cell.isMing ? 'rgba(184,146,42,0.18)' : 'rgba(255,255,255,0.6)',
+                background: cell.isMing ? 'var(--accent-border)' : 'var(--card)',
                 border: cell.isMing
-                  ? '1.5px solid #b8922a'
-                  : '0.5px solid rgba(184,146,42,0.2)',
+                  ? '1.5px solid var(--accent)'
+                  : '0.5px solid var(--accent-border)',
                 borderRadius: '4px',
                 padding: '4px 5px',
                 display: 'flex',
@@ -144,7 +144,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                 {/* Tên Cung + Địa Chi */}
                 <div style={{
                   fontSize: '8px',
-                  color: cell.isMing ? '#8b6a14' : '#a89b7c',
+                  color: cell.isMing ? 'var(--accent)' : 'var(--muted)',
                   letterSpacing: '0.02em',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -169,14 +169,14 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                     <div key={j} style={{
                       fontSize: '10px',
                       fontWeight: 600,
-                      color: cell.isMing ? '#8b6a14' : '#3d2f10',
+                      color: cell.isMing ? 'var(--accent)' : 'var(--ink)',
                       letterSpacing: '0.01em',
                       lineHeight: 1.15,
                     }}>
-                      {s.name}{s.siHua ? <span style={{ fontSize: '8px', color: '#c45a2d', marginLeft: '2px' }}>{s.siHua}</span> : ''}
+                      {s.name}{s.siHua ? <span style={{ fontSize: '8px', color: 'var(--accent)', marginLeft: '2px' }}>{s.siHua}</span> : ''}
                     </div>
                   )) : (
-                    <div style={{ fontSize: '8px', color: '#a89b7c', fontStyle: 'italic' }}>Vô chính diệu</div>
+                    <div style={{ fontSize: '8px', color: 'var(--muted)', fontStyle: 'italic' }}>Vô chính diệu</div>
                   )}
                 </div>
               </div>
@@ -191,28 +191,28 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'rgba(184,146,42,0.06)',
-            border: '0.5px dashed rgba(184,146,42,0.3)',
+            background: 'var(--accent-soft)',
+            border: '0.5px dashed var(--accent-border)',
             borderRadius: '4px',
             textAlign: 'center',
             padding: '2px',
           }}>
-            <div style={{ fontSize: '7px', color: '#a89b7c', letterSpacing: '0.15em', marginBottom: '2px' }}>TỬ VI ĐẨU SỐ</div>
-            <div style={{ fontSize: '12px', color: '#3d2f10', fontWeight: 700, letterSpacing: '0.05em' }}>Mệnh Bàn</div>
-            <div style={{ fontSize: '9px', color: '#6b5d3f', marginTop: '4px' }}>Mệnh · {mingBranchName}</div>
-            <div style={{ fontSize: '9px', color: '#6b5d3f' }}>Thân · {shenBranchName}</div>
-            <div style={{ fontSize: '9px', color: '#8b6a14', marginTop: '3px', fontWeight: 700 }}>{chart.wuxingJuName}</div>
+            <div style={{ fontSize: '7px', color: 'var(--muted)', letterSpacing: '0.15em', marginBottom: '2px' }}>TỬ VI ĐẨU SỐ</div>
+            <div style={{ fontSize: '12px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.05em' }}>Mệnh Bàn</div>
+            <div style={{ fontSize: '9px', color: 'var(--muted)', marginTop: '4px' }}>Mệnh · {mingBranchName}</div>
+            <div style={{ fontSize: '9px', color: 'var(--muted)' }}>Thân · {shenBranchName}</div>
+            <div style={{ fontSize: '9px', color: 'var(--accent)', marginTop: '3px', fontWeight: 700 }}>{chart.wuxingJuName}</div>
           </div>
         </div>
 
         {/* Phải: Thông tin chủ chốt */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ fontSize: '10px', color: '#a89b7c', letterSpacing: '0.1em', marginBottom: '2px' }}>MỆNH CUNG · {mingBranchName}</div>
+            <div style={{ fontSize: '10px', color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: '2px' }}>MỆNH CUNG · {mingBranchName}</div>
             <div style={{
               fontSize: mingStarStr.length > 12 ? '24px' : '30px',
               fontWeight: 800,
-              color: '#8b6a14',
+              color: 'var(--accent)',
               letterSpacing: '0.02em',
               lineHeight: 1.15,
               marginBottom: '10px',
@@ -222,11 +222,11 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
             {highlight && (
               <div style={{
                 fontSize: '11px',
-                color: '#5b4c2e',
+                color: 'var(--ink)',
                 fontWeight: 500,
                 padding: '6px 10px',
-                background: 'rgba(255,255,255,0.6)',
-                borderLeft: '3px solid #b8922a',
+                background: 'var(--card)',
+                borderLeft: '3px solid var(--accent)',
                 borderRadius: '4px',
                 lineHeight: 1.4,
                 marginBottom: '10px',
@@ -239,29 +239,29 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
             {dx && (
               <div style={{
                 fontSize: '11px',
-                color: '#3d2f10',
+                color: 'var(--ink)',
                 marginBottom: '8px',
                 letterSpacing: '0.02em',
               }}>
-                <span style={{ color: '#a89b7c' }}>Đại Hạn Hiện Tại: </span>
+                <span style={{ color: 'var(--muted)' }}>Đại Hạn Hiện Tại: </span>
                 <span style={{ fontWeight: 600 }}>{dx.startAge}–{dx.endAge} tuổi · {dx.palaceName}</span>
               </div>
             )}
 
             <div style={{
               padding: '8px 10px',
-              background: 'linear-gradient(135deg, rgba(212,169,72,0.18) 0%, rgba(184,146,42,0.08) 100%)',
-              border: '1px solid rgba(184,146,42,0.3)',
+              background: 'var(--accent-soft)',
+              border: '1px solid var(--accent-border)',
               borderRadius: '6px',
             }}>
-              <div style={{ fontSize: '11px', color: '#3d2f10', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '11px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 1.4 }}>
                 Tử Vi là then chốt · Thiên Địa Nhân quy nhất
               </div>
-              <div style={{ fontSize: '10px', color: '#8b6a14', fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1.4, marginTop: '2px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1.4, marginTop: '2px' }}>
                 Tiền nhân khai đạo · AI luận giải đồng hành
               </div>
-              <div style={{ fontSize: '8px', color: '#a89b7c', letterSpacing: '0.08em', marginTop: '4px' }}>
-                Tra cứu và lập lá số chi tiết →
+              <div style={{ fontSize: '8px', color: 'var(--muted)', letterSpacing: '0.08em', marginTop: '4px' }}>
+                Tra cứu và lập lá số chi tiết
               </div>
             </div>
           </div>

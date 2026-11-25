@@ -1,5 +1,9 @@
-export type IconName='home'|'chart'|'tools'|'book'|'folder'|'sun'|'moon'|'menu'|'close'|'arrow'|'info'|'calendar'|'compass'|'health'|'compare'|'check'|'print'|'copy'|'reset'|'save';
+export type IconName='logo'|'user'|'external'|'yin-yang'|'home'|'chart'|'tools'|'book'|'folder'|'sun'|'moon'|'menu'|'close'|'arrow'|'info'|'calendar'|'compass'|'health'|'compare'|'check'|'print'|'copy'|'reset'|'save';
 const paths:Record<IconName,React.ReactNode>={
+ logo:<><circle cx="12" cy="12" r="9.75"/><circle cx="12" cy="12" r="3.75"/><path d="M12 2.25v6M12 15.75v6M2.25 12h6M15.75 12h6"/></>,
+ user:<><circle cx="12" cy="8" r="3.5"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/></>,
+ external:<><path d="M13 4h7v7m0-7-9 9"/><path d="M10 4H4v16h16v-6"/></>,
+ 'yin-yang':<><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 1 0 9 4.5 4.5 0 0 0 0 9"/><circle cx="12" cy="7.5" r=".7" fill="currentColor"/><circle cx="12" cy="16.5" r=".7" fill="currentColor"/></>,
  home:<><path d="M3 10l9-7 9 7v10H3z"/><path d="M9 20v-6h6v6"/></>,
  chart:<><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></>,
  tools:<><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></>,
@@ -21,5 +25,5 @@ const paths:Record<IconName,React.ReactNode>={
  save:<><path d="M4 3h13l3 3v15H4zM8 3v7h8V3M8 21v-7h8v7"/></>
 };
 export default function Icon({name,label,size=20}:{name:IconName;label?:string;size?:number}){
- return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" focusable="false" {...(label?{role:'img','aria-label':label}:{'aria-hidden':true})}>{paths[name]}</svg>;
+ return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" focusable="false" {...(label?{role:'img','aria-label':label}:{'aria-hidden':true})}>{paths[name]}</svg>;
 }

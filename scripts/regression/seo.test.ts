@@ -23,14 +23,17 @@ test('D1: không có header điều hướng thứ hai',()=>{
  for(const p of ['components/TriadNav.tsx','app/privacy/page.tsx','app/terms/page.tsx'])assert.doesNotMatch(read(p),/<header\b/,p);
 });
 test('D2: tên tác giả giữ nguyên',()=>assert.doesNotMatch(read('app/library/page.tsx'),/author\.split/));
-test('D3/D4: menu đủ và không đánh dấu link nội bộ như link ngoài',()=>{
- const src=read('components/AppChrome.tsx');
- for(const path of ['/cong-cu','/hop-ban','/ho-so','/lich-van-nien'])assert.ok(src.includes(path),path);
- assert.doesNotMatch(src,/↗/);
- const desktop=src.match(/<nav className="desktop-links"[\s\S]*?<\/nav>/)?.[0]||'';
- assert.ok(desktop.includes('sections.map'), 'Desktop must render all main sections');
- const mobile=src.match(/<nav className="mobile-site-menu"[\s\S]*?<\/nav>/)?.[0]||'';
- assert.ok(mobile.includes('mobileSections.map'), 'Mobile must render all sections');
+test('D3/D4: menu đầy đủ, header theo UI-BRIEF và không đánh dấu link nội bộ như link ngoài',()=>{
+ const header=read('components/ui/Header.tsx'),bottom=read('components/ui/BottomTabBar.tsx'),chrome=read('components/AppChrome.tsx');
+ for(const path of ['/cong-cu','/hop-ban','/ho-so','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/library'])assert.ok(header.includes(path),path);
+ assert.doesNotMatch(header+bottom+chrome,/↗/);
+ assert.ok(header.includes('desktopLinks.map')&&header.includes('allLinks.map'));
+ const expected=['/chart','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/library'];
+ const list=header.match(/export const desktopLinks=\[([^\n]+)\];/)?.[1]||'';
+ assert.deepEqual([...list.matchAll(/href:'([^']+)'/g)].map(m=>m[1]),expected);
+ assert.match(bottom,/href:'\/lich-van-nien',label:'Lịch'/);
+ assert.match(chrome,/<Header path=/);assert.ok(chrome.includes('<Footer/>'));
+ assert.match(header,/Escape/);assert.match(header,/menu\.current\?\.focus/);
 });
 test('A: robots, sitemap loại URL cũ/hồ sơ',()=>{
  assert.match(read('app/robots.ts'),/['"]\/ho-so['"]/);

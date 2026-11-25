@@ -90,8 +90,8 @@ export default function CalendarView({data,initial}:{data:CalendarData;initial:{
     </div>
     <p className="workspace-note">Ngày lễ: Điều 112 Bộ luật Lao động 2019; không thay thế thông báo ngày nghỉ từng năm.</p><div className="study-notice">Ngày âm và năm Can Chi sử dụng lịch Việt Nam UTC+7 (1900–2050). Giờ giao tiết lấy từ lunar-javascript 1.7.7, quy đổi UTC+7 và làm tròn đến phút. Sai số mô hình lịch sử có thể ảnh hưởng những mốc sát nửa đêm. Lịch lịch sử áp dụng quy ước UTC+7 cố định.</div>{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())&&<p className="study-notice">{calendarUncertainty(selected.getFullYear(),selected.getMonth()+1,selected.getDate())}</p>}
     <div style={{marginTop:15,display:'flex',gap:8,flexWrap:'wrap'}}>
-     <Link className="action-outline" href="/thien-ky">Thiên Kỷ →</Link>
-     <Link className="action-outline" href="/chart">Lập lá số →</Link>
+     <Link className="action-outline" href="/thien-ky">Thiên Kỷ <Icon name="arrow" size={16}/></Link>
+     <Link className="action-outline" href="/chart">Lập lá số <Icon name="arrow" size={16}/></Link>
     </div>
    </aside>
   </div>

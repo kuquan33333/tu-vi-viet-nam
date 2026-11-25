@@ -1,0 +1,34 @@
+/* UI-BRIEF.md §2 — single source of presentation tokens. Light mode only in UI-1–UI-6. */
+:root {
+ --paper:#F6F2E9; --card:#FFFDF8; --ink:#1C2230; --muted:#5B6270;
+ --dim:#6B717D; --line:#DDD4C2; --field:#8C8472; --accent:#9E2F26;
+ --white:#FFFFFF; --overlay:rgba(28,34,48,.78); --on-dark:#F6F2E9; --on-dark-muted:#D9D4C7;
+ --accent-soft:#F8EFE9;
+ --accent-border:#C79A8B;
+ --font:var(--font-be-vietnam),system-ui,sans-serif;
+ --font-serif:var(--font-noto-serif),var(--font-noto-serif-vietnamese),var(--font-noto-serif-extended),Georgia,serif;
+ --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+ --heading-home:56px; --heading-page:40px; --heading-mobile:32px; --heading-2:34px; --heading-2-mobile:24px; --heading-3:22px;
+ --body-size:16px; --small-size:14px; --eyebrow-size:12px;
+ --page-gutter:64px; --section-gap:72px; --card-padding:24px; --panel-padding:32px;
+ --radius-card:10px; --radius-control:6px; --control-height:48px; --touch:44px;
+ --header-height:72px; --tab-height:64px;
+ /* Legacy aliases retained until UI-6, to avoid breaking existing views. */
+ --bg-0:var(--paper); --bg-1:var(--paper); --bg-2:var(--line); --bg-card:var(--card); --bg-page:var(--paper); --bg-inv:var(--ink);
+ --tx-0:var(--ink); --tx-1:var(--ink); --tx-2:var(--muted); --tx-3:var(--muted); --tx-inv:var(--on-dark); --tx-inv2:var(--on-dark-muted);
+ --ac:var(--accent); --ac-dim:var(--accent); --ac-bg:var(--accent-soft); --ac-bdr:var(--accent-border);
+ --bdr:var(--line); --bdr-med:var(--field); --bdr-heavy:var(--ink);
+ --t-bg:var(--card); --t-surface:var(--paper); --t-card:var(--card); --t-text:var(--ink); --t-text2:var(--muted); --t-faint:var(--muted); --t-gold:var(--accent); --t-border:var(--line); --t-border-acc:var(--accent-border);
+ --r-xs:4px; --r-sm:var(--radius-control); --r-md:var(--radius-card); --r-lg:var(--radius-card); --r-xl:var(--radius-card); --r-pill:var(--radius-control);
+ --sh-xs:none; --sh-sm:none; --sh-md:none; --sh-lg:none;
+ /* Existing semantic chart colors, not UI accents. Preserve meaning and labels. */
+ --lu:#2D7A4A; --quan:#1A56A8; --ke:#735B16; --ji:#A83228;
+ --lu-bg:#EEF3EA; --lu-border:#B1BEA4;
+ --quan-bg:#EDF0F2; --quan-border:#ACB5BC;
+ --ke-bg:#F6F2E6; --ke-border:#C8BB98;
+ --ji-bg:#F8EDE7; --ji-border:#D0AC9C;
+ --print-paper:#FFFFFF; --print-ink:#111111; --print-muted:#333333; --print-dim:#444444; --print-line:#EEEEEE;
+ color-scheme:light;
+}
+@media(max-width:1023px){:root{--page-gutter:32px}}
+@media(max-width:639px){:root{--page-gutter:20px;--header-height:56px}}

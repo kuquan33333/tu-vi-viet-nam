@@ -1,5 +1,6 @@
 'use client';
 
+import Icon,{type IconName} from '@/components/Icon';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart } from '@/lib/ziwei/types';
@@ -56,7 +57,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-center justify-center p-4"
-          style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)' }}
+          style={{ background: 'var(--overlay)', backdropFilter: 'blur(4px)' }}
           onClick={onClose}
         >
           <motion.div
@@ -72,38 +73,38 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               width: '100%',
               maxHeight: '92vh',
               overflowY: 'auto',
-              boxShadow: '0 24px 60px rgba(0,0,0,0.3)',
+              boxShadow: 'none',
             }}
           >
             {/* Tiêu đề modal */}
             <div style={{
               padding: '14px 18px',
-              borderBottom: '1px solid rgba(184,146,42,0.15)',
+              borderBottom: '1px solid var(--accent-border)',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
             }}>
-              <div style={{ fontSize: '14px', fontWeight: 600, color: '#3d2f10', letterSpacing: '0.08em' }}>
-                ✦ Chia Sẻ Lá Số Tử Vi
+              <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--ink)', letterSpacing: '0.08em' }}>
+                <Icon name="tools" size={18}/> Chia Sẻ Lá Số Tử Vi
               </div>
               <button
                 onClick={onClose}
                 aria-label="Đóng cửa sổ chia sẻ"
                 style={{
                   width: '28px', height: '28px', borderRadius: '50%', border: 'none',
-                  background: 'rgba(0,0,0,0.05)', color: '#666', fontSize: '16px',
+                  background: 'var(--line)', color: 'var(--muted)', fontSize: '16px',
                   cursor: 'pointer', lineHeight: 1,
                 }}
-              >×</button>
+              ><Icon name="close" size={20}/></button>
             </div>
 
             {/* Xem trước ảnh lá số */}
-            <div style={{ padding: '20px', background: '#fbf6e8', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
+            <div style={{ padding: '20px', background: 'var(--paper)', display: 'flex', justifyContent: 'center', overflowX: 'auto' }}>
               {chart && (
                 <ShareCardCanvas chart={chart} birth={birth} highlight={highlight} />
               )}
             </div>
 
-            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: '#a89b7c', letterSpacing: '0.05em' }}>
-              ↑ Thích hợp chia sẻ lên Facebook, Zalo, Telegram, Messenger
+            <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.05em' }}>
+              Thích hợp chia sẻ lên Facebook, Zalo, Telegram, Messenger
             </div>
 
             {/* Vùng thao tác */}
@@ -111,33 +112,33 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
               <button onClick={downloadImage} disabled={downloading}
                 style={{
                   padding: '14px', borderRadius: '10px', border: 'none',
-                  background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
+                  background: 'var(--accent)',
                   color: 'white', fontSize: '14px', fontWeight: 600, letterSpacing: '0.08em',
                   cursor: downloading ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
+                  boxShadow: 'none',
                   opacity: downloading ? 0.7 : 1,
                 }}
               >
-                {downloading ? 'Đang tạo ảnh…' : '⬇ Tải Ảnh Lá Số'}
+                {downloading ? 'Đang tạo ảnh…' : 'Tải Ảnh Lá Số'}
               </button>
 
               <button onClick={copyLink}
                 style={{
                   padding: '14px', borderRadius: '10px',
-                  border: '1px solid rgba(184,146,42,0.4)', background: 'white',
-                  color: '#b8922a', fontSize: '14px', fontWeight: 500, letterSpacing: '0.06em',
+                  border: '1px solid var(--accent-border)', background: 'white',
+                  color: 'var(--accent)', fontSize: '14px', fontWeight: 500, letterSpacing: '0.06em',
                   cursor: 'pointer',
                 }}
               >
-                {copied ? '✓ Đã sao chép liên kết lá số' : '🔗 Sao Chép Liên Kết Lá Số'}
+                {copied ? 'Đã sao chép liên kết lá số' : 'Sao Chép Liên Kết Lá Số'}
               </button>
 
               <div style={{
-                fontSize: '11px', color: '#a89b7c', lineHeight: 1.7,
-                padding: '10px 12px', background: 'rgba(184,146,42,0.05)',
+                fontSize: '11px', color: 'var(--muted)', lineHeight: 1.7,
+                padding: '10px 12px', background: 'var(--accent-soft)',
                 borderRadius: '8px', marginTop: '4px',
               }}>
-                <div style={{ marginBottom: '4px', fontWeight: 600, color: '#8b6a14' }}>Hướng dẫn sử dụng:</div>
+                <div style={{ marginBottom: '4px', fontWeight: 600, color: 'var(--accent)' }}>Hướng dẫn sử dụng:</div>
                 · Nhấn Tải Ảnh để lưu ảnh lá số độ nét cao về thiết bị cá nhân<br />
                 · Sao chép liên kết để gửi cho bạn bè cùng mở xem và đàm đạo mệnh lý
               </div>

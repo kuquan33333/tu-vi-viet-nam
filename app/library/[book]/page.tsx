@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { chapterPath } from '@/lib/classics/chapter-slugs';
 import { pageMetadata } from '@/lib/seo/metadata';
@@ -44,8 +45,8 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
         </div>
 
         {/* Mục lục các chương / quyển */}
-        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid rgba(184,146,42,0.2)', overflow: 'hidden' }}>
-          <div style={{ padding: '14px 20px', borderBottom: '1px solid rgba(184,146,42,0.15)', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', fontWeight: 600 }}>
+        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid var(--line)', overflow: 'hidden' }}>
+          <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--line)', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', fontWeight: 600 }}>
             MỤC LỤC TÁC PHẨM
           </div>
           {book.chapters.map((chapter, i) => (
@@ -57,12 +58,12 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
                 alignItems: 'baseline',
                 gap: '14px',
                 padding: '14px 20px',
-                borderBottom: i === book.chapters.length - 1 ? 'none' : '1px dashed rgba(184,146,42,0.15)',
+                borderBottom: i === book.chapters.length - 1 ? 'none' : '1px dashed var(--line)',
                 textDecoration: 'none',
                 color: 'inherit',
                 transition: 'background 0.15s',
               }}
-              className="hover:bg-amber-500/5"
+              className="hover:bg-[var(--accent-soft)]"
             >
               <div style={{ fontSize: '12px', color: 'var(--ac)', fontWeight: 600, minWidth: '40px', letterSpacing: '0.05em' }}>
                 {String(i + 1).padStart(2, '0')}
@@ -80,7 +81,7 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
               <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
                 {chapter.paragraphs.length} đoạn
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--ac)' }}>→</div>
+              <div style={{ fontSize: '12px', color: 'var(--ac)' }}><Icon name="arrow" size={16}/></div>
             </Link>
           ))}
         </div>

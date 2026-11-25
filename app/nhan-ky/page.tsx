@@ -1,7 +1,6 @@
 'use client';
 
 import {useMemo,useState} from 'react';
-import TriadNav from '@/components/TriadNav';
 import {MEDICAL_SOURCES} from '@/lib/triad/medical-sources';
 import acupointAudit from '@/lib/triad/acupoint-provenance.generated.json';
 import catalog from '@/lib/triad/acupoint-catalog.json';
@@ -147,7 +146,7 @@ function AtlasTool(){
    <p>Atlas 3D do cộng đồng <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noopener noreferrer">aicuc/3d-acupoint-atlas</a> phát hành theo MIT. Bản 3D có mô hình tương tác riêng; liên kết ở đây chỉ nhúng nội dung từ trang tác giả, không sao chép hay cam kết mọi vị trí đều chuẩn giải phẫu.</p>
    <div className="study-actions">
     <button className="study-btn" type="button" onClick={()=>setShow3d(v=>!v)}>{show3d?'Ẩn bản đồ 3D':'Mở bản đồ 3D tại đây'}</button>
-    <a className="study-btn secondary" target="_blank" rel="noopener noreferrer" href="https://aicuc.github.io/3d-acupoint-atlas/">Mở trang gốc ↗</a>
+    <a className="study-btn secondary" target="_blank" rel="noopener noreferrer" href="https://aicuc.github.io/3d-acupoint-atlas/">Mở trang gốc</a>
    </div>
    {show3d&&<div style={{marginTop:15}}>
     <iframe title="Atlas 3D nguồn mở của aicuc" src="https://aicuc.github.io/3d-acupoint-atlas/" loading="lazy"
@@ -188,7 +187,7 @@ function GlossaryTool(){
 export default function NhanKyPage(){
  const [tab,setTab]=useState<Tab>('library');
  return <div className="study-shell">
-  <TriadNav active="nhan-ky"/>
+
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Nhân Kỷ</div>
@@ -214,7 +213,7 @@ export default function NhanKyPage(){
     </div>
     <p className="study-muted">Bản Hán cổ không mặc định đồng nghĩa bản chép số hóa có thể sao chép mà không ghi nguồn. Các bản dịch hiện đại có thể có bản quyền. Tài liệu <a href="https://www.who.int/publications/i/item/9290611057" target="_blank" rel="noopener noreferrer">danh pháp 361 huyệt WHO</a> và sách định vị WHO 2008 có bản quyền; chưa đưa toàn bộ mô tả vào website. TARA chỉ dùng đối chiếu mã, không nhập mô tả phương pháp châm cứu.</p>
    </section>
-   <footer className="study-footer">Nhân Kỷ · Thư viện giáo dục.</footer>
+   <p className="study-footer" role="note">Nhân Kỷ · Thư viện giáo dục.</p>
   </main>
  </div>;
 }

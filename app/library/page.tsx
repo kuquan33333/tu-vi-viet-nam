@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -19,9 +20,9 @@ export default function LibraryHomePage() {
       {/* Hero */}
       <div className="text-center px-6 py-16">
         <div className="flex items-center justify-center gap-3 mb-4">
-          <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to right, transparent, rgba(184,146,42,0.4))' }} />
+          <div style={{ height: '1px', width: '48px', background: 'var(--line)' }} />
           <span style={{ fontSize: '11px', color: 'var(--ac)', letterSpacing: '0.2em', fontWeight: 600 }}>NGHÊ HẢI HẠ · NGUYÊN ĐIỂN CỔ THƯ</span>
-          <div style={{ height: '1px', width: '48px', background: 'linear-gradient(to left, transparent, rgba(184,146,42,0.4))' }} />
+          <div style={{ height: '1px', width: '48px', background: 'var(--line)' }} />
         </div>
         <h1 style={{ fontSize: 'clamp(26px, 4vw, 40px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.04em', marginBottom: '12px' }}>
           Thư Viện Cổ Thư Tử Vi Đẩu Số
@@ -47,12 +48,12 @@ export default function LibraryHomePage() {
               style={{
                 display: 'block',
                 background: 'var(--bg-card)',
-                border: '1px solid rgba(184,146,42,0.2)',
+                border: '1px solid var(--line)',
                 borderRadius: '14px',
                 padding: '24px',
                 textDecoration: 'none',
                 transition: 'all 0.2s',
-                boxShadow: '0 2px 8px rgba(184,146,42,0.06)',
+                boxShadow: 'none',
               }}
               className="hover:shadow-lg"
             >
@@ -67,7 +68,7 @@ export default function LibraryHomePage() {
               </div>
               <div style={{ display: 'flex', gap: '12px', fontSize: '11px', color: 'var(--tx-3)' }}>
                 <span>{book.chapters.length} Chương / Quyển</span>
-                <span style={{ color: 'rgba(184,146,42,0.4)' }}>·</span>
+                <span style={{ color: 'var(--line)' }}>·</span>
                 <span>{book.chapters.reduce((s, c) => s + c.paragraphs.length, 0)} Đoạn tinh hoa</span>
               </div>
               <div style={{
@@ -78,14 +79,14 @@ export default function LibraryHomePage() {
                 letterSpacing: '0.05em',
                 fontWeight: 600,
               }}>
-                Vào đọc tác phẩm →
+                Vào đọc tác phẩm <Icon name="arrow" size={16}/>
               </div>
             </Link>
           ))}
         </div>
 
         {/* Thông tin thêm */}
-        <div style={{ marginTop: '60px', padding: '24px', background: 'rgba(184,146,42,0.05)', borderRadius: '10px', textAlign: 'center' }}>
+        <div style={{ marginTop: '60px', padding: '24px', background: 'var(--accent-soft)', borderRadius: '10px', textAlign: 'center' }}>
           <div style={{ fontSize: '11px', color: 'var(--ac-dim)', fontWeight: 600, letterSpacing: '0.1em', marginBottom: '8px' }}>
             VỀ KHO TƯ LIỆU NGUYÊN ĐIỂN
           </div>

@@ -17,8 +17,8 @@ export default function TermsPage(){
    <p>Kết quả lá số chịu ảnh hưởng của ngày âm, giờ sinh, kinh độ, quy tắc giờ Tý và phiên bản lịch. Những trường hợp giờ sinh chưa rõ, chuyển múi giờ lịch sử, tiết khí hoặc sóc gần nửa đêm có thể có nhiều cách xác định; phần mềm chỉ diễn giải theo phương pháp ghi trong tài liệu, không bảo đảm sự thật về cá nhân.</p>
    <p>Nhân Kỷ không chẩn đoán bệnh, hướng dẫn châm cứu, kê đơn hoặc tự điều trị. Địa Kỷ không thay thế khảo sát địa chất, hồ sơ địa chính hay quy chuẩn xây dựng.</p>
 
-   <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>3. Mã nguồn, thư tịch và quyền sử dụng</h2>
-   <p>Mã nguồn thuộc phạm vi giấy phép <a href="https://github.com/kuquan33333/tu-vi-viet-nam/blob/revamp-v2/LICENSE" target="_blank" rel="noopener noreferrer">MIT của repository</a> có thể được sử dụng, sửa đổi, phân phối theo các điều khoản MIT. Website không đặt ra lệnh cấm chung với việc đọc, sửa đổi hoặc nghiên cứu mã nguồn hợp pháp.</p>
+   <h2 id="nguon-va-giay-phep" style={{fontSize:19,marginTop:28,marginBottom:10}}>3. Mã nguồn, thư tịch và quyền sử dụng</h2>
+   <p>Dự án phát triển từ mã nguồn của <a href="https://github.com/naot7/tu-vi-viet-nam" target="_blank" rel="noopener noreferrer">naot7/tu-vi-viet-nam</a>. Mã nguồn thuộc phạm vi giấy phép <a href="https://github.com/kuquan33333/tu-vi-viet-nam/blob/revamp-v2/LICENSE" target="_blank" rel="noopener noreferrer">MIT của repository</a> có thể được sử dụng, sửa đổi, phân phối theo các điều khoản MIT. Website không đặt ra lệnh cấm chung với việc đọc, sửa đổi hoặc nghiên cứu mã nguồn hợp pháp.</p>
    <p>Các tư liệu, bản ghi cổ thư, hình ảnh, dữ liệu huyệt đạo và nội dung do bên thứ ba cung cấp có giấy phép riêng. Một số tệp nghiên cứu trong <code>docs/tianji-ziwei/</code> thuộc CC BY-NC-SA 4.0, không phải MIT và có giới hạn phi thương mại; việc tái sử dụng cần kiểm tra đúng quyền của từng nguồn. Không mặc định mọi nội dung trang đều thuộc sở hữu độc quyền của website.</p>
 
    <h2 style={{fontSize:19,marginTop:28,marginBottom:10}}>4. Quyền riêng tư và dịch vụ bên ngoài</h2>

@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -48,7 +49,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
         </div>
 
         {/* Danh sách các đoạn văn */}
-        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid rgba(184,146,42,0.2)', padding: '32px 28px' }}>
+        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid var(--line)', padding: '32px 28px' }}>
           {chapter.paragraphs.map((p, i) => (
             <div
               key={p.id}
@@ -56,7 +57,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
               style={{
                 marginBottom: i === chapter.paragraphs.length - 1 ? 0 : '20px',
                 paddingBottom: i === chapter.paragraphs.length - 1 ? 0 : '20px',
-                borderBottom: i === chapter.paragraphs.length - 1 ? 'none' : '1px dashed rgba(184,146,42,0.15)',
+                borderBottom: i === chapter.paragraphs.length - 1 ? 'none' : '1px dashed var(--line)',
                 scrollMarginTop: '80px',
               }}
             >
@@ -91,7 +92,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                   marginTop: '8px',
                   marginLeft: '36px',
                   padding: '10px 14px',
-                  background: 'rgba(184,146,42,0.05)',
+                  background: 'var(--accent-soft)',
                   borderRadius: '6px',
                   fontSize: '13px',
                   color: 'var(--tx-2)',
@@ -106,7 +107,7 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                   marginTop: '8px',
                   marginLeft: '36px',
                   padding: '10px 14px',
-                  background: 'rgba(196,90,45,0.05)',
+                  background: 'var(--accent-soft)',
                   borderRadius: '6px',
                   fontSize: '13px',
                   color: 'var(--tx-2)',
@@ -129,13 +130,13 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                 flex: 1,
                 padding: '14px 18px',
                 background: 'var(--bg-card)',
-                border: '1px solid rgba(184,146,42,0.2)',
+                border: '1px solid var(--line)',
                 borderRadius: '10px',
                 textDecoration: 'none',
                 color: 'var(--tx-0)',
               }}
             >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>← Chương Trước</div>
+              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}><span className="inline-flex rotate-180"><Icon name="arrow" size={16}/></span> Chương Trước</div>
               <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[prevIdx].title}</div>
             </Link>
           ) : <div style={{ flex: 1 }} />}
@@ -146,14 +147,14 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
                 flex: 1,
                 padding: '14px 18px',
                 background: 'var(--bg-card)',
-                border: '1px solid rgba(184,146,42,0.2)',
+                border: '1px solid var(--line)',
                 borderRadius: '10px',
                 textDecoration: 'none',
                 color: 'var(--tx-0)',
                 textAlign: 'right',
               }}
             >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>Chương Kế Tiếp →</div>
+              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>Chương Kế Tiếp <Icon name="arrow" size={16}/></div>
               <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[nextIdx].title}</div>
             </Link>
           ) : <div style={{ flex: 1 }} />}

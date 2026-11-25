@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import {useMemo,useState} from 'react';
 import Link from 'next/link';
 import type {BirthFormState} from '@/components/BirthForm';
@@ -114,6 +115,6 @@ export default function HemingPage(){
    </div>
    <div className="home-note">{READING_NOTICE} Công cụ không cung cấp tỷ lệ phần trăm hay lời khuyên bắt buộc về hôn nhân, công việc hoặc lựa chọn cá nhân.</div>
   </>}
-  <div style={{padding:'20px 0'}}><Link href="/chart" className="section-link">Lập lá số riêng →</Link></div>
+  <div style={{padding:'20px 0'}}><Link href="/chart" className="section-link">Lập lá số riêng <Icon name="arrow" size={16}/></Link></div>
  </main>;
 }

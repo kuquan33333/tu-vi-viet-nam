@@ -1,4 +1,5 @@
 'use client';
+import Icon,{type IconName} from '@/components/Icon';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Star } from '@/lib/ziwei/types';
 import { STAR_DESCRIPTIONS } from '@/lib/ziwei/constants';
@@ -164,22 +165,22 @@ const STAR_DETAIL: Record<string, {
 
 // Cấu hình phân loại sao
 const levelConfig = {
-  major: { label: 'Chính Tinh', color: 'text-amber-400 border-amber-500/30 bg-amber-500/10' },
-  lucky: { label: 'Cát Tinh', color: 'text-sky-400 border-sky-500/30 bg-sky-500/10' },
-  sha:   { label: 'Sát Tinh', color: 'text-red-400 border-red-500/30 bg-red-500/10' },
-  minor: { label: 'Phụ Tinh', color: 'text-slate-400 border-slate-500/25 bg-slate-500/10' },
+  major: { label: 'Chính Tinh', color: 'text-accent border-[var(--accent-border)] bg-[var(--accent-soft)]' },
+  lucky: { label: 'Cát Tinh', color: 'text-quan border-[var(--quan-border)] bg-[var(--quan-bg)]' },
+  sha:   { label: 'Sát Tinh', color: 'text-ji border-[var(--ji-border)] bg-[var(--ji-bg)]' },
+  minor: { label: 'Phụ Tinh', color: 'text-muted border-line bg-paper' },
 };
 
 const siHuaColors: Record<string, string> = {
-  'Lộc': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  'Quyền': 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  'Khoa': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
-  'Kỵ': 'text-red-400 bg-red-500/10 border-red-500/30',
+  'Lộc': 'text-lu bg-[var(--lu-bg)] border-[var(--lu-border)]',
+  'Quyền': 'text-quan bg-[var(--quan-bg)] border-[var(--quan-border)]',
+  'Khoa': 'text-ke bg-[var(--ke-bg)] border-[var(--ke-border)]',
+  'Kỵ': 'text-ji bg-[var(--ji-bg)] border-[var(--ji-border)]',
   // Giữ fallback Hán tự
-  '禄': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  '权': 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  '科': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
-  '忌': 'text-red-400 bg-red-500/10 border-red-500/30',
+  '禄': 'text-lu bg-[var(--lu-bg)] border-[var(--lu-border)]',
+  '权': 'text-quan bg-[var(--quan-bg)] border-[var(--quan-border)]',
+  '科': 'text-ke bg-[var(--ke-bg)] border-[var(--ke-border)]',
+  '忌': 'text-ji bg-[var(--ji-bg)] border-[var(--ji-border)]',
 };
 
 // Mapping ngược từ tiếng Hán sang tiếng Việt nếu star.name vẫn còn Hán tự
@@ -228,10 +229,10 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             <button 
               onClick={onClose} 
               aria-label="Đóng bảng chi tiết"
-              className="transition-colors text-lg leading-none hover:text-white" 
+              className="transition-colors text-lg leading-none hover:text-accent" 
               style={{ color: 'var(--t-faint)' }}
             >
-              ×
+              <Icon name="close" size={20}/>
             </button>
           </div>
 
@@ -248,7 +249,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                   <div key={tag} className="text-[10px] px-2 py-1 rounded-full"
                     style={{
                       border: '1px solid var(--t-border)',
-                      color: tag.includes('Miếu') || tag.includes('Vượng') ? '#eab308' : tag.includes('Hãm') ? '#ef4444' : 'var(--t-text2)',
+                      color: tag.includes('Miếu') || tag.includes('Vượng') ? 'var(--ke)' : tag.includes('Hãm') ? 'var(--ji)' : 'var(--t-text2)',
                     }}>
                     {tag}
                   </div>
@@ -263,7 +264,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                 <div className="flex flex-wrap gap-1.5">
                   {desc.keywords.split('·').map(k => (
                     <span key={k} className="text-[11px] px-2 py-0.5 rounded-full"
-                      style={{ color: 'var(--t-gold)', border: '1px solid rgba(212,168,67,0.2)', background: 'rgba(212,168,67,0.06)' }}>
+                      style={{ color: 'var(--t-gold)', border: '1px solid var(--accent-border)', background: 'var(--accent-soft)' }}>
                       {k.trim()}
                     </span>
                   ))}
@@ -273,7 +274,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
             {/* Trích dẫn Cổ thư */}
             {detail && (
-              <div className="rounded-xl p-3" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.12)' }}>
+              <div className="rounded-xl p-3" style={{ background: 'var(--accent-soft)', border: '1px solid var(--accent-soft)' }}>
                 <div className="text-[10px] tracking-widest mb-1.5 flex items-center gap-1" style={{ color: 'var(--t-gold)', opacity: 0.7 }}>
                   Cổ thư nguyên văn & chú giải
                 </div>
@@ -295,14 +296,14 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
                 <div className="grid grid-cols-1 gap-2">
                   {[
-                    { label: 'Định hướng sự nghiệp', value: detail.career, icon: '◈' },
-                    { label: 'Tình duyên & Hôn nhân', value: detail.relationship, icon: '♡' },
-                    { label: 'Tài vận & Quản lý tiền bạc', value: detail.wealth, icon: '◆' },
-                    { label: 'Sức khỏe & Dưỡng sinh', value: detail.health, icon: '☯' },
+                    { label: 'Định hướng sự nghiệp', value: detail.career, icon: 'tools' as IconName },
+                    { label: 'Tình duyên & Hôn nhân', value: detail.relationship, icon: 'health' as IconName },
+                    { label: 'Tài vận & Quản lý tiền bạc', value: detail.wealth, icon: 'chart' as IconName },
+                    { label: 'Sức khỏe & Dưỡng sinh', value: detail.health, icon: 'yin-yang' as IconName },
                   ].map(item => (
                     <div key={item.label} className="card-inner rounded-lg p-3">
                       <div className="text-[10px] mb-1 flex items-center gap-1" style={{ color: 'var(--t-faint)' }}>
-                        <span>{item.icon}</span>
+                        <Icon name={item.icon} size={16}/>
                         <span>{item.label}</span>
                       </div>
                       <p className="text-[11px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>{item.value}</p>
@@ -311,13 +312,13 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid rgba(74,222,128,0.15)', background: 'rgba(74,222,128,0.05)' }}>
-                    <div className="text-emerald-500 mb-0.5 font-medium">Cung vị đắc địa</div>
-                    <div className="text-emerald-500/80">{detail.bestPalace}</div>
+                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid var(--lu-border)', background: 'var(--lu-bg)' }}>
+                    <div className="text-lu mb-0.5 font-medium">Cung vị đắc địa</div>
+                    <div className="text-lu">{detail.bestPalace}</div>
                   </div>
-                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid rgba(248,113,113,0.15)', background: 'rgba(248,113,113,0.05)' }}>
-                    <div className="text-red-500 mb-0.5 font-medium">Cung vị cần lưu ý</div>
-                    <div className="text-red-500/80">{detail.worstPalace}</div>
+                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid var(--ji-border)', background: 'var(--ji-bg)' }}>
+                    <div className="text-ji mb-0.5 font-medium">Cung vị cần lưu ý</div>
+                    <div className="text-ji">{detail.worstPalace}</div>
                   </div>
                 </div>
               </>

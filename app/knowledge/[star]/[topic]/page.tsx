@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -59,7 +60,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
       <article className="max-w-3xl mx-auto px-6 py-12">
 
         {/* Tiêu đề trang */}
-        <header style={{ marginBottom: '36px' }}>
+        <div style={{ marginBottom: '36px' }}>
           <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', marginBottom: '8px', fontWeight: 600 }}>
             {data.topicLabel} · LUẬN GIẢI NGHÊ HẢI HẠ CHÍNH TÔNG
           </div>
@@ -71,7 +72,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
               {STAR_BRIEF_SEO[star]}
             </p>
           )}
-        </header>
+        </div>
 
         {/* 4 phần luận giải cốt lõi */}
         {data.parsed.dingdiao && (
@@ -110,9 +111,9 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         <div style={{
           margin: '40px 0 30px',
           padding: '24px',
-          background: 'linear-gradient(135deg, rgba(212,169,72,0.15) 0%, rgba(184,146,42,0.06) 100%)',
+          background: 'var(--accent-soft)',
           borderRadius: '14px',
-          border: '1px solid rgba(184,146,42,0.3)',
+          border: '1px solid var(--line)',
           textAlign: 'center',
         }}>
           <div style={{ fontSize: '15px', color: 'var(--tx-0)', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '6px' }}>
@@ -124,16 +125,16 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
           <Link href="/chart" style={{
             display: 'inline-block',
             padding: '12px 28px',
-            background: 'linear-gradient(135deg, #d4a948 0%, #b8922a 100%)',
+            background: 'var(--accent)',
             color: 'white',
             borderRadius: '999px',
             fontSize: '14px',
             fontWeight: 600,
             letterSpacing: '0.06em',
             textDecoration: 'none',
-            boxShadow: '0 4px 12px rgba(184,146,42,0.3)',
+            boxShadow: 'none',
           }}>
-            Lập lá số ngay →
+            Lập lá số ngay <Icon name="arrow" size={16}/>
           </Link>
         </div>
 
@@ -150,7 +151,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
                     fontSize: '12px',
                     padding: '6px 12px',
                     background: 'var(--bg-card)',
-                    border: '1px solid rgba(184,146,42,0.25)',
+                    border: '1px solid var(--line)',
                     borderRadius: '999px',
                     color: 'var(--tx-2)',
                     textDecoration: 'none',
@@ -174,7 +175,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
                   fontSize: '12px',
                   padding: '6px 12px',
                   background: 'var(--bg-card)',
-                  border: '1px solid rgba(184,146,42,0.25)',
+                  border: '1px solid var(--line)',
                   borderRadius: '999px',
                   color: 'var(--tx-2)',
                   textDecoration: 'none',
@@ -190,8 +191,8 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
         <div style={{
           marginTop: '40px',
           padding: '16px 20px',
-          background: 'rgba(184,146,42,0.04)',
-          border: '1px dashed rgba(184,146,42,0.25)',
+          background: 'var(--accent-soft)',
+          border: '1px dashed var(--line)',
           borderRadius: '10px',
           textAlign: 'center',
         }}>
@@ -199,16 +200,16 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             MUỐN NGHIÊN CỨU SÂU NGUYÊN ĐIỂN?
           </div>
           <Link href="/library" style={{ fontSize: '13px', color: 'var(--ac)', fontWeight: 600, letterSpacing: '0.04em', textDecoration: 'none' }}>
-            📜 Tra Cứu Thư Viện Cổ Thư — Toàn Tập / Toàn Thư / Cốt Tủy Phú →
+            <Icon name="book" size={16}/> Tra Cứu Thư Viện Cổ Thư — Toàn Tập / Toàn Thư / Cốt Tủy Phú <Icon name="arrow" size={16}/>
           </Link>
         </div>
       </article>
 
       {/* Footer */}
-      <footer style={{ borderTop: '1px solid rgba(184,146,42,0.15)', padding: '20px 24px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
+      <div role="note" style={{ borderTop: '1px solid var(--line)', padding: '20px 24px', textAlign: 'center', fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.05em' }}>
         <div style={{ marginBottom: '6px' }}>Tử Vi Đẩu Số · Dựa trên hệ thống Nghê Hải Hạ Chính Tông · Phục vụ nghiên cứu học tập</div>
         <div style={{ opacity: 0.85 }}>Nền tảng không cấu thành bất kỳ lời khuyên y tế, đầu tư tài chính hay pháp lý nào</div>
-      </footer>
+      </div>
     </div>
   );
 }
@@ -231,9 +232,9 @@ function Section({ title, children, gradient, minimal }: { title: string; childr
       </h2>
       <div style={{
         background: gradient
-          ? 'linear-gradient(135deg, rgba(212,169,72,0.12) 0%, rgba(184,146,42,0.04) 100%)'
+          ? 'var(--accent-soft)'
           : 'var(--bg-card)',
-        border: '1px solid rgba(184,146,42,0.15)',
+        border: '1px solid var(--line)',
         borderRadius: '10px',
         padding: minimal ? '14px 18px' : '20px 22px',
       }}>

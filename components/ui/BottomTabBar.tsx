@@ -1,0 +1,4 @@
+import Link from 'next/link';
+import Icon,{type IconName} from '../Icon';
+const quick:{href:string;label:string;symbol:IconName}[]=[{href:'/',label:'Trang chủ',symbol:'home'},{href:'/chart',label:'Lá số',symbol:'chart'},{href:'/lich-van-nien',label:'Lịch',symbol:'calendar'},{href:'/library',label:'Thư viện',symbol:'book'},{href:'/ho-so',label:'Hồ sơ',symbol:'user'}];
+export default function BottomTabBar({path}:{path:string}){return <nav className="bottom-nav ui-bottom-nav" aria-label="Điều hướng nhanh trên điện thoại">{quick.map(q=>{const active=q.href==='/'?path==='/':path===q.href||path.startsWith(q.href+'/');return <Link prefetch={false} key={q.href} href={q.href} aria-current={active?'page':undefined} className={active?'active':''}><Icon name={q.symbol} size={22}/><span>{q.label}</span></Link>})}</nav>}

@@ -20,14 +20,14 @@ interface PalaceCellProps {
 }
 
 const SIHUA_STYLES: Record<string, string> = {
-  'Lộc': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  'Quyền': 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  'Khoa': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
-  'Kỵ': 'text-red-400 bg-red-500/10 border-red-500/30',
-  '禄': 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30',
-  '权': 'text-blue-400 bg-blue-500/10 border-blue-500/30',
-  '科': 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30',
-  '忌': 'text-red-400 bg-red-500/10 border-red-500/30',
+  'Lộc': 'text-lu bg-[var(--lu-bg)] border-[var(--lu-border)]',
+  'Quyền': 'text-quan bg-[var(--quan-bg)] border-[var(--quan-border)]',
+  'Khoa': 'text-ke bg-[var(--ke-bg)] border-[var(--ke-border)]',
+  'Kỵ': 'text-ji bg-[var(--ji-bg)] border-[var(--ji-border)]',
+  '禄': 'text-lu bg-[var(--lu-bg)] border-[var(--lu-border)]',
+  '权': 'text-quan bg-[var(--quan-bg)] border-[var(--quan-border)]',
+  '科': 'text-ke bg-[var(--ke-bg)] border-[var(--ke-border)]',
+  '忌': 'text-ji bg-[var(--ji-bg)] border-[var(--ji-border)]',
 };
 
 const SiHuaBadge = ({
@@ -79,20 +79,20 @@ export default function PalaceCell({
       style={{
         minHeight: '90px',
         background: isCurrentDaXian
-          ? 'rgba(147,51,234,0.08)'
+          ? 'var(--quan-bg)'
           : isSelected
-          ? 'rgba(37,99,235,0.18)'
+          ? 'var(--quan-border)'
           : isSanFang
-          ? 'rgba(37,99,235,0.09)'
+          ? 'var(--quan-bg)'
           : isMingGong
-          ? 'rgba(212,168,67,0.04)'
+          ? 'var(--accent-soft)'
           : 'var(--t-bg)',
         boxShadow: isCurrentDaXian
-          ? 'inset 3px 0 0 rgba(147,51,234,0.5)'
+          ? 'inset 3px 0 0 var(--quan)'
           : isSelected
-          ? 'inset 0 0 0 1.5px rgba(37,99,235,0.7)'
+          ? 'inset 0 0 0 1.5px var(--quan)'
           : isSanFang
-          ? 'inset 0 0 0 1px rgba(37,99,235,0.4)'
+          ? 'inset 0 0 0 1px var(--quan)'
           : 'none',
       }}
     >
@@ -100,7 +100,7 @@ export default function PalaceCell({
       {daXianAge && (
         <div className={clsx(
           'absolute top-1 right-1 text-[9px] font-mono tabular-nums',
-          isCurrentDaXian ? 'text-purple-400' : ''
+          isCurrentDaXian ? 'text-ink' : ''
         )}
           style={!isCurrentDaXian ? { color: 'var(--t-faint)', opacity: 0.75 } : undefined}
         >
@@ -111,17 +111,17 @@ export default function PalaceCell({
       {/* 宫名行 */}
       <div className="flex items-center gap-1 mb-0.5 pr-8">
         <span className={clsx('text-[10px] font-medium tracking-wide',
-          isMingGong ? 'text-amber-500' : isShenGong ? 'text-sky-500' : ''
+          isMingGong ? 'text-accent' : isShenGong ? 'text-quan' : ''
         )}
           style={!isMingGong && !isShenGong ? { color: 'var(--t-faint)' } : undefined}
         >
           {name}
         </span>
         {isMingGong && (
-          <span className="text-[7px] text-amber-500/80 border border-amber-500/30 px-0.5 rounded leading-tight font-bold">MỆNH</span>
+          <span className="text-[7px] text-accent border border-[var(--accent-border)] px-0.5 rounded leading-tight font-bold">MỆNH</span>
         )}
         {isShenGong && (
-          <span className="text-[7px] text-sky-500/80 border border-sky-500/30 px-0.5 rounded leading-tight font-bold">THÂN</span>
+          <span className="text-[7px] text-quan border border-[var(--quan-border)] px-0.5 rounded leading-tight font-bold">THÂN</span>
         )}
       </div>
 
@@ -144,12 +144,12 @@ export default function PalaceCell({
             >
               <span className={clsx(
                 'text-[13px] leading-tight font-bold tracking-tight cursor-pointer hover:brightness-125 transition-all',
-                star.brightness === 'bright' ? 'text-amber-300' : star.brightness === 'dim' ? 'text-amber-700/80' : 'text-amber-500',
+                star.brightness === 'bright' ? 'text-accent' : star.brightness === 'dim' ? 'text-accent' : 'text-accent',
               )}>
                 {star.name}
               </span>
               {star.brightnessRaw && (
-                <span className="text-[8px] text-amber-500/70 ml-0.5 font-normal">
+                <span className="text-[8px] text-accent ml-0.5 font-normal">
                   [{star.brightnessRaw}]
                 </span>
               )}
@@ -176,7 +176,7 @@ export default function PalaceCell({
           {luckyStars.map(s => {
             const overlaySiHua = overlayStarSiHua?.[s.name];
             return (
-              <span key={s.name} className="inline-flex items-center text-[9px] text-sky-500/70 leading-tight">
+              <span key={s.name} className="inline-flex items-center text-[9px] text-quan leading-tight">
                 {s.name}
                 {s.siHua && <SiHuaBadge siHua={s.siHua} />}
                 {overlaySiHua && (
@@ -200,7 +200,7 @@ export default function PalaceCell({
       {shaStars.length > 0 && (
         <div className="flex flex-wrap gap-x-1">
           {shaStars.map(s => (
-            <span key={s.name} className="text-[9px] text-red-500/60 leading-tight">
+            <span key={s.name} className="text-[9px] text-ji leading-tight">
               {s.name}{s.siHua && <SiHuaBadge siHua={s.siHua} />}
             </span>
           ))}

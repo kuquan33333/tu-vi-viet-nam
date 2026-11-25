@@ -99,7 +99,7 @@ export default function ChartPage(){
        <p><strong>Ngũ hành:</strong> {STAR_DESCRIPTIONS[star.name].element}</p>
        <p><strong>Tính chất ghi chép:</strong> {STAR_DESCRIPTIONS[star.name].nature}</p>
       </>:<p>Chưa có nội dung đã kiểm duyệt cho sao này. Có thể xem tên sao và vị trí trên lá số.</p>}
-      <button className="action-outline" onClick={()=>setStar(null)} style={{marginTop:5}}>← Xem lại cung {shown?.name}</button>
+      <button className="action-outline" onClick={()=>setStar(null)} style={{marginTop:5}}><span className="inline-flex rotate-180"><Icon name="arrow" size={16}/></span> Xem lại cung {shown?.name}</button>
      </>:study?<>
       <div className="reading-pills"><span>Chi {study.fact.branch}</span>{shown?.isMingGong&&<span>Cung Mệnh</span>}{shown?.isShenGong&&<span>Cung Thân</span>}</div>
       <h3>Các chính tinh tọa thủ</h3>
@@ -115,7 +115,7 @@ export default function ChartPage(){
       <div className="study-notice" style={{marginTop:16}}>Nội dung trên được dựng từ các sao và cung thực tế của lá số, không phải kết quả AI tự tạo.</div>
      </>:null}
      <p className="workspace-note" style={{marginTop:17}}>{READING_NOTICE}</p>
-     <Link href="/library" className="section-link">Tra cứu cổ thư liên quan →</Link>
+     <Link href="/library" className="section-link">Tra cứu cổ thư liên quan <Icon name="arrow" size={16}/></Link>
     </aside>
    </div>
    <div className="home-note"><strong style={{color:'var(--tx-0)'}}>Quyền riêng tư:</strong> Lá số không được tự động tải lên máy chủ. Khi bạn chọn “Lưu lá số”, dữ liệu sinh được lưu trong bộ nhớ trình duyệt hiện tại và có thể xóa tại mục <Link href="/ho-so">Hồ sơ</Link>.</div>

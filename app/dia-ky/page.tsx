@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect,useMemo,useState} from 'react';
-import TriadNav from '@/components/TriadNav';
+import Icon from '@/components/Icon';
 import XuanKongGIS from '@/components/XuanKongGIS';
 import {
  DIRECTIONS, normalizeDegree, mountainAt, directionAt, kuaFromYear,
@@ -33,7 +33,7 @@ function Compass({degree}:{degree:number}) {
    return <text key={d.key} x={center+Math.sin(a)*92} y={center-Math.cos(a)*92+5} fill="var(--tx-2)" fontSize="14" fontWeight="700" textAnchor="middle">{d.key==='N'?'B':d.key==='NE'?'ĐB':d.key==='E'?'Đ':d.key==='SE'?'ĐN':d.key==='S'?'N':d.key==='SW'?'TN':d.key==='W'?'T':'TB'}</text>;
   })}
   <g transform={'rotate('+degree+' '+center+' '+center+')'}>
-   <path d="M155 38 L142 164 L155 149 L168 164 Z" fill="#bd6c32" opacity=".95"/>
+   <path d="M155 38 L142 164 L155 149 L168 164 Z" fill="var(--accent)" opacity=".95"/>
    <path d="M155 38 L155 149 L168 164 Z" fill="var(--ac)"/>
   </g>
   <circle cx={center} cy={center} r={10} fill="var(--ac)" stroke="var(--bg-page)" strokeWidth="3"/>
@@ -86,7 +86,7 @@ function CompassPanel(){
      onChange={e=>setDegree(normalizeDegree(Number(e.target.value)||0))}/>
    <input className="study-slider" aria-label="Thay đổi góc hướng" type="range" min="0" max="359.5" step=".5" value={degree} onChange={e=>setDegree(Number(e.target.value))}/>
    <div className="study-actions" style={{marginTop:10}}>
-    <button type="button" className="study-btn" onClick={enableSensor} disabled={active}>{active?'Cảm biến đã bật':'⌖ Bật la bàn điện thoại'}</button>
+    <button type="button" className="study-btn" onClick={enableSensor} disabled={active}>{active?<><Icon name="check" size={18}/> Cảm biến đã bật</>:<><Icon name="compass" size={18}/> Bật la bàn điện thoại</>}</button>
     {active&&<button type="button" className="study-btn secondary" onClick={()=>setActive(false)}>Dừng cảm biến</button>}
    </div>
    <div className="study-notice">{status} Góc 0° = Bắc, 90° = Đông, 180° = Nam. Ngưỡng ranh sơn 7,5°; kết quả tại ranh giới có thể đổi vì sai số cảm biến.</div>
@@ -191,15 +191,15 @@ function LandPanel(){
 export default function DiaKyPage(){
  const [tab,setTab]=useState<Tab>('compass');
  return <div className="study-shell">
-  <TriadNav active="dia-ky"/>
+
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Địa Kỷ</div>
     <h1 className="study-title">Địa Kỷ · Phương hướng và hình thế</h1>
     <p className="study-lead">La Kinh 24 sơn, Bát Trạch, Huyền Không Phi Tinh và bản đồ tọa độ tùy chọn, cùng phiếu khảo sát địa hình theo các thuật ngữ phong thủy truyền thống.</p>
     <div className="study-tabs" role="tablist" aria-label="Phân hệ Địa Kỷ">
-     <button className={'study-tab'+(tab==='compass'?' active':'')} aria-selected={tab==='compass'} role="tab" onClick={()=>setTab('compass')}>⌖ La Kinh 24 sơn</button>
-     <button className={'study-tab'+(tab==='battrach'?' active':'')} aria-selected={tab==='battrach'} role="tab" onClick={()=>setTab('battrach')}>◈ Bát Trạch</button>
+     <button className={'study-tab'+(tab==='compass'?' active':'')} aria-selected={tab==='compass'} role="tab" onClick={()=>setTab('compass')}><Icon name="compass" size={18}/> La Kinh 24 sơn</button>
+     <button className={'study-tab'+(tab==='battrach'?' active':'')} aria-selected={tab==='battrach'} role="tab" onClick={()=>setTab('battrach')}><Icon name="home" size={18}/> Bát Trạch</button>
      <button className={'study-tab'+(tab==='xuan'?' active':'')} aria-selected={tab==='xuan'} role="tab" onClick={()=>setTab('xuan')}>Huyền Không · GIS</button>
      <button className={'study-tab'+(tab==='land'?' active':'')} aria-selected={tab==='land'} role="tab" onClick={()=>setTab('land')}>△ Sơn xuyên hình thế</button>
     </div>
@@ -210,7 +210,7 @@ export default function DiaKyPage(){
     <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noopener noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
     <p>Một cung hướng cát theo phong thủy không đồng nghĩa nhà ở đạt yêu cầu an toàn hay hợp pháp. Công cụ không tự đánh giá “long mạch”, không thay thế bản đồ đo đạc.</p>
    </div>
-   <footer className="study-footer">Địa Kỷ · Công cụ tham khảo văn hóa, kiến trúc và địa lý. Không dùng làm căn cứ pháp lý, địa chính hoặc xây dựng.</footer>
+   <p className="study-footer" role="note">Địa Kỷ · Công cụ tham khảo văn hóa, kiến trúc và địa lý. Không dùng làm căn cứ pháp lý, địa chính hoặc xây dựng.</p>
   </main>
  </div>;
 }

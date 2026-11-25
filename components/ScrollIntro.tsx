@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -37,7 +38,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
           transition={{ duration: 0.7, ease: 'easeInOut' }}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
-            background: 'radial-gradient(ellipse at center, #1a120a 0%, #0a0604 70%, #000000 100%)',
+            background: 'var(--ink)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             overflow: 'hidden',
           }}
@@ -45,14 +46,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
           {/* Tinh tú nền trời xa */}
           <div style={{
             position: 'absolute', inset: 0,
-            backgroundImage: `
-              radial-gradient(2px 2px at 20% 30%, rgba(255,220,150,0.6), transparent),
-              radial-gradient(1px 1px at 70% 20%, rgba(255,220,150,0.4), transparent),
-              radial-gradient(1px 1px at 35% 75%, rgba(255,220,150,0.5), transparent),
-              radial-gradient(1.5px 1.5px at 85% 65%, rgba(255,220,150,0.4), transparent),
-              radial-gradient(1px 1px at 60% 88%, rgba(255,220,150,0.3), transparent),
-              radial-gradient(2px 2px at 92% 40%, rgba(255,220,150,0.5), transparent)
-            `,
+            backgroundImage: 'none',
           }} />
 
           {/* Trục cuộn thư họa */}
@@ -70,37 +64,25 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 position: 'absolute',
                 top: '8%', bottom: '8%',
                 right: '16px',
-                background: `
-                  linear-gradient(180deg, rgba(120,80,30,0.08) 0%, transparent 12%, transparent 88%, rgba(120,80,30,0.08) 100%),
-                  linear-gradient(135deg, #efe1bf 0%, #e8d6ad 50%, #d6c08a 100%)
-                `,
-                boxShadow: `
-                  inset 0 0 80px rgba(140,90,30,0.18),
-                  inset 0 -2px 0 rgba(120,80,30,0.15),
-                  0 8px 40px rgba(0,0,0,0.7),
-                  0 16px 60px rgba(80,40,10,0.4)
-                `,
+                background: 'var(--paper)',
+                boxShadow: 'none',
                 overflow: 'hidden',
               }}
             >
               {/* Bóng nếp gấp mép cuộn */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '8px',
-                background: 'linear-gradient(180deg, rgba(80,50,20,0.35), transparent)',
+                background: 'var(--line)',
               }} />
               <div style={{
                 position: 'absolute', bottom: 0, left: 0, right: 0, height: '8px',
-                background: 'linear-gradient(0deg, rgba(80,50,20,0.35), transparent)',
+                background: 'var(--line)',
               }} />
 
               {/* Vân giấy cổ */}
               <div style={{
                 position: 'absolute', inset: 0,
-                background: `
-                  radial-gradient(at 20% 30%, rgba(120,80,30,0.06), transparent 50%),
-                  radial-gradient(at 80% 70%, rgba(120,80,30,0.05), transparent 50%),
-                  radial-gradient(at 50% 50%, rgba(120,80,30,0.04), transparent 60%)
-                `,
+                background: 'transparent',
                 opacity: 0.7,
               }} />
 
@@ -121,7 +103,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 {/* Bắc Đẩu Thất Tinh */}
                 <div style={{
                   fontSize: 'clamp(10px, 1.1vw, 12px)',
-                  color: '#8b5d18',
+                  color: 'var(--accent)',
                   letterSpacing: '0.35em',
                   marginBottom: 'clamp(20px, 3vh, 36px)',
                   whiteSpace: 'nowrap',
@@ -133,7 +115,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 {/* Đường chỉ vàng kim */}
                 <div style={{
                   width: '60px', height: '1px',
-                  background: 'linear-gradient(90deg, transparent, #a87a30, transparent)',
+                  background: 'var(--line)',
                   marginBottom: 'clamp(16px, 2.5vh, 28px)',
                 }} />
 
@@ -141,11 +123,11 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 <h1 style={{
                   fontSize: 'clamp(42px, 7vw, 96px)',
                   fontWeight: 800,
-                  color: '#1a1208',
+                  color: 'var(--ink)',
                   letterSpacing: 'clamp(0.12em, 0.2vw, 0.25em)',
                   lineHeight: 1.1,
                   margin: 0,
-                  textShadow: '0 1px 0 rgba(255,250,235,0.4)',
+                  textShadow: 'none',
                   whiteSpace: 'nowrap',
                 }}>
                   TỬ VI ĐẨU SỐ
@@ -154,7 +136,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 {/* Khẩu quyết tiền nhân */}
                 <div style={{
                   fontSize: 'clamp(13px, 1.5vw, 18px)',
-                  color: '#6b4818',
+                  color: 'var(--muted)',
                   letterSpacing: '0.3em',
                   marginTop: 'clamp(16px, 2.5vh, 24px)',
                   marginBottom: '6px',
@@ -164,7 +146,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 </div>
                 <div style={{
                   fontSize: 'clamp(11px, 1.2vw, 14px)',
-                  color: '#8b6410',
+                  color: 'var(--muted)',
                   letterSpacing: '0.2em',
                   whiteSpace: 'nowrap',
                   opacity: 0.9,
@@ -181,8 +163,8 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                     marginTop: 'clamp(18px, 2.8vh, 30px)',
                     width: 'clamp(50px, 6vw, 64px)',
                     height: 'clamp(50px, 6vw, 64px)',
-                    background: '#a8302a',
-                    color: '#f5ecd7',
+                    background: 'var(--accent)',
+                    color: 'var(--white)',
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
@@ -190,7 +172,7 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                     fontWeight: 700,
                     lineHeight: 1.1,
                     letterSpacing: 0,
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.3), inset 0 0 0 2px rgba(245,236,215,0.15)',
+                    boxShadow: 'none',
                     fontSize: 'clamp(10px, 1.1vw, 12px)',
                   }}
                 >
@@ -202,12 +184,12 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
                 <div style={{
                   marginTop: 'clamp(18px, 2.8vh, 30px)',
                   fontSize: 'clamp(13px, 1.4vw, 16px)',
-                  color: '#a87a30',
+                  color: 'var(--accent)',
                   letterSpacing: '0.6em',
                   opacity: 0.75,
                   whiteSpace: 'nowrap',
                 }}>
-                  ☰ ☱ ☲ ☳ ☴ ☵ ☶ ☷
+                  <span aria-label="Bát quái" role="img" style={{display:'inline-flex',gap:8}}>{['111','110','101','100','011','010','001','000'].map(bits=><svg aria-hidden="true" key={bits} width="22" height="20" viewBox="0 0 22 20" fill="none" stroke="currentColor" strokeWidth="1.6">{bits.split('').map((b,i)=>b==='1'?<path key={i} d={'M1 '+(4+i*6)+'h20'}/>:<path key={i} d={'M1 '+(4+i*6)+'h8m4 0h8'}/>)}</svg>)}</span>
                 </div>
               </motion.div>
             </motion.div>
@@ -217,25 +199,25 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
               style={{
                 position: 'absolute', top: 0, bottom: 0, right: 0,
                 width: '32px',
-                background: 'linear-gradient(90deg, #4a2f0e 0%, #8b5d18 25%, #c89647 50%, #8b5d18 75%, #4a2f0e 100%)',
+                background: 'var(--ink)',
                 borderRadius: '4px',
-                boxShadow: '0 6px 24px rgba(0,0,0,0.7), inset 0 0 12px rgba(0,0,0,0.4)',
+                boxShadow: 'none',
                 zIndex: 2,
               }}
             >
               <div style={{
                 position: 'absolute', top: '-14px', left: '-6px', right: '-6px',
                 height: '20px',
-                background: 'radial-gradient(ellipse at 30% 30%, #f0d090 0%, #c89647 35%, #6a4218 90%)',
+                background: 'var(--accent)',
                 borderRadius: '50%',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                boxShadow: 'none',
               }} />
               <div style={{
                 position: 'absolute', bottom: '-14px', left: '-6px', right: '-6px',
                 height: '20px',
-                background: 'radial-gradient(ellipse at 30% 30%, #f0d090 0%, #c89647 35%, #6a4218 90%)',
+                background: 'var(--accent)',
                 borderRadius: '50%',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                boxShadow: 'none',
               }} />
             </div>
 
@@ -247,25 +229,25 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
               style={{
                 position: 'absolute', top: 0, bottom: 0,
                 width: '32px',
-                background: 'linear-gradient(90deg, #4a2f0e 0%, #8b5d18 25%, #c89647 50%, #8b5d18 75%, #4a2f0e 100%)',
+                background: 'var(--ink)',
                 borderRadius: '4px',
-                boxShadow: '-2px 6px 24px rgba(0,0,0,0.7), inset 0 0 12px rgba(0,0,0,0.4)',
+                boxShadow: 'none',
                 zIndex: 3,
               }}
             >
               <div style={{
                 position: 'absolute', top: '-14px', left: '-6px', right: '-6px',
                 height: '20px',
-                background: 'radial-gradient(ellipse at 30% 30%, #f0d090 0%, #c89647 35%, #6a4218 90%)',
+                background: 'var(--accent)',
                 borderRadius: '50%',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                boxShadow: 'none',
               }} />
               <div style={{
                 position: 'absolute', bottom: '-14px', left: '-6px', right: '-6px',
                 height: '20px',
-                background: 'radial-gradient(ellipse at 30% 30%, #f0d090 0%, #c89647 35%, #6a4218 90%)',
+                background: 'var(--accent)',
                 borderRadius: '50%',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.5)',
+                boxShadow: 'none',
               }} />
             </motion.div>
           </div>
@@ -277,8 +259,8 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
               position: 'absolute', bottom: '32px', right: '32px',
               padding: '8px 18px',
               background: 'transparent',
-              color: 'rgba(232,220,196,0.55)',
-              border: '1px solid rgba(232,220,196,0.18)',
+              color: 'var(--on-dark-muted)',
+              border: '1px solid var(--on-dark-muted)',
               borderRadius: '4px',
               fontSize: '12px',
               cursor: 'pointer',
@@ -286,15 +268,15 @@ export default function ScrollIntro({ onComplete, skipLabel = 'Bỏ qua' }: Scro
               transition: 'border-color 0.2s, color 0.2s',
             }}
             onMouseEnter={e => {
-              e.currentTarget.style.borderColor = 'rgba(232,220,196,0.4)';
-              e.currentTarget.style.color = 'rgba(232,220,196,0.9)';
+              e.currentTarget.style.borderColor = 'var(--on-dark-muted)';
+              e.currentTarget.style.color = 'var(--on-dark-muted)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.borderColor = 'rgba(232,220,196,0.18)';
-              e.currentTarget.style.color = 'rgba(232,220,196,0.55)';
+              e.currentTarget.style.borderColor = 'var(--on-dark-muted)';
+              e.currentTarget.style.color = 'var(--on-dark-muted)';
             }}
           >
-            {skipLabel} →
+            {skipLabel} <Icon name="arrow" size={16}/>
           </button>
         </motion.div>
       )}

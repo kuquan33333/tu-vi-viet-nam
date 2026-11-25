@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import {BirthDateFields,BirthClockInput} from './BirthDateTimeFields';
 import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect } from 'react';
@@ -234,30 +235,30 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   };
 
   // ─── Định nghĩa màu sắc & giao diện ──────────────────────────────
-  const bg = isDark ? 'rgba(8,16,40,0.85)' : 'rgba(255,255,255,0.92)';
-  const border = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(200,160,60,0.2)';
+  const bg = 'var(--card)';
+  const border = 'var(--line)';
   const labelClr = 'var(--tx-2)';
-  const inputBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(255,252,240,0.8)';
-  const inputBorder = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(200,160,60,0.25)';
-  const inputClr = isDark ? '#e8eef8' : '#2a1a00';
-  const focusBorder = isDark ? 'rgba(212,168,67,0.5)' : 'rgba(180,120,20,0.5)';
-  const errorClr = isDark ? '#f87171' : '#dc2626';
-  const panelBg = isDark ? 'rgba(255,255,255,0.03)' : 'rgba(255,250,235,0.7)';
-  const panelBorder = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(200,160,60,0.2)';
-  const goldText = isDark ? '#d4a843' : '#7a5008';
-  const summaryBg = isDark ? 'rgba(37,99,235,0.12)' : 'rgba(37,99,235,0.07)';
-  const summaryBorder = isDark ? 'rgba(37,99,235,0.35)' : 'rgba(37,99,235,0.25)';
-  const summaryClr = isDark ? 'rgba(147,197,253,0.9)' : 'rgba(37,99,235,0.85)';
+  const inputBg = 'var(--white)';
+  const inputBorder = 'var(--field)';
+  const inputClr = 'var(--ink)';
+  const focusBorder = 'var(--accent)';
+  const errorClr = 'var(--accent)';
+  const panelBg = 'var(--paper)';
+  const panelBorder = 'var(--line)';
+  const goldText = 'var(--accent)';
+  const summaryBg = 'var(--accent-soft)';
+  const summaryBorder = 'var(--line)';
+  const summaryClr = 'var(--ink)';
 
   const inputStyle = {
     background: inputBg,
     border: `1px solid ${inputBorder}`,
     color: inputClr,
-    borderRadius: '14px',
+    borderRadius: 'var(--radius-control)',
     padding: '10px 14px',
-    fontSize: '13px',
+    fontSize: 'var(--body-size)',
     width: '100%',
-    minHeight:44,
+    minHeight:48,
     transition: 'border-color 0.2s',
   } as React.CSSProperties;
 
@@ -295,17 +296,19 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         {steps.map((done, i) => (
           <div
             key={i}
-            style={{background: done ? (isDark ? '#d4a843' : '#b07820') : (isDark ? 'rgba(255,255,255,0.08)' : 'rgba(200,160,60,0.15)'),flex: 1, height: '2px', borderRadius: '2px',transition:'background .3s'}}
+            style={{background: done ? (isDark ? 'var(--accent)' : 'var(--accent)') : (isDark ? 'var(--line)' : 'var(--line)'),flex: 1, height: '2px', borderRadius: '2px',transition:'background .3s'}}
           />
         ))}
       </div>
 
       {/* ── Tab chuyển đổi Dương lịch / Âm lịch ── */}
-      <div style={{ display: 'flex', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(200,160,60,0.1)', borderRadius: '12px', padding: '3px', marginBottom: '16px' }}>
+      <div style={{ display: 'flex', background: isDark ? 'var(--line)' : 'var(--line)', borderRadius: '12px', padding: '3px', marginBottom: '16px' }}>
         <button
           type="button"
           onClick={handleSwitchToSolar}
+          aria-pressed={calendarType === 'solar'}
           style={{
+            minHeight: 44,
             flex: 1,
             padding: '8px 12px',
             fontSize: '12px',
@@ -313,8 +316,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             borderRadius: '10px',
             border: 'none',
             cursor: 'pointer',
-            background: calendarType === 'solar' ? (isDark ? '#d4a843' : '#80500d') : 'transparent',
-            color: calendarType === 'solar' ? (isDark ? '#08080a' : '#ffffff') : labelClr,
+            background: calendarType === 'solar' ? (isDark ? 'var(--accent)' : 'var(--ink)') : 'transparent',
+            color: calendarType === 'solar' ? 'var(--white)' : 'var(--ink)',
             transition: 'all 0.2s',
           }}
         >
@@ -323,7 +326,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <button
           type="button"
           onClick={handleSwitchToLunar}
+          aria-pressed={calendarType === 'lunar'}
           style={{
+            minHeight: 44,
             flex: 1,
             padding: '8px 12px',
             fontSize: '12px',
@@ -331,8 +336,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             borderRadius: '10px',
             border: 'none',
             cursor: 'pointer',
-            background: calendarType === 'lunar' ? (isDark ? '#d4a843' : '#80500d') : 'transparent',
-            color: calendarType === 'lunar' ? (isDark ? '#08080a' : '#ffffff') : labelClr,
+            background: calendarType === 'lunar' ? (isDark ? 'var(--accent)' : 'var(--ink)') : 'transparent',
+            color: calendarType === 'lunar' ? 'var(--white)' : 'var(--ink)',
             transition: 'all 0.2s',
           }}
         >
@@ -380,7 +385,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
         {calendarType === 'lunar' && form.year && form.month && form.day && (
           <p style={{ fontSize: '11px', color: 'var(--tx-2)', marginTop: '6px' }}>
-            → Tương đương Dương lịch: {String(form.day).padStart(2, '0')}/{String(form.month).padStart(2, '0')}/{form.year}
+            Tương đương Dương lịch: {String(form.day).padStart(2, '0')}/{String(form.month).padStart(2, '0')}/{form.year}
           </p>
         )}
       </div>
@@ -429,7 +434,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         {currentCityData?.reference&&<div className="study-notice" style={{marginTop:8}}>
           <p>Điểm tham khảo của huyện: {currentCityData.reference.longitude.toFixed(4)}° Đông. Đây không phải tọa độ chính xác nơi sinh; sai số vị trí có thể làm đổi chi giờ nếu sinh gần ranh giờ.</p>
           <button type="button" className="action-outline" onClick={()=>{const r=currentCityData.reference;if(r)setForm({...form,longitude:r.longitude,longitudeReferenceId:r.geonamesId});}}>Dùng kinh độ tham khảo của huyện</button>
-          <p style={{marginTop:6}}>Nguồn: <a href={'https://www.geonames.org/'+currentCityData.reference.geonamesId+'/'} target="_blank" rel="noopener noreferrer">GeoNames ↗</a> · CC BY 4.0</p>
+          <p style={{marginTop:6}}>Nguồn: <a href={'https://www.geonames.org/'+currentCityData.reference.geonamesId+'/'} target="_blank" rel="noopener noreferrer">GeoNames</a> · CC BY 4.0</p>
           {form.longitudeReferenceId===currentCityData.reference.geonamesId&&<p role="status">Đang dùng kinh độ tham khảo. Có thể sửa bằng tọa độ nơi sinh chính xác.</p>}
         </div>}
         <>
@@ -459,18 +464,18 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       {historicalTz && historicalTz.deltaMinutes !== 0 && (
         <div
           style={{
-            background: isDark ? 'rgba(234, 179, 8, 0.12)' : 'rgba(234, 179, 8, 0.1)',
-            border: '1px solid rgba(234, 179, 8, 0.35)',
+            background: isDark ? 'var(--line)' : 'var(--line)',
+            border: '1px solid var(--line)',
             borderRadius: '12px',
             padding: '10px 14px',
             marginBottom: '16px',
             fontSize: '11px',
-            color: isDark ? '#fef08a' : '#854d0e',
+            color: isDark ? 'var(--ink)' : 'var(--ink)',
             lineHeight: 1.5,
           }}
         >
           <div style={{ fontWeight: 600, marginBottom: '4px' }}>
-            ⚠️ Lưu ý Múi giờ lịch sử: Giai đoạn này Việt Nam áp dụng {historicalTz.periodLabel} (UTC+{historicalTz.actualOffsetMinutes / 60}).
+            Lưu ý Múi giờ lịch sử: Giai đoạn này Việt Nam áp dụng {historicalTz.periodLabel} (UTC+{historicalTz.actualOffsetMinutes / 60}).
           </div>
           <div style={{ marginBottom: '8px' }}>
             Giờ ghi trên giấy khai sinh có thể chạy sớm hơn giờ chuẩn thiên văn UTC+7 là {Math.abs(historicalTz.deltaMinutes)} phút.
@@ -495,7 +500,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
           {/* Kết quả Chân Thái Dương Thời */}
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
-            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời → </span>
+            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời: </span>
             <span style={{ fontSize: '15px', color: goldText, fontWeight: 700, letterSpacing: '0.08em' }}>
               {branch===undefined?'Chưa xác định':`Giờ ${BRANCHES[branch]}`}
             </span>
@@ -530,7 +535,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           {(['male', 'female'] as const).map(g => {
             const active = form.gender === g;
             const isMale = g === 'male';
-            const accent = isMale ? '37,99,235' : '225,29,72';
+            const accent = 'var(--ink)';
             return (
               <button
                 key={g}
@@ -542,8 +547,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
                   borderRadius: '14px',
                   fontSize: '13px',
                   fontWeight: 600,
-                  border: `1px solid ${active ? `rgba(${accent},0.6)` : inputBorder}`,
-                  background: active ? `rgba(${accent},0.08)` : inputBg,
+                  border: `1px solid ${active ? accent : inputBorder}`,
+                  background: active ? 'var(--accent-soft)' : inputBg,
                   color: active ? 'var(--tx-0)' : 'var(--tx-2)',
                   transition: 'all 0.2s',
                   cursor: 'pointer',
@@ -570,7 +575,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
               alignItems: 'center',
               gap: '8px',
             }}>
-              <span style={{ fontSize: '12px', color: summaryClr }}>✓</span>
+              <span style={{ fontSize: '12px', color: summaryClr }}><Icon name="check" size={16}/></span>
               <span style={{ fontSize: '11px', color: summaryClr, letterSpacing: '0.03em', flex: 1 }}>
                 {summaryText}
               </span>
@@ -593,13 +598,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             letterSpacing: '0.15em',
             border: 'none',
             cursor: loading ? 'not-allowed' : 'pointer',
-            background: loading
-              ? (isDark ? 'rgba(212,168,67,0.15)' : 'rgba(180,120,20,0.15)')
-              : (isDark
-                ? 'linear-gradient(135deg, rgba(180,130,40,0.9), rgba(240,200,80,0.9))'
-                : '#80500d'),
-            color: loading ? (isDark ? 'rgba(212,168,67,0.4)' : 'rgba(120,80,10,0.4)') : (isDark ? '#08080a' : '#fff8e8'),
-            boxShadow: loading ? 'none' : (isDark ? '0 4px 20px rgba(212,168,67,0.2)' : '0 4px 16px rgba(140,100,20,0.25)'),
+            background: loading ? 'var(--accent-soft)' : 'var(--accent)',
+            color: loading ? 'var(--muted)' : 'var(--white)',
+            boxShadow: 'none',
             transition: 'all 0.2s',
           }}
         >
