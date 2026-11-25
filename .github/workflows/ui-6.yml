@@ -1,0 +1,57 @@
+name: UI-6 final cross-browser QA
+on:
+  pull_request:
+    branches: [revamp-v2]
+permissions:
+  contents: read
+jobs:
+  browser:
+    if: github.head_ref == 'ui/06-final-qa'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {mode: all, engine: chromium, shard: 0, shards: 4}
+          - {mode: all, engine: chromium, shard: 1, shards: 4}
+          - {mode: all, engine: chromium, shard: 2, shards: 4}
+          - {mode: all, engine: chromium, shard: 3, shards: 4}
+          - {mode: screens, engine: chromium, shard: 0, shards: 1}
+          - {mode: compat, engine: firefox, shard: 0, shards: 1}
+          - {mode: compat, engine: webkit, shard: 0, shards: 1}
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SITE_URL: https://lichvannien-9sv.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Build static export
+        run: |
+          node scripts/prepare-cloudflare-demo.mjs
+          npm run build
+          node scripts/check-seo-export.mjs
+      - name: Inventory tokens
+        if: matrix.mode == 'screens'
+        run: node scripts/audit-ui-6-tokens.mjs
+      - name: Serve export
+        run: |
+          node scripts/serve-export.mjs > "$RUNNER_TEMP/ui6-server.log" 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break || sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+      - name: Install browser and axe
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ui6-qa" --ignore-scripts --no-save --no-audit --no-fund playwright@1.51.1 axe-core@4.10.3
+          "$RUNNER_TEMP/ui6-qa/node_modules/.bin/playwright" install --with-deps ${{ matrix.engine }}
+      - name: Audit exported routes and keyboard
+        run: PLAYWRIGHT_MODULE="$RUNNER_TEMP/ui6-qa/node_modules/playwright" AXE_SCRIPT="$RUNNER_TEMP/ui6-qa/node_modules/axe-core/axe.min.js" node scripts/capture-ui-6.mjs ${{ matrix.mode }} ${{ matrix.engine }} ${{ matrix.shard }} ${{ matrix.shards }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui6-${{ matrix.mode }}-${{ matrix.engine }}-${{ matrix.shard }}
+          path: qa-artifacts
+          if-no-files-found: warn

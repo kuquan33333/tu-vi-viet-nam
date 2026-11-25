@@ -63,7 +63,7 @@ jobs:
             url="http://127.0.0.1:4173/$route"
             if [ "$route" = home ]; then url="http://127.0.0.1:4173/"; fi
             categories=seo
-            if [[ "$route" =~ ^(home|chart|lich-van-nien)$ ]]; then categories=seo,accessibility,performance; fi
+            if [[ "$route" =~ ^(home|chart|lich-van-nien)$ ]]; then categories=seo,accessibility,performance,best-practices; fi
             npx --yes lighthouse@12.6.0 "$url" --only-categories="$categories" --output=json --output-path="qa-artifacts/lighthouse/$route.json" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
           done
           node scripts/check-seo-lighthouse.mjs

@@ -1,0 +1,64 @@
+import assert from 'node:assert/strict';
+import {readdirSync,readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {join,relative,resolve} from 'node:path';
+import {createRequire} from 'node:module';
+import {execFileSync} from 'node:child_process';
+const pw=createRequire(import.meta.url)(process.env.PLAYWRIGHT_MODULE||'playwright');
+const mode=process.argv[2],engine=process.argv[3]||'chromium',shard=Number(process.argv[4]||0),shards=Number(process.argv[5]||1);
+assert.ok(['all','screens','compat'].includes(mode));assert.ok(['chromium','firefox','webkit'].includes(engine));
+const root=resolve('out'),base='http://127.0.0.1:4173',dir='qa-artifacts/ui6-'+mode+'-'+engine+'-'+shard;
+mkdirSync(dir,{recursive:true});const results=[],failures=[];
+const main=['/','/chart','/lich-van-nien','/thien-ky','/dia-ky','/nhan-ky','/library','/hop-ban','/ho-so','/privacy','/terms'];
+function walk(d){return readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(join(d,e.name)):[join(d,e.name)]);}
+const routes=[...new Set(walk(root).filter(f=>f.endsWith('.html')).map(f=>relative(root,f).split('\\').join('/')).filter(f=>!f.startsWith('_next/')&&!f.startsWith('_not-found/')&&!/(^|\/)(500|_not-found)\.html$/.test(f)).map(f=>'/'+f.replace(/(?:^|\/)index\.html$/,'').replace(/\.html$/,'')).map(s=>s.replace(/\/$/,'')||'/'))].sort();
+if(mode==='all'){for(const r of main)assert.ok(routes.includes(r),'missing export '+r);assert.ok(routes.includes('/404'),'missing 404');}
+const jobs=mode==='all'?routes.filter((_,i)=>i%shards===shard).map(route=>({route,width:360})):mode==='screens'?[360,768,1280].flatMap(width=>main.map(route=>({route,width}))):[360,1280].flatMap(width=>['/','/chart','/lich-van-nien'].map(route=>({route,width})));
+assert.ok(jobs.length>0);
+writeFileSync(dir+'/scope.json',JSON.stringify({mode,engine,shard,shards,totalExportRoutes:routes.length,jobs},null,2));
+const browser=await pw[engine].launch({headless:true});
+const name=(route,width)=>(route==='/'?'home':route.slice(1).replaceAll('/','--'))+'-'+width;
+async function tabTo(page,selector){
+ for(let i=0;i<150;i++){if(await page.evaluate(s=>document.activeElement?.matches(s),selector))return;await page.keyboard.press('Tab');}
+ throw Error('Keyboard cannot reach '+selector);
+}
+async function keyboard(page,route,width){
+ if(route==='/'){
+  if(width===360){await tabTo(page,'.mobile-menu-button');await page.keyboard.press('Enter');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'true');await page.keyboard.press('Tab');await page.keyboard.press('Escape');assert.equal(await page.locator('.mobile-menu-button').getAttribute('aria-expanded'),'false');assert.ok(await page.evaluate(()=>document.activeElement?.matches('.mobile-menu-button')));}
+  await tabTo(page,'.home2-actions a[href="/chart"]');await page.keyboard.press('Enter');await page.waitForURL('**/chart');await page.getByRole('heading',{name:'Lập lá số Tử Vi'}).waitFor();
+ }else if(route==='/chart'){
+  await tabTo(page,'.birth-form button[type=submit]');await page.keyboard.press('Enter');
+  await page.waitForFunction(()=>document.activeElement?.getAttribute('aria-invalid')==='true');
+  assert.equal(await page.evaluate(()=>document.activeElement?.textContent?.trim()),'Nam');
+  await page.keyboard.press('Space');assert.equal(await page.getByRole('button',{name:'Nam',exact:true}).getAttribute('aria-pressed'),'true');
+  await tabTo(page,'.birth-form input[aria-label="Không rõ giờ sinh cụ thể"]');await page.keyboard.press('Space');assert.equal(await page.getByLabel('Giờ và phút sinh').isDisabled(),true);
+ }else if(route==='/lich-van-nien'){
+  await tabTo(page,'.calendar4-grid button[tabindex="0"]');const old=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));
+  await page.keyboard.press('ArrowRight');const next=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));assert.notEqual(next,old);
+  await page.keyboard.press('PageDown');await page.keyboard.press('PageUp');await page.keyboard.press('Enter');
+  assert.equal(await page.evaluate(()=>document.activeElement?.getAttribute('aria-pressed')),'true');
+ }
+}
+try{
+ for(const {route,width} of jobs){
+  const key=name(route,width),errors=[],external=[],ctx=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
+  const page=await ctx.newPage();page.on('pageerror',e=>errors.push(e.message));
+  await ctx.route('**/*',r=>{const req=r.request(),url=req.url();if(url.startsWith(base+'/')||url.startsWith('data:')||url.startsWith('blob:'))return r.continue();external.push({url,type:req.resourceType()});return r.abort();});
+  try{
+   const response=await page.goto(base+route,{waitUntil:'domcontentloaded',timeout:20000});assert.equal(response?.status(),200,'export HTTP status '+route);
+   await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true',null,{timeout:15000});await page.evaluate(()=>document.fonts.ready);
+   const metrics=await page.evaluate(()=>({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,header:document.querySelectorAll('header.global-header').length,footer:document.querySelectorAll('footer').length,h1:document.querySelectorAll('h1').length,theme:document.documentElement.dataset.theme}));
+   assert.ok(metrics.scroll<=metrics.width+1,'horizontal overflow '+JSON.stringify(metrics));assert.equal(metrics.header,1);assert.equal(metrics.footer,1);assert.equal(metrics.h1,1);assert.equal(metrics.theme,'light');
+   if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
+   await page.addScriptTag({path:process.env.AXE_SCRIPT});
+   const axe=await page.evaluate(async()=>window.axe.run({runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
+   writeFileSync(dir+'/axe-'+key+'.json',JSON.stringify(axe.violations,null,2));
+   const high=axe.violations.filter(v=>['serious','critical'].includes(v.impact)).map(v=>({id:v.id,nodes:v.nodes.map(n=>n.target)}));assert.deepEqual(high,[]);
+   if(mode!=='all'&&['/','/chart','/lich-van-nien'].includes(route))await keyboard(page,route,width);
+   assert.deepEqual(errors,[]);assert.deepEqual(external,[]);
+   results.push({route,width,engine,status:'pass',metrics,violations:axe.violations.map(v=>({id:v.id,impact:v.impact}))});
+  }catch(e){const problem={route,width,engine,status:'fail',message:e instanceof Error?e.message:String(e),errors,external};failures.push(problem);results.push(problem);console.error(JSON.stringify(problem));await page.screenshot({path:dir+'/failure-'+key+'.png',fullPage:false,timeout:5000}).catch(()=>{});}
+  finally{await ctx.close();}
+ }
+}finally{await browser.close();writeFileSync(dir+'/results.json',JSON.stringify(results,null,2));writeFileSync(dir+'/failures.json',JSON.stringify(failures,null,2));}
+assert.equal(results.length,jobs.length);assert.deepEqual(failures,[],'UI-6 failures');
+console.log('UI6 '+mode+' '+engine+' '+results.length+' route/viewport checks passed');
