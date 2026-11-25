@@ -6,7 +6,7 @@ permissions:
   contents: read
 jobs:
   browser:
-    if: github.head_ref == 'ui/06-final-qa' || github.head_ref == 'ui/07-branding'
+    if: github.head_ref == 'ui/06-final-qa' || github.head_ref == 'ui/07-branding' || github.head_ref == 'ui/08-home-preview'
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:

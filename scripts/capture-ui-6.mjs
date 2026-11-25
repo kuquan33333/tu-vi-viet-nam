@@ -75,6 +75,12 @@ try{
     assert.match(await page.title(),/Tử Vi Việt Nam/);
     if(route==='/'){
      assert.equal(await page.locator('.home-primary-card').count(),4);
+     assert.deepEqual(await page.locator('.home-primary-card').evaluateAll(es=>es.map(e=>e.getAttribute('href'))),['/hop-ban','/thien-ky','/dia-ky','/nhan-ky']);
+     assert.equal(await page.locator('.home2-modules,.home2-tools').count(),0);
+     assert.deepEqual((await page.locator('.home-classic-card').evaluateAll(es=>es.map(e=>e.getAttribute('href')))).sort(),['/library/gusuifu','/library/quanji','/library/quanshu']);
+     assert.ok(await page.evaluate(()=>{const selectors=['.home2-hero','.home-preview-grid','.home-explore','.home-classics','.home2-method','footer .author-contact'];const nodes=selectors.map(s=>document.querySelector(s));return nodes.every(Boolean)&&nodes.every((n,i)=>!i||!!(nodes[i-1].compareDocumentPosition(n)&Node.DOCUMENT_POSITION_FOLLOWING))}),'home section order and author card');
+     assert.equal(await page.locator('footer .author-contact-telegram').getAttribute('href'),'https://t.me/locphat88886');
+     const books=await page.locator('.home-classic-card').evaluateAll(es=>es.map(e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,height:r.height}}));assert.ok(books.every(b=>b.left>=0&&b.right<=width+1&&b.height>=44),'library cards fit viewport');
      assert.equal(await page.locator('.home-chart .ui-chart-cell').count(),12);
      assert.equal(await page.locator('.home-chart .home-palace-name,.home-chart .ui-chart-cell strong').count(),12);
      assert.match(await page.locator('.brand-date').getAttribute('data-date'),/^\d{4}-\d{2}-\d{2}$/);
@@ -150,7 +156,7 @@ try{
      const active=page.locator('.desktop-links a[aria-current=page]');
      assert.equal(await active.count(),1);
      assert.ok(await active.evaluate(e=>parseFloat(getComputedStyle(e).borderBottomWidth)>=2&&getComputedStyle(e).borderBottomStyle==='solid'&&getComputedStyle(e).borderBottomColor!=='rgba(0, 0, 0, 0)'),'desktop active indicator retained');
-     await active.focus();assert.ok(await active.evaluate(e=>getComputedStyle(e).outlineStyle!=='none'&&!getComputedStyle(e).textDecorationLine.includes('underline')),'focus without underline');
+     await page.keyboard.press('Tab');await tabTo(page,'.desktop-links a[aria-current=page]');assert.ok(await active.evaluate(e=>e.matches(':focus-visible')&&getComputedStyle(e).outlineStyle!=='none'&&!getComputedStyle(e).textDecorationLine.includes('underline')),'keyboard focus without underline');
     }else if(width<640){
      const active=page.locator('.ui-bottom-nav a[aria-current=page]');
      assert.equal(await active.count(),1);

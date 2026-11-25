@@ -55,7 +55,7 @@
  .ui-home .home-brand .home-primary-grid{width:calc(100% - clamp(90px,10.2vw,150px))!important;max-width:1390px!important;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin:0 auto 22px!important}
  .ui-home .home-brand .home-primary-card{display:flex;align-items:center;min-height:clamp(101px,8vw,117px);padding:15px 17px;gap:12px;background-image:url('/brand/cloud-pc.svg');background-position:6px bottom;background-size:130px auto;background-repeat:no-repeat}
  .ui-home .home-brand .home-primary-card>svg{width:38px;height:38px;flex:none;stroke-width:1.45}
- .ui-home .home-brand .home-primary-card h2{font-family:var(--font-serif);font-size:clamp(18px,1.63vw,24px);font-weight:700;line-height:1.16;letter-spacing:-.035em;margin:0 0 5px;color:var(--brand-red)}
+ .ui-home .home-brand .home-primary-card :is(h2,h3){font-family:var(--font-serif);font-size:clamp(18px,1.63vw,24px);font-weight:700;line-height:1.16;letter-spacing:-.035em;margin:0 0 5px;color:var(--brand-red)}
  .ui-home .home-brand .home-primary-card p{font-size:clamp(11px,.93vw,14px);line-height:1.42;margin:0;color:var(--brand-navy)}
  .ui-home .home-brand .home-primary-arrow{width:23px;height:23px;border-color:var(--brand-gold)}
  .ui-home .home-brand .home-preview-grid{width:calc(100% - clamp(76px,8.4vw,124px))!important;max-width:1420px!important;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:22px;margin:0 auto 34px!important}

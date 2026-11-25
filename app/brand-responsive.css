@@ -57,7 +57,7 @@
  .ui-home .home-brand .home-primary-card{background-image:url('/brand/hills-card-pc.svg');background-size:140px 40px;background-repeat:no-repeat;background-position:4px bottom;min-width:0}
  .ui-home .home-brand .home-primary-card>svg{stroke-width:1.45;flex:none}
  .ui-home .home-brand .home-primary-card:nth-child(2)>svg,.ui-home .home-brand .home-primary-card:nth-child(4)>svg{color:#a36a26}
- .ui-home .home-brand .home-primary-card h2{font-family:var(--font-serif);font-weight:700;letter-spacing:-.025em;color:var(--brand-red)}
+ .ui-home .home-brand .home-primary-card :is(h2,h3){font-family:var(--font-serif);font-weight:700;letter-spacing:-.025em;color:var(--brand-red)}
  .ui-home .home-brand .home-primary-card p{font-size:13px;line-height:1.5}
  .ui-home .home-brand .home-primary-arrow{color:var(--brand-gold);border-color:#b38443;width:24px;height:24px}
  .ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{background-image:url('/brand/cloud-detail-pc.svg');background-position:right 6px bottom 3px;background-size:138px 36px;background-repeat:no-repeat}
@@ -96,7 +96,7 @@
  .ui-home .home-brand .home-primary-grid,.ui-home .home-brand .home2-module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
  .ui-home .home-brand .home-primary-card{min-height:112px;padding:17px 20px;gap:16px}
  .ui-home .home-brand .home-primary-card>svg{width:42px;height:42px}
- .ui-home .home-brand .home-primary-card h2{font-size:23px}
+ .ui-home .home-brand .home-primary-card :is(h2,h3){font-size:23px}
  .ui-home .home-brand .home-preview-grid{grid-template-columns:1fr;gap:18px}
  .ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{padding:22px 24px}
  .ui-home .home-brand .home-panel-head h2{font-size:24px}
@@ -144,7 +144,7 @@
  .ui-home .home-brand .home-primary-grid{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:18px}
  .ui-home .home-brand .home-primary-card{min-height:88px;padding:14px 15px;gap:13px}
  .ui-home .home-brand .home-primary-card>svg{width:38px;height:38px}
- .ui-home .home-brand .home-primary-card h2{font-size:21px;margin:0 0 4px}
+ .ui-home .home-brand .home-primary-card :is(h2,h3){font-size:21px;margin:0 0 4px}
  .ui-home .home-brand .home-primary-card p{font-size:13px;line-height:1.45}
  .ui-home .home-brand .home-preview-grid{display:grid;grid-template-columns:1fr;gap:15px;margin-bottom:25px}
  .ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{padding:15px 15px 19px}

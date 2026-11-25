@@ -11,28 +11,15 @@ import { FAMOUS_PERSONS } from '@/lib/ziwei/famous';
 import { buildCalendarYear } from '@/lib/ziwei/calendar-display-server';
 import { vietnamToday } from '@/lib/ziwei/calendar-display';
 import { pageMetadata, SITE_DESCRIPTION, websiteSchema } from '@/lib/seo/metadata';
+import { ALL_BOOKS, TOTAL_PARAGRAPHS } from '@/lib/classics';
 import './home.css';
 
 export const metadata=pageMetadata({title:'Tử Vi Việt Nam – Thư quán phương Đông',description:SITE_DESCRIPTION,path:'/'});
 const primary:{href:string;title:string;desc:string;icon:IconName}[]=[
- {href:'/chart',title:'Lập lá số',desc:'An sao, lập lá số Tử Vi Đẩu Số theo lịch Việt Nam.',icon:'yin-yang'},
- {href:'/lich-van-nien',title:'Lịch Vạn Niên',desc:'Tra cứu âm dương lịch, tiết khí, Can Chi và ngày lễ.',icon:'calendar'},
  {href:'/hop-ban',title:'Hợp bàn',desc:'Đối chiếu hai lá số và cấu trúc 12 cung.',icon:'compare'},
- {href:'/library',title:'Cổ thư',desc:'Tra cứu, đọc và nghiên cứu kinh điển Tử Vi, cổ học phương Đông.',icon:'book'},
-];
-const modules=[
- {href:'/chart',title:'Tử Vi Đẩu Số',desc:'12 cung, 14 chính tinh, đại hạn, lưu niên.'},
- {href:'/thien-ky',title:'Thiên Kỷ',desc:'Chu Dịch 64 quẻ, bảng địa bàn cửu cung.'},
- {href:'/dia-ky',title:'Địa Kỷ',desc:'La Kinh 24 sơn, Bát Trạch, la bàn số.'},
- {href:'/nhan-ky',title:'Nhân Kỷ',desc:'Atlas 361 huyệt, thuật ngữ Đông y (để học tập).'},
-];
-const tools=[
- {href:'/lich-van-nien',title:'Lịch Vạn Niên',desc:'Âm dương lịch, Can Chi, tiết khí'},
- {href:'/hop-ban',title:'Hợp bàn',desc:'Đối chiếu hai lá số theo 12 cung'},
- {href:'/thien-ky',title:'Tra cứu Kinh Dịch',desc:'64 quẻ, hào động, quẻ biến'},
- {href:'/dia-ky',title:'La Kinh 24 sơn',desc:'La bàn số theo 360 độ'},
- {href:'/nhan-ky',title:'Atlas huyệt đạo',desc:'14 kinh mạch, tìm theo mã huyệt'},
- {href:'/library',title:'Thư viện cổ thư',desc:'Trích đoạn, kèm nguồn bản'},
+ {href:'/thien-ky',title:'Thiên Kỷ',desc:'Kinh Dịch 64 quẻ, địa bàn cửu cung.',icon:'yin-yang'},
+ {href:'/dia-ky',title:'Địa Kỷ',desc:'La Kinh 24 sơn, Bát Trạch và la bàn số.',icon:'compass'},
+ {href:'/nhan-ky',title:'Nhân Kỷ',desc:'Atlas huyệt đạo, kiến thức Đông y để học tập.',icon:'health'},
 ];
 export default function HomePage(){
  const person=FAMOUS_PERSONS.find(p=>p.id==='phan-boi-chau');
@@ -56,9 +43,6 @@ export default function HomePage(){
     <div className="hero-art" aria-hidden="true"><picture><source srcSet="/brand/study-pc.webp" type="image/webp"/><Image unoptimized src="/brand/study.webp" alt="" width={256} height={228} loading="eager"/></picture></div>
    </Container>
   </section>
-  <Container className="home-primary-grid" role="navigation" aria-label="Công cụ nổi bật">
-   {primary.map(p=><Link className="brand-frame home-primary-card" key={p.href} href={p.href} prefetch={false}><Icon name={p.icon} size={42}/><div><h2>{p.title}</h2><p>{p.desc}</p></div><span className="home-primary-arrow"><Icon name="arrow" size={16}/></span></Link>)}
-  </Container>
   <Container className="home-preview-grid">
    <section className="brand-frame home-chart" aria-labelledby="home-chart-title">
     <div className="home-panel-head"><h2 id="home-chart-title"><Icon name="chart" size={24}/> Lá số Tử Vi mẫu</h2><Link href="/chart" prefetch={false}>Xem chi tiết <Icon name="arrow" size={16}/></Link></div>
@@ -68,8 +52,19 @@ export default function HomePage(){
    </section>
    <HomeCalendar initial={today} data={calendarData}/>
   </Container>
-  <section className="home2-modules" aria-labelledby="home2-modules-title"><Container><Eyebrow>Bốn phân hệ</Eyebrow><h2 id="home2-modules-title">Chọn lĩnh vực bạn quan tâm</h2><div className="home2-module-grid">{modules.map((m,i)=><Link prefetch={false} key={m.href} href={m.href} className="brand-frame home2-module"><span className="ui-eyebrow">{String(i+1).padStart(2,'0')}</span><h3>{m.title}</h3><p>{m.desc}</p><Icon name="arrow" size={18}/></Link>)}</div></Container></section>
-  <section className="home2-tools" aria-labelledby="home2-tools-title"><Container><div className="home2-section-head"><div><Eyebrow>Công cụ</Eyebrow><h2 id="home2-tools-title">Thường dùng</h2></div><Link prefetch={false} className="home2-all" href="/cong-cu">Xem tất cả <Icon name="arrow" size={18}/></Link></div><div className="home2-tool-grid">{tools.map(t=><Link prefetch={false} key={t.title} href={t.href} className="brand-frame home2-tool"><strong>{t.title}</strong><span>{t.desc}</span></Link>)}</div></Container></section>
+  <section className="home-explore" aria-labelledby="home-explore-title">
+   <Container className="home-section-heading"><Eyebrow>Khám phá chuyên sâu</Eyebrow><h2 id="home-explore-title">Tinh hoa cổ học phương Đông</h2><Ornament/></Container>
+   <Container className="home-primary-grid">
+    {primary.map(p=><Link className="brand-frame home-primary-card" key={p.href} href={p.href} prefetch={false}><Icon name={p.icon} size={42}/><div><h3>{p.title}</h3><p>{p.desc}</p></div><span className="home-primary-arrow"><Icon name="arrow" size={16}/></span></Link>)}
+   </Container>
+   <Container className="home-explore-end"><Link prefetch={false} className="home2-all" href="/cong-cu">Xem tất cả công cụ <Icon name="arrow" size={18}/></Link></Container>
+  </section>
+  <section className="home-classics" aria-labelledby="home-classics-title">
+   <Container className="home-section-heading"><Eyebrow>Thư viện cổ thư</Eyebrow><h2 id="home-classics-title">Kho tàng tri thức phương Đông</h2><Ornament/><p>{ALL_BOOKS.length} bộ cổ thư · {TOTAL_PARAGRAPHS} đoạn tư liệu và dịch giải trong thư viện.</p></Container>
+   <Container className="home-classics-grid">
+    {ALL_BOOKS.map(book=><Link key={book.slug} href={`/library/${book.slug}`} prefetch={false} className="brand-frame home-classic-card"><span className="home-classic-seal" aria-hidden="true"><Icon name="book" size={34}/></span><div className="home-classic-text"><h3>{book.title}</h3><p>{book.chapters.length} chương / quyển · {book.chapters.reduce((sum,ch)=>sum+ch.paragraphs.length,0)} đoạn</p><span className="home-classic-read">Đọc cổ thư <Icon name="arrow" size={16}/></span></div></Link>)}
+   </Container>
+  </section>
   <section className="section-dark home2-method" aria-labelledby="home2-method-title"><Container className="home2-method-inner"><div><h2 id="home2-method-title">Minh bạch phương pháp</h2><p>Các nội dung Tử Vi, Kinh Dịch và phong thủy phản ánh hệ thống quan niệm truyền thống, không phải dự báo được khoa học xác nhận. Phần Nhân Kỷ dành cho học tập, không cung cấp chẩn đoán hay hướng dẫn tự điều trị, không thay thế tư vấn y tế. Nội dung, dữ liệu và các công cụ chuyên sâu sẽ được mở rộng cùng tài liệu nguồn được xác minh.</p></div><ButtonLink href="/terms#nguon-va-giay-phep" variant="secondary" className="home2-source">Nguồn và giấy phép</ButtonLink></Container></section>
  </main>;
 }
