@@ -5,6 +5,8 @@
  --white:#FFFFFF; --overlay:rgba(28,34,48,.78); --on-dark:#F6F2E9; --on-dark-muted:#D9D4C7;
  --accent-soft:#F8EFE9;
  --accent-border:#C79A8B;
+ /* Approved brand artwork palette (semantic chart colors remain unchanged). */
+ --brand-red:#8C1717; --brand-navy:#142B4B; --brand-gold:#A56C25; --brand-gold-line:#C49A60; --brand-cream:#FFF5DF; --brand-paper:#FAEED8; --brand-surface:#FFF9EE;
  --font:var(--font-be-vietnam),system-ui,sans-serif;
  --font-serif:var(--font-noto-serif),var(--font-noto-serif-vietnamese),var(--font-noto-serif-extended),Georgia,serif;
  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;

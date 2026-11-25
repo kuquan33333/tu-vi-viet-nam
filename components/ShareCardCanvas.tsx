@@ -92,7 +92,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
           }}>Tử</div>
           <div>
             <div style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.06em', lineHeight: 1.2 }}>Lá Số Tử Vi</div>
-            <div style={{ fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', marginTop: '2px' }}>TỬ VI ĐẨU SỐ · TƯ LIỆU THAM KHẢO</div>
+            <div style={{ fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', marginTop: '2px' }}>TỬ VI VIỆT NAM · TƯ LIỆU THAM KHẢO</div>
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
