@@ -12,3 +12,5 @@ Baseline UI-2: 977ba99fda103d2c1dcfd555b0280197135af9cb. Đọc UI-BRIEF.md mụ
 - 1a190e7: cả ba workflow xanh, axe form 0 violations tại 360/768/1280, không lỗi JS/mạng ngoài. Kiểm tra thủ công phát hiện PDF A4 mẫu có 3 trang: tiêu đề, bàn lá số, chú thích riêng. Bổ sung CSS print độc lập, ghi chú ngắn vẫn chứa cảnh báo lịch pháp, kinh độ, diễn giải và riêng tư; thêm assertion PDF đúng 1 trang trên fixture. Cần xem lại PDF mới, không kết luận tất cả lá số đều vừa 1 trang chỉ từ một fixture.
 - Giờ chưa biết: Mệnh/Thân/Cục/đại hạn không hiện mặc định; 12 phương án vẫn có mục mở giả định riêng để không mất chức năng cũ. Không lưu hồ sơ xác định. Ghi rõ đây là dung hòa yêu cầu ẩn mặc định và giữ hành vi cũ.
 - Giảm khoảng trống giữa nhóm sao trên bàn, không giảm vùng bấm 44px; sửa chụp ảnh result về đầu trang. Giữ nguyên engine.
+
+- Hậu kiểm giao diện theo yêu cầu chủ dự án: bỏ vòng viền ngoài của nút i trong CSS dùng chung `.term-help-button`, giữ SVG đỏ, vùng chạm 44×44, focus bàn phím và hành vi tooltip. Thêm kiểm thử CSS trên các route browser QA. Không thay các nút khác.

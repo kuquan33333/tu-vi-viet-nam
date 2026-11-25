@@ -54,6 +54,9 @@ try{
     assert.equal(await page.evaluate(()=>localStorage.getItem('ziwei-theme')),'dark');
     assert.equal(await page.locator('.theme-switch').count(),0);
     await checkContrast('light');
+    // All shared info buttons must have no external ring while retaining the SVG circle and touch target.
+    const helpButtons=await page.locator('button.term-help-button:visible').evaluateAll(buttons=>buttons.map(b=>{const s=getComputedStyle(b),r=b.getBoundingClientRect(),svg=b.querySelector('svg');return {border:[s.borderTopWidth,s.borderRightWidth,s.borderBottomWidth,s.borderLeftWidth],background:s.backgroundColor,shadow:s.boxShadow,width:r.width,height:r.height,circle:!!svg?.querySelector('circle'),color:s.color};}));
+    for(const b of helpButtons){assert.deepEqual(b.border,['0px','0px','0px','0px']);assert.equal(b.background,'rgba(0, 0, 0, 0)');assert.equal(b.shadow,'none');assert.ok(b.width>=44&&b.height>=44);assert.ok(b.circle);assert.equal(b.color,'rgb(158, 47, 38)');}
     if(path==='/chart'){
       const solar=page.getByRole('button',{name:'Dương lịch (Mặt trời)',exact:true});
       const lunar=page.getByRole('button',{name:'Âm lịch (Mặt trăng)',exact:true});
