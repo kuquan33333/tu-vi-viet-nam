@@ -32,6 +32,8 @@ async function keyboard(page,route,width){
   await page.keyboard.press('Space');assert.equal(await page.getByRole('button',{name:'Nam',exact:true}).getAttribute('aria-pressed'),'true');
   await tabTo(page,'.birth-form input[aria-label="Không rõ giờ sinh cụ thể"]');await page.keyboard.press('Space');assert.equal(await page.getByLabel('Giờ và phút sinh').isDisabled(),true);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),'chart form overflow after keyboard validation');
+  await page.getByLabel('Tỉnh hoặc thành phố nơi sinh').selectOption('Tỉnh Gia Lai');await page.getByLabel('Quận huyện hoặc khu vực nơi sinh').selectOption('TP. Pleiku');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1),'chart form overflow after location selection');
  }else if(route==='/lich-van-nien'){
   await tabTo(page,'.calendar4-grid button[tabindex="0"]');const old=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));
   await page.keyboard.press('ArrowRight');const next=await page.evaluate(()=>document.activeElement?.getAttribute('data-date'));assert.notEqual(next,old);
@@ -49,6 +51,17 @@ try{
    await page.waitForFunction(()=>document.documentElement.dataset.themeReady==='true',null,{timeout:15000});await page.evaluate(()=>document.fonts.ready);
    const metrics=await page.evaluate(()=>({width:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,header:document.querySelectorAll('header.global-header').length,footer:document.querySelectorAll('footer').length,h1:document.querySelectorAll('h1').length,theme:document.documentElement.dataset.theme}));
    if(metrics.scroll>metrics.width+1){const offenders=await page.evaluate(()=>Array.from(document.querySelectorAll('body *')).flatMap(e=>{const r=e.getBoundingClientRect(),s=getComputedStyle(e);return r.width>0&&(r.right>document.documentElement.clientWidth+1||r.left< -1)&&s.position!=='fixed'?[{tag:e.tagName,id:e.id,cls:String(e.className).slice(0,100),label:e.getAttribute('aria-label'),left:r.left,right:r.right,width:r.width,scroll:e.scrollWidth,client:e.clientWidth}]:[];}).slice(0,60));writeFileSync(dir+'/overflow-'+key+'.json',JSON.stringify(offenders,null,2));}
+   if(metrics.scroll>metrics.width+1&&route==='/chart'){
+    // Diagnostic only, after the original metrics were recorded. Restore every
+    // inline style immediately; do not change the pass/fail measurement.
+    const probes=await page.evaluate(()=>{
+     const root=document.documentElement,initial=root.scrollWidth,out=[];
+     const candidates=Array.from(document.querySelectorAll('.chart3-form-grid,.chart3-birth-form,.chart3-birth-form>div,.chart3-preview,.chart3-birth-form select,.chart3-birth-form input,.chart3-birth-form details,.term-help-popup'));
+     for(const el of candidates){const before=el.getAttribute('style'),r=el.getBoundingClientRect(),s=getComputedStyle(el),entry={tag:el.tagName,cls:String(el.className),label:el.getAttribute('aria-label'),text:el.tagName==='SELECT'?el.options[el.selectedIndex]?.text:undefined,width:r.width,right:r.right,client:el.clientWidth,scroll:el.scrollWidth,display:s.display,appearance:s.appearance};el.style.setProperty('display','none','important');entry.without=root.scrollWidth;if(before===null)el.removeAttribute('style');else el.setAttribute('style',before);out.push(entry);}
+     return {initial,restored:root.scrollWidth,probes:out};
+    });
+    writeFileSync(dir+'/overflow-probes-'+key+'.json',JSON.stringify(probes,null,2));
+   }
    assert.ok(metrics.scroll<=metrics.width+1,'horizontal overflow '+JSON.stringify(metrics));assert.equal(metrics.header,1);assert.equal(metrics.footer,1);assert.equal(metrics.h1,1);assert.equal(metrics.theme,'light');
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});

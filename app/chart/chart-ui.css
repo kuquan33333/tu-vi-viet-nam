@@ -114,3 +114,14 @@
 @media(max-width:639px){
  .chart3-birth-form select{contain:inline-size}
 }
+
+/* Keep the native picker while removing the native closed-control decoration
+   whose anonymous render tree may overflow on WebKit. SVG uses currentColor. */
+.birth-select-control{display:block;position:relative;min-width:0;max-width:100%}
+.birth-select-control .birth-select-arrow{display:none}
+.chart3-birth-form .birth-select-control select{appearance:none;-webkit-appearance:none;padding-inline-end:28px!important;overflow:hidden;contain:inline-size}
+.chart3-birth-form .birth-select-control .birth-select-arrow{display:flex;position:absolute;inset-inline-end:8px;top:50%;transform:translateY(-50%) rotate(90deg);pointer-events:none;color:var(--muted)}
+.chart3-birth-form input[type=time]{overflow:hidden;contain:inline-size}
+.chart3-birth-form input[type=time]::-webkit-datetime-edit-fields-wrapper{min-width:0}
+.chart3-birth-form input[type=time]::-webkit-date-and-time-value{max-width:100%}
+@media(max-width:639px){.chart3-birth-form .birth-date-grid .birth-select-control select{padding-inline-start:6px!important;padding-inline-end:22px!important}.chart3-birth-form .birth-date-grid .birth-select-arrow{inset-inline-end:4px}}

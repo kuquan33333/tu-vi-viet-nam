@@ -1,6 +1,6 @@
 'use client';
 import Icon from '@/components/Icon';
-import {BirthDateFields,BirthClockInput} from './BirthDateTimeFields';
+import {BirthDateFields,BirthClockInput,BirthSelect} from './BirthDateTimeFields';
 import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect, useId } from 'react';
 import type { BirthInfo } from '@/lib/ziwei/types';
@@ -460,7 +460,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <label style={{display:'block',marginTop:6}}><input type="checkbox" checked={form.trueSolar!==false} onChange={e=>setForm({...form,trueSolar:e.target.checked})}/> Dùng Chân Thái Dương Thời</label>
           <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng nguyên giờ đồng hồ địa phương, không hiệu chỉnh lịch sử.</p>
           {preview&&<p>Kinh độ: {preview.longitudeCorrectionMinutes.toFixed(2)} phút · EoT: {preview.equationOfTimeMinutes.toFixed(2)} phút · Tổng: {preview.totalCorrectionMinutes.toFixed(2)} phút · Giờ tính: {String(preview.hour).padStart(2,'0')}:{String(preview.minute).padStart(2,'0')}:{String(preview.second).padStart(2,'0')}</p>}
-          <label>Quy ước giờ Tý muộn (23:00–23:59)<select style={inputStyle} value={form.lateZishi??'next-day'} onChange={e=>setForm({...form,lateZishi:e.target.value as 'next-day'|'current-day'})}><option value="next-day">Tý muộn tính ngày hôm sau; Tý sớm giữ ngày</option><option value="current-day">Tý muộn giữ ngày hiện tại</option></select></label>
+          <label>Quy ước giờ Tý muộn (23:00–23:59)<BirthSelect style={inputStyle} value={form.lateZishi??'next-day'} onChange={e=>setForm({...form,lateZishi:e.target.value as 'next-day'|'current-day'})}><option value="next-day">Tính ngày hôm sau</option><option value="current-day">Giữ ngày hiện tại</option></BirthSelect></label>
           <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
           {/* Kết quả Chân Thái Dương Thời */}
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
@@ -499,7 +499,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         {form.province!=='Nước ngoài'&&<input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>}
         {form.province!=='Nước ngoài'&&locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,longitudeReferenceId:undefined,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
         <div className="chart3-location-grid" style={{ display: 'grid', gridTemplateColumns: form.province==='Nước ngoài'?'1fr':'minmax(0,1fr) minmax(0,1fr)', gap: '8px' }}>
-          {form.province!=='Nước ngoài'&&<select
+          {form.province!=='Nước ngoài'&&<BirthSelect
             aria-label="Tỉnh hoặc thành phố nơi sinh" {...invalid(provinceError,"province")}
             value={form.province}
             onChange={e => handleProvince(e.target.value)}
@@ -512,8 +512,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             {PROVINCES.map(p => (
               <option key={p.name} value={p.name}>{p.name}</option>
             ))}
-          </select>}
-          {form.province==='Nước ngoài'?<input aria-label="Thành phố và quốc gia" {...invalid(cityError,"city")} placeholder="Thành phố, quốc gia" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inputStyle}/>:<select
+          </BirthSelect>}
+          {form.province==='Nước ngoài'?<input aria-label="Thành phố và quốc gia" {...invalid(cityError,"city")} placeholder="Thành phố, quốc gia" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inputStyle}/>:<BirthSelect
             aria-label="Quận huyện hoặc khu vực nơi sinh" {...invalid(cityError,"city")}
             value={form.city}
             onChange={e => handleCity(e.target.value)}
@@ -527,7 +527,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             {cityList.map(c => (
               <option key={c.name} value={c.name}>{c.name}</option>
             ))}
-          </select>}
+          </BirthSelect>}
         </div>
         {fieldMessage(provinceError,'province')}{fieldMessage(cityError,'city')}
         <button type="button" className="chart3-foreign" onClick={()=>{handleProvince(form.province==='Nước ngoài'?'':'Nước ngoài');setLocationQuery('');}}>{form.province==='Nước ngoài'?'Sinh ở Việt Nam?':'Sinh ở nước ngoài? Nhập kinh độ và múi giờ'}</button>
@@ -559,7 +559,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </>
       </div>
 
-      {form.province==='Tỉnh Quảng Trị'&&form.city&&y>=1900&&y<=1975&&currentCityData?.isSouthOf17thParallel===undefined&&<label style={{display:'block',margin:'10px 0'}}>Vị trí lịch sử so với sông Bến Hải<select aria-label="Khu vực lịch sử" value={form.historicalRegion||''} onChange={e=>setForm({...form,historicalRegion:e.target.value?e.target.value as BirthRegion:undefined})} style={inputStyle}><option value="">Chưa xác định</option><option value="north">Phía Bắc</option><option value="south">Phía Nam</option></select></label>}
+      {form.province==='Tỉnh Quảng Trị'&&form.city&&y>=1900&&y<=1975&&currentCityData?.isSouthOf17thParallel===undefined&&<label style={{display:'block',margin:'10px 0'}}>Vị trí lịch sử so với sông Bến Hải<BirthSelect aria-label="Khu vực lịch sử" value={form.historicalRegion||''} onChange={e=>setForm({...form,historicalRegion:e.target.value?e.target.value as BirthRegion:undefined})} style={inputStyle}><option value="">Chưa xác định</option><option value="north">Phía Bắc</option><option value="south">Phía Nam</option></BirthSelect></label>}
       {civil&&civil.offsets.length>1&&<div className="study-notice" role="alert"><p>Giờ này xuất hiện hai lần trong lịch sử. Chọn múi giờ đã xác nhận từ hồ sơ:</p>{civil.offsets.map(offset=><label key={offset} style={{display:'block'}}><input type="radio" checked={chosen===offset} onChange={()=>{setChosenKey(civilKey);setChosenOffset(offset);}}/> UTC{offset>=0?'+':''}{offset/60}</label>)}</div>}
       <p className="study-notice">Ngày âm sử dụng lịch Việt Nam UTC+7 (1900–2050); các quy ước giờ sinh và lịch lịch sử vẫn cần đối chiếu hồ sơ thực tế.</p>
       {civilTimeIssue&&<p role="alert" className="study-notice">{civilTimeIssue}</p>}
