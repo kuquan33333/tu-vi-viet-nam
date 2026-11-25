@@ -6,7 +6,7 @@
  --accent-soft:#F8EFE9;
  --accent-border:#C79A8B;
  --font:var(--font-be-vietnam),system-ui,sans-serif;
- --font-serif:var(--font-noto-serif),Georgia,serif;
+ --font-serif:var(--font-noto-serif),var(--font-noto-serif-vietnamese),var(--font-noto-serif-extended),Georgia,serif;
  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
  --heading-home:56px; --heading-page:40px; --heading-mobile:32px; --heading-2:34px; --heading-2-mobile:24px; --heading-3:22px;
  --body-size:16px; --small-size:14px; --eyebrow-size:12px;

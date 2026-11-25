@@ -78,6 +78,25 @@ try{
       assert.equal(status.bottom,width<640?'grid':'none','Bottom tab breakpoint');
       assert.equal(outbound.filter(x=>x.type==='font'||x.type==='script').length,0,'Unexpected remote font/script');
       assert.deepEqual(pageErrors,[]);
+      if(route==='/'){
+        const cdp=await ctx.newCDPSession(page);
+        await cdp.send('DOM.enable');await cdp.send('CSS.enable');
+        try{
+          await page.evaluate(()=>{
+            const sample='ĂÂĐÊÔƠƯăâđêôơưẮẰẲẴẶẤẦẨẪẬẾỀỂỄỆỐỒỔỖỘỚỜỞỠỢỨỪỬỮỰỲỶỸỴ';
+            for(const [id,family,weight] of [['ui1-sans-probe',getComputedStyle(document.body).fontFamily,'400'],['ui1-serif-probe',getComputedStyle(document.querySelector('h1')).fontFamily,'700']]){
+              const span=document.createElement('span');span.id=id;span.textContent=sample;span.style.cssText='position:fixed;left:0;top:0;opacity:0;pointer-events:none;font-size:16px;white-space:nowrap';span.style.fontFamily=family;span.style.fontWeight=weight;document.body.append(span);
+            }
+          });
+          await page.evaluate(()=>document.fonts.ready);
+          const {root}=await cdp.send('DOM.getDocument');
+          for(const selector of ['#ui1-sans-probe','#ui1-serif-probe']){
+            const {nodeId}=await cdp.send('DOM.querySelector',{nodeId:root.nodeId,selector});
+            const {fonts:used}=await cdp.send('CSS.getPlatformFontsForNode',{nodeId});
+            assert.ok(used.length>0&&used.every(f=>f.isCustomFont),'Vietnamese fallback '+selector+' '+JSON.stringify(used));
+          }
+        }finally{await page.evaluate(()=>{document.querySelector('#ui1-sans-probe')?.remove();document.querySelector('#ui1-serif-probe')?.remove()});await cdp.detach();}
+      }
       if(route==='/'&&width<1024){
         const menu=page.getByRole('button',{name:'Mở menu'});
         await menu.click();await page.getByRole('navigation',{name:'Menu toàn website'}).waitFor();
