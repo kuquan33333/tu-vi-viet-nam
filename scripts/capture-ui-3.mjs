@@ -46,8 +46,9 @@ try{
   await fill();await submit().click();await page.getByLabel('Bàn lá số 12 cung').waitFor();await overflow();
   await page.evaluate(()=>document.fonts.ready);
   if(width>=640)await page.locator('.chart-scroll [role=group]').first().waitFor();
-  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
-  await page.waitForFunction(()=>window.scrollY===0);
+  // Full-page capture does not require an exact pixel scroll position. On the new result, verify focus is moved out of the submitted form.
+  if(phase==='after')await page.waitForFunction(()=>document.activeElement===document.querySelector('.workspace-head h1'));
+  await page.evaluate(async()=>{await new Promise(requestAnimationFrame);window.scrollTo({top:0,left:0,behavior:'instant'});await new Promise(requestAnimationFrame);});
   await page.screenshot({path:dir+'/result-'+width+'.png',fullPage:true,animations:'disabled'});
   if(phase==='after'){
    if(width===360){

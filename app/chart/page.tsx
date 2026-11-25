@@ -20,6 +20,13 @@ import type {BirthInfo,ZiweiChart,Palace,Star} from '@/lib/ziwei/types';
 export default function ChartPage(){
  const [options,setOptions]=useState<ZiweiChart[]>([]);
  const [chart,setChart]=useState<ZiweiChart|null>(null);
+ const resultHeading=useRef<HTMLHeadingElement>(null);
+ useEffect(()=>{
+  if(!chart)return;
+  // Run after React commits the result, not while the submitted form still owns focus.
+  resultHeading.current?.focus({preventScroll:true});
+  window.scrollTo({top:0,left:0,behavior:'instant'});
+ },[chart]);
  const [palace,setPalace]=useState<Palace|null>(null);
  const [star,setStar]=useState<Star|null>(null);
  const [view,setView]=useState<TimeView>('mingpan');
@@ -68,7 +75,7 @@ export default function ChartPage(){
    const next=generateChart(birth);
    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
    setStar(null);setFeedback('');
-   window.scrollTo({top:0,behavior:'smooth'});
+
   }catch{setFeedback('Chưa tính được lá số với dữ liệu vừa nhập. Hãy kiểm tra ngày và giờ sinh.');}
  }
  async function save(){
@@ -107,7 +114,7 @@ export default function ChartPage(){
   </div>:
   <>
    <div className="workspace-head">
-    <div><div className="eyebrow">BẢN MỆNH · 12 CUNG</div><h1>{chartLabel(chart.birthInfo)}</h1>
+    <div><div className="eyebrow">BẢN MỆNH · 12 CUNG</div><h1 ref={resultHeading} tabIndex={-1}>{chartLabel(chart.birthInfo)}</h1>
      <p style={{color:'var(--tx-3)',fontSize:12,marginTop:5}}>{chart.birthInfo.day}/{chart.birthInfo.month}/{chart.birthInfo.year} · {chart.wuxingJuName} · {chart.birthInfo.gender==='male'?'Nam':'Nữ'}</p>
     </div>
     <div className="site-actions" style={{display:'flex',flexWrap:'wrap',gap:7}}>

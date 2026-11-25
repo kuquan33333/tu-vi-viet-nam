@@ -99,3 +99,6 @@
 }
 /* Reduce empty space between stars without reducing their touch targets. */
 @media screen{.chart3 .chart3-palace>div.flex-1{flex:0 0 auto}.chart3 .chart3-other-stars{gap:2px 4px}.chart3 .chart3-palace{align-content:start}}
+
+/* Avoid scroll anchoring to the removed birth form while the result board hydrates. */
+.chart3:has(.workspace-head){overflow-anchor:none}

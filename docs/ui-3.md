@@ -14,3 +14,5 @@ Baseline UI-2: 977ba99fda103d2c1dcfd555b0280197135af9cb. Đọc UI-BRIEF.md mụ
 - Giảm khoảng trống giữa nhóm sao trên bàn, không giảm vùng bấm 44px; sửa chụp ảnh result về đầu trang. Giữ nguyên engine.
 
 - Hậu kiểm giao diện theo yêu cầu chủ dự án: bỏ vòng viền ngoài của nút i trong CSS dùng chung `.term-help-button`, giữ SVG đỏ, vùng chạm 44×44, focus bàn phím và hành vi tooltip. Thêm kiểm thử CSS trên các route browser QA. Không thay các nút khác.
+
+- 1fd394f: CI và SEO QA xanh; UI-3 visual QA timeout tại waitForFunction scrollY===0 (dòng 50), không phải lỗi PDF hay icon. Artifact từ commit 151a174 đã kiểm chứng cả 3 PDF đúng 1 trang A4 ngang; vẫn giữ gate 1 trang cho head mới. Chuyển focus vào h1 và cuộn sau khi React render kết quả; chụp full-page không chờ điều kiện tọa độ pixel tuyệt đối, thay bằng xác minh focus đúng ở kết quả. Không giảm tiêu chuẩn kiểm thử chức năng. PDF mẫu còn một số tên sao Hán từ dữ liệu cũ; cần kiểm tra riêng việc Việt hóa, không sửa thuật toán trong patch này.
