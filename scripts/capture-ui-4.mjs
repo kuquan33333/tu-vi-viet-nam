@@ -48,6 +48,13 @@ try{
    await page.keyboard.press('Enter');assert.equal(await cell('2026-11-28').getAttribute('aria-pressed'),'true');
    await page.keyboard.press('ArrowRight');await page.keyboard.press('ArrowRight');await page.keyboard.press('ArrowRight');assert.equal(await keyOfFocus(),'2026-12-01');await page.keyboard.press('Enter');assert.equal(await month.inputValue(),'12');
    assert.equal(await grid.locator('button[tabindex="0"]').count(),1);
+   // Reproduce rapid key presses immediately after selection, including crossing the year boundary.
+   await selectMonth(2026,12);await cell('2026-12-30').click();
+   await page.keyboard.press('Enter');await page.keyboard.press('ArrowRight');await page.keyboard.press('ArrowRight');
+   assert.equal(await keyOfFocus(),'2027-01-01');await page.keyboard.press('Space');
+   assert.equal(await cell('2027-01-01').getAttribute('aria-pressed'),'true');
+   assert.equal(await year.inputValue(),'2027');
+   await selectMonth(2026,12);
    await page.getByRole('button',{name:'Tháng trước'}).click();assert.equal(await month.inputValue(),'11');
    await page.getByRole('button',{name:'Tháng sau'}).click();assert.equal(await month.inputValue(),'12');
    await selectMonth(1900,1);assert.equal(await page.getByRole('button',{name:'Tháng trước'}).isDisabled(),true);

@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useMemo,useRef,useState} from 'react';
+import {useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react';
 import Link from 'next/link';
 import {Button,Icon} from '@/components/ui';
 import CalendarGrid,{civilKey,fullDate} from '@/components/ui/CalendarGrid';
@@ -36,11 +36,19 @@ export default function CalendarView({data,initial}:{data:CalendarData;initial:{
  const pendingFocus=useRef<string|null>(null);
  function choose(d:Date,restoreFocus=false){
   if(!inRange(d))return;
-  const key=civilKey(d);setYear(d.getFullYear());setMonth(d.getMonth()+1);setSelected(d);setFocused(key);
-  if(restoreFocus){pendingFocus.current=key;requestAnimationFrame(()=>{gridRoot.current?.querySelector<HTMLButtonElement>('[data-date="'+key+'"]')?.focus();});}
+  const key=civilKey(d);
+  // Focus requests are consumed once after the committed DOM, never by a delayed animation frame.
+  pendingFocus.current=restoreFocus?key:null;
+  setYear(d.getFullYear());setMonth(d.getMonth()+1);setSelected(d);setFocused(key);
  }
  useEffect(()=>{const now=vietnamToday();setToday(now);if(now.year!==initial.year||now.month!==initial.month||now.day!==initial.day){const d=date(now.year,now.month,now.day);if(inRange(d)){setYear(now.year);setMonth(now.month);setSelected(d);setFocused(civilKey(d));}}},[initial.year,initial.month,initial.day]);
- useEffect(()=>{if(pendingFocus.current){const target=gridRoot.current?.querySelector<HTMLButtonElement>('[data-date="'+pendingFocus.current+'"]');if(target){pendingFocus.current=null;target.focus();}}},[year,month,focused]);
+ useLayoutEffect(()=>{
+  const key=pendingFocus.current;
+  if(!key)return;
+  pendingFocus.current=null;
+  const target=gridRoot.current?.querySelector<HTMLButtonElement>('[data-date="'+key+'"]');
+  if(target&&document.activeElement!==target)target.focus();
+ });
  const terms=useMemo(()=>displayTerms(data,year),[data,year]);
  const days=useMemo(()=>{
   const offset=date(year,month,1).getDay();
@@ -66,8 +74,8 @@ export default function CalendarView({data,initial}:{data:CalendarData;initial:{
   const next=key==='PageUp'||key==='PageDown'?monthDate(d,key==='PageUp'?-1:1):date(d.getFullYear(),d.getMonth()+1,d.getDate()+steps[key]);
   if(!inRange(next))return;
   const nextKey=civilKey(next);
+  if(nextKey===civilKey(d))return;
   pendingFocus.current=nextKey;setFocused(nextKey);setYear(next.getFullYear());setMonth(next.getMonth()+1);
-  if(nextKey===focused)gridRoot.current?.querySelector<HTMLButtonElement>('[data-date="'+nextKey+'"]')?.focus();
  }
  return <main className="site-wrap page-content calendar4">
   <div className="calendar4-header">
