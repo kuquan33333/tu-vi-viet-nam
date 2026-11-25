@@ -23,7 +23,7 @@
  header.brand-header .mobile-menu-button{display:none!important}
  header.brand-header .brand-tools-dropdown{z-index:150}
  .ui-home .home-brand{background:var(--brand-paper) url('/brand/paper.svg');color:var(--brand-navy)}
- .ui-home .home-brand .home2-hero{position:relative;padding:0!important;min-height:340px;background:url('/brand/landscape-pc.svg') center bottom/100% 160px no-repeat;isolation:isolate;overflow:hidden}
+ .ui-home .home-brand .home2-hero{position:relative;padding:0!important;min-height:340px;background:url('/brand/celestial-pc.svg') right 18px top/310px auto no-repeat,url('/brand/landscape-pc.svg') center bottom/100% 160px no-repeat;isolation:isolate;overflow:hidden}
  .ui-home .home-brand .home2-hero-grid{display:grid!important;grid-template-columns:minmax(0,34fr) minmax(0,38fr) minmax(0,32fr);gap:24px;align-items:center;min-height:clamp(330px,25.5vw,375px);width:100%!important;max-width:1600px!important;padding:0 0 10px clamp(80px,9.5vw,145px)!important;margin:0 auto}
  .ui-home .home-brand .hero-blossom{position:absolute;left:0;top:0;width:clamp(150px,16vw,230px);height:auto;opacity:1;mask-image:none;mix-blend-mode:normal;z-index:-1}
  .ui-home .home-brand .hero-logo{display:flex!important;position:relative;justify-content:center;align-items:center;padding-right:22px;min-width:0}
@@ -48,7 +48,7 @@
  .ui-home .home-brand .hero-art img{display:block;width:min(100%,390px)!important;max-width:390px!important;height:auto!important;aspect-ratio:390/353;max-height:none!important;object-fit:contain;object-position:center right;mix-blend-mode:normal;mask-image:linear-gradient(to right,transparent,black 5%),linear-gradient(to bottom,black 94%,transparent);mask-composite:intersect;filter:none}
  /* True nine-slice vector border: corners do not stretch, horizontal/vertical rules remain crisp. */
  .ui-home .home-brand .brand-frame{border:0!important;border-radius:12px;background-color:var(--brand-surface);box-shadow:0 2px 5px rgba(126,78,27,.08);isolation:isolate}
- .ui-home .home-brand .brand-frame::before,.ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{content:'';position:absolute;inset:0;width:auto;height:auto;pointer-events:none;z-index:1;border:18px solid transparent;border-image: url('/brand/frame-pc.svg') 24 / 18px / 0 stretch;border-radius:0}
+ .ui-home .home-brand .brand-frame::before,.ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{content:'';position:absolute;inset:0;width:auto;height:auto;pointer-events:none;z-index:1;border:18px solid transparent;border-image: url('/brand/frame-pc.svg') 24% / 18px / 0 stretch;border-radius:0}
  .ui-home .home-brand .brand-frame::after{display:none}
  .ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{border-width:12px;border-image-width:12px}
  .ui-home .home-brand .home2-actions .brand-primary::before,header.brand-header .header-cta::before{border-image-source:url('/brand/frame-light-pc.svg')}
@@ -65,7 +65,7 @@
  .ui-home .home-brand .home-panel-head>a{font-size:13px;min-height:35px;white-space:nowrap}
  .ui-home .home-brand .home-chart-body{grid-template-columns:minmax(0,1.2fr) minmax(0,.95fr);gap:15px}
  .ui-home .home-brand .home-chart .ui-chart-grid{position:relative;grid-template-rows:repeat(4,minmax(59px,1fr));gap:0;border:1px solid var(--brand-gold);border-radius:7px;background:var(--brand-cream);overflow:visible}
- .ui-home .home-brand .home-chart .ui-chart-grid::before{content:'';position:absolute;inset:-1px;z-index:1;pointer-events:none;border:13px solid transparent;border-image:url('/brand/frame-pc.svg') 24/13px/0 stretch}
+ .ui-home .home-brand .home-chart .ui-chart-grid::before{content:'';position:absolute;inset:-1px;z-index:1;pointer-events:none;border:13px solid transparent;border-image:url('/brand/frame-pc.svg') 24%/13px/0 stretch}
  .ui-home .home-brand .home-chart .ui-chart-cell{border-color:var(--brand-gold-line);font-size:12px;padding:6px 3px}
  .ui-home .home-brand .home-chart .ui-chart-cell .home-palace-name,.ui-home .home-brand .home-chart .ui-chart-cell strong{font-size:11px;line-height:1.35}
  .ui-home .home-brand .home-chart .ui-chart-center{background:var(--brand-surface) url('/brand/seal-pc.svg') center/88% auto no-repeat;border-color:var(--brand-gold-line)}
@@ -77,7 +77,7 @@
  .ui-home .home-brand .home-chart-note,.ui-home .home-brand .brand-calendar-note{font-size:11px;line-height:1.45;margin-top:9px}
  .ui-home .home-brand .home-calendar-body{grid-template-columns:minmax(0,.96fr) minmax(0,1.04fr);gap:15px}
  .ui-home .home-brand .brand-date{position:relative;border:0;border-radius:8px;background:var(--brand-cream) url('/brand/cloud-pc.svg') center bottom/100% auto no-repeat;isolation:isolate;min-height:239px}
- .ui-home .home-brand .brand-date::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border:14px solid transparent;border-image:url('/brand/frame-pc.svg') 24/14px/0 stretch}
+ .ui-home .home-brand .brand-date::before{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;border:14px solid transparent;border-image:url('/brand/frame-pc.svg') 24%/14px/0 stretch}
  .ui-home .home-brand .brand-date-week{background:var(--brand-red);font-size:20px;padding:7px 5px;color:var(--white);border-radius:6px 6px 0 0}
  .ui-home .home-brand .brand-date-number{font-family:var(--font-serif);font-size:clamp(75px,6.6vw,102px);line-height:1.02;letter-spacing:-.045em;padding:6px 0 0;color:var(--brand-red)}
  .ui-home .home-brand .brand-date p{font-size:14px;margin:3px 0 9px}

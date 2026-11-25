@@ -93,6 +93,7 @@ try{
     assert.match(pc.asset.logo,/emblem-pc\.svg$/);assert.match(pc.asset.book,/study-pc\.webp$/);assert.ok(pc.asset.bookNatural>=pc.asset.bookRendered-1,'book artwork scaled beyond source');
     assert.match(pc.frame,/frame-pc\.svg/);
    }
+   await page.mouse.move(0,0);
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});
    const axe=await page.evaluate(async()=>window.axe.run({runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
