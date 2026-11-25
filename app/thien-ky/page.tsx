@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import TriadNav from '@/components/TriadNav';
 import TimeQimenTool from '@/components/TimeQimenTool';
 import {
  HEXAGRAMS, castHexagram, changedLines, hexFromLines, readingRule,
@@ -185,7 +184,7 @@ function QimenTool(){
 export default function ThienKyPage(){
  const [tab,setTab]=useState<Tab>('dich');
  return <div className="study-shell">
-  <TriadNav active="thien-ky"/>
+
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Thiên Kỷ</div>
@@ -202,7 +201,7 @@ export default function ThienKyPage(){
      <h2>Tử Vi Đẩu Số – hệ thống hiện có</h2><p>Lập mệnh bàn 12 cung, an sao, đại hạn, lưu niên và xem giải thích trong công cụ hiện hữu. Thiên Kỷ dùng chung nền tri thức, không tạo bản tính Tử Vi thứ hai.</p>
      <Link className="study-btn" href="/chart">Mở công cụ lập lá số →</Link>
     </section>}
-   <footer className="study-footer">Thiên Kỷ – công cụ nghiên cứu văn hóa và lịch sử thuật số. Nguồn thuật toán được ghi trong từng công cụ; không dùng các kết quả chiêm nghiệm thay cho chuyên gia hay bằng chứng thực tế.</footer>
+   <p className="study-footer" role="note">Thiên Kỷ – công cụ nghiên cứu văn hóa và lịch sử thuật số. Nguồn thuật toán được ghi trong từng công cụ; không dùng các kết quả chiêm nghiệm thay cho chuyên gia hay bằng chứng thực tế.</p>
   </main>
  </div>;
 }

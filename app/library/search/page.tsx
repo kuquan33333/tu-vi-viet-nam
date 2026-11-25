@@ -22,7 +22,7 @@ export default function SearchPage() {
       <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:'Tra cứu',href:'/library/search'}]} />
 
       <main className="max-w-3xl mx-auto px-6 py-12">
-        <header className="text-center mb-10">
+        <div className="text-center mb-10">
           <div style={{ fontSize: 12, color: 'var(--tx-3)', letterSpacing: '0.1em' }}>THƯ VIỆN CỔ THƯ</div>
           <h1 style={{ fontSize: 'clamp(24px,4vw,34px)', fontWeight: 700, color: 'var(--tx-0)', margin: '10px 0 20px' }}>
             Tra cứu toàn văn
@@ -42,7 +42,7 @@ export default function SearchPage() {
           <p style={{ fontSize: 12, color: 'var(--tx-3)', marginTop: 14 }}>
             {q ? <>Tìm thấy <strong style={{ color: 'var(--ac)' }}>{hits.length}</strong> kết quả cho “{q}”</> : 'Nhập từ khóa để xem kết quả.'}
           </p>
-        </header>
+        </div>
 
         {hits.length === 0 ? (
           <div style={{ background: 'var(--bg-card)', border: '1px solid rgba(184,146,42,0.15)', borderRadius: 12, padding: '36px 24px', textAlign: 'center', color: 'var(--tx-2)' }}>
