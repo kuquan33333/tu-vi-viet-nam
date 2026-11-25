@@ -80,6 +80,13 @@ try{
   await page.getByRole('button',{name:'Lưu lá số'}).click();await page.getByText(/Đã lưu hồ sơ/).waitFor();
   await page.screenshot({path:'qa-artifacts/v4/chart-'+width+'.png',fullPage:true});
   await page.emulateMedia({media:'print'});await page.locator('.chart-scroll').waitFor({state:'visible'});await page.pdf({path:'qa-artifacts/v4/chart-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});await page.emulateMedia({media:'screen'});
+  // The separate profile print action must reopen the real chart and call print only after rendering.
+  await open('/ho-so');
+  await page.evaluate(()=>{window.print=()=>{document.documentElement.dataset.printInvoked='true';};});
+  await page.getByRole('button',{name:'In A4',exact:true}).click();
+  await page.waitForURL('**/chart?print=1');await page.getByLabel('Bàn lá số 12 cung').waitFor();
+  await page.waitForFunction(()=>document.documentElement.dataset.printInvoked==='true');
+  await page.emulateMedia({media:'print'});await page.locator('.chart-scroll').waitFor({state:'visible'});const profilePdf=await page.pdf({path:'qa-artifacts/v4/profile-print-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});assert.equal((profilePdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length,1);await page.emulateMedia({media:'screen'});
   // JSON backup must download the real saved profile; importing it again is idempotent.
   await open('/ho-so');
   page.once('dialog',dialog=>dialog.accept());
