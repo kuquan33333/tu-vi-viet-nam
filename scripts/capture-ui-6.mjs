@@ -82,7 +82,7 @@ try{
     const pc=await page.evaluate(async()=>{
      const rect=s=>{const e=document.querySelector(s),r=e.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top,bottom:r.bottom,width:r.width,height:r.height}};
      const brand=document.querySelector('.global-header .brand-emblem'),art=document.querySelector('.hero-art img');await Promise.all([brand.decode(),art.decode()]);
-     return {brand:rect('.brand-wordmark'),nav:rect('.desktop-links'),cta:rect('.header-cta'),links:[...document.querySelectorAll('.desktop-links>a,.brand-tools-toggle')].map(e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width}}),hero:rect('.home2-hero'),title:rect('#home2-title'),titleSize:parseFloat(getComputedStyle(document.querySelector('#home2-title')).fontSize),cards:[...document.querySelectorAll('.home-primary-card')].map(e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right}}),asset:{logo:brand.currentSrc,logoNatural:brand.naturalWidth,book:art.currentSrc,bookNatural:art.naturalWidth,bookRendered:art.getBoundingClientRect().width},frame:getComputedStyle(document.querySelector('.home-primary-card'),'::before').borderImageSource};
+     return {brand:rect('.brand-wordmark'),nav:rect('.desktop-links'),cta:rect('.header-cta'),links:[...document.querySelectorAll('.desktop-links>a,.brand-tools-toggle')].map(e=>{const r=e.getBoundingClientRect();return {left:r.left,right:r.right,width:r.width}}),hero:rect('.home2-hero'),title:rect('#home2-title'),titleSize:parseFloat(getComputedStyle(document.querySelector('#home2-title')).fontSize),cards:[...document.querySelectorAll('.home-primary-card')].map(e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right}}),asset:{logo:brand.currentSrc,logoNatural:brand.naturalWidth,book:art.currentSrc,bookNatural:art.naturalWidth,bookRendered:art.getBoundingClientRect().width},frame:getComputedStyle(document.querySelector('.home-primary-card'),'::before').backgroundImage};
     });
     writeFileSync(dir+'/pc-layout-'+width+'.json',JSON.stringify(pc,null,2));
     assert.ok(pc.brand.width>160&&pc.brand.right<=pc.nav.left+1,'desktop logo/nav collision');
@@ -91,7 +91,9 @@ try{
     assert.ok(pc.titleSize>=29,'desktop hero type too small');
     assert.equal(pc.cards.length,4);assert.ok(pc.cards.every(c=>Math.abs(c.top-pc.cards[0].top)<2),'desktop feature card row');
     assert.match(pc.asset.logo,/emblem-pc\.svg$/);assert.match(pc.asset.book,/study-pc\.webp$/);assert.ok(pc.asset.bookNatural>=pc.asset.bookRendered-1,'book artwork scaled beyond source');
-    assert.match(pc.frame,/frame-pc\.svg/);
+    for(const corner of ['tl','tr','br','bl'])assert.ok(pc.frame.includes('corner-gold-'+corner+'.svg'),'missing fixed vector corner '+corner);
+    assert.equal(await page.locator('.home-primary-card svg .icon-pc').first().evaluate(e=>getComputedStyle(e).display),'inline');
+    const art=await page.evaluate(async()=>{const paths=['paper-pc.svg','cloud-detail-pc.svg','hills-card-pc.svg','corner-gold-tl.svg','corner-gold-tr.svg','corner-gold-br.svg','corner-gold-bl.svg'];return Promise.all(paths.map(async p=>{const img=new Image();img.src='/brand/'+p;await img.decode();return {p,w:img.naturalWidth,h:img.naturalHeight}}));});assert.ok(art.every(x=>x.w>0&&x.h>0));
    }
    await page.mouse.move(0,0);
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});

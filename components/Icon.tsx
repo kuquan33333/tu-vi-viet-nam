@@ -24,6 +24,16 @@ const paths:Record<IconName,React.ReactNode>={
  reset:<><path d="M4 9a8 8 0 1 1 1 8M4 4v5h5"/></>,
  save:<><path d="M4 3h13l3 3v15H4zM8 3v7h8V3M8 21v-7h8v7"/></>
 };
+const pcPaths:Partial<Record<IconName,React.ReactNode>>={
+ home:<><path d="M2.5 10.5 12 3l9.5 7.5M5 9v12h14V9M9.5 21v-7h5v7" strokeWidth="1.65"/></>,
+ chart:<><rect x="4" y="3" width="16" height="18" rx="1.4"/><path d="M7.5 7h9M7.5 11h9M7.5 15h6M7.5 18h4"/></>,
+ 'yin-yang':<><circle cx="12" cy="12" r="10" strokeWidth="1.25"/><path d="M12 2a10 10 0 0 1 0 20 5 5 0 0 1 0-10 5 5 0 0 0 0-10Z" fill="currentColor" stroke="none"/><circle cx="12" cy="7" r="1.45" fill="currentColor" stroke="none"/><circle cx="12" cy="17" r="1.45" fill="#fff5df" stroke="none"/></>,
+ calendar:<><rect x="2.8" y="5.2" width="18.4" height="16" rx="1.15"/><path d="M2.8 10h18.4M7.4 2.8v5M16.6 2.8v5"/>{[7,12,17].flatMap(x=>[13.5,17.4].map(y=><circle key={x+'-'+y} cx={x} cy={y} r=".75" fill="currentColor" stroke="none"/>))}</>,
+ compare:<><circle cx="7.7" cy="7" r="3.65"/><circle cx="17.1" cy="7.3" r="3.15"/><path d="M1.9 21v-2.1a5.8 5.8 0 0 1 11.6 0V21M14.8 13.4a5.5 5.5 0 0 1 7.3 5.2V21"/></>,
+ book:<><path d="M12 5.6C8.8 3.6 5.2 3.7 2.2 4.7v15.1c3.1-1.4 6.5-1.2 9.8.8 3.3-2 6.7-2.2 9.8-.8V4.7c-3-1-6.6-1.1-9.8.9Zm0 0v15M5.5 6.5v10.3c2-.4 3.5-.1 4.7.6m8.3-10.9v10.3c-2-.4-3.5-.1-4.7.6"/></>,
+ tools:<>{[3,13].flatMap(x=>[3,13].map(y=><rect key={x+'-'+y} x={x} y={y} width="8" height="8" rx="1.4"/>))}</>,
+ user:<><circle cx="12" cy="6.5" r="3.5"/><path d="M4 21v-2a8 8 0 0 1 16 0v2Z"/></>,
+};
 export default function Icon({name,label,size=20}:{name:IconName;label?:string;size?:number}){
- return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" focusable="false" {...(label?{role:'img','aria-label':label}:{'aria-hidden':true})}>{paths[name]}</svg>;
+ return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" focusable="false" {...(label?{role:'img','aria-label':label}:{'aria-hidden':true})}>{pcPaths[name]?<><g className="icon-original">{paths[name]}</g><g className="icon-pc" style={{display:'none'}}>{pcPaths[name]}</g></>:paths[name]}</svg>;
 }

@@ -100,3 +100,49 @@
  .ui-home .home-brand .home-primary-card>svg{width:32px;height:32px}
  .ui-home .home-brand .home-primary-arrow{width:20px;height:20px}
 }
+
+/* PC V3: independently drawn corners and fixed-width rules. No stretched
+   frame bitmap, no filters or scaling on the line work. */
+@media screen and (min-width:1100px){
+ :root{--pc-gold-outer:#b38443;--pc-gold-inner:#d1a76a}
+ html,body,.ui-home .home-brand{background-color:#fbf1dd;background-image:url('/brand/paper-pc.svg')}
+ header.brand-header.ui-header.global-header{background:#fff9ee url('/brand/paper-pc.svg');box-shadow:0 1px 3px rgba(105,66,23,.10)}
+ .ui-home .home-brand .home2-hero{background-image:url('/brand/celestial-pc.svg'),url('/brand/landscape-pc.svg');background-size:360px auto,100% 190px;background-position:right 0 top,center bottom}
+ .ui-home .home-brand .home-primary-card,.ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{background-color:#fff8e9;background-image:url('/brand/hills-card-pc.svg');background-size:165px 48px;background-repeat:no-repeat;box-shadow:0 1px 3px rgba(133,88,34,.08);border-radius:9px}
+ .ui-home .home-brand .home-primary-card{background-position:4px bottom;padding:17px 18px;gap:13px}
+ .ui-home .home-brand .home-chart,.ui-home .home-brand .home-calendar{background-image:url('/brand/cloud-detail-pc.svg');background-position:right 6px bottom 3px;background-size:158px 42px;padding:18px 21px 20px}
+ .ui-home .home-brand .brand-frame::before,.ui-home .home-brand .home-chart .ui-chart-grid::before,.ui-home .home-brand .brand-date::before,.ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{
+  --pc-corner:24px;--pc-outer:var(--pc-gold-outer);--pc-inner:var(--pc-gold-inner);
+  --pc-tl:url('/brand/corner-gold-tl.svg');--pc-tr:url('/brand/corner-gold-tr.svg');--pc-br:url('/brand/corner-gold-br.svg');--pc-bl:url('/brand/corner-gold-bl.svg');
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:2;border:0!important;border-image:none!important;border-radius:0;
+  background-image:var(--pc-tl),var(--pc-tr),var(--pc-br),var(--pc-bl),linear-gradient(var(--pc-outer),var(--pc-outer)),linear-gradient(var(--pc-outer),var(--pc-outer)),linear-gradient(var(--pc-outer),var(--pc-outer)),linear-gradient(var(--pc-outer),var(--pc-outer)),linear-gradient(var(--pc-inner),var(--pc-inner)),linear-gradient(var(--pc-inner),var(--pc-inner)),linear-gradient(var(--pc-inner),var(--pc-inner)),linear-gradient(var(--pc-inner),var(--pc-inner));
+  background-position:left top,right top,right bottom,left bottom,center top 1px,right 1px center,center bottom 1px,left 1px center,center top 4px,right 4px center,center bottom 4px,left 4px center;
+  background-size:var(--pc-corner) var(--pc-corner),var(--pc-corner) var(--pc-corner),var(--pc-corner) var(--pc-corner),var(--pc-corner) var(--pc-corner),calc(100% - 2 * var(--pc-corner) + 1px) 1px,1px calc(100% - 2 * var(--pc-corner) + 1px),calc(100% - 2 * var(--pc-corner) + 1px) 1px,1px calc(100% - 2 * var(--pc-corner) + 1px),calc(100% - 2 * var(--pc-corner) + 1px) 1px,1px calc(100% - 2 * var(--pc-corner) + 1px),calc(100% - 2 * var(--pc-corner) + 1px) 1px,1px calc(100% - 2 * var(--pc-corner) + 1px);
+  background-repeat:no-repeat;
+ }
+ .ui-home .home-brand .home2-actions .brand-primary::before,header.brand-header .header-cta::before{--pc-outer:#f5d79b;--pc-inner:#dcaa5d;--pc-tl:url('/brand/corner-light-tl.svg');--pc-tr:url('/brand/corner-light-tr.svg');--pc-br:url('/brand/corner-light-br.svg');--pc-bl:url('/brand/corner-light-bl.svg')}
+ .ui-home .home-brand .home2-actions .ui-button,header.brand-header .header-cta.brand-primary{min-height:44px;border:0!important;border-radius:7px;padding-inline:17px!important}
+ .ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{inset:2px}
+ .ui-home .home-brand .home-primary-card>svg{width:42px;height:42px;stroke-width:1.45}
+ .ui-home .home-brand .home-primary-card:nth-child(2)>svg,.ui-home .home-brand .home-primary-card:nth-child(4)>svg{color:#a36a26}
+ .ui-home .home-brand .home-primary-arrow{width:24px;height:24px;border-color:#b38443}
+ .ui-home .home-brand .home-panel-head{padding-bottom:7px;border-color:#dcc29a}
+ .ui-home .home-brand .home-panel-head>a{min-height:44px}
+ .ui-home .home-brand .home-chart .ui-chart-grid{border:1px solid #b38443;border-radius:5px;background:#fff6e5;overflow:hidden}
+ .ui-home .home-brand .home-chart .ui-chart-grid::before{inset:0}
+ .ui-home .home-brand .home-chart .ui-chart-cell{border-color:#c49a60}
+ .ui-home .home-brand .home-chart .ui-chart-center{background-color:#fff9ee}
+ .ui-home .home-brand .brand-date{background:#fff6e5 url('/brand/cloud-detail-pc.svg') center bottom 5px/90% auto no-repeat;border-radius:6px}
+ .ui-home .home-brand .brand-date-week{padding:9px 8px 12px;border-radius:6px 6px 0 0;background:linear-gradient(110deg,#a52623,#8c1717);box-shadow:inset 0 -3px 0 #d4a35a}
+ .ui-home .home-brand .brand-date-lunar{padding-bottom:30px}
+ .ui-home .home-brand .home-chart-facts dl,.ui-home .home-brand .brand-calendar-facts dl{font-size:13px;line-height:1.5;gap:6px 10px}
+ .ui-home .home-brand .home-chart-facts dd,.ui-home .home-brand .brand-calendar-facts dd{border-bottom-color:#e5d6b9}
+ .ui-home .home-brand .home-chart-note,.ui-home .home-brand .brand-calendar-note{padding-right:4px;font-size:11.5px}
+ .brand-header svg .icon-original,.home-brand svg .icon-original{display:none}
+ .brand-header svg .icon-pc,.home-brand svg .icon-pc{display:inline!important}
+}
+@media screen and (min-width:1100px) and (max-width:1199px){
+ .ui-home .home-brand .home-primary-card{padding:14px 12px;gap:8px}
+ .ui-home .home-brand .home-primary-card>svg{width:32px;height:32px}
+ .ui-home .home-brand .home2-actions .ui-button,header.brand-header .header-cta.brand-primary{padding-inline:10px!important}
+}
