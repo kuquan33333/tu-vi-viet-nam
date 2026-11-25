@@ -119,7 +119,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
         >
         <div className="card-glass rounded-xl p-4">
           <div className="text-[10px] tracking-widest mb-3 flex items-center gap-2 font-semibold" style={{ color: 'var(--t-faint)' }}>
-            <span style={{ color: 'var(--t-gold)', opacity: 0.8 }}>◆</span>
+            <span style={{ color: 'var(--t-gold)', opacity: 0.8 }}><Icon name="tools" size={16}/></span>
             TỨ HÓA NĂM SINH
           </div>
           <div className="grid grid-cols-2 gap-2">
@@ -239,7 +239,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
       >
       <div className="card-glass rounded-xl p-4">
         <div className="text-[10px] tracking-widest mb-3 flex items-center gap-2 font-semibold" style={{ color: 'var(--t-faint)' }}>
-          <span className="text-purple-400">◎</span>
+          <span className="text-purple-400"><Icon name="compass" size={16}/></span>
           TIẾN TRÌNH ĐẠI HẠN
         </div>
         <div className="grid grid-cols-3 gap-2">

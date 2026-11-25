@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import {BirthDateFields,BirthClockInput} from './BirthDateTimeFields';
 import TermTooltip from '@/components/TermTooltip';
 import { useState, useMemo, useEffect } from 'react';
@@ -380,7 +381,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
         {calendarType === 'lunar' && form.year && form.month && form.day && (
           <p style={{ fontSize: '11px', color: 'var(--tx-2)', marginTop: '6px' }}>
-            → Tương đương Dương lịch: {String(form.day).padStart(2, '0')}/{String(form.month).padStart(2, '0')}/{form.year}
+            Tương đương Dương lịch: {String(form.day).padStart(2, '0')}/{String(form.month).padStart(2, '0')}/{form.year}
           </p>
         )}
       </div>
@@ -495,7 +496,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
           <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
           {/* Kết quả Chân Thái Dương Thời */}
           <div style={{ textAlign: 'center', padding: '4px 0' }}>
-            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời → </span>
+            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời: </span>
             <span style={{ fontSize: '15px', color: goldText, fontWeight: 700, letterSpacing: '0.08em' }}>
               {branch===undefined?'Chưa xác định':`Giờ ${BRANCHES[branch]}`}
             </span>
@@ -570,7 +571,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
               alignItems: 'center',
               gap: '8px',
             }}>
-              <span style={{ fontSize: '12px', color: summaryClr }}>✓</span>
+              <span style={{ fontSize: '12px', color: summaryClr }}><Icon name="check" size={16}/></span>
               <span style={{ fontSize: '11px', color: summaryClr, letterSpacing: '0.03em', flex: 1 }}>
                 {summaryText}
               </span>

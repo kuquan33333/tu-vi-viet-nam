@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 import { pageMetadata } from '@/lib/seo/metadata';
 /**
@@ -133,7 +134,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             textDecoration: 'none',
             boxShadow: 'none',
           }}>
-            Lập lá số ngay →
+            Lập lá số ngay <Icon name="arrow" size={16}/>
           </Link>
         </div>
 
@@ -199,7 +200,7 @@ export default async function KnowledgePage({ params }: { params: Promise<{ star
             MUỐN NGHIÊN CỨU SÂU NGUYÊN ĐIỂN?
           </div>
           <Link href="/library" style={{ fontSize: '13px', color: 'var(--ac)', fontWeight: 600, letterSpacing: '0.04em', textDecoration: 'none' }}>
-            📜 Tra Cứu Thư Viện Cổ Thư — Toàn Tập / Toàn Thư / Cốt Tủy Phú →
+            <Icon name="book" size={16}/> Tra Cứu Thư Viện Cổ Thư — Toàn Tập / Toàn Thư / Cốt Tủy Phú <Icon name="arrow" size={16}/>
           </Link>
         </div>
       </article>

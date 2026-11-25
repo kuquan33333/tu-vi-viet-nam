@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -98,7 +99,7 @@ export default function AnnouncementModal() {
                   cursor: 'pointer', lineHeight: 1,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
-              >×</button>
+              ><Icon name="close" size={20}/></button>
             </div>
 
             {/* Banner tri ân */}
@@ -157,7 +158,7 @@ export default function AnnouncementModal() {
                 Kính chúc quý bạn luôn an nhiên tự tại, ngày càng thấu tỏ bản thân và lan tỏa nhiều yêu thương, trí tuệ đến cuộc đời.
               </p>
               <p style={{ margin: 0, textAlign: 'right', fontSize: '13px', color: 'var(--muted)' }}>
-                —— Trân trọng cảm ơn quý bạn 🙏
+                —— Trân trọng cảm ơn quý bạn.
               </p>
             </div>
 

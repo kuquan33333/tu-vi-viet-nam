@@ -199,7 +199,7 @@ export default function DiaKyPage(){
     <p className="study-lead">La Kinh 24 sơn, Bát Trạch, Huyền Không Phi Tinh và bản đồ tọa độ tùy chọn, cùng phiếu khảo sát địa hình theo các thuật ngữ phong thủy truyền thống.</p>
     <div className="study-tabs" role="tablist" aria-label="Phân hệ Địa Kỷ">
      <button className={'study-tab'+(tab==='compass'?' active':'')} aria-selected={tab==='compass'} role="tab" onClick={()=>setTab('compass')}><Icon name="compass" size={18}/> La Kinh 24 sơn</button>
-     <button className={'study-tab'+(tab==='battrach'?' active':'')} aria-selected={tab==='battrach'} role="tab" onClick={()=>setTab('battrach')}>◈ Bát Trạch</button>
+     <button className={'study-tab'+(tab==='battrach'?' active':'')} aria-selected={tab==='battrach'} role="tab" onClick={()=>setTab('battrach')}><Icon name="home" size={18}/> Bát Trạch</button>
      <button className={'study-tab'+(tab==='xuan'?' active':'')} aria-selected={tab==='xuan'} role="tab" onClick={()=>setTab('xuan')}>Huyền Không · GIS</button>
      <button className={'study-tab'+(tab==='land'?' active':'')} aria-selected={tab==='land'} role="tab" onClick={()=>setTab('land')}>△ Sơn xuyên hình thế</button>
     </div>

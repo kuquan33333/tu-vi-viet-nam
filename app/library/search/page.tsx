@@ -1,4 +1,5 @@
 'use client';
+import Icon from '@/components/Icon';
 import Breadcrumb from '@/components/Breadcrumb';
 
 
@@ -46,7 +47,7 @@ export default function SearchPage() {
 
         {hits.length === 0 ? (
           <div style={{ background: 'var(--bg-card)', border: '1px solid var(--line)', borderRadius: 12, padding: '36px 24px', textAlign: 'center', color: 'var(--tx-2)' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>📜</div>
+            <div style={{ fontSize: 32, marginBottom: 12 }}><Icon name="book" size={32}/></div>
             {q ? 'Chưa tìm thấy nội dung phù hợp. Hãy thử từ khóa khác.' : 'Hãy nhập từ khóa cần tra cứu.'}
           </div>
         ) : (

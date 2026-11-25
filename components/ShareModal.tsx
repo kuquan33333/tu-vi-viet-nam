@@ -93,7 +93,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
                   background: 'var(--line)', color: 'var(--muted)', fontSize: '16px',
                   cursor: 'pointer', lineHeight: 1,
                 }}
-              >×</button>
+              ><Icon name="close" size={20}/></button>
             </div>
 
             {/* Xem trước ảnh lá số */}
@@ -104,7 +104,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
             </div>
 
             <div style={{ padding: '0 20px 12px', textAlign: 'center', fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.05em' }}>
-              ↑ Thích hợp chia sẻ lên Facebook, Zalo, Telegram, Messenger
+              Thích hợp chia sẻ lên Facebook, Zalo, Telegram, Messenger
             </div>
 
             {/* Vùng thao tác */}
@@ -130,7 +130,7 @@ export default function ShareModal({ open, onClose, shareUrl, chart, birth, high
                   cursor: 'pointer',
                 }}
               >
-                {copied ? '✓ Đã sao chép liên kết lá số' : 'Sao Chép Liên Kết Lá Số'}
+                {copied ? 'Đã sao chép liên kết lá số' : 'Sao Chép Liên Kết Lá Số'}
               </button>
 
               <div style={{

@@ -232,7 +232,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
               className="transition-colors text-lg leading-none hover:text-white" 
               style={{ color: 'var(--t-faint)' }}
             >
-              ×
+              <Icon name="close" size={20}/>
             </button>
           </div>
 
