@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFileSync,mkdirSync,writeFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+const dir='qa-artifacts/ui6-inventory';mkdirSync(dir,{recursive:true});
+const src=readFileSync('app/tokens.css','utf8');
+const tokens=Object.fromEntries([...src.matchAll(/--([a-z-]+):\s*(#[0-9a-fA-F]{6})\b/g)].map(m=>[m[1],m[2]]));
+const lum=hex=>{const a=hex.slice(1).match(/../g).map(x=>parseInt(x,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return .2126*a[0]+.7152*a[1]+.0722*a[2]};
+const ratio=(a,b)=>{assert.ok(tokens[a]&&tokens[b]);const x=lum(tokens[a]),y=lum(tokens[b]);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+const pairs=[['ink','paper'],['ink','card'],['muted','paper'],['muted','card'],['accent','paper'],['accent','card'],['accent','accent-soft'],['white','accent'],['on-dark','ink'],['on-dark-muted','ink'],['lu','lu-bg'],['quan','quan-bg'],['ke','ke-bg'],['ji','ji-bg'],['print-ink','print-paper'],['print-muted','print-paper']];
+const contrasts=pairs.map(([fg,bg])=>({fg,bg,ratio:ratio(fg,bg),minimum:4.5,pass:ratio(fg,bg)>=4.5}));
+contrasts.push({fg:'dim',bg:'paper',ratio:ratio('dim','paper'),minimum:4.5,pass:ratio('dim','paper')>=4.5,note:'Known token pair not used for small outside-month labels; use muted instead.'});
+writeFileSync(dir+'/contrast.json',JSON.stringify(contrasts,null,2));
+const files=execFileSync('git',['ls-files','app','components'],{encoding:'utf8'}).trim().split('\n').filter(p=>/\.(tsx|ts|css)$/.test(p)&&p!=='app/tokens.css');
+const residual=files.flatMap(file=>readFileSync(file,'utf8').split('\n').flatMap((line,i)=>{const colors=line.match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g)||[],glyphs=line.match(/[☷☯⊕✺⌖✳☰☾✦◇⌂▤◷∞↗]/gu)||[],gradient=/(?:linear|radial)-gradient\(/.test(line);return colors.length||glyphs.length||gradient?[{file,line:i+1,colors,glyphs,gradient}]:[];}));
+writeFileSync(dir+'/residual.json',JSON.stringify(residual,null,2));console.log('Residual candidates (manual classification required):',residual.length);
+assert.ok(contrasts.slice(0,-1).every(x=>x.pass),'Token contrast regression');
