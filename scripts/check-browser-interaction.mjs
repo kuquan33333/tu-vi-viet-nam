@@ -26,6 +26,7 @@ try{
    await scope.getByLabel('Năm sinh',{exact:true}).fill(y);
   };
   const fillNormal=async scope=>{
+   await scope.getByRole('button',{name:'Nam',exact:true}).click();
    await fillDate(scope);await scope.getByLabel('Tỉnh hoặc thành phố nơi sinh').selectOption('Tỉnh Gia Lai');
    await scope.getByLabel('Quận huyện hoặc khu vực nơi sinh').selectOption('TP. Pleiku');
    await scope.getByLabel('Giờ và phút sinh').fill('08:00');
@@ -33,7 +34,7 @@ try{
   await goto('/chart');
   assert.equal(await page.getByLabel('Giờ và phút sinh').inputValue(),'');
   assert.equal(await page.getByLabel('Tỉnh hoặc thành phố nơi sinh').inputValue(),'');
-  await fillDate(page);await page.getByLabel('Tìm nơi sinh theo địa danh cũ').fill('krong pa');
+  await page.getByRole('button',{name:'Nam',exact:true}).click();await fillDate(page);await page.getByLabel('Tìm nơi sinh theo địa danh cũ').fill('krong pa');
   await page.getByRole('button',{name:/Krông Pa.*cần nhập kinh độ/}).first().click();
   assert.equal(await page.getByLabel('Kinh độ',{exact:true}).inputValue(),'');
   await page.getByRole('button',{name:'Dùng kinh độ tham khảo của huyện'}).click();

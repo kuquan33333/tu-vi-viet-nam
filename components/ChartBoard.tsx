@@ -107,9 +107,9 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
 
       {/* 4x4 命盘网格（含 SVG 叠加层） */}
       <div
-        className="grid rounded-xl overflow-hidden relative"
+        className="grid rounded-xl overflow-hidden relative chart3-grid"
         style={{
-          gridTemplateColumns: 'repeat(4, 1fr)',
+          gridTemplateColumns: 'repeat(4, minmax(0,1fr))',
           gridTemplateRows: 'repeat(4, auto)',
           gap: '1px',
           background: 'var(--t-border)',
@@ -143,19 +143,18 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col items-center justify-center p-4 gap-3"
+          className="flex flex-col items-center justify-center p-4 gap-3 chart3-center"
           style={{ gridRow: '2 / 4', gridColumn: '2 / 4', background: 'var(--t-bg)' }}
         >
-          <div className="text-5xl select-none leading-none" style={{ color: 'var(--t-gold)', opacity: 0.12 }}>
-            <Icon name="yin-yang" size={48}/>
-          </div>
+          <strong>{chart.birthInfo.name||'Lá số Tử Vi'}</strong>
+          <div>Dương lịch: {chart.birthInfo.origInput?.day??chart.birthInfo.day}/{chart.birthInfo.origInput?.month??chart.birthInfo.month}/{chart.birthInfo.origInput?.year??chart.birthInfo.year} · {chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour).padStart(2,'0')+':'+String(chart.birthInfo.origInput.clockMinute).padStart(2,'0'):'Giờ '+BRANCHES[chart.birthInfo.hour]} · {chart.birthInfo.gender==='male'?'Nam':'Nữ'}</div>
 
           <div className="text-center space-y-1">
             <div className="text-[9px] tracking-[0.3em] font-semibold" style={{ color: 'var(--t-gold)' }}>TỬ VI ĐẨU SỐ</div>
             <div className="text-[10px] space-y-0.5" style={{ color: 'var(--t-faint)' }}>
-              <div>Mệnh tại <span style={{ color: 'var(--t-gold)', opacity: 0.9, fontWeight: 600 }}>{BRANCHES[chart.mingGongBranch]}</span></div>
-              <div>Thân tại <span className="text-quan font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
-              <div className="text-[9px] font-medium" style={{ color: 'var(--t-gold)', opacity: 0.85 }}>{chart.wuxingJuName}</div>
+              <div>Mệnh tại <span style={{ color: 'var(--t-gold)', fontWeight: 600 }}>{BRANCHES[chart.mingGongBranch]}</span></div>
+              <div>Thân tại <span className="text-accent font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
+              <div className="text-[9px] font-medium" style={{ color: 'var(--t-gold)', opacity: 1 }}>{chart.wuxingJuName}</div>
             </div>
           </div>
 

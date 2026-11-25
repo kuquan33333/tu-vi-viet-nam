@@ -1,0 +1,20 @@
+# UI-3 – Lập lá số
+Baseline UI-2: 977ba99fda103d2c1dcfd555b0280197135af9cb. Đọc UI-BRIEF.md mục UI-3 và chart-form.html trong ZIP chủ dự án. Cloudflare không triển khai production trong đợt này.
+
+## Phạm vi
+- BirthForm và BirthDateTimeFields dùng lại toàn bộ hàm chuyển đổi/validation engine, thêm lựa chọn giới tính bắt buộc trên /chart; giữ cách nhập Hợp bàn cũ cho UI-5. Không thay kiểu BirthFormState của engine.
+- Form hai cột 600px + thẻ xem trước, một cột dưới 1024. Giữ 3 trường ngày/tháng/năm thay ô text duy nhất trong mẫu để dùng lại kiểm thử và tránh nhập ngày mơ hồ. Dương lịch là chế độ nhập, không phải giá trị ngày mặc định. Múi giờ và kinh độ nước ngoài để trống. Giữ giây, địa danh cũ, kinh độ tham khảo, quy ước Tý muộn và giờ lịch sử.
+- Khi không nhớ giờ sinh, giữ tính năng 12 phương án có điều kiện và cảnh báo, không tạo/lưu một lá số xác định. Khác với mẫu nói ẩn Mệnh/Thân: các giá trị có điều kiện trong 12 phương án vẫn được hiển thị như trước, không khẳng định kết quả thật.
+- Bàn 4×4 hiện có được nâng cấp trình bày, giữ Tam phương Tứ chính và overlay đại hạn/lưu niên. Noto Serif 700 đã có từ UI-1 (brief muốn 600 cho chính tinh, chưa thêm font mới). Mobile danh sách mặc định, có nút đổi sang bàn cuộn riêng. Panel chi tiết mở bằng sao/cung, Esc và nút đóng. PNG dùng ShareCardCanvas + html2canvas hiện có, không tạo URL chứa thông tin sinh. Không sửa lib/ hoặc dữ liệu.
+- Kiểm thử CI/SEO và browser cũ giữ nguyên; cập nhật test chọn giới tính. UI-3 workflow before/after ở 360/768/1280, lỗi nhập liệu, focus, nước ngoài, giờ chưa biết, bàn, panel, tải PNG, in PDF, axe form và ảnh chụp. Chưa nghiệm thu cho tới khi có kết quả thực tế và rà ảnh/PDF. Kiểm tra Safari/trình đọc màn hình thật chưa thực hiện.
+
+## Hậu kiểm 25/11
+- 1a190e7: cả ba workflow xanh, axe form 0 violations tại 360/768/1280, không lỗi JS/mạng ngoài. Kiểm tra thủ công phát hiện PDF A4 mẫu có 3 trang: tiêu đề, bàn lá số, chú thích riêng. Bổ sung CSS print độc lập, ghi chú ngắn vẫn chứa cảnh báo lịch pháp, kinh độ, diễn giải và riêng tư; thêm assertion PDF đúng 1 trang trên fixture. Cần xem lại PDF mới, không kết luận tất cả lá số đều vừa 1 trang chỉ từ một fixture.
+- Giờ chưa biết: Mệnh/Thân/Cục/đại hạn không hiện mặc định; 12 phương án vẫn có mục mở giả định riêng để không mất chức năng cũ. Không lưu hồ sơ xác định. Ghi rõ đây là dung hòa yêu cầu ẩn mặc định và giữ hành vi cũ.
+- Giảm khoảng trống giữa nhóm sao trên bàn, không giảm vùng bấm 44px; sửa chụp ảnh result về đầu trang. Giữ nguyên engine.
+
+- Hậu kiểm giao diện theo yêu cầu chủ dự án: bỏ vòng viền ngoài của nút i trong CSS dùng chung `.term-help-button`, giữ SVG đỏ, vùng chạm 44×44, focus bàn phím và hành vi tooltip. Thêm kiểm thử CSS trên các route browser QA. Không thay các nút khác.
+
+- 1fd394f: CI và SEO QA xanh; UI-3 visual QA timeout tại waitForFunction scrollY===0 (dòng 50), không phải lỗi PDF hay icon. Artifact từ commit 151a174 đã kiểm chứng cả 3 PDF đúng 1 trang A4 ngang; vẫn giữ gate 1 trang cho head mới. Chuyển focus vào h1 và cuộn sau khi React render kết quả; chụp full-page không chờ điều kiện tọa độ pixel tuyệt đối, thay bằng xác minh focus đúng ở kết quả. Không giảm tiêu chuẩn kiểm thử chức năng. PDF mẫu còn một số tên sao Hán từ dữ liệu cũ; cần kiểm tra riêng việc Việt hóa, không sửa thuật toán trong patch này.
+
+- Hậu kiểm a15d833: CI, SEO và UI-3 QA đều xanh, axe form không vi phạm, 3 PDF A4 ngang đúng một trang. Trích xuất PDF phát hiện 7 nhãn sao phụ Hán chưa Việt hóa (天月, 天厨, 台辅, 天巫, 月德, 劫煞, 诰). Bổ sung bảng nhãn trình bày tại components/ui/star-labels.ts (诰 dịch theo đúng ký tự nguồn là Cáo, không tự gán thành Phong Cáo nếu nguồn không ghi 封诰). Giữ raw name/ID và callback; không sửa lib hay thuật toán. Áp dụng bàn, mobile, panel và thẻ chia sẻ. Thẻ PNG là bản tóm tắt chính tinh, bỏ lời quảng bá AI không phù hợp. Kiểm thử mẫu không còn chữ Hán, giữ gate PDF một trang. Nhãn chưa biết ngoài bảng vẫn giữ nguyên để tránh dịch sai; chưa tuyên bố toàn bộ dữ liệu mọi lá số đã Việt hóa.

@@ -2,7 +2,7 @@
 import Icon from '@/components/Icon';
 import {BirthDateFields,BirthClockInput} from './BirthDateTimeFields';
 import TermTooltip from '@/components/TermTooltip';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useId } from 'react';
 import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
@@ -43,6 +43,7 @@ interface BirthFormProps {
   onFormSave?: (data: BirthFormState) => void;
   /** Ẩn nút nộp biểu mẫu nội bộ (cho kịch bản kết hợp lá số vợ chồng/đối tác) */
   hideSubmit?: boolean;
+  chartLayout?: boolean;
 }
 
 /** Kiểm tra ngày tháng năm hợp lệ */
@@ -52,7 +53,7 @@ function isValidDate(y: number, m: number, d: number): boolean {
   return date.getFullYear() === y && date.getMonth() === m - 1 && date.getDate() === d;
 }
 
-export default function BirthForm({ onSubmit, onUnknownTime, loading, initialData, onFormSave, hideSubmit }: BirthFormProps) {
+export default function BirthForm({ onSubmit, onUnknownTime, loading, initialData, onFormSave, hideSubmit, chartLayout=false }: BirthFormProps) {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
 
@@ -87,6 +88,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     isLeapMonth: initialData?.isLeapMonth ?? false,
   });
 
+  const [genderChosen,setGenderChosen]=useState(!chartLayout||Boolean(initialData?.gender));
+  const errorId=useId();
   const [locationQuery,setLocationQuery]=useState('');
   const locationMatches=useMemo(()=>searchBirthplaces(locationQuery),[locationQuery]);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
@@ -193,14 +196,23 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       : '',
   };
   const formProblem=birthFormProblem(effectiveForm);
-  const hasError = Object.values(errors).some(Boolean)||Boolean(formProblem);
+  const genderError=!genderChosen?'Vui lòng chọn giới tính.':'';
+  const clockError=!form.unknownTime&&(!form.clockHour||!form.clockMinute||!Number.isInteger(Number(form.clockHour))||Number(form.clockHour)<0||Number(form.clockHour)>23||!Number.isInteger(Number(form.clockMinute))||Number(form.clockMinute)<0||Number(form.clockMinute)>59||!Number.isInteger(Number(form.clockSecond||0))||Number(form.clockSecond||0)<0||Number(form.clockSecond||0)>59)?'Vui lòng nhập giờ, phút và giây hợp lệ.':'';
+  const provinceError=!form.province?'Vui lòng chọn nơi sinh.':'';
+  const cityError=!form.city?'Vui lòng nhập địa danh nơi sinh.':'';
+  const longitudeError=form.province&&form.city&&(!Number.isFinite(form.longitude)||Math.abs(form.longitude)>180)?'Vui lòng nhập kinh độ hợp lệ.':'';
+  const utcError=form.province==='Nước ngoài'&&(!Number.isFinite(form.utcOffsetMinutes)||form.utcOffsetMinutes! < -720||form.utcOffsetMinutes! > 840)?'Vui lòng nhập múi giờ UTC tại thời điểm sinh.':'';
+  const dateError=Boolean(formProblem.startsWith('Ngày sinh'))||Object.values(errors).some(Boolean);
+  const hasError = Object.values(errors).some(Boolean)||Boolean(formProblem)||Boolean(genderError);
+  const invalid=(msg:string,key:string)=>({'aria-invalid':Boolean(submitAttempted&&msg),'aria-describedby':submitAttempted&&msg?errorId+'-'+key:undefined});
+  const fieldMessage=(msg:string,key:string)=>submitAttempted&&msg?<p className="field-error" id={errorId+'-'+key}>{msg}</p>:null;
 
   // Tiến trình hoàn thành
   const steps = [
     Boolean(form.year && form.month && form.day && !errors.year && !errors.month && !errors.day),
     Boolean(form.province && form.city),
     form.unknownTime || Boolean(form.clockHour !== '' && form.clockMinute !== ''),
-    true,
+    genderChosen,
   ];
 
   // Chuỗi tóm tắt
@@ -228,7 +240,15 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     e.preventDefault();
     setSubmitAttempted(true);
     setTouched({ year: true, month: true, day: true });
-    if (hasError) return;
+    if (hasError) {
+      const root=e.currentTarget;
+      requestAnimationFrame(()=>{
+        const first=root.querySelector<HTMLElement>('[aria-invalid="true"]:not(:disabled)');
+        if(first){const detail=first.closest('details');if(detail)detail.open=true;first.focus();}
+        else root.querySelector<HTMLElement>('[data-form-problem]')?.focus();
+      });
+      return;
+    }
     onFormSave?.({ ...effectiveForm, calendarType, isLeapMonth });
     if(form.unknownTime){onUnknownTime?.(effectiveForm);return;}
     onSubmit(formToBirthInfo(effectiveForm));
@@ -262,7 +282,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     transition: 'border-color 0.2s',
   } as React.CSSProperties;
 
-  const errorInputStyle = { ...inputStyle, borderColor: errorClr };
+  const errorInputStyle = { ...inputStyle, border: '2px solid var(--accent)' };
 
   function FieldError({ msg }: { msg: string }) {
     return (
@@ -282,9 +302,10 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
   return (
     <form
-      className="birth-form"
+      className={"birth-form"+(chartLayout?" chart3-birth-form":"")}
+      noValidate={chartLayout}
       onSubmit={handleSubmit}
-      style={{ background: bg, border: `1px solid ${border}`, borderRadius: '24px', padding: '28px', backdropFilter: 'none' }}
+      style={{ background: bg, border: `1px solid ${border}`, borderRadius: 'var(--radius-card)', padding: 'var(--panel-padding)', backdropFilter: 'none' }}
     >
       {/* Tiêu đề */}
       <h2 style={{ color: goldText, fontSize: '12px', letterSpacing: '0.12em', textAlign: 'center', marginBottom: '16px', fontWeight: 600 }}>
@@ -299,6 +320,57 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             style={{background: done ? (isDark ? 'var(--accent)' : 'var(--accent)') : (isDark ? 'var(--line)' : 'var(--line)'),flex: 1, height: '2px', borderRadius: '2px',transition:'background .3s'}}
           />
         ))}
+      </div>
+
+      {/* ── Họ và tên ── */}
+      <div style={{ marginBottom: '16px' }}>
+        <label htmlFor={errorId+"-name"}>Họ tên (không bắt buộc)</label>
+        <input
+          type="text"
+          placeholder="Ví dụ: Nguyễn Văn A"
+          id={errorId+"-name"} aria-label="Họ và tên (tùy chọn)"
+          value={form.name}
+          onChange={e => setForm({ ...form, name: e.target.value })}
+          style={inputStyle}
+          onFocus={e => { e.target.style.borderColor = focusBorder; }}
+          onBlur={e => { e.target.style.borderColor = inputBorder; }}
+        />
+      </div>
+
+      {/* ── Giới tính ── */}
+      <div style={{ marginBottom: '20px' }}>
+        <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Giới tính *</label>
+        <div role="group" aria-label="Giới tính (bắt buộc)" style={{ display: 'flex', gap: '10px' }}>
+          {(['male', 'female'] as const).map(g => {
+            const active = genderChosen && form.gender === g;
+            const isMale = g === 'male';
+            const accent = 'var(--ink)';
+            return (
+              <button
+                key={g}
+                type="button"
+                onClick={() => {setGenderChosen(true);setForm({ ...form, gender: g });}}
+                aria-pressed={active} {...invalid(genderError,'gender')}
+                style={{
+                  flex: 1,
+                  padding: '11px',
+                  borderRadius: 'var(--radius-control)',
+                  minHeight:48,fontSize: '14px',
+                  fontWeight: 600,
+                  border: `1px solid ${active ? accent : inputBorder}`,
+                  background: active ? 'var(--ink)' : inputBg,
+                  color: active ? 'var(--white)' : 'var(--ink)',
+                  transition: 'all 0.2s',
+                  cursor: 'pointer',
+                }}
+              >
+                {isMale ? 'Nam' : 'Nữ'}
+              </button>
+            );
+          })}
+        </div>
+        <p className="chart3-hint">Dùng để xác định chiều vận hành của đại hạn.</p>
+        {fieldMessage(genderError,'gender')}
       </div>
 
       {/* ── Tab chuyển đổi Dương lịch / Âm lịch ── */}
@@ -346,26 +418,11 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       </div>
       <div className="calendar-term-help"><span>Dương lịch <TermTooltip term="Dương lịch (Mặt trời)" /></span><span>Âm lịch <TermTooltip term="Âm lịch (Mặt trăng)" /></span></div>
 
-      {/* ── Họ và tên ── */}
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Họ và tên (Tùy chọn)</label>
-        <input
-          type="text"
-          placeholder="Ví dụ: Nguyễn Văn A"
-          aria-label="Họ và tên (tùy chọn)"
-          value={form.name}
-          onChange={e => setForm({ ...form, name: e.target.value })}
-          style={inputStyle}
-          onFocus={e => { e.target.style.borderColor = focusBorder; }}
-          onBlur={e => { e.target.style.borderColor = inputBorder; }}
-        />
-      </div>
-
       {/* ── Ngày sinh (Dương lịch hoặc Âm lịch) ── */}
       <div style={{ marginBottom: '16px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <label style={{ fontSize: '11px', color: labelClr, letterSpacing: '0.05em' }}>
-            {calendarType === 'solar' ? 'Ngày sinh Dương lịch' : 'Ngày sinh Âm lịch'}
+            {calendarType === 'solar' ? 'Ngày sinh Dương lịch *' : 'Ngày sinh Âm lịch *'}
           </label>
           {calendarType === 'lunar' && (
             <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: goldText, cursor: 'pointer' }}>
@@ -381,7 +438,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
 
         <BirthDateFields lunar={calendarType==='lunar'} year={calendarType==='solar'?form.year:lunarYear} month={calendarType==='solar'?form.month:lunarMonth} day={calendarType==='solar'?form.day:lunarDay}
           onChange={(field,value)=>{if(calendarType==='solar'){setForm({...form,[field]:value});setTouched(t=>({...t,[field]:true}));}else handleLunarDateChange(field==='year'?value:lunarYear,field==='month'?value:lunarMonth,field==='day'?value:lunarDay,isLeapMonth);}}
-          inputStyle={inputStyle} errorStyle={errorInputStyle} errors={calendarType==='solar'?{year:showErr('year')?errors.year:'',month:showErr('month')?errors.month:'',day:showErr('day')?errors.day:''}:undefined}/>
+          inputStyle={inputStyle} errorStyle={errorInputStyle} errors={calendarType==='solar'?{year:showErr('year')?errors.year:'',month:showErr('month')?errors.month:'',day:showErr('day')?(errors.day||(dateError&&!errors.year&&!errors.month?'Ngày sinh không hợp lệ hoặc ở tương lai.':'')):''}:submitAttempted?{year:!lunarYear?'Vui lòng nhập năm âm lịch':'',month:!lunarMonth?'Vui lòng chọn tháng âm lịch':'',day:!lunarDay?'Vui lòng chọn ngày âm lịch':dateError&&lunarYear&&lunarMonth?'Ngày âm lịch không hợp lệ hoặc ngoài phạm vi.':''}:undefined}/>
 
         {calendarType === 'lunar' && form.year && form.month && form.day && (
           <p style={{ fontSize: '11px', color: 'var(--tx-2)', marginTop: '6px' }}>
@@ -390,17 +447,60 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         )}
       </div>
 
+      {/* ── Thời gian sinh (Giờ : Phút : Giây) ── */}
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>
+          Giờ sinh * (theo đồng hồ dân dụng)
+        </label>
+        <div style={{ borderRadius: '14px', padding: '12px', background: panelBg, border: `1px solid ${panelBorder}`, opacity: 1, transition: 'opacity 0.2s' }}>
+          <BirthClockInput hour={form.clockHour} minute={form.clockMinute} disabled={form.unknownTime} onChange={(h,m)=>setForm({...form,clockHour:h,clockMinute:m})} style={inputStyle} invalid={Boolean(submitAttempted&&clockError)} describedBy={submitAttempted&&clockError?errorId+'-clock':undefined}/>
+          {fieldMessage(clockError,'clock')}
+          <details style={{marginTop:8}} open={chartLayout||undefined}><summary>Tùy chọn nâng cao</summary>
+          <label>Giây sinh<input type="number" min={0} max={59} disabled={form.unknownTime} value={form.clockSecond||'0'} onChange={e=>setForm({...form,clockSecond:e.target.value})} style={inputStyle}/></label>
+          <label style={{display:'block',marginTop:6}}><input type="checkbox" checked={form.trueSolar!==false} onChange={e=>setForm({...form,trueSolar:e.target.checked})}/> Dùng Chân Thái Dương Thời</label>
+          <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng nguyên giờ đồng hồ địa phương, không hiệu chỉnh lịch sử.</p>
+          {preview&&<p>Kinh độ: {preview.longitudeCorrectionMinutes.toFixed(2)} phút · EoT: {preview.equationOfTimeMinutes.toFixed(2)} phút · Tổng: {preview.totalCorrectionMinutes.toFixed(2)} phút · Giờ tính: {String(preview.hour).padStart(2,'0')}:{String(preview.minute).padStart(2,'0')}:{String(preview.second).padStart(2,'0')}</p>}
+          <label>Quy ước giờ Tý muộn (23:00–23:59)<select style={inputStyle} value={form.lateZishi??'next-day'} onChange={e=>setForm({...form,lateZishi:e.target.value as 'next-day'|'current-day'})}><option value="next-day">Tý muộn tính ngày hôm sau; Tý sớm giữ ngày</option><option value="current-day">Tý muộn giữ ngày hiện tại</option></select></label>
+          <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
+          {/* Kết quả Chân Thái Dương Thời */}
+          <div style={{ textAlign: 'center', padding: '4px 0' }}>
+            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời: </span>
+            <span style={{ fontSize: '15px', color: goldText, fontWeight: 700, letterSpacing: '0.08em' }}>
+              {branch===undefined?'Chưa xác định':`Giờ ${BRANCHES[branch]}`}
+            </span>
+            {shichenInfo && (
+              <span style={{ fontSize: '11px', color: 'var(--tx-2)', marginLeft: '4px' }}>
+                ({shichenInfo.range})
+              </span>
+            )}
+          </div>
+        </div>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '8px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            aria-label="Không rõ giờ sinh cụ thể"
+            checked={form.unknownTime}
+            onChange={e => setForm({ ...form, unknownTime: e.target.checked })}
+            style={{ width: '14px', height: '14px', borderRadius: '4px', cursor: 'pointer' }}
+          />
+          <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>
+            Tôi không nhớ giờ sinh
+          </span>
+        </label>
+      </div>
+
       {/* ── Nơi sinh (Địa giới hành chính 34 tỉnh/thành NQ 202/2025/QH15) ── */}
       <div style={{ marginBottom: '16px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>
-          Nơi sinh (Hiệu chỉnh Chân Thái Dương Thời theo kinh độ)
+          Nơi sinh *
         </label>
         <div className="form-term-note">Chân Thái Dương Thời <TermTooltip term="Chân Thái Dương Thời" /></div>
-        <input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>
-        {locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,longitudeReferenceId:undefined,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-          <select
-            aria-label="Tỉnh hoặc thành phố nơi sinh"
+        {form.province!=='Nước ngoài'&&<input type="search" aria-label="Tìm nơi sinh theo địa danh cũ" placeholder="Tìm tỉnh, huyện hoặc địa danh cũ" value={locationQuery} onChange={e=>setLocationQuery(e.target.value)} style={{...inputStyle,marginBottom:8}}/>}
+        {form.province!=='Nước ngoài'&&locationQuery.trim()&&<div style={{maxHeight:180,overflowY:'auto',marginBottom:8}}>{locationMatches.length?locationMatches.map(({p,c})=><button key={p.name+c.name} type="button" style={{...inputStyle,textAlign:'left',marginBottom:3}} onClick={()=>{setForm({...form,province:p.name,city:c.name,longitude:c.longitude,longitudeReferenceId:undefined,utcOffsetMinutes:undefined,historicalRegion:undefined});setLocationQuery('');}}>{c.name} · {p.name}{c.requiresLongitude?' · cần nhập kinh độ':''}</button>):<p>Chưa có địa danh này. Chọn tỉnh và nhập kinh độ chính xác ở mục nâng cao.</p>}</div>}
+        <div className="chart3-location-grid" style={{ display: 'grid', gridTemplateColumns: form.province==='Nước ngoài'?'1fr':'minmax(0,1fr) minmax(0,1fr)', gap: '8px' }}>
+          {form.province!=='Nước ngoài'&&<select
+            aria-label="Tỉnh hoặc thành phố nơi sinh" {...invalid(provinceError,"province")}
             value={form.province}
             onChange={e => handleProvince(e.target.value)}
             style={inputStyle}
@@ -412,9 +512,9 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             {PROVINCES.map(p => (
               <option key={p.name} value={p.name}>{p.name}</option>
             ))}
-          </select>
-          {form.province==='Nước ngoài'?<input aria-label="Thành phố và quốc gia" placeholder="Thành phố, quốc gia" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inputStyle}/>:<select
-            aria-label="Quận huyện hoặc khu vực nơi sinh"
+          </select>}
+          {form.province==='Nước ngoài'?<input aria-label="Thành phố và quốc gia" {...invalid(cityError,"city")} placeholder="Thành phố, quốc gia" value={form.city} onChange={e=>setForm({...form,city:e.target.value})} style={inputStyle}/>:<select
+            aria-label="Quận huyện hoặc khu vực nơi sinh" {...invalid(cityError,"city")}
             value={form.city}
             onChange={e => handleCity(e.target.value)}
             disabled={!form.province}
@@ -429,8 +529,11 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
             ))}
           </select>}
         </div>
-        {form.province==='Nước ngoài'&&<label>Múi giờ UTC tại thời điểm sinh (giờ)<input type="number" step="0.25" min={-12} max={14} value={form.utcOffsetMinutes===undefined?'':form.utcOffsetMinutes/60} onChange={e=>setForm({...form,utcOffsetMinutes:e.target.value===''?undefined:Number(e.target.value)*60})} style={inputStyle}/></label>}
-        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'||currentCityData?.requiresLongitude?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value),longitudeReferenceId:undefined})} style={inputStyle}/></details>}
+        {fieldMessage(provinceError,'province')}{fieldMessage(cityError,'city')}
+        <button type="button" className="chart3-foreign" onClick={()=>{handleProvince(form.province==='Nước ngoài'?'':'Nước ngoài');setLocationQuery('');}}>{form.province==='Nước ngoài'?'Sinh ở Việt Nam?':'Sinh ở nước ngoài? Nhập kinh độ và múi giờ'}</button>
+        {form.province==='Nước ngoài'&&<label>Múi giờ UTC tại thời điểm sinh (giờ)<input type="number" aria-label="Múi giờ UTC tại thời điểm sinh" {...invalid(utcError,"utc")} placeholder="Ví dụ: +7" step="0.25" min={-12} max={14} value={form.utcOffsetMinutes===undefined?'':form.utcOffsetMinutes/60} onChange={e=>setForm({...form,utcOffsetMinutes:e.target.value===''?undefined:Number(e.target.value)*60})} style={inputStyle}/></label>}
+        {fieldMessage(utcError,'utc')}
+        {form.province&&<details style={{marginTop:8}} open={form.province==='Nước ngoài'||form.city==='Địa danh khác (nhập kinh độ)'||currentCityData?.requiresLongitude?true:undefined}><summary>Nhập kinh độ chính xác (độ Đông dương, độ Tây âm)</summary><input type="number" aria-label="Kinh độ" {...invalid(longitudeError,"longitude")} placeholder="Ví dụ: 108.2" min={-180} max={180} step="0.0001" value={Number.isFinite(form.longitude)?form.longitude:''} onChange={e=>setForm({...form,longitude:e.target.value===''?NaN:Number(e.target.value),longitudeReferenceId:undefined})} style={inputStyle}/>{fieldMessage(longitudeError,'longitude')}</details>}
         {currentCityData?.reference&&<div className="study-notice" style={{marginTop:8}}>
           <p>Điểm tham khảo của huyện: {currentCityData.reference.longitude.toFixed(4)}° Đông. Đây không phải tọa độ chính xác nơi sinh; sai số vị trí có thể làm đổi chi giờ nếu sinh gần ranh giờ.</p>
           <button type="button" className="action-outline" onClick={()=>{const r=currentCityData.reference;if(r)setForm({...form,longitude:r.longitude,longitudeReferenceId:r.geonamesId});}}>Dùng kinh độ tham khảo của huyện</button>
@@ -484,83 +587,8 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         </div>
       )}
 
-      {/* ── Thời gian sinh (Giờ : Phút : Giây) ── */}
-      <div style={{ marginBottom: '16px' }}>
-        <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>
-          Thời gian sinh (HH:mm:ss theo đồng hồ dân dụng)
-        </label>
-        <div style={{ borderRadius: '14px', padding: '12px', background: panelBg, border: `1px solid ${panelBorder}`, opacity: form.unknownTime ? 0.45 : 1, pointerEvents: form.unknownTime ? 'none' : 'auto', transition: 'opacity 0.2s' }}>
-          <BirthClockInput hour={form.clockHour} minute={form.clockMinute} disabled={form.unknownTime} onChange={(h,m)=>setForm({...form,clockHour:h,clockMinute:m})} style={inputStyle}/>
-          <details style={{marginTop:8}}><summary>Tùy chọn nâng cao</summary>
-          <label>Giây sinh<input type="number" min={0} max={59} disabled={form.unknownTime} value={form.clockSecond||'0'} onChange={e=>setForm({...form,clockSecond:e.target.value})} style={inputStyle}/></label>
-          <label style={{display:'block',marginTop:6}}><input type="checkbox" checked={form.trueSolar!==false} onChange={e=>setForm({...form,trueSolar:e.target.checked})}/> Dùng Chân Thái Dương Thời</label>
-          <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng nguyên giờ đồng hồ địa phương, không hiệu chỉnh lịch sử.</p>
-          {preview&&<p>Kinh độ: {preview.longitudeCorrectionMinutes.toFixed(2)} phút · EoT: {preview.equationOfTimeMinutes.toFixed(2)} phút · Tổng: {preview.totalCorrectionMinutes.toFixed(2)} phút · Giờ tính: {String(preview.hour).padStart(2,'0')}:{String(preview.minute).padStart(2,'0')}:{String(preview.second).padStart(2,'0')}</p>}
-          <label>Quy ước giờ Tý muộn (23:00–23:59)<select style={inputStyle} value={form.lateZishi??'next-day'} onChange={e=>setForm({...form,lateZishi:e.target.value as 'next-day'|'current-day'})}><option value="next-day">Tý muộn tính ngày hôm sau; Tý sớm giữ ngày</option><option value="current-day">Tý muộn giữ ngày hiện tại</option></select></label>
-          <p>Tý sớm 00:00–00:59 luôn tính theo ngày hiện tại; ranh giờ xét theo loại giờ đã chọn.</p></details>
-          {/* Kết quả Chân Thái Dương Thời */}
-          <div style={{ textAlign: 'center', padding: '4px 0' }}>
-            <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>Chân Thái Dương Thời: </span>
-            <span style={{ fontSize: '15px', color: goldText, fontWeight: 700, letterSpacing: '0.08em' }}>
-              {branch===undefined?'Chưa xác định':`Giờ ${BRANCHES[branch]}`}
-            </span>
-            {shichenInfo && (
-              <span style={{ fontSize: '11px', color: 'var(--tx-2)', marginLeft: '4px' }}>
-                ({shichenInfo.range})
-              </span>
-            )}
-          </div>
-        </div>
-
-        <label style={{ display: 'flex', alignItems: 'center', gap: '7px', marginTop: '8px', cursor: 'pointer' }}>
-          <input
-            type="checkbox"
-            aria-label="Không rõ giờ sinh cụ thể"
-            checked={form.unknownTime}
-            onChange={e => setForm({ ...form, unknownTime: e.target.checked })}
-            style={{ width: '14px', height: '14px', borderRadius: '4px', cursor: 'pointer' }}
-          />
-          <span style={{ fontSize: '11px', color: 'var(--tx-2)' }}>
-            Không rõ giờ sinh cụ thể
-          </span>
-        </label>
-      </div>
-
       {form.unknownTime&&<p role="alert" className="study-notice">Không thể xác định chắc chắn Mệnh, Thân, Cục và đại hạn. {onUnknownTime?'Có thể xem 12 phương án tham khảo; không lưu như lá số đã xác định.':'Cần xác định giờ sinh trước khi Hợp bàn.'}</p>}
-      {submitAttempted&&formProblem&&<p role="alert" style={{color:errorClr}}>{formProblem}</p>}
-      {/* ── Giới tính ── */}
-      <div style={{ marginBottom: '20px' }}>
-        <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Giới tính</label>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          {(['male', 'female'] as const).map(g => {
-            const active = form.gender === g;
-            const isMale = g === 'male';
-            const accent = 'var(--ink)';
-            return (
-              <button
-                key={g}
-                type="button"
-                onClick={() => setForm({ ...form, gender: g })}
-                style={{
-                  flex: 1,
-                  padding: '11px',
-                  borderRadius: '14px',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  border: `1px solid ${active ? accent : inputBorder}`,
-                  background: active ? 'var(--accent-soft)' : inputBg,
-                  color: active ? 'var(--tx-0)' : 'var(--tx-2)',
-                  transition: 'all 0.2s',
-                  cursor: 'pointer',
-                }}
-              >
-                {isMale ? 'Nam Mệnh' : 'Nữ Mệnh'}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
+      {submitAttempted&&formProblem&&<p role="alert" tabIndex={-1} data-form-problem style={{color:errorClr}}>{formProblem}</p>}
       {/* ── Thanh tóm tắt thông tin đã chọn ── */}
       <>
         {showSummary && (
@@ -587,7 +615,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       {/* ── Nút xác nhận lập lá số ── */}
       {!hideSubmit && (
         <button
-          type="submit"
+          type="submit" className="ui-button ui-button-primary chart3-submit"
           disabled={loading}
           style={{
             width: '100%',
