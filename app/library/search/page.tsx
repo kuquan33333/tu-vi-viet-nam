@@ -19,7 +19,7 @@ export default function SearchPage() {
   const hits = useMemo(() => q ? searchClassics(q, 50) : [], [q]);
 
   return (
-    <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
+    <div className="ui5-page ui5-library">
       <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:'Tra cứu',href:'/library/search'}]} />
 
       <main className="max-w-3xl mx-auto px-6 py-12">
