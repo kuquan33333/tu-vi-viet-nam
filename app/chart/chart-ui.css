@@ -74,3 +74,28 @@
  .chart3 .chart3-grid{gap:1px!important}.chart3 .chart3-palace{min-height:0!important}
  .chart3 .workspace-head,.chart3 .home-note{margin:0 0 8px!important}
 }
+
+/* Print is an independent compact layout, not the screen layout paginated. */
+.chart3-print-note{display:none}
+@media print{
+ @page{size:A4 landscape;margin:10mm}
+ html:has(.chart3 .chart3-grid),body:has(.chart3 .chart3-grid),.app-content:has(.chart3 .chart3-grid){min-height:0!important;height:auto!important;margin:0!important;padding:0!important;display:block!important}
+ .chart3:has(.chart3-grid){min-height:0!important;height:auto!important;width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+ .chart3:has(.chart3-grid)>.workspace-head,.chart3:has(.chart3-grid)>.study-notice,.chart3:has(.chart3-grid)>.home-note,.chart3:has(.chart3-grid)>.workspace-toolbar,.chart3:has(.chart3-grid) .chart3-board-toggle,.chart3:has(.chart3-grid) .chart3-detail{display:none!important}
+ .chart3 .workspace-layout,.chart3 .chart-print,.chart3 .chart-scroll,.chart3 .chart-scroll>*{display:block!important;width:100%!important;min-width:0!important;min-height:0!important;height:auto!important;max-height:none!important;padding:0!important;margin:0!important;break-inside:auto!important;page-break-inside:auto!important;overflow:visible!important}
+ .chart3 .chart3-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;grid-template-rows:repeat(4,auto)!important;break-inside:avoid;page-break-inside:avoid;gap:1px!important}
+ .chart3 .chart3-grid>div{min-width:0;min-height:0!important;margin:0!important;transform:none!important;opacity:1!important}
+ .chart3 .chart3-palace{min-height:0!important;padding:3px 4px!important;gap:0!important;transform:none!important;opacity:1!important}
+ .chart3 .chart3-palace>div{margin-top:0!important;margin-bottom:1px!important;flex:0 0 auto!important;gap:1px 3px!important}
+ .chart3 .chart3-palace [role=button],.chart3 .chart3-palace button{min-height:0!important;min-width:0!important;padding:0!important;line-height:1.12!important}
+ .chart3 .chart3-palace-title,.chart3 .chart3-branch,.chart3 .chart3-major-name,.chart3 .chart3-brightness,.chart3 .chart3-minor-name,.chart3 .chart3-other-stars,.chart3 .chart3-hua{font-size:8pt!important;line-height:1.12!important}
+ .chart3 .chart3-other-stars{gap:1px 3px!important}
+ .chart3 .chart3-center{padding:6px!important;gap:4px!important;font-size:10pt!important;transform:none!important;opacity:1!important}
+ .chart3 .chart-scroll h2{font-size:16pt!important;letter-spacing:0!important;line-height:1.15!important;margin:0!important}
+ .chart3 .chart-scroll .mb-3{margin-bottom:5px!important}
+ .chart3 .chart-scroll .mt-3{margin-top:5px!important}
+ .chart3 .chart3-print-note{display:block!important;font:400 8pt/1.25 var(--font);color:var(--print-muted);margin:5px 0 0!important;padding:3px 0 0;border-top:1px solid var(--line);break-inside:avoid}
+ .chart3-print-note p{margin:1px 0}
+}
+/* Reduce empty space between stars without reducing their touch targets. */
+@media screen{.chart3 .chart3-palace>div.flex-1{flex:0 0 auto}.chart3 .chart3-other-stars{gap:2px 4px}.chart3 .chart3-palace{align-content:start}}

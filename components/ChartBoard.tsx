@@ -147,7 +147,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           style={{ gridRow: '2 / 4', gridColumn: '2 / 4', background: 'var(--t-bg)' }}
         >
           <strong>{chart.birthInfo.name||'Lá số Tử Vi'}</strong>
-          <div>Dương lịch: {chart.birthInfo.origInput?.day??chart.birthInfo.day}/{chart.birthInfo.origInput?.month??chart.birthInfo.month}/{chart.birthInfo.origInput?.year??chart.birthInfo.year} · {chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour).padStart(2,'0')+':'+String(chart.birthInfo.origInput.clockMinute).padStart(2,'0'):'Giờ '+BRANCHES[chart.birthInfo.hour]}</div>
+          <div>Dương lịch: {chart.birthInfo.origInput?.day??chart.birthInfo.day}/{chart.birthInfo.origInput?.month??chart.birthInfo.month}/{chart.birthInfo.origInput?.year??chart.birthInfo.year} · {chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour).padStart(2,'0')+':'+String(chart.birthInfo.origInput.clockMinute).padStart(2,'0'):'Giờ '+BRANCHES[chart.birthInfo.hour]} · {chart.birthInfo.gender==='male'?'Nam':'Nữ'}</div>
 
           <div className="text-center space-y-1">
             <div className="text-[9px] tracking-[0.3em] font-semibold" style={{ color: 'var(--t-gold)' }}>TỬ VI ĐẨU SỐ</div>

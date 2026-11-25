@@ -39,11 +39,15 @@ try{
    await page.getByLabel('Không rõ giờ sinh cụ thể').check();assert.equal(await page.getByLabel('Giờ và phút sinh').isDisabled(),true);
    await page.getByRole('button',{name:/XEM 12 PHƯƠNG ÁN/}).click();await page.getByRole('heading',{name:'12 phương án chưa xác định'}).waitFor();
    assert.equal(await page.getByRole('button',{name:'Lưu lá số'}).count(),0);
+   assert.equal(await page.locator('.chart3-hypothesis').count(),12);
+   assert.equal(await page.locator('.chart3-hypothesis[open]').count(),0);
    await open();
   }
   await fill();await submit().click();await page.getByLabel('Bàn lá số 12 cung').waitFor();await overflow();
   await page.evaluate(()=>document.fonts.ready);
   if(width>=640)await page.locator('.chart-scroll [role=group]').first().waitFor();
+  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));
+  await page.waitForFunction(()=>window.scrollY===0);
   await page.screenshot({path:dir+'/result-'+width+'.png',fullPage:true,animations:'disabled'});
   if(phase==='after'){
    if(width===360){
@@ -60,7 +64,7 @@ try{
    const download=page.waitForEvent('download');await page.getByRole('button',{name:'Tải ảnh PNG'}).click();
    const png=await download;assert.match(png.suggestedFilename(),/\.png$/);const bytes=readFileSync(await png.path());assert.ok(bytes.length>1000);assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
    await page.getByRole('dialog').getByRole('button',{name:'Đóng',exact:true}).click();
-   await page.emulateMedia({media:'print'});assert.equal(await page.locator('.chart-scroll').isVisible(),true);await page.pdf({path:dir+'/print-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});await page.emulateMedia({media:'screen'});
+   await page.emulateMedia({media:'print'});assert.equal(await page.locator('.chart-scroll').isVisible(),true);const pdf=await page.pdf({path:dir+'/print-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});const pageCount=(pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;assert.equal(pageCount,1,'A4 chart must occupy exactly one page at '+width);await page.emulateMedia({media:'screen'});
    assert.deepEqual(errors,[]);assert.deepEqual(outbound,[]);
    await open();await page.addScriptTag({path:process.env.AXE_SCRIPT});const axe=await page.evaluate(async()=>window.axe.run({runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
    writeFileSync(dir+'/axe-'+width+'.json',JSON.stringify(axe.violations,null,2));
