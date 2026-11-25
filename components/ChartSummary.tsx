@@ -10,10 +10,10 @@ interface ChartSummaryProps {
 }
 
 const PatternLevelStyle = {
-  excellent: { dot: 'bg-amber-400', label: 'text-amber-500', badge: 'text-amber-500 bg-amber-500/10 border-amber-500/25' },
-  good: { dot: 'bg-sky-400', label: 'text-sky-500', badge: 'text-sky-500 bg-sky-500/10 border-sky-500/25' },
-  neutral: { dot: 'bg-slate-400', label: 'text-slate-400', badge: 'text-slate-400 bg-slate-500/10 border-slate-500/20' },
-  caution: { dot: 'bg-orange-500', label: 'text-orange-500', badge: 'text-orange-500 bg-orange-500/10 border-orange-500/25' },
+  excellent: { dot: 'bg-accent', label: 'text-accent', badge: 'text-accent bg-[var(--accent-soft)] border-[var(--accent-border)]' },
+  good: { dot: 'bg-quan', label: 'text-quan', badge: 'text-quan bg-[var(--quan-bg)] border-[var(--quan-border)]' },
+  neutral: { dot: 'bg-muted', label: 'text-muted', badge: 'text-muted bg-paper border-line' },
+  caution: { dot: 'bg-ji', label: 'text-ji', badge: 'text-ji bg-[var(--ji-bg)] border-[var(--ji-border)]' },
 };
 
 export default function ChartSummary({ chart }: ChartSummaryProps) {
@@ -60,7 +60,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
                   <span key={s} className="font-bold text-lg" style={{ color: 'var(--t-gold)' }}>{s}</span>
                 ))
               ) : (
-                <span className="text-sm font-semibold text-amber-500/80">Vô chính diệu</span>
+                <span className="text-sm font-semibold text-accent">Vô chính diệu</span>
               )}
             </div>
             {nature && (
@@ -90,7 +90,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
             <div className="text-[9px] mb-1" style={{ color: 'var(--t-faint)', opacity: 0.85 }}>Ngũ Hành Cục · Đại Hạn Hiện Tại</div>
             <div className="text-[11px] font-medium" style={{ color: 'var(--t-text2)' }}>{chart.wuxingJuName}</div>
             {currentDx && (
-              <div className="text-[11px] text-purple-400 font-medium mt-0.5">
+              <div className="text-[11px] text-ink font-medium mt-0.5">
                 {currentDx.startAge}–{currentDx.endAge} tuổi · {currentDx.palaceName}
               </div>
             )}
@@ -203,14 +203,14 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
                       )}
                       {p.conditions.bonus && p.conditions.bonus.length > 0 && (
                         <div className="text-[9px] leading-relaxed" style={{ color: 'var(--t-text2)', opacity: 0.85 }}>
-                          <span className="font-semibold text-emerald-500">Cát hóa hỗ trợ</span>
+                          <span className="font-semibold text-lu">Cát hóa hỗ trợ</span>
                           <span style={{ opacity: 0.6 }}> · </span>
                           {p.conditions.bonus.join(', ')}
                         </div>
                       )}
                       {p.conditions.breaking && p.conditions.breaking.length > 0 && (
                         <div className="text-[9px] leading-relaxed" style={{ color: 'var(--t-text2)', opacity: 0.85 }}>
-                          <span className="font-semibold text-orange-500">Cảnh báo phá cách</span>
+                          <span className="font-semibold text-ji">Cảnh báo phá cách</span>
                           <span style={{ opacity: 0.6 }}> · </span>
                           {p.conditions.breaking.join(', ')}
                         </div>
@@ -239,7 +239,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
       >
       <div className="card-glass rounded-xl p-4">
         <div className="text-[10px] tracking-widest mb-3 flex items-center gap-2 font-semibold" style={{ color: 'var(--t-faint)' }}>
-          <span className="text-purple-400"><Icon name="compass" size={16}/></span>
+          <span className="text-ink"><Icon name="compass" size={16}/></span>
           TIẾN TRÌNH ĐẠI HẠN
         </div>
         <div className="grid grid-cols-3 gap-2">

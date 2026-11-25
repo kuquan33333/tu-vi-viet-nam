@@ -154,7 +154,7 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
             <div className="text-[9px] tracking-[0.3em] font-semibold" style={{ color: 'var(--t-gold)' }}>TỬ VI ĐẨU SỐ</div>
             <div className="text-[10px] space-y-0.5" style={{ color: 'var(--t-faint)' }}>
               <div>Mệnh tại <span style={{ color: 'var(--t-gold)', opacity: 0.9, fontWeight: 600 }}>{BRANCHES[chart.mingGongBranch]}</span></div>
-              <div>Thân tại <span className="text-sky-500 font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
+              <div>Thân tại <span className="text-quan font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
               <div className="text-[9px] font-medium" style={{ color: 'var(--t-gold)', opacity: 0.85 }}>{chart.wuxingJuName}</div>
             </div>
           </div>
@@ -162,11 +162,11 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           {chart.currentDaXianIndex >= 0 && (() => {
             const dx = chart.daXians[chart.currentDaXianIndex];
             return (
-              <div className="border border-purple-500/30 rounded-lg px-3 py-1.5 text-center"
+              <div className="border border-line rounded-lg px-3 py-1.5 text-center"
                 style={{ background: 'var(--accent-soft)' }}>
-                <div className="text-[8px] text-purple-400 mb-0.5 tracking-wider font-medium">Đại Hạn Hiện Tại</div>
-                <div className="text-[12px] text-purple-400 font-semibold tabular-nums">{dx.startAge}–{dx.endAge} tuổi</div>
-                <div className="text-[9px] text-purple-300/80">{dx.palaceName}</div>
+                <div className="text-[8px] text-ink mb-0.5 tracking-wider font-medium">Đại Hạn Hiện Tại</div>
+                <div className="text-[12px] text-ink font-semibold tabular-nums">{dx.startAge}–{dx.endAge} tuổi</div>
+                <div className="text-[9px] text-ink">{dx.palaceName}</div>
               </div>
             );
           })()}
@@ -261,10 +261,10 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
         className="mt-3 flex items-center justify-center gap-2 text-[9px] flex-wrap"
       >
         {[
-          { h: 'Hóa Lộc', c: 'text-emerald-500 border-emerald-500/30' },
-          { h: 'Hóa Quyền', c: 'text-blue-500 border-blue-500/30' },
-          { h: 'Hóa Khoa', c: 'text-yellow-500 border-yellow-500/30' },
-          { h: 'Hóa Kỵ', c: 'text-red-500 border-red-500/30' },
+          { h: 'Hóa Lộc', c: 'text-lu border-[var(--lu-border)]' },
+          { h: 'Hóa Quyền', c: 'text-quan border-[var(--quan-border)]' },
+          { h: 'Hóa Khoa', c: 'text-ke border-[var(--ke-border)]' },
+          { h: 'Hóa Kỵ', c: 'text-ji border-[var(--ji-border)]' },
         ].map(({ h, c }) => (
           <span key={h} className={`border px-1.5 py-0.5 rounded-full font-medium ${c}`}>{h}</span>
         ))}

@@ -22,7 +22,7 @@
  --r-xs:4px; --r-sm:var(--radius-control); --r-md:var(--radius-card); --r-lg:var(--radius-card); --r-xl:var(--radius-card); --r-pill:var(--radius-control);
  --sh-xs:none; --sh-sm:none; --sh-md:none; --sh-lg:none;
  /* Existing semantic chart colors, not UI accents. Preserve meaning and labels. */
- --lu:#2D7A4A; --quan:#1A56A8; --ke:#8A7018; --ji:#A83228;
+ --lu:#2D7A4A; --quan:#1A56A8; --ke:#735B16; --ji:#A83228;
  --lu-bg:#EEF3EA; --lu-border:#B1BEA4;
  --quan-bg:#EDF0F2; --quan-border:#ACB5BC;
  --ke-bg:#F6F2E6; --ke-border:#C8BB98;
