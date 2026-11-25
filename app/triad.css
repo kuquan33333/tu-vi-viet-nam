@@ -39,7 +39,7 @@
 .study-hex{display:flex;flex-direction:column;gap:9px;align-items:center;max-width:260px;margin:auto;padding:9px}
 .study-hex-row{display:flex;gap:12px;width:100%;align-items:center;justify-content:center;height:20px}
 .study-hex-seg{display:block;background:var(--ac);height:10px;border-radius:4px;flex:1}
-.study-hex-row.moving .study-hex-seg{background:#be6950}
+.study-hex-row.moving .study-hex-seg{background:var(--accent)}
 .study-hex-row .half{max-width:calc(50% - 6px)}
 .study-hex-small{transform:scale(.84);transform-origin:center;width:210px}
 .study-palace-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:18px 0}
@@ -62,7 +62,7 @@
 .study-figure{position:relative;display:block;min-height:370px;max-width:270px;width:100%;margin:auto}
 .study-figure svg{width:100%;height:auto;display:block}
 .study-figure circle.hotspot{fill:var(--ac);stroke:var(--bg-page);stroke-width:1.9;cursor:pointer}
-.study-figure circle.hotspot.active{fill:#b44f35;stroke:var(--tx-0);stroke-width:2.1}
+.study-figure circle.hotspot.active{fill:var(--accent);stroke:var(--tx-0);stroke-width:2.1}
 .study-figure text{font-size:7px;fill:var(--tx-2)}
 @media(max-width:720px){
  .study-container{padding:0 15px}

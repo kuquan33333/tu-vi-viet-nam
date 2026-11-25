@@ -1,11 +1,18 @@
 import type { Metadata } from 'next';
+import { Be_Vietnam_Pro, Noto_Serif } from 'next/font/google';
+import './tokens.css';
 import './globals.css';
 import './triad.css';
 import './revamp.css';
+import './ui.css';
 import AppChrome from '@/components/AppChrome';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { SITE_URL } from '@/lib/site';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/lib/seo/metadata';
+
+// next/font fetches at build time and serves font files from this origin, never from Google in the browser.
+const sans = Be_Vietnam_Pro({weight:['400','500','600'],subsets:['latin','vietnamese'],display:'swap',variable:'--font-be-vietnam'});
+const serif = Noto_Serif({weight:'700',subsets:['latin','vietnamese'],display:'swap',variable:'--font-noto-serif'});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -21,10 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="vi" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('ziwei-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else document.documentElement.setAttribute('data-theme','light');}catch(e){}})();` }} />
-      </head>
+    <html lang="vi" data-theme="light" className={sans.variable+' '+serif.variable} suppressHydrationWarning>
       <body className="min-h-screen">
         <ThemeProvider>
           <AppChrome>{children}</AppChrome>

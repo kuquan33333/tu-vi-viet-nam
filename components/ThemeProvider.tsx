@@ -6,15 +6,11 @@ export function ThemeProvider({children}:{children:React.ReactNode}){
  const [theme,setTheme]=useState<Theme>('light');
  useEffect(()=>{
   const root=document.documentElement;
-  const current=root.getAttribute('data-theme')==='dark'?'dark':'light';
+  const current='light' as const;
   setTheme(current);root.setAttribute('data-theme',current);root.dataset.themeReady='true';
  },[]);
- function toggle(){
-  const root=document.documentElement;
-  const next:Theme=root.getAttribute('data-theme')==='dark'?'light':'dark';
-  root.setAttribute('data-theme',next);setTheme(next);
-  try{localStorage.setItem('ziwei-theme',next)}catch{}
- }
+ // Dark mode intentionally suspended per UI-BRIEF; the old preference is not erased.
+ function toggle(){ /* restored in a future dark-theme release */ }
  return <ThemeContext.Provider value={{theme,toggle}}>{children}</ThemeContext.Provider>;
 }
 export const useTheme=()=>useContext(ThemeContext);
