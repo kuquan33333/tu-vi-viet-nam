@@ -28,7 +28,8 @@ try{
    assert.equal(metrics.header,1);assert.equal(metrics.footer,1);
    assert.equal(metrics.bottom,width<640?'grid':'none');
    assert.match(metrics.heading,/Lá số rõ ràng,\s*phương pháp minh bạch\./);
-   assert.equal(metrics.canonical,'https://lichvannien-9sv.pages.dev/');
+   assert.ok(metrics.canonical,'Missing canonical');
+   assert.equal(new URL(metrics.canonical).href,'https://lichvannien-9sv.pages.dev/');
    const main=page.locator('main.home2');
    assert.equal(await main.locator('.home2-actions a').count(),2);
    assert.equal(await main.locator('.home2-actions a.ui-button-primary').count(),1);
