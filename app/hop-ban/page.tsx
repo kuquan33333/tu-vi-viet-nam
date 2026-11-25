@@ -49,16 +49,16 @@ export default function HemingPage(){
   try {await saveProfiles([chartA.birthInfo,chartB.birthInfo]);setMessage('Đã lưu cả hai lá số trên thiết bị này.');}
   catch(e) {setMessage(e instanceof Error?e.message:'Không thể lưu hồ sơ.');}
  }
- return <main className="site-wrap page-content" style={{minHeight:'70dvh'}}>
+ return <main className="site-wrap page-content ui5-page ui5-compare" style={{minHeight:'70dvh'}}>
   <div className="tool-hero">
    <div className="eyebrow">TỬ VI ĐẨU SỐ · ĐỐI CHIẾU CẤU TRÚC</div>
    <h1 className="display-small">Hợp Bàn · Hai lá số</h1>
    <p className="lead" style={{maxWidth:800}}>So sánh hai mệnh bàn bằng các cung, sao và dữ liệu được tính trực tiếp trên máy. Báo cáo trình bày sự giống và khác theo 12 lĩnh vực truyền thống, không chấm điểm “hợp nhau” tùy ý.</p>
   </div>
   {!facts?<div>
-   <div className="study-tabs" style={{justifyContent:'center'}}>
-    <button type="button" className={'study-tab'+(selected==='A'?' active':'')} onClick={()=>setSelected('A')}>Người thứ nhất · A</button>
-    <button type="button" className={'study-tab'+(selected==='B'?' active':'')} onClick={()=>setSelected('B')}>Người thứ hai · B</button>
+   <div className="study-tabs ui5-compare-switch" role="group" aria-label="Chọn người nhập trên điện thoại">
+    <button type="button" className={'study-tab'+(selected==='A'?' active':'')} aria-pressed={selected==='A'} onClick={()=>setSelected('A')}>Người thứ nhất · A</button>
+    <button type="button" className={'study-tab'+(selected==='B'?' active':'')} aria-pressed={selected==='B'} onClick={()=>setSelected('B')}>Người thứ hai · B</button>
    </div>
    <div className="profile-split compare-forms" data-mobile-selected={selected}>
     <section className="surface-card profile-box compare-a"><div className="eyebrow">HỒ SƠ A</div><h2>Người thứ nhất</h2>
@@ -75,9 +75,9 @@ export default function HemingPage(){
    <div className="workspace-head"><div><h2 className="display-small" style={{fontSize:24}}>Báo cáo đối chiếu 12 cung</h2>
     <p className="workspace-note">Xem điểm chung và khác biệt trong các trường sao thực tế.</p></div>
     <div className="site-actions" style={{display:'flex',gap:8,flexWrap:'wrap'}}>
-     <button type="button" className="action-outline" onClick={()=>window.print()}>↧ In / PDF</button>
-     <button type="button" className="action-outline" onClick={saveBoth}>＋ Lưu 2 hồ sơ</button>
-     <button type="button" className="action-primary" onClick={()=>{setChartA(null);setChartB(null);setSavedA(null);setSavedB(null);setA(null);setB(null);setSelected('A');}}>↶ Đổi dữ liệu</button>
+     <button type="button" className="action-outline" onClick={()=>window.print()}><Icon name="print"/> In / PDF</button>
+     <button type="button" className="action-outline" onClick={saveBoth}><Icon name="save"/> Lưu 2 hồ sơ</button>
+     <button type="button" className="action-primary" onClick={()=>{setChartA(null);setChartB(null);setSavedA(null);setSavedB(null);setA(null);setB(null);setSelected('A');}}><Icon name="reset"/> Đổi dữ liệu</button>
     </div>
    </div>
    {message&&<p role="status" className="study-notice">{message}</p>}
@@ -101,7 +101,7 @@ export default function HemingPage(){
     </div>
     <p className="workspace-note">Những điểm trùng nhau chỉ mô tả ký hiệu trên hai lá số, không xác nhận chất lượng mối quan hệ, tính cách hay mức độ tương hợp trong đời sống.</p>
    </div>
-   <div className="profile-split">
+   <div className="profile-split ui5-comparison-report">
     {rows.map(row=><section className="surface-card reading-panel" key={row.name}>
      <div className="eyebrow">CUNG {row.name.toLocaleUpperCase('vi')}</div>
      <h2 style={{fontFamily:'var(--font-serif)',fontSize:20,fontWeight:700,margin:'9px 0'}}>{TOPICS[row.name]||row.name}</h2>

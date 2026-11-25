@@ -67,3 +67,11 @@
 .ui5-error-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
 @media(max-width:1023px){.ui5-reader-layout{grid-template-columns:minmax(0,680px);gap:16px}.ui5-chapters{top:var(--header-height);z-index:5;max-height:36dvh;background:var(--card)}.ui5-chapters ol{max-height:22dvh;overflow:auto}}
 @media(max-width:639px){.ui5-reader .ui5-reading-body{padding:16px}.ui5-chapters{padding:8px}.ui5-reader-nav{flex-direction:column}}
+
+.ui5-compare .profile-box{min-width:0;padding:var(--card-padding)}
+.ui5-compare .profile-box .birth-form{padding:0!important;background:transparent!important;border:0!important}
+.ui5-comparison-report>section{min-width:0}
+.ui5-profiles .saved-card{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.ui5-profiles .saved-card>div{min-width:0}
+@media(min-width:641px){.ui5-compare .ui5-compare-switch{display:none}}
+@media(max-width:639px){.ui5-compare .profile-box{padding:16px}.ui5-profiles .saved-card{flex-direction:column;align-items:stretch}.ui5-profiles .saved-card button{flex:1}}

@@ -2,6 +2,8 @@
 import {useEffect,useState} from 'react';
 import {useRouter} from 'next/navigation';
 import Link from 'next/link';
+import Icon from '@/components/Icon';
+import {BRANCHES} from '@/lib/ziwei/constants';
 import {profileStatus,readProfiles,queueProfile,deleteProfile,deleteAllProfiles,lockProfiles,unlockProfiles,relockProfiles,disableProfileLock,exportProfiles,importProfiles,PROFILE_LIMIT,type SavedProfile} from '@/lib/ziwei/profile-storage';
 export default function HoSoPage(){
  const [profiles,setProfiles]=useState<SavedProfile[]>([]),[state,setState]=useState<ReturnType<typeof profileStatus>>('unavailable'),[ready,setReady]=useState(false),[pin,setPin]=useState(''),[confirmPin,setConfirmPin]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);
@@ -9,11 +11,11 @@ export default function HoSoPage(){
  function refresh(){setState(profileStatus());setProfiles(readProfiles());setReady(true);}
  useEffect(()=>{refresh();window.addEventListener('storage',refresh);return()=>window.removeEventListener('storage',refresh);},[]);
  async function run(fn:()=>Promise<void>|void){setBusy(true);setMessage('');try{await fn();refresh();}catch(e){setMessage(e instanceof Error?e.message:'Không thể thực hiện.');}finally{setBusy(false);setPin('');setConfirmPin('');}}
- function open(id:string){queueProfile(id);router.push('/chart');}
+ function open(id:string,print=false){queueProfile(id);router.push(print?'/chart?print=1':'/chart');}
  function download(){if(!window.confirm('Tệp JSON xuất ra KHÔNG được mã hóa. Chỉ lưu ở nơi an toàn. Tiếp tục?'))return;
   const url=URL.createObjectURL(new Blob([exportProfiles()],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='ho-so-tu-vi.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
  const accessible=ready&&(state==='plain'||state==='unlocked');
- return <main className="site-wrap page-content" style={{minHeight:'70dvh'}}>
+ return <main className="site-wrap page-content ui5-page ui5-profiles" style={{minHeight:'70dvh'}}>
   <div className="tool-hero"><div className="eyebrow">CHỈ LƯU TRÊN THIẾT BỊ</div><h1 className="display-small">Hồ sơ lá số</h1><p className="lead">Quản lý, sao lưu và bảo vệ thông tin sinh của bạn.</p></div>
   {message&&<p role="status" className="study-notice">{message}</p>}
   {ready&&state==='unavailable'&&<p role="alert" className="study-notice">Không đọc được kho hồ sơ. Không ghi đè dữ liệu hiện có.</p>}
@@ -33,7 +35,7 @@ export default function HoSoPage(){
       <button className="action-outline" disabled={busy}>Mã hóa và khóa</button>
     </form>:<><p>Đang mở khóa trong phiên này. Mọi thay đổi vẫn được mã hóa. Tải lại trang để khóa.</p><button className="action-outline" disabled={busy} onClick={()=>void run(relockProfiles)}>Khóa ngay</button> <button className="action-outline" disabled={busy} onClick={()=>{if(window.confirm('Tắt mã hóa sẽ lưu hồ sơ dạng bản rõ. Tiếp tục?'))void run(disableProfileLock);}}>Tắt mã hóa</button></>}
    </section>
-   {profiles.length===0?<div className="surface-card reading-panel"><h2>Chưa có hồ sơ nào</h2><p>Lập lá số rồi lưu để xem lại tại đây.</p></div>:<div className="saved-list">{profiles.map(p=><article key={p.id} className="surface-card saved-card"><div><h3>{p.title}</h3><p>{p.birth.day}/{p.birth.month}/{p.birth.year} · {p.birth.gender==='male'?'Nam':'Nữ'}</p></div><div style={{display:'flex',gap:8,flexWrap:'wrap'}}><button type="button" className="action-outline" onClick={()=>open(p.id)}>Xem lá số / In A4</button><button className="action-outline" disabled={busy} aria-label={'Xóa hồ sơ '+p.title} onClick={()=>{if(window.confirm('Xóa hồ sơ này?'))void run(()=>deleteProfile(p.id));}}>Xóa</button></div></article>)}</div>}
+   {profiles.length===0?<div className="surface-card reading-panel"><h2>Chưa có hồ sơ nào</h2><p>Lập lá số rồi lưu để xem lại tại đây.</p><Link className="ui-button ui-button-primary" href="/chart">Lập lá số</Link></div>:<div className="saved-list">{profiles.map(p=><article key={p.id} className="surface-card saved-card"><div><h3>{p.title}</h3><p>{p.birth.origInput?.day??p.birth.day}/{p.birth.origInput?.month??p.birth.month}/{p.birth.origInput?.year??p.birth.year} · {p.birth.origInput?String(p.birth.origInput.clockHour).padStart(2,'0')+':'+String(p.birth.origInput.clockMinute).padStart(2,'0'):'Giờ '+BRANCHES[p.birth.hour]} · {p.birth.gender==='male'?'Nam':'Nữ'}</p></div><div style={{display:'flex',gap:8,flexWrap:'wrap'}}><button type="button" className="action-outline" onClick={()=>open(p.id)}>Xem lá số</button><button type="button" className="action-outline" onClick={()=>open(p.id,true)}><Icon name="print" size={16}/> In A4</button><button className="action-outline" disabled={busy} aria-label={'Xóa hồ sơ '+p.title} onClick={()=>{if(window.confirm('Xóa hồ sơ này?'))void run(()=>deleteProfile(p.id));}}>Xóa</button></div></article>)}</div>}
   </>}
   <p className="home-note">Hồ sơ không tự đồng bộ. Mã hóa không bảo vệ khỏi thiết bị đã bị xâm nhập hoặc trang đang mở khóa. Xóa dữ liệu trình duyệt sẽ mất hồ sơ; hãy sao lưu an toàn.</p>
  </main>;
