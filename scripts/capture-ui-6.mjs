@@ -63,6 +63,21 @@ try{
     writeFileSync(dir+'/overflow-probes-'+key+'.json',JSON.stringify(probes,null,2));
    }
    assert.ok(metrics.scroll<=metrics.width+1,'horizontal overflow '+JSON.stringify(metrics));assert.equal(metrics.header,1);assert.equal(metrics.footer,1);assert.equal(metrics.h1,1);assert.equal(metrics.theme,'light');
+   if(mode!=='all'){
+    const brand=page.locator('.global-header .brand-wordmark');
+    assert.match(await brand.innerText(),/Tử Vi Việt Nam/);
+    await brand.locator('img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('missing brand emblem')});
+    assert.ok(await page.locator('link[rel="icon"][href="/brand/favicon.svg"]').count(),'new favicon');
+    assert.match(await page.title(),/Tử Vi Việt Nam/);
+    if(route==='/'){
+     assert.equal(await page.locator('.home-primary-card').count(),4);
+     assert.equal(await page.locator('.home-chart .ui-chart-cell').count(),12);
+     assert.equal(await page.locator('.home-chart .home-palace-name,.home-chart .ui-chart-cell strong').count(),12);
+     assert.match(await page.locator('.brand-date').getAttribute('data-date'),/^\d{4}-\d{2}-\d{2}$/);
+     await page.locator('.hero-art img').evaluate(async img=>{await img.decode();if(!img.naturalWidth)throw Error('missing study artwork')});
+     if(width>=1100){const toggle=page.locator('.brand-tools-toggle');await toggle.click();assert.equal(await toggle.getAttribute('aria-expanded'),'true');assert.equal(await page.locator('#desktop-tools-menu a').count(),6);await page.keyboard.press('Escape');assert.equal(await toggle.getAttribute('aria-expanded'),'false');await page.locator('.skip-link').focus();}
+    }
+   }
    if(mode==='screens')await page.screenshot({path:dir+'/'+key+'.png',fullPage:true,animations:'disabled'});
    await page.addScriptTag({path:process.env.AXE_SCRIPT});
    const axe=await page.evaluate(async()=>window.axe.run({runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));
