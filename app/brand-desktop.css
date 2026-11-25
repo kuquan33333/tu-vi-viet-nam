@@ -146,3 +146,11 @@
  .ui-home .home-brand .home-primary-card>svg{width:32px;height:32px}
  .ui-home .home-brand .home2-actions .ui-button,header.brand-header .header-cta.brand-primary{padding-inline:10px!important}
 }
+
+@media screen and (min-width:1100px){
+ .ui-home .home-brand .home2-actions .ui-button::before,header.brand-header .header-cta::before{--pc-corner:17px;background-position:left top,right top,right bottom,left bottom,center top .7px,right .7px center,center bottom .7px,left .7px center,center top 3px,right 3px center,center bottom 3px,left 3px center}
+ .home-brand .brand-primary,.brand-header .brand-primary{--pc-icon-cutout:var(--brand-red)}
+ .home-brand .brand-primary:hover,.brand-header .brand-primary:hover{--pc-icon-cutout:var(--brand-navy)}
+ .home-chart .home-panel-head .icon-pc{display:none!important}
+ .home-chart .home-panel-head .icon-pc-telescope{display:inline!important}
+}
