@@ -79,20 +79,20 @@ export default function PalaceCell({
       style={{
         minHeight: '90px',
         background: isCurrentDaXian
-          ? 'rgba(147,51,234,0.08)'
+          ? 'var(--quan-bg)'
           : isSelected
-          ? 'rgba(37,99,235,0.18)'
+          ? 'var(--quan-border)'
           : isSanFang
-          ? 'rgba(37,99,235,0.09)'
+          ? 'var(--quan-bg)'
           : isMingGong
-          ? 'rgba(212,168,67,0.04)'
+          ? 'var(--accent-soft)'
           : 'var(--t-bg)',
         boxShadow: isCurrentDaXian
-          ? 'inset 3px 0 0 rgba(147,51,234,0.5)'
+          ? 'inset 3px 0 0 var(--quan)'
           : isSelected
-          ? 'inset 0 0 0 1.5px rgba(37,99,235,0.7)'
+          ? 'inset 0 0 0 1.5px var(--quan)'
           : isSanFang
-          ? 'inset 0 0 0 1px rgba(37,99,235,0.4)'
+          ? 'inset 0 0 0 1px var(--quan)'
           : 'none',
       }}
     >

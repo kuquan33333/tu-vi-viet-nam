@@ -1,4 +1,5 @@
 'use client';
+import Icon,{type IconName} from '@/components/Icon';
 import { motion } from 'framer-motion';
 import type { ZiweiChart } from '@/lib/ziwei/types';
 import { BRANCHES, STEMS } from '@/lib/ziwei/constants';
@@ -46,7 +47,7 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
       >
       <div className="card-glass rounded-xl p-5">
         <div className="text-[10px] tracking-widest mb-4 flex items-center gap-2 font-semibold" style={{ color: 'var(--t-faint)' }}>
-          <span style={{ color: 'var(--t-gold)', opacity: 0.8 }}>✦</span>
+          <span style={{ color: 'var(--t-gold)', opacity: 0.8 }}><Icon name="tools" size={16}/></span>
           TỔNG QUAN MỆNH CÁCH
         </div>
 
@@ -75,8 +76,8 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
                   <span key={k} className="text-[10px] px-2 py-0.5 rounded-full"
                     style={{
                       color: 'var(--t-gold)',
-                      background: 'rgba(212,168,67,0.08)',
-                      border: '1px solid rgba(212,168,67,0.15)',
+                      background: 'var(--accent-soft)',
+                      border: '1px solid var(--accent-border)',
                     }}>
                     {k}
                   </span>
@@ -124,14 +125,14 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
           <div className="grid grid-cols-2 gap-2">
             {siHuaSummary.map(({ name, siHua, palaceName }) => {
               const colors: Record<string, { text: string; bg: string; border: string }> = {
-                'Lộc': { text: '#4ade80', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.2)' },
-                'Quyền': { text: '#60a5fa', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.2)' },
-                'Khoa': { text: '#facc15', bg: 'rgba(250,204,21,0.06)', border: 'rgba(250,204,21,0.2)' },
-                'Kỵ': { text: '#f87171', bg: 'rgba(248,113,113,0.06)', border: 'rgba(248,113,113,0.2)' },
-                '禄': { text: '#4ade80', bg: 'rgba(74,222,128,0.06)', border: 'rgba(74,222,128,0.2)' },
-                '权': { text: '#60a5fa', bg: 'rgba(96,165,250,0.06)', border: 'rgba(96,165,250,0.2)' },
-                '科': { text: '#facc15', bg: 'rgba(250,204,21,0.06)', border: 'rgba(250,204,21,0.2)' },
-                '忌': { text: '#f87171', bg: 'rgba(248,113,113,0.06)', border: 'rgba(248,113,113,0.2)' },
+                'Lộc': { text: 'var(--lu)', bg: 'var(--lu-bg)', border: 'var(--lu-border)' },
+                'Quyền': { text: 'var(--quan)', bg: 'var(--quan-bg)', border: 'var(--quan-border)' },
+                'Khoa': { text: 'var(--ke)', bg: 'var(--ke-bg)', border: 'var(--ke-border)' },
+                'Kỵ': { text: 'var(--ji)', bg: 'var(--ji-bg)', border: 'var(--ji-border)' },
+                '禄': { text: 'var(--lu)', bg: 'var(--lu-bg)', border: 'var(--lu-border)' },
+                '权': { text: 'var(--quan)', bg: 'var(--quan-bg)', border: 'var(--quan-border)' },
+                '科': { text: 'var(--ke)', bg: 'var(--ke-bg)', border: 'var(--ke-border)' },
+                '忌': { text: 'var(--ji)', bg: 'var(--ji-bg)', border: 'var(--ji-border)' },
               };
               const c = colors[siHua] || colors['Lộc'];
               return (
@@ -250,10 +251,10 @@ export default function ChartSummary({ chart }: ChartSummaryProps) {
                 className="text-[10px] px-2 py-2 rounded-lg text-center transition-colors"
                 style={{
                   border: isCurrent
-                    ? '1px solid rgba(147,51,234,0.4)'
+                    ? '1px solid var(--quan)'
                     : '1px solid var(--t-border)',
-                  background: isCurrent ? 'rgba(147,51,234,0.08)' : 'transparent',
-                  color: isCurrent ? '#a78bfa' : 'var(--t-faint)',
+                  background: isCurrent ? 'var(--quan-bg)' : 'transparent',
+                  color: isCurrent ? 'var(--quan)' : 'var(--t-faint)',
                 }}
               >
                 <div className="font-mono tabular-nums font-semibold">{dx.startAge}–{dx.endAge} tuổi</div>

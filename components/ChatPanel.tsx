@@ -1,4 +1,5 @@
 'use client';
+import Icon,{type IconName} from '@/components/Icon';
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { ZiweiChart } from '@/lib/ziwei/types';
@@ -109,7 +110,7 @@ export default function ChatPanel({ chart }: ChatPanelProps) {
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
         {messages.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
-            <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.15 }}>✦</div>
+            <div className="text-4xl mb-3" style={{ color: 'var(--t-gold)', opacity: 0.15 }}><Icon name="tools" size={32}/></div>
             <p className="text-xs leading-relaxed" style={{ color: 'var(--t-faint)' }}>
               Lá số đã an định, quý bạn có thể đặt câu hỏi trực tiếp<br />
               hoặc chọn câu hỏi mẫu bên dưới để bắt đầu đàm đạo
@@ -128,8 +129,8 @@ export default function ChatPanel({ chart }: ChatPanelProps) {
               <div
                 className="max-w-[85%] rounded-xl px-3.5 py-2.5 text-sm leading-relaxed"
                 style={msg.role === 'user' ? {
-                  background: 'rgba(212,168,67,0.1)',
-                  border: '1px solid rgba(212,168,67,0.2)',
+                  background: 'var(--accent-soft)',
+                  border: '1px solid var(--accent-border)',
                   color: 'var(--t-gold)',
                 } : {
                   background: 'var(--t-card)',
@@ -168,7 +169,7 @@ export default function ChatPanel({ chart }: ChatPanelProps) {
                   background: 'transparent',
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = 'rgba(212,168,67,0.3)';
+                  e.currentTarget.style.borderColor = 'var(--accent-border)';
                   e.currentTarget.style.color = 'var(--t-gold)';
                 }}
                 onMouseLeave={e => {
@@ -205,8 +206,8 @@ export default function ChatPanel({ chart }: ChatPanelProps) {
             disabled={loading || !input.trim()}
             className="px-3 py-2 rounded-lg text-xs font-medium transition-all disabled:opacity-30 disabled:cursor-not-allowed"
             style={{
-              background: 'rgba(212,168,67,0.15)',
-              border: '1px solid rgba(212,168,67,0.25)',
+              background: 'var(--accent-border)',
+              border: '1px solid var(--accent-border)',
               color: 'var(--t-gold)',
             }}
           >

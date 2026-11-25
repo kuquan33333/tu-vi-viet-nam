@@ -1,4 +1,5 @@
 'use client';
+import Icon,{type IconName} from '@/components/Icon';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Star } from '@/lib/ziwei/types';
 import { STAR_DESCRIPTIONS } from '@/lib/ziwei/constants';
@@ -248,7 +249,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                   <div key={tag} className="text-[10px] px-2 py-1 rounded-full"
                     style={{
                       border: '1px solid var(--t-border)',
-                      color: tag.includes('Miếu') || tag.includes('Vượng') ? '#eab308' : tag.includes('Hãm') ? '#ef4444' : 'var(--t-text2)',
+                      color: tag.includes('Miếu') || tag.includes('Vượng') ? 'var(--ke)' : tag.includes('Hãm') ? 'var(--ji)' : 'var(--t-text2)',
                     }}>
                     {tag}
                   </div>
@@ -263,7 +264,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                 <div className="flex flex-wrap gap-1.5">
                   {desc.keywords.split('·').map(k => (
                     <span key={k} className="text-[11px] px-2 py-0.5 rounded-full"
-                      style={{ color: 'var(--t-gold)', border: '1px solid rgba(212,168,67,0.2)', background: 'rgba(212,168,67,0.06)' }}>
+                      style={{ color: 'var(--t-gold)', border: '1px solid var(--accent-border)', background: 'var(--accent-soft)' }}>
                       {k.trim()}
                     </span>
                   ))}
@@ -273,7 +274,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
             {/* Trích dẫn Cổ thư */}
             {detail && (
-              <div className="rounded-xl p-3" style={{ background: 'rgba(212,168,67,0.04)', border: '1px solid rgba(212,168,67,0.12)' }}>
+              <div className="rounded-xl p-3" style={{ background: 'var(--accent-soft)', border: '1px solid var(--accent-soft)' }}>
                 <div className="text-[10px] tracking-widest mb-1.5 flex items-center gap-1" style={{ color: 'var(--t-gold)', opacity: 0.7 }}>
                   Cổ thư nguyên văn & chú giải
                 </div>
@@ -295,14 +296,14 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
 
                 <div className="grid grid-cols-1 gap-2">
                   {[
-                    { label: 'Định hướng sự nghiệp', value: detail.career, icon: '◈' },
-                    { label: 'Tình duyên & Hôn nhân', value: detail.relationship, icon: '♡' },
-                    { label: 'Tài vận & Quản lý tiền bạc', value: detail.wealth, icon: '◆' },
-                    { label: 'Sức khỏe & Dưỡng sinh', value: detail.health, icon: '☯' },
+                    { label: 'Định hướng sự nghiệp', value: detail.career, icon: 'tools' as IconName },
+                    { label: 'Tình duyên & Hôn nhân', value: detail.relationship, icon: 'health' as IconName },
+                    { label: 'Tài vận & Quản lý tiền bạc', value: detail.wealth, icon: 'chart' as IconName },
+                    { label: 'Sức khỏe & Dưỡng sinh', value: detail.health, icon: 'yin-yang' as IconName },
                   ].map(item => (
                     <div key={item.label} className="card-inner rounded-lg p-3">
                       <div className="text-[10px] mb-1 flex items-center gap-1" style={{ color: 'var(--t-faint)' }}>
-                        <span>{item.icon}</span>
+                        <Icon name={item.icon} size={16}/>
                         <span>{item.label}</span>
                       </div>
                       <p className="text-[11px] leading-relaxed" style={{ color: 'var(--t-text2)' }}>{item.value}</p>
@@ -311,11 +312,11 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid rgba(74,222,128,0.15)', background: 'rgba(74,222,128,0.05)' }}>
+                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid var(--lu-border)', background: 'var(--lu-bg)' }}>
                     <div className="text-emerald-500 mb-0.5 font-medium">Cung vị đắc địa</div>
                     <div className="text-emerald-500/80">{detail.bestPalace}</div>
                   </div>
-                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid rgba(248,113,113,0.15)', background: 'rgba(248,113,113,0.05)' }}>
+                  <div className="text-[10px] p-2.5 rounded-lg" style={{ border: '1px solid var(--ji-border)', background: 'var(--ji-bg)' }}>
                     <div className="text-red-500 mb-0.5 font-medium">Cung vị cần lưu ý</div>
                     <div className="text-red-500/80">{detail.worstPalace}</div>
                   </div>
