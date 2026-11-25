@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import type { Palace, Star } from '@/lib/ziwei/types';
 import { STEMS, BRANCHES } from '@/lib/ziwei/constants';
 import clsx from 'clsx';
+import {starLabel} from './ui/star-labels';
 
 interface PalaceCellProps {
   palace: Palace;
@@ -142,14 +143,14 @@ export default function PalaceCell({
             <div
               key={star.name}
               className="flex items-center"
-              role="button" tabIndex={0} aria-label={star.name} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();onStarClick?.(star);}}}
+              role="button" tabIndex={0} aria-label={starLabel(star.name)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();onStarClick?.(star);}}}
               onClick={e => { e.stopPropagation(); onStarClick?.(star); }}
             >
               <span className={clsx(
                 'text-[13px] leading-tight font-bold tracking-tight cursor-pointer chart3-major-name',
                 star.brightness === 'bright' ? 'text-accent' : star.brightness === 'dim' ? 'text-accent' : 'text-accent',
               )}>
-                {star.name}
+                {starLabel(star.name)}
               </span>
               {star.brightnessRaw && (
                 <span className="chart3-brightness">
@@ -179,7 +180,7 @@ export default function PalaceCell({
           {luckyStars.map(s => {
             const overlaySiHua = overlayStarSiHua?.[s.name];
             return (
-              <span key={s.name} className="inline-flex items-center text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>
+              <span key={s.name} className="inline-flex items-center text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{starLabel(s.name)}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>
                 {s.siHua && <SiHuaBadge siHua={s.siHua} />}
                 {overlaySiHua && (
                   <SiHuaBadge
@@ -202,13 +203,13 @@ export default function PalaceCell({
       {shaStars.length > 0 && (
         <div className="flex flex-wrap gap-x-1">
           {shaStars.map(s => (
-            <span key={s.name} className="text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua && <SiHuaBadge siHua={s.siHua} />}
+            <span key={s.name} className="text-[9px] chart3-minor-name leading-tight"><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{starLabel(s.name)}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua && <SiHuaBadge siHua={s.siHua} />}
             </span>
           ))}
         </div>
       )}
 
-      {otherStars.length>0&&<div className="chart3-other-stars">{otherStars.map((s,i)=><span key={s.name+i}><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua&&<SiHuaBadge siHua={s.siHua}/>}</span>)}</div>}
+      {otherStars.length>0&&<div className="chart3-other-stars">{otherStars.map((s,i)=><span key={s.name+i}><button type="button" onClick={e=>{e.stopPropagation();onStarClick?.(s);}}>{starLabel(s.name)}{s.brightnessRaw?' · '+s.brightnessRaw:''}</button>{s.siHua&&<SiHuaBadge siHua={s.siHua}/>}</span>)}</div>}
     </motion.div>
   );
 }

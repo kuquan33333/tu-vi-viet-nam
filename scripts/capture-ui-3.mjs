@@ -59,6 +59,9 @@ try{
    }
    await page.locator('.chart3-grid').waitFor();
    assert.equal(await page.locator('.chart3-palace').count(),12);
+   const gridText=await page.locator('.chart3-grid').innerText();
+   assert.doesNotMatch(gridText,/\p{Script=Han}/u,'Unlocalized Han characters in sample chart');
+   for(const label of ['Thiên Nguyệt','Thiên Trù','Đài Phụ','Thiên Vu','Nguyệt Đức','Kiếp Sát'])assert.ok(gridText.includes(label),'Missing translated auxiliary label '+label);
    const major=page.locator('.chart3-palace [role=button]').first();await major.click();
    await page.locator('.chart3-detail.is-open').waitFor();await page.keyboard.press('Escape');assert.equal(await page.locator('.chart3-detail.is-open').count(),0);
    await page.getByRole('button',{name:'Chia sẻ ảnh'}).click();await page.locator('#share-card').waitFor();

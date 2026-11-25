@@ -5,6 +5,7 @@ import BirthForm,{type BirthFormState} from '@/components/BirthForm';
 import dynamic from 'next/dynamic';
 import Icon from '@/components/Icon';
 import ChartGrid from '@/components/ui/ChartGrid';
+import {starLabel} from '@/components/ui/star-labels';
 import './chart-ui.css';
 const ShareCard=dynamic(()=>import('@/components/ShareCardCanvas'));
 const ChartBoard=dynamic(()=>import('@/components/ChartBoard'),{loading:()=> <p role="status">Đang tải bàn lá số…</p>});
@@ -108,7 +109,7 @@ export default function ChartPage(){
       <p className="chart3-hint">Lá số sẽ hiện ở đây sau khi bạn lập.</p>
     </aside>
    </div>
-   {options.length>0&&<section className="workspace-surface" style={{marginTop:20,padding:16}}><h2>12 phương án chưa xác định</h2><p role="alert" className="study-notice">Giả định ngày an sao không đổi, lần lượt xét 12 chi giờ. Mệnh, Thân, Cục và đại hạn chỉ là khả năng; gần nửa đêm còn có thể đổi ngày. Không lưu phương án nào thành hồ sơ.</p><div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(145px,1fr))',gap:8}}>{options.map(c=><div key={c.birthInfo.hour} className="surface-card" style={{padding:10}}><strong>Giờ {BRANCHES[c.birthInfo.hour]}</strong><p>Chưa xác định Mệnh, Thân, Cục và đại hạn.</p><details className="chart3-hypothesis"><summary>Xem giả định cho giờ này</summary><p>Chỉ là giả định nếu sinh giờ {BRANCHES[c.birthInfo.hour]}.</p><p>Mệnh: {BRANCHES[c.mingGongBranch]} · Thân: {BRANCHES[c.shenGongBranch]}</p><p>{c.wuxingJuName}</p><small>{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=>s.name).join(', ')||'Vô chính diệu'}</small></details></div>)}</div><button className="action-outline" onClick={()=>setOptions([])}>Đóng phương án</button></section>}
+   {options.length>0&&<section className="workspace-surface" style={{marginTop:20,padding:16}}><h2>12 phương án chưa xác định</h2><p role="alert" className="study-notice">Giả định ngày an sao không đổi, lần lượt xét 12 chi giờ. Mệnh, Thân, Cục và đại hạn chỉ là khả năng; gần nửa đêm còn có thể đổi ngày. Không lưu phương án nào thành hồ sơ.</p><div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(145px,1fr))',gap:8}}>{options.map(c=><div key={c.birthInfo.hour} className="surface-card" style={{padding:10}}><strong>Giờ {BRANCHES[c.birthInfo.hour]}</strong><p>Chưa xác định Mệnh, Thân, Cục và đại hạn.</p><details className="chart3-hypothesis"><summary>Xem giả định cho giờ này</summary><p>Chỉ là giả định nếu sinh giờ {BRANCHES[c.birthInfo.hour]}.</p><p>Mệnh: {BRANCHES[c.mingGongBranch]} · Thân: {BRANCHES[c.shenGongBranch]}</p><p>{c.wuxingJuName}</p><small>{c.palaces.find(p=>p.branch===c.mingGongBranch)?.stars.filter(s=>s.type==='major').map(s=>starLabel(s.name)).join(', ')||'Vô chính diệu'}</small></details></div>)}</div><button className="action-outline" onClick={()=>setOptions([])}>Đóng phương án</button></section>}
    {feedback&&<p role="status" className="study-notice">{feedback}</p>}
    <div className="home-note" style={{marginTop:23}}>Lưu ý: thông tin trong lá số là cách diễn giải văn hóa truyền thống, không phải khẳng định chính xác về tính cách, tương lai, sức khỏe hay tài chính. Bạn có thể lưu hồ sơ cục bộ sau khi lập xong.</div>
   </div>:
@@ -137,12 +138,12 @@ export default function ChartPage(){
      <button className="action-outline chart3-board-toggle" aria-pressed={boardMode} onClick={()=>setBoardMode(v=>!v)}>{boardMode?"Xem danh sách":"Xem dạng bàn"}</button>
      <div className={"chart-scroll"+(boardMode?" chart3-board-visible":"")}><ChartBoard chart={chart} view={view} liunianYear={year}
       onPalaceSelect={p=>showDetail(p)} onStarSelect={(s,p)=>showDetail(p,s)}
-      onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){showDetail(p,p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+name+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
-     <div className={"mobile-palaces"+(boardMode?" chart3-list-hidden":"")} aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>showDetail(p)}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>showDetail(p,s)} className={s.type==='major'?'chart3-major':'chart3-minor'}>{s.name}{s.brightnessRaw?' · '+s.brightnessRaw:''}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
+      onSiHuaClick={(name,hua)=>{const p=chart.palaces.find(x=>x.stars.some(s=>s.name===name));if(p){showDetail(p,p.stars.find(s=>s.name===name)||null);setFeedback('Đang xem '+starLabel(name)+' Hóa '+hua+' trong cung '+p.name+'.');}}}/></div>
+     <div className={"mobile-palaces"+(boardMode?" chart3-list-hidden":"")} aria-label="Danh sách 12 cung"><p className="mobile-lunar-date">Âm lịch: {(chart.lunarInfo.rawDate??chart.lunarInfo).lunarDay}/{(chart.lunarInfo.rawDate??chart.lunarInfo).isLeapMonth?'Nhuận ':''}{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarMonth}/{(chart.lunarInfo.rawDate??chart.lunarInfo).lunarYear}</p>{chart.palaces.map(p=><article key={p.branch} className="surface-card mobile-palace"><button className="action-outline" aria-pressed={shown?.branch===p.branch} onClick={()=>showDetail(p)}>{p.name} · {BRANCHES[p.branch]}</button><p>{p.isMingGong?'Mệnh · ':''}{p.isShenGong?'Thân · ':''}{p.daXianAge?p.daXianAge.join('–')+' tuổi':''}</p>{!p.stars.some(s=>s.type==='major')&&<p>Vô chính diệu</p>}<div className="mobile-star-list">{p.stars.map((s,i)=><button key={s.name+'-'+i} onClick={()=>showDetail(p,s)} className={s.type==='major'?'chart3-major':'chart3-minor'}>{starLabel(s.name)}{s.brightnessRaw?' · '+s.brightnessRaw:''}{s.siHua?' · Hóa '+s.siHua:''}</button>)}</div></article>)}</div>
     </section>
     <aside className={"workspace-surface workspace-aside reading-panel chart3-detail"+(detailOpen?" is-open":"")} aria-label="Chi tiết cung và sao">
      <button ref={detailClose} type="button" className="action-outline chart3-close" onClick={closeDetail}><Icon name="close"/> Đóng chi tiết</button>
-     <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?star.name:(shown?.name||'Tổng quan')}</h2></div></div>
+     <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?starLabel(star.name):(shown?.name||'Tổng quan')}</h2></div></div>
      {star?<>
       <div className="reading-pills"><span>{star.type==='major'?'Chính tinh':'Phụ tinh'}</span>{star.brightnessRaw&&<span>{star.brightnessRaw}</span>}{star.siHua&&<span>Hóa {star.siHua}</span>}</div>
       <h3>Đặc tính trong tư liệu truyền thống</h3>
@@ -156,14 +157,14 @@ export default function ChartPage(){
       <div className="reading-pills"><span>Chi {study.fact.branch}</span>{shown?.isMingGong&&<span>Cung Mệnh</span>}{shown?.isShenGong&&<span>Cung Thân</span>}</div>
       <h3>Các chính tinh tọa thủ</h3>
       {study.intros.length?study.intros.map(s=><div key={s.name} style={{borderBottom:'1px solid var(--bdr)',paddingBottom:12,marginBottom:12}}>
-       <strong>{s.name}</strong>{s.brightness&&<span style={{fontSize:11,color:'var(--ac-dim)'}}> · {s.brightness}</span>}
+       <strong>{starLabel(s.name)}</strong>{s.brightness&&<span style={{fontSize:11,color:'var(--ac-dim)'}}> · {s.brightness}</span>}
        <p style={{marginTop:6}}>{s.description?.keywords||'Chưa có chú giải được xác minh.'}</p>
       </div>):<p>Vô chính diệu — không có chính tinh trực tiếp trong cung; xem đối cung để tham khảo cấu trúc.</p>}
-      {!!study.fact.transformations.length&&<><h3>Tứ Hóa tại cung</h3><p>{study.fact.transformations.join(' · ')}</p></>}
+      {!!study.fact.transformations.length&&<><h3>Tứ Hóa tại cung</h3><p>{study.fact.transformations.map(t=>{const [name,...rest]=t.split(' Hóa ');return [starLabel(name),...rest].join(' Hóa ');}).join(' · ')}</p></>}
       <h3>Đối cung</h3>
-      <p>{study.opposite?.name} ({study.opposite?.branch}) · {study.opposite?.major.join(', ')||'Không có chính tinh'}</p>
+      <p>{study.opposite?.name} ({study.opposite?.branch}) · {study.opposite?.major.map(starLabel).join(', ')||'Không có chính tinh'}</p>
       <h3>Tam hợp</h3>
-      <p>{study.trine.map(x=>x.name+': '+(x.major.join(', ')||'Vô chính diệu')).join(' · ')}</p>
+      <p>{study.trine.map(x=>x.name+': '+(x.major.map(starLabel).join(', ')||'Vô chính diệu')).join(' · ')}</p>
       <div className="study-notice" style={{marginTop:16}}>Nội dung trên được dựng từ các sao và cung thực tế của lá số, không phải kết quả AI tự tạo.</div>
      </>:null}
      <p className="workspace-note" style={{marginTop:17}}>{READING_NOTICE}</p>

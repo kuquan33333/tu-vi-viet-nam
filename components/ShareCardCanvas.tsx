@@ -8,6 +8,7 @@
 
 import type { ZiweiChart } from '@/lib/ziwei/types';
 import { SITE_HOST } from '@/lib/site';
+import {starLabel} from './ui/star-labels';
 
 const BRANCH_NAMES = ['Tý', 'Sửu', 'Dần', 'Mão', 'Thìn', 'Tỵ', 'Ngọ', 'Mùi', 'Thân', 'Dậu', 'Tuất', 'Hợi'];
 
@@ -39,7 +40,7 @@ interface ShareCardProps {
 
 export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardProps) {
   const mingPalace = chart.palaces.find(p => p.branch === chart.mingGongBranch);
-  const mingMajorStars = mingPalace?.stars.filter(s => s.type === 'major').map(s => s.name) ?? [];
+  const mingMajorStars = mingPalace?.stars.filter(s => s.type === 'major').map(s => starLabel(s.name)) ?? [];
   const mingStarStr = mingMajorStars.length > 0 ? mingMajorStars.join(' · ') : 'Vô Chính Diệu';
   const mingBranchName = BRANCH_NAMES[chart.mingGongBranch] || '';
   const shenBranchName = BRANCH_NAMES[chart.shenGongBranch] || '';
@@ -91,7 +92,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
           }}>Tử</div>
           <div>
             <div style={{ fontSize: '15px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.06em', lineHeight: 1.2 }}>Lá Số Tử Vi</div>
-            <div style={{ fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', marginTop: '2px' }}>Nghê Hải Hạ Chính Tông · TỬ VI ĐẨU SỐ</div>
+            <div style={{ fontSize: '9px', color: 'var(--muted)', letterSpacing: '0.12em', marginTop: '2px' }}>TỬ VI ĐẨU SỐ · TƯ LIỆU THAM KHẢO</div>
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
@@ -173,7 +174,7 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
                       letterSpacing: '0.01em',
                       lineHeight: 1.15,
                     }}>
-                      {s.name}{s.siHua ? <span style={{ fontSize: '8px', color: 'var(--accent)', marginLeft: '2px' }}>{s.siHua}</span> : ''}
+                      {starLabel(s.name)}{s.siHua ? <span style={{ fontSize: '8px', color: 'var(--accent)', marginLeft: '2px' }}>{s.siHua}</span> : ''}
                     </div>
                   )) : (
                     <div style={{ fontSize: '8px', color: 'var(--muted)', fontStyle: 'italic' }}>Vô chính diệu</div>
@@ -255,13 +256,13 @@ export default function ShareCardCanvas({ chart, birth, highlight }: ShareCardPr
               borderRadius: '6px',
             }}>
               <div style={{ fontSize: '11px', color: 'var(--ink)', fontWeight: 700, letterSpacing: '0.04em', lineHeight: 1.4 }}>
-                Tử Vi là then chốt · Thiên Địa Nhân quy nhất
+                Lá số tóm tắt · 14 chính tinh
               </div>
               <div style={{ fontSize: '10px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1.4, marginTop: '2px' }}>
-                Tiền nhân khai đạo · AI luận giải đồng hành
+                Diễn giải văn hóa truyền thống
               </div>
               <div style={{ fontSize: '8px', color: 'var(--muted)', letterSpacing: '0.08em', marginTop: '4px' }}>
-                Tra cứu và lập lá số chi tiết
+                Không phải dự báo đã được khoa học xác nhận
               </div>
             </div>
           </div>
