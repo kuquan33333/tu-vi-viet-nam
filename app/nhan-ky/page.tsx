@@ -1,4 +1,5 @@
 'use client';
+import {StudyTabs,StudyPanel} from '@/components/ui/StudyTabs';
 
 import {useMemo,useState} from 'react';
 import {MEDICAL_SOURCES} from '@/lib/triad/medical-sources';
@@ -58,7 +59,7 @@ function LibraryTool(){
     </article>)}
    </div>
   </>}
-  <div className="study-notice">Tài liệu tổng thuật chỉ nhằm học thuật. Tên các bệnh, khái niệm tạng phủ và lời văn cổ không được dùng để tự xác định bệnh, tự kê thuốc hoặc thay cho dịch vụ y tế.</div>
+
  </>;
 }
 function BodyFigure({side,selected,onSelect}:{side:'front'|'back';selected:string;onSelect:(code:string)=>void}) {
@@ -153,7 +154,7 @@ function AtlasTool(){
       referrerPolicy="no-referrer" sandbox="allow-scripts allow-same-origin" style={{width:'100%',height:520,border:'1px solid var(--ac-bdr)',borderRadius:12}}/>
     <p className="study-muted">Nếu trình duyệt hoặc trang gốc chặn nhúng, sử dụng liên kết “Mở trang gốc”.</p>
    </div>}
-   <div className="study-notice">Sơ đồ không dành cho hướng dẫn châm cứu. Không tự châm kim, cứu ngải, ấn sâu các huyệt hoặc tự điều trị bệnh dựa vào hình minh họa.</div>
+   <p className="study-muted">Sơ đồ minh họa vị trí tương đối, không phải tài liệu định vị huyệt lâm sàng.</p>
   </div>
  </>;
 }
@@ -186,20 +187,18 @@ function GlossaryTool(){
 }
 export default function NhanKyPage(){
  const [tab,setTab]=useState<Tab>('library');
- return <div className="study-shell">
+ return <div className="study-shell ui5-page">
 
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Nhân Kỷ</div>
-    <h1 className="study-title">Nhân Kỷ · Y thư và kinh lạc</h1><div className="study-notice" role="note"><strong>Thông tin giáo dục, không thay thế tư vấn y tế.</strong> Không tự chẩn đoán, kê thuốc, châm cứu, cứu ngải hoặc tự điều trị dựa vào nội dung này. Khi cần chăm sóc sức khỏe hãy gặp nhân viên y tế được cấp phép.</div><div className="study-picks"><div><strong>Học thuyết cổ truyền</strong><p>Y thư và kinh lạc trình bày quan niệm lịch sử.</p></div><div><strong>Chứng cứ y học hiện đại</strong><p>Chưa có bộ tổng quan bằng chứng lâm sàng được thẩm định trong thư viện này.</p></div></div>
+    <h1 className="study-title">Nhân Kỷ · Y thư và kinh lạc</h1><div className="study-notice" role="note"><strong>Thông tin giáo dục, không thay thế tư vấn y tế.</strong> Không tự chẩn đoán, kê thuốc, châm cứu, cứu ngải, ấn sâu huyệt hoặc tự điều trị dựa vào nội dung và hình minh họa này. Khi cần chăm sóc sức khỏe hãy gặp nhân viên y tế được cấp phép.</div><div className="study-picks"><div><strong>Học thuyết cổ truyền</strong><p>Y thư và kinh lạc trình bày quan niệm lịch sử.</p></div><div><strong>Chứng cứ y học hiện đại</strong><p>Chưa có bộ tổng quan bằng chứng lâm sàng được thẩm định trong thư viện này.</p></div></div>
     <p className="study-lead">Học và tra cứu Nội Kinh, Thương Hàn, Kim Quỹ, Châm Cứu; khám phá danh mục huyệt đạo, thuật ngữ cổ học và sơ đồ giáo dục.</p>
-    <div className="study-tabs" role="tablist" aria-label="Chọn phân hệ Nhân Kỷ">
-     <button role="tab" aria-selected={tab==='library'} className={'study-tab'+(tab==='library'?' active':'')} type="button" onClick={()=>setTab('library')}>Thư viện y thư</button>
-     <button role="tab" aria-selected={tab==='atlas'} className={'study-tab'+(tab==='atlas'?' active':'')} type="button" onClick={()=>setTab('atlas')}>Atlas 361 huyệt</button>
-     <button role="tab" aria-selected={tab==='glossary'} className={'study-tab'+(tab==='glossary'?' active':'')} type="button" onClick={()=>setTab('glossary')}>Từ điển thuật ngữ</button>
-    </div>
+    <StudyTabs<Tab> id="nhan" label="Chọn phân hệ Nhân Kỷ" tabs={[{"value":"library","label":"Kinh điển · Thư viện y thư"},{"value":"atlas","label":"Atlas 361 huyệt"},{"value":"glossary","label":"Từ điển thuật ngữ"}]} value={tab} onChange={setTab}/>
    </div>
+   <StudyPanel<Tab> id="nhan" tabs={["library","atlas","glossary"]} value={tab}>
    {tab==='library'?<LibraryTool/>:tab==='atlas'?<AtlasTool/>:<GlossaryTool/>}
+   </StudyPanel>
    <div className="study-card" style={{marginTop:16}}>
     <h2>Nguồn dữ liệu và giới hạn</h2>
     <p>Danh mục tên và mã 361 huyệt, 14 kinh mạch được chuyển từ <a href="https://github.com/aicuc/3d-acupoint-atlas" target="_blank" rel="noopener noreferrer">aicuc/3d-acupoint-atlas</a> (MIT, ghi công tác giả). Các mục giới thiệu y thư do dự án biên soạn mới, không sao chép nguyên văn giáo trình có bản quyền.</p>

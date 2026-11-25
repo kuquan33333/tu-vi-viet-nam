@@ -14,11 +14,11 @@ export const metadata = pageMetadata({title:"Thư viện cổ thư Tử Vi Đẩ
 
 export default function LibraryHomePage() {
   return (
-    <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
+    <div className="ui5-page ui5-library">
       <Breadcrumb items={[{label:'Thư viện',href:'/library'}]} />
 
       {/* Hero */}
-      <div className="text-center px-6 py-16">
+      <div className="site-wrap ui5-library-hero">
         <div className="flex items-center justify-center gap-3 mb-4">
           <div style={{ height: '1px', width: '48px', background: 'var(--line)' }} />
           <span style={{ fontSize: '11px', color: 'var(--ac)', letterSpacing: '0.2em', fontWeight: 600 }}>NGHÊ HẢI HẠ · NGUYÊN ĐIỂN CỔ THƯ</span>
@@ -39,7 +39,7 @@ export default function LibraryHomePage() {
       </div>
 
       {/* Danh sách 3 bộ cổ thư */}
-      <div className="max-w-5xl mx-auto px-6 pb-20">
+      <div className="site-wrap ui5-library-grid">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {ALL_BOOKS.map(book => (
             <Link
@@ -55,14 +55,14 @@ export default function LibraryHomePage() {
                 transition: 'all 0.2s',
                 boxShadow: 'none',
               }}
-              className="hover:shadow-lg"
+              className="ui5-book-card"
             >
               <div style={{ fontSize: '12px', color: 'var(--tx-3)', lineHeight: 1.5, overflowWrap: 'anywhere', marginBottom: '8px' }}>
-                {book.dynasty} · {book.author}
+                <span className="ui5-book-author">{book.author}</span><span className="ui5-book-era">{book.dynasty}</span>
               </div>
-              <div style={{ fontSize: '19px', fontWeight: 700, color: 'var(--tx-0)', marginBottom: '10px', letterSpacing: '0.02em' }}>
+              <h2 className="ui5-book-title">
                 《{book.title}》
-              </div>
+              </h2>
               <div style={{ fontSize: '12px', color: 'var(--tx-2)', lineHeight: 1.7, marginBottom: '14px' }}>
                 {book.intro}
               </div>

@@ -22,11 +22,13 @@ export default function ChartPage(){
  const [options,setOptions]=useState<ZiweiChart[]>([]);
  const [chart,setChart]=useState<ZiweiChart|null>(null);
  const resultHeading=useRef<HTMLHeadingElement>(null);
+ const printQueued=useRef(false);
  useEffect(()=>{
   if(!chart)return;
   // Run after React commits the result, not while the submitted form still owns focus.
   resultHeading.current?.focus({preventScroll:true});
   window.scrollTo({top:0,left:0,behavior:'instant'});
+  if(printQueued.current){printQueued.current=false;void document.fonts.ready.then(()=>requestAnimationFrame(()=>window.print()));}
  },[chart]);
  const [palace,setPalace]=useState<Palace|null>(null);
  const [star,setStar]=useState<Star|null>(null);
@@ -66,6 +68,7 @@ export default function ChartPage(){
  }
  useEffect(()=>{
   const queued=takeQueuedProfile();if(!queued)return;
+  printQueued.current=new URLSearchParams(window.location.search).get('print')==='1';
   void import('@/lib/ziwei/algorithm').then(({generateChart})=>{const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);}).catch(()=>setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.'));
  },[]);
  async function onUncertain(form:BirthFormState){try{const {generateChart}=await import('@/lib/ziwei/algorithm');setOptions(uncertainBirthOptions(form).map(b=>generateChart(b)));setFeedback('');}catch{setFeedback('Không thể tạo các phương án; kiểm tra ngày và nơi sinh.');}}

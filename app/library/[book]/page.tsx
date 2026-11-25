@@ -27,10 +27,10 @@ export default async function BookPage({ params }: { params: Promise<{ book: str
   if (!book) notFound();
 
   return (
-    <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
+    <div className="ui5-page ui5-library">
       <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug}]} />
 
-      <div className="max-w-3xl mx-auto px-6 py-12">
+      <div className="site-wrap ui5-book-index">
         {/* Thông tin tác phẩm */}
         <div className="text-center mb-12">
           <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', marginBottom: '8px' }}>

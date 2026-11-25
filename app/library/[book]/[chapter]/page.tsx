@@ -28,138 +28,28 @@ export default async function ChapterPage({ params }: { params: Promise<{ book: 
   const prevIdx = chapterIdx - 1;
   const nextIdx = chapterIdx + 1;
 
-  return (
-    <div style={{ background: 'var(--bg-page)', minHeight: '100vh' }}>
-      <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug},{label:chapter.title,href:chapterPath(book.slug,chapterIdx)}]} />
-
-      <article className="max-w-3xl mx-auto px-6 py-12">
-        {/* Tiêu đề chương */}
-        <div className="text-center mb-10">
-          <div style={{ fontSize: '11px', color: 'var(--tx-3)', letterSpacing: '0.15em', marginBottom: '8px' }}>
-            《{book.title}》· {book.dynasty}
-          </div>
-          <h1 style={{ fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.04em', marginBottom: '8px' }}>
-            {chapter.title}
-          </h1>
-          {chapter.subtitle && (
-            <div style={{ fontSize: '13px', color: 'var(--tx-2)', letterSpacing: '0.05em' }}>
-              {chapter.subtitle}
-            </div>
-          )}
-        </div>
-
-        {/* Danh sách các đoạn văn */}
-        <div style={{ background: 'var(--bg-card)', borderRadius: '14px', border: '1px solid var(--line)', padding: '32px 28px' }}>
-          {chapter.paragraphs.map((p, i) => (
-            <div
-              key={p.id}
-              id={p.id}
-              style={{
-                marginBottom: i === chapter.paragraphs.length - 1 ? 0 : '20px',
-                paddingBottom: i === chapter.paragraphs.length - 1 ? 0 : '20px',
-                borderBottom: i === chapter.paragraphs.length - 1 ? 'none' : '1px dashed var(--line)',
-                scrollMarginTop: '80px',
-              }}
-            >
-              <div style={{
-                display: 'flex',
-                alignItems: 'baseline',
-                gap: '12px',
-              }}>
-                <span style={{
-                  fontSize: '11px',
-                  color: 'var(--ac)',
-                  fontWeight: 600,
-                  letterSpacing: '0.05em',
-                  minWidth: '24px',
-                }}>
-                  {String(p.idx).padStart(2, '0')}
-                </span>
-                <p style={{
-                  flex: 1,
-                  fontSize: '16px',
-                  color: 'var(--tx-0)',
-                  lineHeight: 1.9,
-                  letterSpacing: '0.02em',
-                  fontFamily: '"Noto Serif", serif',
-                  fontWeight: 500,
-                }}>
-                  {p.text}
-                </p>
-              </div>
-              {p.translation && (
-                <div style={{
-                  marginTop: '8px',
-                  marginLeft: '36px',
-                  padding: '10px 14px',
-                  background: 'var(--accent-soft)',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  color: 'var(--tx-2)',
-                  lineHeight: 1.8,
-                }}>
-                  <span style={{ fontSize: '10px', color: 'var(--ac)', marginRight: '8px', fontWeight: 700 }}>DỊCH NGHĨA</span>
-                  {p.translation}
-                </div>
-              )}
-              {p.niNote && (
-                <div style={{
-                  marginTop: '8px',
-                  marginLeft: '36px',
-                  padding: '10px 14px',
-                  background: 'var(--accent-soft)',
-                  borderRadius: '6px',
-                  fontSize: '13px',
-                  color: 'var(--tx-2)',
-                  lineHeight: 1.8,
-                }}>
-                  <span style={{ fontSize: '10px', color: 'var(--ji)', marginRight: '8px', fontWeight: 700 }}>THẦY NGHÊ CHÚ</span>
-                  {p.niNote}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Điều hướng chương trước / sau */}
-        <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', gap: '12px' }}>
-          {prevIdx >= 0 ? (
-            <Link
-              href={chapterPath(book.slug,prevIdx)}
-              style={{
-                flex: 1,
-                padding: '14px 18px',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--line)',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                color: 'var(--tx-0)',
-              }}
-            >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}><span className="inline-flex rotate-180"><Icon name="arrow" size={16}/></span> Chương Trước</div>
-              <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[prevIdx].title}</div>
-            </Link>
-          ) : <div style={{ flex: 1 }} />}
-          {nextIdx < book.chapters.length ? (
-            <Link
-              href={chapterPath(book.slug,nextIdx)}
-              style={{
-                flex: 1,
-                padding: '14px 18px',
-                background: 'var(--bg-card)',
-                border: '1px solid var(--line)',
-                borderRadius: '10px',
-                textDecoration: 'none',
-                color: 'var(--tx-0)',
-                textAlign: 'right',
-              }}
-            >
-              <div style={{ fontSize: '10px', color: 'var(--tx-3)', letterSpacing: '0.1em', marginBottom: '2px' }}>Chương Kế Tiếp <Icon name="arrow" size={16}/></div>
-              <div style={{ fontSize: '13px', fontWeight: 600 }}>{book.chapters[nextIdx].title}</div>
-            </Link>
-          ) : <div style={{ flex: 1 }} />}
-        </div>
-      </article>
-    </div>
-  );
+  return <div className="ui5-page ui5-library">
+   <Breadcrumb items={[{label:'Thư viện',href:'/library'},{label:book.title,href:'/library/'+book.slug},{label:chapter.title,href:chapterPath(book.slug,chapterIdx)}]}/>
+   <div className="site-wrap ui5-reader-layout">
+    <nav className="ui-card ui5-chapters" aria-label="Mục lục chương">
+     <Link className="ui5-chapter-book" href={'/library/'+book.slug}>{book.title}</Link>
+     <details open><summary>Mục lục chương</summary><ol>{book.chapters.map((c,i)=><li key={i}><Link href={chapterPath(book.slug,i)} aria-current={i===chapterIdx?'page':undefined}>{c.title}</Link></li>)}</ol></details>
+    </nav>
+    <article className="ui5-reader">
+     <header><p className="ui-eyebrow">{book.title} · {book.dynasty}</p><h1>{chapter.title}</h1>{chapter.subtitle&&<p className="ui-hint">{chapter.subtitle}</p>}</header>
+     <div className="ui-card ui5-reading-body">
+      {chapter.paragraphs.map(p=>{const han=/\p{Script=Han}/u.test(p.text);return <section className="ui5-passage" key={p.id} id={p.id}>
+       <p className="ui-eyebrow">Đoạn {String(p.idx).padStart(2,'0')}</p>
+       {han?<><h2 className="ui5-reading-label">Hán</h2><p className="ui5-han" lang="zh-Hans">{p.text}</p><h2 className="ui5-reading-label">Hán-Việt</h2><p className="ui5-missing">Chưa có phiên âm riêng trong dữ liệu.</p></>:<><h2 className="ui5-reading-label">Hán</h2><p className="ui5-missing">Chưa có nguyên văn chữ Hán trong dữ liệu.</p><h2 className="ui5-reading-label">Hán-Việt</h2><p>{p.text}</p></>}
+       <h2 className="ui5-reading-label">Dịch nghĩa</h2>{p.translation?<p>{p.translation}</p>:<p className="ui5-missing">Chưa có bản dịch trong dữ liệu.</p>}
+       {p.niNote&&<><h2 className="ui5-reading-label">Thầy Nghê chú</h2><p>{p.niNote}</p></>}
+      </section>})}
+     </div>
+     <nav className="ui5-reader-nav" aria-label="Chuyển chương">
+      {prevIdx>=0&&<Link className="ui-button ui-button-secondary" href={chapterPath(book.slug,prevIdx)}>Chương trước: {book.chapters[prevIdx].title}</Link>}
+      {nextIdx<book.chapters.length&&<Link className="ui-button ui-button-secondary" href={chapterPath(book.slug,nextIdx)}>Chương kế tiếp: {book.chapters[nextIdx].title}</Link>}
+     </nav>
+    </article>
+   </div>
+  </div>;
 }

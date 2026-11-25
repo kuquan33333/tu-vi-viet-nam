@@ -1,4 +1,5 @@
 'use client';
+import {StudyTabs,StudyPanel} from '@/components/ui/StudyTabs';
 
 import {useEffect,useMemo,useState} from 'react';
 import Icon from '@/components/Icon';
@@ -28,6 +29,7 @@ function Compass({degree}:{degree:number}) {
   <circle cx={center} cy={center} r={105} fill="none" stroke="var(--ac-bdr)" strokeWidth="1"/>
   <circle cx={center} cy={center} r={81} fill="none" stroke="var(--ac-bdr)" strokeWidth="1"/>
   {ticks.map((t,i)=><line key={i} x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2} stroke="var(--ac)" strokeWidth={i%3===0?2.2:1}/>)}
+  {Array.from({length:24},(_,i)=>{const m=mountainAt(i*15),angle=i*15*Math.PI/180;return <text key={i} x={center+Math.sin(angle)*135} y={center-Math.cos(angle)*135+3} fontSize="8" fill="var(--ink)" textAnchor="middle">{m.name}</text>})}
   {DIRECTIONS.map(d=>{
    const a=d.degree*Math.PI/180;
    return <text key={d.key} x={center+Math.sin(a)*92} y={center-Math.cos(a)*92+5} fill="var(--tx-2)" fontSize="14" fontWeight="700" textAnchor="middle">{d.key==='N'?'B':d.key==='NE'?'ĐB':d.key==='E'?'Đ':d.key==='SE'?'ĐN':d.key==='S'?'N':d.key==='SW'?'TN':d.key==='W'?'T':'TB'}</text>;
@@ -37,7 +39,7 @@ function Compass({degree}:{degree:number}) {
    <path d="M155 38 L155 149 L168 164 Z" fill="var(--ac)"/>
   </g>
   <circle cx={center} cy={center} r={10} fill="var(--ac)" stroke="var(--bg-page)" strokeWidth="3"/>
-  <text x={center} y="198" fontSize="12" fontWeight="700" fill="var(--ac-dim)" textAnchor="middle">{Math.round(degree*10)/10}°</text>
+  <text x={center} y="198" fontSize="24" fontWeight="700" fill="var(--ac-dim)" textAnchor="middle">{Math.round(degree*10)/10}°</text>
  </svg>;
 }
 function CompassPanel(){
@@ -77,7 +79,7 @@ function CompassPanel(){
   <section className="study-card">
    <h2>La Kinh 24 sơn hướng</h2>
    <Compass degree={degree}/>
-   <div className="study-picks" style={{marginBottom:14}}>
+   <div className="study-picks ui5-direction-pair" style={{marginBottom:14}}>
     <div><div className="study-muted">Hướng (mặt nhìn ra)</div><strong>{dir.name} · {mountain.name}</strong> · {degree.toFixed(1)}°</div>
     <div><div className="study-muted">Tọa (phía đối diện)</div><strong style={{color:'var(--ac-dim)'}}>{sittingDir.name} · {sittingMountain.name}</strong> · {sittingDegree.toFixed(1)}°</div>
    </div>
@@ -89,7 +91,7 @@ function CompassPanel(){
     <button type="button" className="study-btn" onClick={enableSensor} disabled={active}>{active?<><Icon name="check" size={18}/> Cảm biến đã bật</>:<><Icon name="compass" size={18}/> Bật la bàn điện thoại</>}</button>
     {active&&<button type="button" className="study-btn secondary" onClick={()=>setActive(false)}>Dừng cảm biến</button>}
    </div>
-   <div className="study-notice">{status} Góc 0° = Bắc, 90° = Đông, 180° = Nam. Ngưỡng ranh sơn 7,5°; kết quả tại ranh giới có thể đổi vì sai số cảm biến.</div>
+   <div className="study-notice" role="note"><span role="status">{status}</span> Góc 0° = Bắc, 90° = Đông, 180° = Nam. Ngưỡng ranh sơn 7,5°; kết quả tại ranh giới có thể đổi vì sai số cảm biến.</div>
   </section>
   <section className="study-card">
    <h2>Tra cứu 24 sơn</h2>
@@ -190,21 +192,18 @@ function LandPanel(){
 }
 export default function DiaKyPage(){
  const [tab,setTab]=useState<Tab>('compass');
- return <div className="study-shell">
+ return <div className="study-shell ui5-page">
 
   <main className="study-container">
    <div className="study-hero">
     <div className="study-kicker">Hệ thống tri thức · Địa Kỷ</div>
     <h1 className="study-title">Địa Kỷ · Phương hướng và hình thế</h1>
     <p className="study-lead">La Kinh 24 sơn, Bát Trạch, Huyền Không Phi Tinh và bản đồ tọa độ tùy chọn, cùng phiếu khảo sát địa hình theo các thuật ngữ phong thủy truyền thống.</p>
-    <div className="study-tabs" role="tablist" aria-label="Phân hệ Địa Kỷ">
-     <button className={'study-tab'+(tab==='compass'?' active':'')} aria-selected={tab==='compass'} role="tab" onClick={()=>setTab('compass')}><Icon name="compass" size={18}/> La Kinh 24 sơn</button>
-     <button className={'study-tab'+(tab==='battrach'?' active':'')} aria-selected={tab==='battrach'} role="tab" onClick={()=>setTab('battrach')}><Icon name="home" size={18}/> Bát Trạch</button>
-     <button className={'study-tab'+(tab==='xuan'?' active':'')} aria-selected={tab==='xuan'} role="tab" onClick={()=>setTab('xuan')}>Huyền Không · GIS</button>
-     <button className={'study-tab'+(tab==='land'?' active':'')} aria-selected={tab==='land'} role="tab" onClick={()=>setTab('land')}>△ Sơn xuyên hình thế</button>
-    </div>
+    <StudyTabs<Tab> id="dia" label="Phân hệ Địa Kỷ" tabs={[{"value":"compass","label":"La Kinh 24 sơn"},{"value":"battrach","label":"Bát Trạch"},{"value":"xuan","label":"Huyền Không · GIS"},{"value":"land","label":"Sơn xuyên hình thế"}]} value={tab} onChange={setTab}/>
    </div>
+   <StudyPanel<Tab> id="dia" tabs={["compass","battrach","xuan","land"]} value={tab}>
    {tab==='compass'?<CompassPanel/>:tab==='battrach'?<BattrachPanel/>:tab==='xuan'?<XuanKongGIS/>:<LandPanel/>}
+   </StudyPanel>
    <div className="study-card" style={{marginTop:16}}>
     <h2>Nguồn tham khảo và phương pháp</h2>
     <p>Bộ tính Bát Trạch và phân nhóm hướng được đối chiếu với <a href="https://github.com/aec-platform/phong-thuy-corpus" target="_blank" rel="noopener noreferrer">phong-thuy-corpus</a> (code MIT, dữ liệu CC BY 4.0) và bảng hướng Bát Trạch truyền thống. 24 sơn được tính bằng 24 cung liên tiếp, mỗi cung rộng 15°.</p>
