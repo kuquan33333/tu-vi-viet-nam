@@ -1,0 +1,90 @@
+/* UI-4 — isolated calendar layout, UI-1 tokens only. */
+.calendar4{min-width:0;padding-bottom:var(--section-gap)}
+.calendar4-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:24px}
+.calendar4 h1{font-size:var(--heading-page);margin:0}
+.calendar4-navigation{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.calendar4-navigation .calendar4-arrow{width:48px;min-width:48px;height:48px;padding:0;flex:none}
+.calendar4-back{display:inline-flex;transform:rotate(180deg)}
+.calendar4-month{font:700 22px/1.2 var(--font-serif);min-width:150px;text-align:center}
+.calendar4-today{margin-left:12px}
+.calendar4-intro{color:var(--muted);margin:0 0 20px;max-width:800px}
+.calendar4-controls{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.calendar4-controls label{font-size:14px;font-weight:600;color:var(--ink);min-width:110px}
+.calendar4-controls select{display:block;margin-top:6px}
+.calendar4-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:32px;align-items:start}
+.calendar4-board.ui-card{padding:0;min-width:0;overflow:visible}
+.calendar4-print-heading{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.calendar4-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--line);border-radius:var(--radius-card) var(--radius-card) 0 0;min-width:0}
+.calendar4-week{padding:12px 0;text-align:center;font:600 13px/1.4 var(--font);color:var(--muted);background:var(--card)}
+.calendar4-week:first-child{border-top-left-radius:var(--radius-card)}
+.calendar4-week:nth-child(7){border-top-right-radius:var(--radius-card)}
+.calendar4-day{appearance:none;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:2px;min-width:0;min-height:92px;padding:10px;border:0;border-radius:0;background:var(--card);color:var(--ink);text-align:left;cursor:pointer;overflow-wrap:anywhere;position:relative;font-family:var(--font)}
+.calendar4-solar{font:600 20px/1.3 var(--font)}
+.calendar4-lunar{font:400 13px/1.4 var(--font);color:var(--muted)}
+.calendar4-day.first-lunar .calendar4-solar,.calendar4-day.first-lunar .calendar4-lunar,.calendar4-day.full-lunar .calendar4-lunar{color:var(--accent);font-weight:600}
+.calendar4-day.outside{background:var(--paper);color:var(--muted)}
+.calendar4-day.outside .calendar4-lunar{color:var(--muted)}
+.calendar4-day:disabled{cursor:not-allowed}
+.calendar4-day.today:not(.selected){box-shadow:inset 0 0 0 2px var(--accent)}
+.calendar4-day:not(:disabled):not(.selected):hover{background:var(--accent-soft)}
+.calendar4-day.selected{background:var(--accent);color:var(--white)}
+.calendar4-day.selected span{color:var(--white)}
+.calendar4-day:focus-visible{outline-offset:-4px!important;z-index:1}
+.calendar4-day.selected:focus-visible{outline-color:var(--white)!important}
+.calendar4-event,.calendar4-leap,.calendar4-today-label{font:600 11px/1.25 var(--font);color:var(--accent);max-width:100%;overflow-wrap:anywhere}
+.calendar4-event.event-term{color:var(--muted);font-weight:500}
+.calendar4-event.event-holiday,.calendar4-event.event-tradition{text-decoration:underline;text-underline-offset:2px}
+.calendar4-day.selected .calendar4-event{color:var(--white)}
+.calendar4-notes{padding:14px var(--card-padding);font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+.calendar4-notes p{margin:4px 0}
+.calendar4-panel.ui-card{padding:28px;min-width:0}
+.calendar4-panel h2{font-size:28px;margin:8px 0 4px;overflow-wrap:anywhere}
+.calendar4-subtitle{font-size:14px;color:var(--muted);margin:0 0 20px}
+.calendar4-facts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:12px 16px;margin:20px 0;border-top:1px solid var(--line);padding-top:20px;font-size:14px}
+.calendar4-facts dt{color:var(--muted)}
+.calendar4-facts dt small{display:block;font-size:12px}
+.calendar4-facts dd{font-weight:600;margin:0;overflow-wrap:anywhere;color:var(--ink)}
+.calendar4-source,.calendar4-note,.calendar4-marks{font-size:13px;color:var(--muted);margin:12px 0}
+.calendar4-marks{font-weight:600;color:var(--accent)}
+.calendar4-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.calendar4-links a{padding-inline:14px}
+@media(max-width:1023px){.calendar4-header{align-items:flex-start;flex-direction:column;gap:16px}.calendar4-layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:639px){
+ .calendar4 h1{font-size:var(--heading-mobile)}
+ .calendar4-navigation{width:100%;gap:8px}
+ .calendar4-month{min-width:0;flex:1;font-size:20px}
+ .calendar4-today{width:100%;margin-left:0}
+ .calendar4-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .calendar4-controls .ui-button{grid-column:1/-1}
+ .calendar4-controls label{min-width:0}
+ .calendar4-layout{gap:20px}
+ .calendar4-day{min-height:56px;padding:4px 2px}
+ .calendar4-solar{font-size:20px}
+ .calendar4-lunar{font-size:13px;overflow-wrap:anywhere}
+ .calendar4-event,.calendar4-leap,.calendar4-today-label{font-size:10px}
+ .calendar4-notes{padding:12px}
+ .calendar4-panel.ui-card{padding:var(--card-padding)}
+ .calendar4-panel h2{font-size:24px}
+}
+@media print{
+ @page{size:A4 landscape;margin:10mm}
+ html:has(.calendar4),body:has(.calendar4),.app-content:has(.calendar4){margin:0!important;padding:0!important;min-height:0!important;height:auto!important;display:block!important}
+ .calendar4.site-wrap{width:100%!important;max-width:none!important;padding:0!important;margin:0!important;min-height:0!important}
+ .calendar4-header,.calendar4-intro,.calendar4-controls,.calendar4-links{display:none!important}
+ .calendar4-layout{display:grid!important;grid-template-columns:minmax(0,1fr) 78mm!important;gap:4mm!important;align-items:start;break-inside:auto}
+ .calendar4-board.ui-card,.calendar4-panel.ui-card{break-inside:avoid;box-shadow:none!important;margin:0!important}
+ .calendar4-print-heading{position:static;width:auto;height:auto;overflow:visible;clip-path:none;font-size:16pt;margin:0;padding:2mm 3mm}
+ .calendar4-grid{gap:.25mm}
+ .calendar4-week{font-size:8pt;padding:1.5mm 0}
+ .calendar4-day{min-height:18mm;padding:1mm;gap:.5mm}
+ .calendar4-solar{font-size:12pt}.calendar4-lunar{font-size:8pt}.calendar4-event,.calendar4-leap,.calendar4-today-label{font-size:7pt}
+ .calendar4-day.selected{background:var(--card)!important;color:var(--ink)!important;box-shadow:inset 0 0 0 1.5pt var(--accent)}
+ .calendar4-day.selected span{color:var(--ink)!important}
+ .calendar4-panel.ui-card{padding:3mm}
+ .calendar4-panel h2{font-size:15pt}
+ .calendar4-panel .ui-eyebrow,.calendar4-facts,.calendar4-subtitle{font-size:8.5pt}
+ .calendar4-facts{gap:2mm;margin:3mm 0;padding-top:3mm}
+ .calendar4-facts dt small,.calendar4-source,.calendar4-note,.calendar4-marks,.calendar4-notes{font-size:7.5pt;line-height:1.25}
+ .calendar4-source,.calendar4-note,.calendar4-marks{margin:2mm 0}
+ .calendar4-notes{padding:2mm 3mm}
+}

@@ -111,7 +111,7 @@ try{
   await page.getByLabel('Chọn hồ sơ người B').selectOption({label:await page.getByLabel('Chọn hồ sơ người B').locator('option').nth(1).textContent()});
   await page.getByRole('button',{name:'Đối chiếu hai lá số'}).click();await page.getByRole('heading',{name:'Báo cáo đối chiếu 12 cung'}).waitFor();await noOverflow();
   await page.screenshot({path:'qa-artifacts/v4/hop-ban-'+width+'.png',fullPage:true});
-  await open('/lich-van-nien');await page.getByLabel('Năm tra cứu').selectOption('2004');await page.getByLabel('Tháng tra cứu').selectOption('2');await page.getByRole('button',{name:'4/2/2004',exact:true}).click();await page.getByText(/Lập xuân · 18:5/).waitFor();await noOverflow();
+  await open('/lich-van-nien');await page.getByLabel('Năm tra cứu').selectOption('2004');await page.getByLabel('Tháng tra cứu').selectOption('2');await page.locator('button[data-date="2004-02-04"]').click();await page.locator('.calendar4-facts dd').last().getByText(/Lập xuân · 18:5/).waitFor();await noOverflow();
   await page.emulateMedia({media:'print'});assert.equal(await page.getByRole('button',{name:'In lịch tháng A4'}).isVisible(),false);await page.pdf({path:'qa-artifacts/v4/calendar-'+width+'.pdf',preferCSSPageSize:true,printBackground:true});await page.emulateMedia({media:'screen'});
   await open('/thien-ky/que/1');await page.getByRole('heading',{name:'Quái từ',exact:true}).waitFor();await page.getByRole('link',{name:'Quẻ sau',exact:true}).click();await page.getByRole('heading',{name:'Thuần Khôn',exact:true}).waitFor();
   await page.screenshot({path:'qa-artifacts/v4/hex-'+width+'.png',fullPage:true});
