@@ -21,7 +21,7 @@ try{
    await open(route);
    if(phase==='after')await overflow(route);
    await page.screenshot({path:dir+'/'+slug+'-'+width+'.png',fullPage:true,animations:'disabled'});
-   if(phase==='before')continue;
+   if(phase==='before'){results.push({width,route,phase,status:'captured'});continue;}
    assert.equal(await page.locator('h1').count(),1,'single h1 '+route);
    assert.ok(await page.locator('nav[aria-label="Đường dẫn trang"]').count()>=1,'breadcrumb '+route);
    if(['/thien-ky','/dia-ky','/nhan-ky'].includes(route)){
