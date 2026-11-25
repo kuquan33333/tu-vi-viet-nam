@@ -2,9 +2,9 @@
 :root {
  --paper:#F6F2E9; --card:#FFFDF8; --ink:#1C2230; --muted:#5B6270;
  --dim:#6B717D; --line:#DDD4C2; --field:#8C8472; --accent:#9E2F26;
- --white:#FFFFFF; --on-dark:#F6F2E9; --on-dark-muted:#D9D4C7;
- --accent-soft:color-mix(in srgb,var(--accent) 7%,var(--card));
- --accent-border:color-mix(in srgb,var(--accent) 35%,var(--line));
+ --white:#FFFFFF; --overlay:rgba(28,34,48,.78); --on-dark:#F6F2E9; --on-dark-muted:#D9D4C7;
+ --accent-soft:#F8EFE9;
+ --accent-border:#C79A8B;
  --font:var(--font-be-vietnam),system-ui,sans-serif;
  --font-serif:var(--font-noto-serif),Georgia,serif;
  --font-mono:ui-monospace,SFMono-Regular,Menlo,monospace;
@@ -23,10 +23,10 @@
  --sh-xs:none; --sh-sm:none; --sh-md:none; --sh-lg:none;
  /* Existing semantic chart colors, not UI accents. Preserve meaning and labels. */
  --lu:#2D7A4A; --quan:#1A56A8; --ke:#8A7018; --ji:#A83228;
- --lu-bg:color-mix(in srgb,var(--lu) 8%,var(--card)); --lu-border:color-mix(in srgb,var(--lu) 25%,var(--line));
- --quan-bg:color-mix(in srgb,var(--quan) 8%,var(--card)); --quan-border:color-mix(in srgb,var(--quan) 25%,var(--line));
- --ke-bg:color-mix(in srgb,var(--ke) 8%,var(--card)); --ke-border:color-mix(in srgb,var(--ke) 25%,var(--line));
- --ji-bg:color-mix(in srgb,var(--ji) 8%,var(--card)); --ji-border:color-mix(in srgb,var(--ji) 25%,var(--line));
+ --lu-bg:#EEF3EA; --lu-border:#B1BEA4;
+ --quan-bg:#EDF0F2; --quan-border:#ACB5BC;
+ --ke-bg:#F6F2E6; --ke-border:#C8BB98;
+ --ji-bg:#F8EDE7; --ji-border:#D0AC9C;
  --print-paper:#FFFFFF; --print-ink:#111111; --print-muted:#333333; --print-dim:#444444; --print-line:#EEEEEE;
  color-scheme:light;
 }

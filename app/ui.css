@@ -69,3 +69,11 @@ a:hover,a:focus-visible{text-decoration:underline;text-underline-offset:3px}
 }
 @media(min-width:640px){.ui-bottom-nav.bottom-nav{display:none}.ui-footer.global-footer{padding-bottom:0}}
 @media print{.ui-header,.ui-footer,.ui-bottom-nav,.breadcrumb,.skip-link{display:none!important}body{padding-bottom:0!important}.app-content{padding:0!important}}
+
+/* Header/footer presentation fixes for previous responsive selectors. */
+.ui-footer.global-footer{margin-bottom:0}
+.ui-header .brand-wordmark,.ui-header .brand-symbol,.ui-bottom-nav svg{flex-shrink:0}
+.study-tab,.study-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.ui-header .desktop-links a:focus-visible,.ui-header .header-profile:focus-visible{outline-offset:2px}
+#nguon-va-giay-phep{scroll-margin-top:calc(var(--header-height) + 16px)}
+@media(max-width:639px){.ui-footer-inner nav a{white-space:normal}.ui-bottom-nav a{font-size:12px}.ui-header .mobile-site-menu{max-height:calc(100dvh - var(--header-height) - var(--tab-height) - env(safe-area-inset-bottom))}}
