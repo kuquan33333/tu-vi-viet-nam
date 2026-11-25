@@ -1,0 +1,53 @@
+name: UI-3 chart form and result QA
+on:
+  pull_request:
+    branches: [revamp-v2]
+permissions:
+  contents: read
+jobs:
+  visual:
+    if: github.head_ref == 'ui/03-chart-form-result'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        phase: [before, after]
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SITE_URL: https://lichvannien-9sv.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ matrix.phase == 'before' && '977ba99fda103d2c1dcfd555b0280197135af9cb' || github.event.pull_request.head.sha }}
+          path: subject
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: subject/package-lock.json
+      - name: Install and build
+        working-directory: subject
+        run: |
+          npm ci --no-audit --no-fund
+          npm run typecheck
+          node scripts/prepare-cloudflare-demo.mjs
+          npm run build
+      - name: Serve export
+        working-directory: subject
+        run: |
+          node scripts/serve-export.mjs > "$RUNNER_TEMP/ui3-server.log" 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/ >/dev/null && break || sleep 1; done
+          curl -fsS http://127.0.0.1:4173/ >/dev/null
+      - name: Capture form and chart QA
+        run: |
+          npm install --prefix "$RUNNER_TEMP/ui3-qa" --ignore-scripts --no-save --no-audit --no-fund playwright@1.51.1 axe-core@4.10.3
+          "$RUNNER_TEMP/ui3-qa/node_modules/.bin/playwright" install chromium
+          PLAYWRIGHT_MODULE="$RUNNER_TEMP/ui3-qa/node_modules/playwright" AXE_SCRIPT="$RUNNER_TEMP/ui3-qa/node_modules/axe-core/axe.min.js" node scripts/capture-ui-3.mjs ${{ matrix.phase }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-3-${{ matrix.phase }}
+          path: qa-artifacts/ui-3-${{ matrix.phase }}
+          if-no-files-found: warn

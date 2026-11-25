@@ -32,6 +32,7 @@ export default function ChartPage(){
  const shareDialog=useRef<HTMLDialogElement>(null);
  const [shareOpen,setShareOpen]=useState(false);
  const [sharing,setSharing]=useState(false);
+ const [shareReady,setShareReady]=useState(false);
  const [shareError,setShareError]=useState('');
  function showDetail(p:Palace,s:Star|null=null){
   trigger.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
@@ -44,7 +45,11 @@ export default function ChartPage(){
   const key=(e:KeyboardEvent)=>{if(e.key==='Escape'&&!shareDialog.current?.open){setDetailOpen(false);setStar(null);requestAnimationFrame(()=>trigger.current?.focus());}};
   window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);
  },[detailOpen]);
- useEffect(()=>{if(shareOpen&&!shareDialog.current?.open)shareDialog.current?.showModal();},[shareOpen]);
+ useEffect(()=>{if(!shareOpen)return;
+  if(!shareDialog.current?.open)shareDialog.current?.showModal();
+  const root=shareDialog.current;if(!root)return;
+  const sync=()=>setShareReady(Boolean(root.querySelector('#share-card')));sync();
+  const observer=new MutationObserver(sync);observer.observe(root,{childList:true,subtree:true});return()=>observer.disconnect();},[shareOpen]);
  async function downloadImage(){
   setSharing(true);setShareError('');
   try{const {captureShareCard,downloadDataURL}=await import('@/components/ShareCardCanvas');await document.fonts.ready;const png=await captureShareCard();if(!png)throw new Error('image');downloadDataURL(png,'La-so-tu-vi.png');}
@@ -107,7 +112,7 @@ export default function ChartPage(){
     </div>
     <div className="site-actions" style={{display:'flex',flexWrap:'wrap',gap:7}}>
      <button className="action-outline" onClick={save}><Icon name="save"/> Lưu lá số</button>
-     <button className="action-outline" onClick={()=>{setShareError('');setShareOpen(true);}}><Icon name="external"/> Chia sẻ ảnh</button>
+     <button className="action-outline" onClick={()=>{setShareError('');setShareReady(false);setShareOpen(true);}}><Icon name="external"/> Chia sẻ ảnh</button>
      <button className="action-outline" onClick={copy}><Icon name="copy"/> Sao chép</button>
      <button className="action-outline" onClick={()=>window.print()}><Icon name="print"/> In / PDF A4</button>
      <button className="action-primary" onClick={()=>{setChart(null);setPalace(null);setStar(null);setBoardMode(false);setDetailOpen(false);}}><Icon name="reset"/> Lập lại</button>
@@ -158,7 +163,7 @@ export default function ChartPage(){
      <Link href="/library" className="section-link">Tra cứu cổ thư liên quan <Icon name="arrow" size={16}/></Link>
     </aside>
    </div>
-   {shareOpen&&<dialog ref={shareDialog} className="chart3-share" aria-labelledby="chart3-share-title" onClose={()=>setShareOpen(false)}><h2 id="chart3-share-title">Chia sẻ ảnh lá số</h2><p>Ảnh chứa thông tin ngày giờ sinh; chỉ chia sẻ nếu bạn muốn. Ảnh được tạo trên thiết bị.</p><div className="chart3-share-scroll"><ShareCard chart={chart} birth={{year:String(chart.birthInfo.origInput?.year??chart.birthInfo.year),month:String(chart.birthInfo.origInput?.month??chart.birthInfo.month),day:String(chart.birthInfo.origInput?.day??chart.birthInfo.day),hour:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour):"--",minute:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockMinute):"--",gender:chart.birthInfo.gender,city:chart.birthInfo.city}}/></div>{shareError&&<p role="alert">{shareError}</p>}<div className="chart3-share-actions"><button className="action-primary" onClick={downloadImage} disabled={sharing}>{sharing?"Đang tạo ảnh…":"Tải ảnh PNG"}</button><button className="action-outline" onClick={()=>shareDialog.current?.close()}>Đóng</button></div></dialog>}
+   {shareOpen&&<dialog ref={shareDialog} className="chart3-share" aria-labelledby="chart3-share-title" onClose={()=>setShareOpen(false)}><h2 id="chart3-share-title">Chia sẻ ảnh lá số</h2><p>Ảnh chứa thông tin ngày giờ sinh; chỉ chia sẻ nếu bạn muốn. Ảnh được tạo trên thiết bị.</p><div className="chart3-share-scroll"><ShareCard chart={chart} birth={{year:String(chart.birthInfo.origInput?.year??chart.birthInfo.year),month:String(chart.birthInfo.origInput?.month??chart.birthInfo.month),day:String(chart.birthInfo.origInput?.day??chart.birthInfo.day),hour:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockHour):"--",minute:chart.birthInfo.origInput?String(chart.birthInfo.origInput.clockMinute):"--",gender:chart.birthInfo.gender,city:chart.birthInfo.city}}/></div>{shareError&&<p role="alert">{shareError}</p>}<div className="chart3-share-actions"><button className="action-primary" onClick={downloadImage} disabled={sharing||!shareReady}>{sharing?"Đang tạo ảnh…":"Tải ảnh PNG"}</button><button className="action-outline" onClick={()=>shareDialog.current?.close()}>Đóng</button></div></dialog>}
    <div className="home-note"><strong style={{color:'var(--tx-0)'}}>Quyền riêng tư:</strong> Lá số không được tự động tải lên máy chủ. Khi bạn chọn “Lưu lá số”, dữ liệu sinh được lưu trong bộ nhớ trình duyệt hiện tại và có thể xóa tại mục <Link href="/ho-so">Hồ sơ</Link>.</div>
   </>}
  </main>;

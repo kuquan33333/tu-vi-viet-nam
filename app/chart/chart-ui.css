@@ -60,3 +60,17 @@
  .chart3 .chart3-palace button{min-height:0!important}
  .chart3 .chart3-palace{padding:4px}
 }
+
+.chart3 .chart3-palace-title{font-size:12px;text-transform:uppercase;font-weight:600}
+.chart3 .chart3-branch{font-size:12px;color:var(--muted)}
+.chart3 .chart3-palace [role=button]{min-height:44px;min-width:44px;flex-wrap:wrap}
+.chart3 .chart3-palace .chart3-hua[role=button]{padding:4px;cursor:pointer}
+.chart3 .chart3-other-stars{display:flex;flex-wrap:wrap;gap:4px}
+.chart3 .chart3-palace .chart3-minor-name,.chart3 .chart3-other-stars span{display:inline-flex;align-items:center;flex-wrap:wrap}
+.chart3 .chart3-palace .chart3-minor-name button,.chart3 .chart3-other-stars button{min-width:44px;padding:2px 4px}
+@media print{
+ .chart3 .chart3-palace [role=button],.chart3 .chart3-palace button{min-height:0!important;min-width:0!important;padding:0 2px!important}
+ .chart3 .chart3-palace-title,.chart3 .chart3-branch,.chart3 .chart3-major-name,.chart3 .chart3-brightness,.chart3 .chart3-minor-name,.chart3 .chart3-other-stars,.chart3 .chart3-hua{font-size:8pt!important;line-height:1.15!important}
+ .chart3 .chart3-grid{gap:1px!important}.chart3 .chart3-palace{min-height:0!important}
+ .chart3 .workspace-head,.chart3 .home-note{margin:0 0 8px!important}
+}

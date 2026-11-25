@@ -199,7 +199,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   const genderError=!genderChosen?'Vui lòng chọn giới tính.':'';
   const clockError=!form.unknownTime&&(!form.clockHour||!form.clockMinute||!Number.isInteger(Number(form.clockHour))||Number(form.clockHour)<0||Number(form.clockHour)>23||!Number.isInteger(Number(form.clockMinute))||Number(form.clockMinute)<0||Number(form.clockMinute)>59||!Number.isInteger(Number(form.clockSecond||0))||Number(form.clockSecond||0)<0||Number(form.clockSecond||0)>59)?'Vui lòng nhập giờ, phút và giây hợp lệ.':'';
   const provinceError=!form.province?'Vui lòng chọn nơi sinh.':'';
-  const cityError=form.province&&!form.city?'Vui lòng nhập địa danh nơi sinh.':'';
+  const cityError=!form.city?'Vui lòng nhập địa danh nơi sinh.':'';
   const longitudeError=form.province&&form.city&&(!Number.isFinite(form.longitude)||Math.abs(form.longitude)>180)?'Vui lòng nhập kinh độ hợp lệ.':'';
   const utcError=form.province==='Nước ngoài'&&(!Number.isFinite(form.utcOffsetMinutes)||form.utcOffsetMinutes! < -720||form.utcOffsetMinutes! > 840)?'Vui lòng nhập múi giờ UTC tại thời điểm sinh.':'';
   const dateError=Boolean(formProblem.startsWith('Ngày sinh'))||Object.values(errors).some(Boolean);
@@ -340,7 +340,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
       {/* ── Giới tính ── */}
       <div style={{ marginBottom: '20px' }}>
         <label style={{ display: 'block', fontSize: '11px', color: labelClr, marginBottom: '6px', letterSpacing: '0.05em' }}>Giới tính *</label>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div role="group" aria-label="Giới tính (bắt buộc)" style={{ display: 'flex', gap: '10px' }}>
           {(['male', 'female'] as const).map(g => {
             const active = genderChosen && form.gender === g;
             const isMale = g === 'male';
@@ -455,7 +455,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
         <div style={{ borderRadius: '14px', padding: '12px', background: panelBg, border: `1px solid ${panelBorder}`, opacity: 1, transition: 'opacity 0.2s' }}>
           <BirthClockInput hour={form.clockHour} minute={form.clockMinute} disabled={form.unknownTime} onChange={(h,m)=>setForm({...form,clockHour:h,clockMinute:m})} style={inputStyle} invalid={Boolean(submitAttempted&&clockError)} describedBy={submitAttempted&&clockError?errorId+'-clock':undefined}/>
           {fieldMessage(clockError,'clock')}
-          <details style={{marginTop:8}}><summary>Tùy chọn nâng cao</summary>
+          <details style={{marginTop:8}} open={chartLayout||undefined}><summary>Tùy chọn nâng cao</summary>
           <label>Giây sinh<input type="number" min={0} max={59} disabled={form.unknownTime} value={form.clockSecond||'0'} onChange={e=>setForm({...form,clockSecond:e.target.value})} style={inputStyle}/></label>
           <label style={{display:'block',marginTop:6}}><input type="checkbox" checked={form.trueSolar!==false} onChange={e=>setForm({...form,trueSolar:e.target.checked})}/> Dùng Chân Thái Dương Thời</label>
           <p>Hiệu chỉnh theo kinh độ, múi giờ tại nơi sinh và phương trình thời gian (EoT); tắt để dùng nguyên giờ đồng hồ địa phương, không hiệu chỉnh lịch sử.</p>

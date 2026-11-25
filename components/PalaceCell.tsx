@@ -46,10 +46,11 @@ const SiHuaBadge = ({
       className={clsx(
         'inline-flex items-center px-1 rounded border font-medium ml-1 chart3-hua',
         SIHUA_STYLES[siHua],
-        overlay && 'border-dashed opacity-80',
+        overlay && 'border-dashed',
         onClick && 'cursor-pointer hover:opacity-100',
       )}
       onClick={onClick}
+      {...(onClick?{role:'button',tabIndex:0,onKeyDown:(e:React.KeyboardEvent<HTMLSpanElement>)=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();e.currentTarget.click();}}}:{})}
     >
       {overlay && label && <span className="mr-px">{label==='年'?'Năm':label==='限'?'Hạn':label}</span>}
       {({'禄':'Lộc','权':'Quyền','科':'Khoa','忌':'Kỵ'} as Record<string,string>)[siHua]||siHua}
@@ -103,16 +104,17 @@ export default function PalaceCell({
           'absolute top-1 right-1 text-[9px] font-mono tabular-nums',
           isCurrentDaXian ? 'text-ink' : ''
         )}
-          style={!isCurrentDaXian ? { color: 'var(--t-faint)', opacity: 0.75 } : undefined}
+          style={!isCurrentDaXian ? { color: 'var(--t-faint)', opacity: 1 } : undefined}
         >
           {daXianAge[0]}–{daXianAge[1]}
         </div>
       )}
 
+      <span className="chart3-branch">{BRANCHES[branch]}</span>
       {/* 宫名行 */}
       <div className="flex items-center gap-1 mb-0.5 pr-8">
-        <span className={clsx('text-[10px] font-medium tracking-wide',
-          isMingGong ? 'text-accent' : isShenGong ? 'text-quan' : ''
+        <span className={clsx('chart3-palace-title font-medium tracking-wide',
+          isMingGong || isShenGong ? 'text-accent' : ''
         )}
           style={!isMingGong && !isShenGong ? { color: 'var(--t-faint)' } : undefined}
         >
@@ -132,7 +134,7 @@ export default function PalaceCell({
       {/* 主星 */}
       <div className="flex flex-col gap-0.5 flex-1">
         {majorStars.length === 0 && (
-          <span className="text-[10px] italic" style={{ color: 'var(--t-faint)', opacity: 0.6 }}>Vô chính diệu</span>
+          <span className="text-[10px] italic" style={{ color: 'var(--t-faint)', opacity: 1 }}>Vô chính diệu</span>
         )}
         {majorStars.map((star) => {
           const overlaySiHua = overlayStarSiHua?.[star.name];

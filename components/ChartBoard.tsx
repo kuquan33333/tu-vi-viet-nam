@@ -152,9 +152,9 @@ export default function ChartBoard({ chart, view = 'mingpan', liunianYear = new 
           <div className="text-center space-y-1">
             <div className="text-[9px] tracking-[0.3em] font-semibold" style={{ color: 'var(--t-gold)' }}>TỬ VI ĐẨU SỐ</div>
             <div className="text-[10px] space-y-0.5" style={{ color: 'var(--t-faint)' }}>
-              <div>Mệnh tại <span style={{ color: 'var(--t-gold)', opacity: 0.9, fontWeight: 600 }}>{BRANCHES[chart.mingGongBranch]}</span></div>
-              <div>Thân tại <span className="text-quan font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
-              <div className="text-[9px] font-medium" style={{ color: 'var(--t-gold)', opacity: 0.85 }}>{chart.wuxingJuName}</div>
+              <div>Mệnh tại <span style={{ color: 'var(--t-gold)', fontWeight: 600 }}>{BRANCHES[chart.mingGongBranch]}</span></div>
+              <div>Thân tại <span className="text-accent font-medium">{BRANCHES[chart.shenGongBranch]}</span></div>
+              <div className="text-[9px] font-medium" style={{ color: 'var(--t-gold)', opacity: 1 }}>{chart.wuxingJuName}</div>
             </div>
           </div>
 
