@@ -8,7 +8,7 @@ test('D5/D8: reusable date and clock fields, SVG icon controls and mobile layout
  assert.match(read('components/TermTooltip.tsx'),/<Icon name="info"/);
  assert.match(read('app/chart/page.tsx'),/mobile-palaces/);
  assert.match(read('app/page.tsx'),/generateChart\(/);
- assert.equal((read('app/page.tsx').match(/className="action-primary"/g)||[]).length,1);
+ assert.equal((read('app/page.tsx').match(/<ButtonLink href="\/chart" variant="primary"/g)||[]).length,1);
 });
 test('D10: no remote font or telemetry and static security/cache headers',()=>{
  assert.doesNotMatch(read('app/layout.tsx'),/fonts\.googleapis|<Analytics|<SpeedInsights/);

@@ -102,7 +102,7 @@ try{
   // Do not reload the page: the encrypted vault deliberately relocks on a hard navigation.
   // Exercise the real new shell via client-side navigation from the unlocked profile page.
   await page.locator('.global-header .brand-wordmark').click();
-  await page.getByRole('link',{name:/Đối chiếu hai lá số/}).first().click();
+  await page.locator('main a[href="/hop-ban"]').click();
   await page.waitForURL('**/hop-ban');await page.getByLabel('Chọn hồ sơ người A').selectOption({label:await page.getByLabel('Chọn hồ sơ người A').locator('option').nth(1).textContent()});
   if(width===360)await page.getByRole('button',{name:/Người thứ hai/}).click();
   await page.getByLabel('Chọn hồ sơ người B').selectOption({label:await page.getByLabel('Chọn hồ sơ người B').locator('option').nth(1).textContent()});
