@@ -20,6 +20,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "tsx scripts/render-calendar-data.ts",
     "prebuild": "node scripts/render-brand-assets.mjs && tsx scripts/render-calendar-data.ts",
     "build": "next build --webpack",
     "start": "next start",
