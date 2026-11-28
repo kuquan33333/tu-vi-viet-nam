@@ -40,7 +40,7 @@ export default function HomePage(){
  const sample=generateChart({year:person.year,month:person.month,day:person.day,hour:person.hour,gender:person.gender,name:person.name});
  const date=[person.day,person.month,person.year].map(n=>String(n).padStart(2,'0')).join('/');
  const today=vietnamToday();
- const calendarData=Object.fromEntries([today.year-1,today.year,today.year+1].filter(y=>y>=1900&&y<=2050).map(y=>[y,buildCalendarYear(y)]));
+ const calendarData=Object.fromEntries([today.year-1,today.year].filter(y=>y>=1900&&y<=2050).map(y=>[y,buildCalendarYear(y)]));
  return <main className="home2 home-brand">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteSchema()).replace(/</g,'\\u003c')}}/>
   <section className="home2-hero" aria-labelledby="home2-title">
