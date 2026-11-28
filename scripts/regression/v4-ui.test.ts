@@ -25,3 +25,13 @@ test('NT-00.2: chart defers historical birthplace datasets until location intera
  assert.doesNotMatch(form,/import \{[^}]*birthLocationsForProvince[^}]*\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
  assert.doesNotMatch(form,/import \{[^}]*searchBirthplaces[^}]*\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
 });
+
+test('NT-00.2: chart Lighthouse performance gate requires three independent passing runs',()=>{
+ const runner=read('scripts/nt-qa-extended.sh');
+ const gate=read('scripts/check-seo-lighthouse.mjs');
+ assert.match(runner,/lighthouse-chart-repeat-\$repeat/);
+ assert.match(runner,/chart-repeat-\$repeat\.json/);
+ assert.match(gate,/chart-repeat-2/);
+ assert.match(gate,/chart-repeat-3/);
+ assert.match(gate,/score>=\.85/);
+});
