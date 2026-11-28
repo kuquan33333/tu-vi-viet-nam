@@ -24,18 +24,18 @@
 - The development branch remains separate from production and preview-home work.
 
 ## MediaPipe feasibility and privacy gate
-- Official Web setup documentation supports MediaPipe Tasks in JavaScript/TypeScript with WebAssembly and modern Chrome, Edge, Safari and Firefox browsers. The Face Landmarker documentation describes image, decoded video and live-feed input, 478 normalized 3D landmarks, 52 blendshape coefficients and optional transformation matrices.
+- Official Web setup documentation (https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker) supports MediaPipe Tasks in JavaScript/TypeScript with WebAssembly and modern Chrome, Edge, Safari and Firefox browsers. The Face Landmarker documentation describes image, decoded video and live-feed input, 478 normalized 3D landmarks, 52 blendshape coefficients and optional transformation matrices.
 - `@mediapipe/tasks-vision` npm currently lists version 1.2.3 and Apache-2.0. This is not sufficient by itself to close licensing for every model bundle or compiled WASM artifact; retain the exact package/model notices and hashes before redistribution.
-- Critical privacy finding: Google's current MediaPipe Tasks Privacy Notice says input images/video are processed on-device and not sent to Google, but also says the Tasks APIs send performance/utilization metrics to Google. This conflicts with the project requirement of no analytics or third-party runtime requests unless the current Web SDK can be shown to operate with all outbound telemetry blocked without breaking inference. No opt-out mechanism is assumed.
+- Critical privacy finding: Google's current MediaPipe Tasks Privacy Notice (https://developers.google.com/edge/mediapipe/solutions/privacy) says input images/video are processed on-device and not sent to Google, but also says the Tasks APIs send performance/utilization metrics to Google. This conflicts with the project requirement of no analytics or third-party runtime requests unless the current Web SDK can be shown to operate with all outbound telemetry blocked without breaking inference. No opt-out mechanism is assumed.
 - NT-02 is blocked from dependency adoption until Muse verifies actual network requests for the exact pinned Web SDK, model and WASM using browser request capture plus restrictive CSP/network blocking. If telemetry cannot be blocked while retaining supported functionality, select another local model/runtime or request explicit owner approval to change the privacy requirement. Do not silently accept metrics or add a consent banner as a substitute.
-- Face Landmarker provides geometry/expression outputs, not scientific evidence for personality, health, intelligence, morality, identity or destiny. The product must not derive or display such inferences.
+- Face Landmarker provides geometry/expression outputs, not scientific evidence for personality, health, intelligence, morality, identity or destiny. A 2024 review (https://doi.org/10.1016/j.copsyc.2024.101815) highlights unresolved questions of epistemic validity, practical relevance and social welfare for AI facial inference. The product must not derive or display such inferences.
 
 ## NT-00.2 pending evidence
 - Node 22 exact parity.
 - Browser interactive regression at 360px and 1280px.
 - UI-6 Chromium route, keyboard and axe checks; Firefox and WebKit compatibility.
 - Five-system browser journeys and encoded asset checks.
-- Independent LichTa/Swiss-Ephemeris/Moshier/Astronomy Engine and iztro calendar comparisons.
+- Independent LichTa, Astronomy Engine, Moshier fixture and iztro calendar comparisons.
 - Lighthouse SEO >=95, accessibility >=95, best practices >=95, performance >=85 where the existing gate applies; preserve any failures as evidence rather than lowering thresholds.
 - Read-only live HTTP headers from `https://tuvivietnam.pages.dev`.
 - These checks are pending until Muse provides the NT-00.2 TXT and artifacts.

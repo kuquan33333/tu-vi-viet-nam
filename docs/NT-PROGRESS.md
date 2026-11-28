@@ -10,7 +10,7 @@
 
 ## NT-00
 ### NT-00.1 — baseline build and regression
-- Checkpoint commit: `14910dd8e6d6eade8369728805286043ab896ccd`.
+- Tested commit: `14910dd8e6d6eade8369728805286043ab896ccd`.
 - Muse report: `NT-LINUX-REPORT-NT-00.1-14910dd8e6d6eade8369728805286043ab896ccd-20261128-111435.txt`.
 - Report UTC: 2026-11-28 11:14:35; exact Git HEAD verified; clean working tree.
 - Environment: Linux x86_64, Node v24.22.1, npm 10.9.4.
@@ -20,8 +20,11 @@
 - Not included in NT-00.1: interactive Chromium journeys, full UI-6 keyboard/axe cross-browser checks, independent astronomy/calendar audits, Lighthouse thresholds, and actual Cloudflare edge response headers. Do not infer these passed from static build.
 
 ### NT-00.2 — extended compatibility and production-edge audit
-- Added `scripts/nt-qa-extended.sh`. It creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, and runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks, and a read-only production HTTP header capture.
-- Pending Muse run against the exact commit containing this script. Do not mark NT-00 closed until the Node 22 run and extended checks have a report; record unsupported physical iPhone/iPad and real camera tests as deferred to NT-03/NT-11.
+- QA runner: `scripts/nt-qa-extended.sh`.
+- Latest runner commit: `4ad4fde63e1e389e739e9df48471d2d20be2eaaf`.
+- The runner creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks and a read-only production HTTP header capture.
+- It installs Playwright browsers before launching tests, runs the encoded-asset check after the static server is ready, and exports screenshots/JSON evidence as a separate TAR.GZ bundle. Static server and edge-header logs are also preserved outside the disposable worktree.
+- Status: pending Muse execution. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
 - Static preparation mutates Next config/metadata and removes unsupported dynamic/API routes. The extended script must run only in its disposable worktree.
 
 ## NT-01
@@ -31,4 +34,10 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
-Muse: run `bash scripts/nt-qa-extended.sh 14910dd8e6d6eade8369728805286043ab896ccd` on Linux after syncing the commit that adds the script. Send the complete TXT, screenshots and JSON artifacts to ChatGPT. ChatGPT will review, fix any new failures, close NT-00, then start NT-01.
+Muse: sync `4ad4fde63e1e389e739e9df48471d2d20be2eaaf`, select Node 22, then run:
+
+```bash
+bash scripts/nt-qa-extended.sh 4ad4fde63e1e389e739e9df48471d2d20be2eaaf
+```
+
+Send the complete TXT plus the emitted `NT-ARTIFACTS-*.tar.gz`, `NT-EDGE-HEADERS-*.txt` and `NT-STATIC-SERVER-*.log` to ChatGPT. ChatGPT will review the evidence, fix any failures, close NT-00, then begin NT-01. Do not run GitHub Actions, push, merge or deploy.
