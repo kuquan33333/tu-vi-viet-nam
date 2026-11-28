@@ -18,7 +18,7 @@ test('D10: no remote font or telemetry and static security/cache headers',()=>{
 
 test('NT-00.2: chart defers historical birthplace datasets until location interaction',()=>{
  const form=read('components/BirthForm.tsx');
- assert.match(form,/import type \{BirthRegion\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
+ assert.match(form,/import type \{BirthRegion,BirthLocation\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
  assert.match(form,/import\('@\/lib\/ziwei\/legacy-birthplaces'\)/);
  assert.match(form,/legacyPlaces\?\.birthLocationsForProvince/);
  assert.match(form,/legacyPlaces\?\.searchBirthplaces/);
