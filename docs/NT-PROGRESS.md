@@ -41,7 +41,8 @@
 - Latest runner commit: `241977d155329cc6f86f57b81be5e95bcadc72d9`.
 - The runner creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks and a read-only production HTTP header capture.
 - It installs Playwright browsers before launching tests, runs the encoded-asset check after the static server is ready, and exports screenshots/JSON evidence as a separate TAR.GZ bundle. Static server and edge-header logs are also preserved outside the disposable worktree.
-- Status: NOT RUN as of the 19:06:47 GMT+7 baseline repeat; pending Muse execution on Node 22. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
+- Status: FIRST RUN FAIL at 2026-11-28 12:08:07 UTC (19:08:07 GMT+7); four gates failed. Report: `NT-LINUX-REPORT-NT-00.2-b1d44db0b4188fda44f0040d4ffd87ef2efbacad-20261128-120807.txt`. Node v22.23.5 / npm 10.9.9. Do not mark NT-00 closed until the complete extended suite passes on a remediation SHA. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
+- Root causes and remediation are recorded in `NT-AUDIT.md`: token audit reads the tracked Git object after static export; Firefox/WebKit tests use real keyboard Tab focus; mobile header LCP background is CSS-only; Footer and chart result-only modules are moved out of the initial client bundle. No test threshold was lowered.
 - Static preparation mutates Next config/metadata and removes unsupported dynamic/API routes. The extended script must run only in its disposable worktree.
 
 ## NT-01
@@ -51,6 +52,7 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
+- **NT-00.2 remains the only active checkpoint.** Muse must fetch the remediation commit, verify exact HEAD and clean worktree, use Node 22, then rerun the complete extended QA. Do not run NT-00.1 again and do not begin NT-00.3/NT-01.
 - **Coordinator routing rule:** NT-00.1 is accepted on Node 24 and must not be run again solely because documentation/QA evidence commits advance HEAD. Dispatch the pending checkpoint named in Current next action, not the last completed checkpoint. For the next run use only `scripts/nt-qa-extended.sh` under Node 22. If Node 22 or required browser/system dependencies cannot be prepared, report BLOCKED with actual error; do not substitute Node 24 baseline. A docs-only evidence commit does not itself request another QA run. Preserve exact tested SHA in every report.
 
 Muse: select Node 22 first (for example, `nvm use 22` if installed), check that port 4173 is free and Playwright system dependencies can be installed with authorized privileges, then fetch the latest branch head and run NT-00.2 against that exact SHA. Do not run another NT-00.1-only pass. This instruction remains active across documentation-only commits.

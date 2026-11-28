@@ -3,7 +3,7 @@
 @media screen and (max-width:1099px){
  :root{--pc-gold-outer:#b38443;--pc-gold-inner:#d1a76a;--header-height:76px}
  html,body,.ui-home .home-brand{background-color:#fbf1dd;background-image:url('/brand/paper-pc.svg')}
- header.brand-header.ui-header.global-header{background:#fff9ee url('/brand/paper-pc.svg');border-bottom:1px solid var(--brand-gold-line);box-shadow:0 1px 3px rgba(105,66,23,.10)}
+ header.brand-header.ui-header.global-header{background:radial-gradient(ellipse at 18% 50%,rgba(179,132,67,.045),transparent 70%),#fff9ee;border-bottom:1px solid var(--brand-gold-line);box-shadow:0 1px 3px rgba(105,66,23,.10)}
  header.brand-header .header-inner{width:calc(100% - 32px)!important;max-width:100%;gap:12px;height:100%;min-height:0;padding:0!important}
  header.brand-header .brand-wordmark{display:inline-flex;min-width:0;max-width:100%;align-items:center;flex-shrink:1;text-decoration:none}
  header.brand-header .brand-mark{gap:8px;max-width:100%;min-width:0}

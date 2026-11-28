@@ -11,6 +11,6 @@ const contrasts=pairs.map(([fg,bg])=>({fg,bg,ratio:ratio(fg,bg),minimum:4.5,pass
 contrasts.push({fg:'dim',bg:'paper',ratio:ratio('dim','paper'),minimum:4.5,pass:ratio('dim','paper')>=4.5,note:'Known token pair not used for small outside-month labels; use muted instead.'});
 writeFileSync(dir+'/contrast.json',JSON.stringify(contrasts,null,2));
 const files=execFileSync('git',['ls-files','app','components'],{encoding:'utf8'}).trim().split('\n').filter(p=>/\.(tsx|ts|css)$/.test(p)&&p!=='app/tokens.css');
-const residual=files.flatMap(file=>readFileSync(file,'utf8').split('\n').flatMap((line,i)=>{const colors=line.match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g)||[],glyphs=line.match(/[☷☯⊕✺⌖✳☰☾✦◇⌂▤◷∞↗]/gu)||[],gradient=/(?:linear|radial)-gradient\(/.test(line);return colors.length||glyphs.length||gradient?[{file,line:i+1,colors,glyphs,gradient}]:[];}));
+const residual=files.flatMap(file=>execFileSync('git',['show',`HEAD:${file}`],{encoding:'utf8'}).split('\n').flatMap((line,i)=>{const colors=line.match(/#[0-9a-fA-F]{3,8}\b|rgba?\([^)]*\)/g)||[],glyphs=line.match(/[☷☯⊕✺⌖✳☰☾✦◇⌂▤◷∞↗]/gu)||[],gradient=/(?:linear|radial)-gradient\(/.test(line);return colors.length||glyphs.length||gradient?[{file,line:i+1,colors,glyphs,gradient}]:[];}));
 writeFileSync(dir+'/residual.json',JSON.stringify(residual,null,2));console.log('Residual candidates (manual classification required):',residual.length);
 assert.ok(contrasts.slice(0,-1).every(x=>x.pass),'Token contrast regression');

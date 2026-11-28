@@ -48,7 +48,17 @@
 - NT-02 is blocked from dependency adoption until Muse verifies actual network requests for the exact pinned Web SDK, model and WASM using browser request capture plus restrictive CSP/network blocking. If telemetry cannot be blocked while retaining supported functionality, select another local model/runtime or request explicit owner approval to change the privacy requirement. Do not silently accept metrics or add a consent banner as a substitute.
 - Face Landmarker provides geometry/expression outputs, not scientific evidence for personality, health, intelligence, morality, identity or destiny. A 2024 review (https://doi.org/10.1016/j.copsyc.2024.101815) highlights unresolved questions of epistemic validity, practical relevance and social welfare for AI facial inference. The product must not derive or display such inferences.
 
-## NT-00.2 pending evidence
+## NT-00.2 — first extended Linux QA (FAIL) — 2026-11-28
+- Tested SHA: `b1d44db0b4188fda44f0040d4ffd87ef2efbacad`; report confirms exact HEAD and clean worktree. The current development branch then advanced to `0e68f123cdb8089443a5a0acf946f9902c550820`, whose sole parent is the tested SHA and whose only changes are the two NT documentation files. Fixes are based on that current HEAD.
+- Report: `NT-LINUX-REPORT-NT-00.2-b1d44db0b4188fda44f0040d4ffd87ef2efbacad-20261128-120807.txt`; UTC 2026-11-28T12:08:07Z; Linux x86_64, Node v22.23.5, npm 10.9.9.
+- Overall: `OVERALL_EXIT=1`. Exactly four failing gates: `ui6-token-audit`, `ui6-firefox`, `ui6-webkit`, `lighthouse-gates`. Typecheck, npm regression, strict audit 12/12, Triad, Revamp, builds, independent astronomy/calendar checks, Chromium UI-6 shards, five-system journeys, static assets and live production-edge header capture passed as reported. The production request was read-only; no deployment occurred.
+- Token audit root cause: `scripts/prepare-cloudflare-demo.mjs` removes `app/api` from the disposable static-export worktree. `git ls-files` still lists the tracked API source, but `readFileSync` then fails with ENOENT. The audit now reads tracked source from `git show HEAD:<path>`, independent of whether static preparation removed its working-tree copy.
+- Firefox and WebKit root cause: `capture-ui-6.mjs` called Playwright `.focus()` directly and then asserted a `:focus-visible` outline. Programmatic focus does not reliably activate keyboard modality in Firefox/WebKit. The gate now blurs and navigates with actual Tab key presses, retaining the visible-outline and no-underline assertions.
+- Lighthouse mobile results: chart performance 0.75 (LCP 3.77s, TBT 505ms); calendar performance 0.83 (LCP 3.62s, TBT 279ms). SEO, accessibility and best-practices were 100; CLS was below 0.1. LCP discovery identifies the mobile header background `/brand/paper-pc.svg` as the LCP candidate, discovered only through render-blocking CSS. The mobile header now uses a CSS-only parchment gradient; page and footer paper artwork remain.
+- Remediation on current development HEAD: render the shared Footer as a server-component slot rather than importing it into the client AppChrome graph; defer chart-only star-reading descriptions and profile-storage code until the result/action requires them; remove the mobile header's external background image; correct the two QA harness assumptions above. No Lighthouse threshold or test scope was relaxed.
+- NT-00.2 remains OPEN and FAIL pending a complete rerun on the remediation commit. Do not start NT-00.3 or NT-01 until the full extended runner passes and the evidence is reviewed. Physical iPhone/iPad camera tests remain deferred to NT-03/NT-11.
+
+## NT-00.2 revalidation gates
 - Node 22 exact parity.
 - Browser interactive regression at 360px and 1280px.
 - UI-6 Chromium route, keyboard and axe checks; Firefox and WebKit compatibility.
@@ -56,7 +66,8 @@
 - Independent LichTa, Astronomy Engine, Moshier fixture and iztro calendar comparisons.
 - Lighthouse SEO >=95, accessibility >=95, best practices >=95, performance >=85 where the existing gate applies; preserve any failures as evidence rather than lowering thresholds.
 - Read-only live HTTP headers from `https://tuvivietnam.pages.dev`.
-- These checks are pending until Muse provides the NT-00.2 TXT and artifacts.
+- Re-run the complete `scripts/nt-qa-extended.sh` on the remediation SHA under Node 22. Keep performance >=85, SEO/accessibility/best-practices >=95, CLS <0.1, and Firefox/WebKit focus checks enabled. Review all TXT, TAR.GZ, edge headers and server log before closing NT-00.
+- No deployment, production mutation, merge, or GitHub Actions run is authorized.
 
 ## NT-01 source and editorial guardrails
 - `神相全编` is a composite historical compilation. Digital catalogues attribute it to Chen Tuan with Yuan Zhongche's corrections, while the preface describes collecting several traditions and warns against rigidly treating physiognomic claims as certain. Do not present it as a single uncontested author's work.

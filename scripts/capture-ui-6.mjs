@@ -150,7 +150,9 @@ try{
      const active=page.locator('.desktop-links a[aria-current=page]');
      assert.equal(await active.count(),1);
      assert.ok(await active.evaluate(e=>parseFloat(getComputedStyle(e).borderBottomWidth)>=2&&getComputedStyle(e).borderBottomStyle==='solid'&&getComputedStyle(e).borderBottomColor!=='rgba(0, 0, 0, 0)'),'desktop active indicator retained');
-     await active.focus();assert.ok(await active.evaluate(e=>getComputedStyle(e).outlineStyle!=='none'&&!getComputedStyle(e).textDecorationLine.includes('underline')),'focus without underline');
+     await page.evaluate(()=>{if(document.activeElement instanceof HTMLElement)document.activeElement.blur()});
+     await tabTo(page,'.desktop-links a[aria-current=page]');
+     assert.ok(await active.evaluate(e=>getComputedStyle(e).outlineStyle!=='none'&&!getComputedStyle(e).textDecorationLine.includes('underline')),'keyboard focus without underline');
     }else if(width<640){
      const active=page.locator('.ui-bottom-nav a[aria-current=page]');
      assert.equal(await active.count(),1);

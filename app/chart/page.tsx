@@ -13,14 +13,20 @@ import type {TimeView} from '@/components/TimeNav';
 const TimeNav=dynamic(()=>import('@/components/TimeNav'));
 
 import {uncertainBirthOptions} from '@/lib/ziwei/share';
-import {STAR_DESCRIPTIONS,BRANCHES} from '@/lib/ziwei/constants';
-import {chartLabel,getPalaceFact,getStudyReading,READING_NOTICE} from '@/lib/ziwei/client-reading';
-import {saveProfiles,takeQueuedProfile} from '@/lib/ziwei/profile-storage';
 import type {BirthInfo,ZiweiChart,Palace,Star} from '@/lib/ziwei/types';
-
+const BRANCHES:readonly string[]=['Tý','Sửu','Dần','Mão','Thìn','Tỵ','Ngọ','Mùi','Thân','Dậu','Tuất','Hợi'];
+const READING_NOTICE='Đây là cách trình bày dữ liệu lá số theo học thuyết Tử Vi truyền thống; không có cơ sở để xác định mức độ tương hợp hay tiên đoán chắc chắn sự kiện đời sống.';
+type ReadingBundle={
+ getStudyReading:typeof import('@/lib/ziwei/client-reading').getStudyReading;
+ STAR_DESCRIPTIONS:typeof import('@/lib/ziwei/constants').STAR_DESCRIPTIONS;
+};
+function chartLabel(birth:BirthInfo){
+ return birth.name?.trim()||'Lá số '+String(birth.day).padStart(2,'0')+'/'+String(birth.month).padStart(2,'0')+'/'+birth.year;
+}
 export default function ChartPage(){
  const [options,setOptions]=useState<ZiweiChart[]>([]);
  const [chart,setChart]=useState<ZiweiChart|null>(null);
+ const [reading,setReading]=useState<ReadingBundle|null>(null);
  const resultHeading=useRef<HTMLHeadingElement>(null);
  const printQueued=useRef(false);
  useEffect(()=>{
@@ -44,6 +50,19 @@ export default function ChartPage(){
  const [sharing,setSharing]=useState(false);
  const [shareReady,setShareReady]=useState(false);
  const [shareError,setShareError]=useState('');
+ useEffect(()=>{
+  if(!chart){setReading(null);return;}
+  let active=true;
+  void Promise.all([
+   import('@/lib/ziwei/client-reading'),
+   import('@/lib/ziwei/constants'),
+  ]).then(([module,constants])=>{
+   if(active)setReading({getStudyReading:module.getStudyReading,STAR_DESCRIPTIONS:constants.STAR_DESCRIPTIONS});
+  }).catch(()=>{
+   if(active)setFeedback('Không thể tải nội dung tra cứu. Vui lòng tải lại trang.');
+  });
+  return()=>{active=false};
+ },[chart]);
  function showDetail(p:Palace,s:Star|null=null){
   trigger.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
   setPalace(p);setStar(s);setDetailOpen(true);
@@ -67,9 +86,20 @@ export default function ChartPage(){
   finally{setSharing(false);}
  }
  useEffect(()=>{
-  const queued=takeQueuedProfile();if(!queued)return;
-  printQueued.current=new URLSearchParams(window.location.search).get('print')==='1';
-  void import('@/lib/ziwei/algorithm').then(({generateChart})=>{const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);}).catch(()=>setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử nhập lại.'));
+  let hasQueued=false;
+  try{hasQueued=typeof sessionStorage!=='undefined'&&Boolean(sessionStorage.getItem('tuvivn.open-profile.v2'));}catch{return;}
+  if(!hasQueued)return;
+  let active=true;
+  void import('@/lib/ziwei/profile-storage').then(({takeQueuedProfile})=>{
+   if(!active)return;
+   const queued=takeQueuedProfile();if(!queued)return;
+   printQueued.current=new URLSearchParams(window.location.search).get('print')==='1';
+   void import('@/lib/ziwei/algorithm').then(({generateChart})=>{
+    const next=generateChart({...queued.birth,calendarVersion:queued.birth.calendarVersion??'legacy-cn'});
+    setChart(next);setPalace(next.palaces.find(p=>p.branch===next.mingGongBranch)||null);
+   }).catch(()=>setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử lại.'));
+  }).catch(()=>{if(active)setFeedback('Không thể mở hồ sơ đã lưu, vui lòng thử lại.')});
+  return()=>{active=false};
  },[]);
  async function onUncertain(form:BirthFormState){try{const {generateChart}=await import('@/lib/ziwei/algorithm');setOptions(uncertainBirthOptions(form).map(b=>generateChart(b)));setFeedback('');}catch{setFeedback('Không thể tạo các phương án; kiểm tra ngày và nơi sinh.');}}
  async function onGenerated(birth:BirthInfo){
@@ -84,7 +114,7 @@ export default function ChartPage(){
  }
  async function save(){
   if(!chart)return;
-  try {await saveProfiles([chart.birthInfo]);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
+  try {const {saveProfiles}=await import('@/lib/ziwei/profile-storage');await saveProfiles([chart.birthInfo]);setFeedback('Đã lưu hồ sơ trên thiết bị này. Mở mục Hồ sơ để xem lại.');}
   catch(e) {setFeedback(e instanceof Error?e.message:'Không lưu được hồ sơ.');}
  }
  async function copy(){
@@ -95,7 +125,8 @@ export default function ChartPage(){
   catch{setFeedback('Trình duyệt không hỗ trợ sao chép. Bạn có thể sử dụng chức năng in.');}
  }
  const shown=chart?(palace||chart.palaces.find(p=>p.branch===chart.mingGongBranch)||null):null;
- const study=chart&&shown?getStudyReading(chart,shown):null;
+ const study=chart&&shown&&reading?reading.getStudyReading(chart,shown):null;
+ const starDescription=star&&reading?reading.STAR_DESCRIPTIONS[star.name]:undefined;
  return <main className="site-wrap page-content chart3" style={{minHeight:'70dvh'}}>
   {!chart?<div className="chart3-form-view">
    <div className="tool-hero">
@@ -147,13 +178,13 @@ export default function ChartPage(){
     <aside className={"workspace-surface workspace-aside reading-panel chart3-detail"+(detailOpen?" is-open":"")} aria-label="Chi tiết cung và sao">
      <button ref={detailClose} type="button" className="action-outline chart3-close" onClick={closeDetail}><Icon name="close"/> Đóng chi tiết</button>
      <div className="reading-head"><Icon name="tools" size={24}/><div><div className="eyebrow">TRA CỨU CÓ CĂN CỨ</div><h2>{star?starLabel(star.name):(shown?.name||'Tổng quan')}</h2></div></div>
-     {star?<>
+     {!reading?<p role="status">Đang tải nội dung tra cứu…</p>:star?<>
       <div className="reading-pills"><span>{star.type==='major'?'Chính tinh':'Phụ tinh'}</span>{star.brightnessRaw&&<span>{star.brightnessRaw}</span>}{star.siHua&&<span>Hóa {star.siHua}</span>}</div>
       <h3>Đặc tính trong tư liệu truyền thống</h3>
-      {STAR_DESCRIPTIONS[star.name]?<>
-       <p><strong>Từ khóa:</strong> {STAR_DESCRIPTIONS[star.name].keywords}</p>
-       <p><strong>Ngũ hành:</strong> {STAR_DESCRIPTIONS[star.name].element}</p>
-       <p><strong>Tính chất ghi chép:</strong> {STAR_DESCRIPTIONS[star.name].nature}</p>
+      {starDescription?<>
+       <p><strong>Từ khóa:</strong> {starDescription.keywords}</p>
+       <p><strong>Ngũ hành:</strong> {starDescription.element}</p>
+       <p><strong>Tính chất ghi chép:</strong> {starDescription.nature}</p>
       </>:<p>Chưa có nội dung đã kiểm duyệt cho sao này. Có thể xem tên sao và vị trí trên lá số.</p>}
       <button className="action-outline" onClick={()=>setStar(null)} style={{marginTop:5}}><span className="inline-flex rotate-180"><Icon name="arrow" size={16}/></span> Xem lại cung {shown?.name}</button>
      </>:study?<>
