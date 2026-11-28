@@ -20,3 +20,12 @@ for(const route of ['home','chart','lich-van-nien']){
 }
 
 assert.deepEqual(misses,[],'Accessibility/performance/best-practices/CLS gates');
+
+const chartRuns=['chart','chart-repeat-2','chart-repeat-3'];
+for(const run of chartRuns){
+ const report=JSON.parse(fs.readFileSync('qa-artifacts/lighthouse/'+run+'.json','utf8'));
+ const score=report.categories?.performance?.score;
+ assert.equal(typeof score,'number',run+' no performance score');
+ console.log(run,'performance',Math.round(score*100));
+ assert.ok(score>=.85,run+' performance below 85');
+}
