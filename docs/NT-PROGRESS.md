@@ -28,12 +28,20 @@
 - GitHub comparison against `14910dd8e6d6eade8369728805286043ab896ccd`: 9 commits ahead, 0 behind; only `docs/NT-AUDIT.md`, `docs/NT-MASTER-PLAN.md`, `docs/NT-PROGRESS.md` and `scripts/nt-qa-extended.sh` changed. No product code changed. The mktemp suffix fix `241977d155329cc6f86f57b81be5e95bcadc72d9` affected the extended runner, not the baseline runner.
 - NT-00.1 remains PASS on Node 24, with zero new failures. Node 22 parity and all NT-00.2 extended gates are NOT RUN in this report. No third baseline-only run is required; proceed directly to NT-00.2 on Node 22 after preflight.
 
+### NT-00.1 — third baseline confirmation (PASS)
+- Tested exact SHA: `b1d44db0b4188fda44f0040d4ffd87ef2efbacad`; matching HEAD and clean worktree.
+- Muse report: `NT-LINUX-REPORT-NT-00.1-b1d44db0b4188fda44f0040d4ffd87ef2efbacad-20261128-120647.txt`; start 2026-11-28T12:06:47Z (19:06:47 GMT+7).
+- Linux 7.0.0-44-generic x86_64, Node v24.22.1, npm 10.9.4. npm ci installed 184 packages, deprecation warning for node-domexception only.
+- Complete report reviewed: 49/49 EXIT markers zero, 34/34 individual regression files, strict audit 12/12, npm test/typecheck/Triad/Revamp PASS; native build 109/109 pages, static build 107/107 pages, metadata/SEO/redirect/sitemap/robots/OG 103 routes PASS; OVERALL_EXIT=0, zero new failures.
+- GitHub compare 6ae15f66...b1d44db0 confirms only NT-PROGRESS.md and NT-AUDIT.md changed. Product and QA runner unchanged.
+- Extended browser/astronomy/calendar and physical camera explicitly NOT RUN. No Node 22 parity, Lighthouse or live edge evidence. NT-00.2 remains pending.
+
 ### NT-00.2 — extended compatibility and production-edge audit
 - QA runner: `scripts/nt-qa-extended.sh`.
 - Latest runner commit: `241977d155329cc6f86f57b81be5e95bcadc72d9`.
 - The runner creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks and a read-only production HTTP header capture.
 - It installs Playwright browsers before launching tests, runs the encoded-asset check after the static server is ready, and exports screenshots/JSON evidence as a separate TAR.GZ bundle. Static server and edge-header logs are also preserved outside the disposable worktree.
-- Status: NOT RUN as of the 18:56:17 GMT+7 baseline repeat; pending Muse execution on Node 22. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
+- Status: NOT RUN as of the 19:06:47 GMT+7 baseline repeat; pending Muse execution on Node 22. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
 - Static preparation mutates Next config/metadata and removes unsupported dynamic/API routes. The extended script must run only in its disposable worktree.
 
 ## NT-01
@@ -43,7 +51,9 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
-Muse: select Node 22 first (for example, `nvm use 22` if installed), check that port 4173 is free and Playwright system dependencies can be installed with authorized privileges, then fetch the latest branch head and run NT-00.2 against that exact SHA. Do not run another NT-00.1-only pass.
+- **Coordinator routing rule:** NT-00.1 is accepted on Node 24 and must not be run again solely because documentation/QA evidence commits advance HEAD. Dispatch the pending checkpoint named in Current next action, not the last completed checkpoint. For the next run use only `scripts/nt-qa-extended.sh` under Node 22. If Node 22 or required browser/system dependencies cannot be prepared, report BLOCKED with actual error; do not substitute Node 24 baseline. A docs-only evidence commit does not itself request another QA run. Preserve exact tested SHA in every report.
+
+Muse: select Node 22 first (for example, `nvm use 22` if installed), check that port 4173 is free and Playwright system dependencies can be installed with authorized privileges, then fetch the latest branch head and run NT-00.2 against that exact SHA. Do not run another NT-00.1-only pass. This instruction remains active across documentation-only commits.
 
 ```bash
 git fetch origin feature/nhan-tuong-ai

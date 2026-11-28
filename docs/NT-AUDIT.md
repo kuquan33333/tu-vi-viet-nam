@@ -18,6 +18,15 @@
 - This is a baseline repeat, not extended QA. Report explicitly states extended browser/astronomy/calendar, real MediaPipe and physical camera tests NOT RUN. Lighthouse and live edge header evidence are also absent. Node 22 is still untested in this checkpoint. NT-00 remains OPEN; NT-00.2 is the next required gate.
 - Before running NT-00.2: use Node 22, validate shell syntax, ensure localhost port 4173 is unused (avoid accidentally testing another server), and make sure Playwright system dependencies can be installed with authorized privileges. Do not weaken gates or bypass environment blockers; report them separately.
 
+## NT-00.1 third baseline evidence — 2026-11-28
+- Tested exact SHA: `b1d44db0b4188fda44f0040d4ffd87ef2efbacad`; matching HEAD and clean worktree.
+- Muse report: `NT-LINUX-REPORT-NT-00.1-b1d44db0b4188fda44f0040d4ffd87ef2efbacad-20261128-120647.txt`; start 2026-11-28T12:06:47Z (19:06:47 GMT+7).
+- Linux 7.0.0-44-generic x86_64, Node v24.22.1, npm 10.9.4. npm ci installed 184 packages, deprecation warning for node-domexception only.
+- Complete report reviewed: 49/49 EXIT markers zero, 34/34 individual regression files, strict audit 12/12, npm test/typecheck/Triad/Revamp PASS; native build 109/109 pages, static build 107/107 pages, metadata/SEO/redirect/sitemap/robots/OG 103 routes PASS; OVERALL_EXIT=0, zero new failures.
+- GitHub compare 6ae15f66...b1d44db0 confirms only NT-PROGRESS.md and NT-AUDIT.md changed. Product and QA runner unchanged.
+- Extended browser/astronomy/calendar and physical camera explicitly NOT RUN. No Node 22 parity, Lighthouse or live edge evidence. NT-00.2 remains pending.
+- **Coordinator routing rule:** NT-00.1 is accepted on Node 24 and must not be run again solely because documentation/QA evidence commits advance HEAD. Dispatch the pending checkpoint named in Current next action, not the last completed checkpoint. For the next run use only `scripts/nt-qa-extended.sh` under Node 22. If Node 22 or required browser/system dependencies cannot be prepared, report BLOCKED with actual error; do not substitute Node 24 baseline. A docs-only evidence commit does not itself request another QA run. Preserve exact tested SHA in every report.
+
 ## Environment and build observations
 - CI workflows pin Node 22; Muse NT-00.1 used Node 24.22.1. Node 22 parity is still an explicit gate.
 - `scripts/prepare-cloudflare-demo.mjs` mutates `next.config.js`, metadata routes and removes `app/api` plus `app/knowledge/[star]` for static export. Never run it in the primary checkout; use a detached disposable worktree.
