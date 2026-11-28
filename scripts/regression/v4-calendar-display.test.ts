@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {test} from 'node:test';
 import {Solar} from 'lunar-javascript';
 import {buildCalendarYear} from '../../lib/ziwei/calendar-display-server';
@@ -16,4 +17,20 @@ test('Calendar display cache matches original terms and Gan Chi at all monthly b
    assert.equal(cached?.day,reference.getDayGan()+reference.getDayZhi(),year+'/'+m+'/'+d+' day');
   }
  }
+});
+
+test('Calendar UI defers the full 151-year dataset and keeps the home preview server-rendered',()=>{
+ const page=readFileSync('app/lich-van-nien/page.tsx','utf8');
+ const view=readFileSync('app/lich-van-nien/CalendarView.tsx','utf8');
+ const home=readFileSync('components/ui/HomeCalendar.tsx','utf8');
+ const homePage=readFileSync('app/page.tsx','utf8');
+ const pkg=JSON.parse(readFileSync('package.json','utf8'));
+ assert.ok(page.includes('buildCalendarYear')&&page.includes('initialData'));
+ assert.doesNotMatch(page,/buildCalendarData/);
+ assert.ok(view.includes("fetch('/calendar-data.json')"));
+ assert.ok(homePage.includes('buildCalendarYear'));
+ assert.doesNotMatch(homePage,/today\.year\+1/);
+ assert.doesNotMatch(home,/^'use client'/m);
+ assert.doesNotMatch(home,/useEffect|useState/);
+ assert.ok(pkg.scripts.prebuild.includes('render-calendar-data.ts'));
 });
