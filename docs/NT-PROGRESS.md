@@ -41,7 +41,7 @@ git fetch origin feature/nhan-tuong-ai
 git checkout feature/nhan-tuong-ai
 git pull --ff-only origin feature/nhan-tuong-ai
 QA_SHA=$(git rev-parse HEAD)
-printf 'Testing SHA: %s\\n' "$QA_SHA"
+echo "Testing SHA: $QA_SHA"
 bash -n scripts/nt-qa-extended.sh
 bash scripts/nt-qa-extended.sh "$QA_SHA"
 ```
