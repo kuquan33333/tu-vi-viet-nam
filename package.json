@@ -20,7 +20,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/render-brand-assets.mjs",
+    "prebuild": "node scripts/render-brand-assets.mjs && tsx scripts/render-calendar-data.ts",
     "build": "next build --webpack",
     "start": "next start",
     "typecheck": "tsc --noEmit",
