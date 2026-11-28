@@ -37,7 +37,8 @@
 Muse: sync `241977d155329cc6f86f57b81be5e95bcadc72d9`, select Node 22, validate the shell script, then run:
 
 ```bash
-bash -n scripts/nt-qa-extended.sh\nbash scripts/nt-qa-extended.sh 241977d155329cc6f86f57b81be5e95bcadc72d9
+bash -n scripts/nt-qa-extended.sh
+bash scripts/nt-qa-extended.sh 241977d155329cc6f86f57b81be5e95bcadc72d9
 ```
 
 Send the complete TXT plus the emitted `NT-ARTIFACTS-*.tar.gz`, `NT-EDGE-HEADERS-*.txt` and `NT-STATIC-SERVER-*.log` to ChatGPT. ChatGPT will review the evidence, fix any failures, close NT-00, then begin NT-01. Do not run GitHub Actions, push, merge or deploy.
