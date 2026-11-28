@@ -19,12 +19,21 @@
 - Important variance: repository CI workflows pin Node 22; this first Muse run used Node 24. The code baseline is green on Node 24 but exact Node 22 parity remains to be checked.
 - Not included in NT-00.1: interactive Chromium journeys, full UI-6 keyboard/axe cross-browser checks, independent astronomy/calendar audits, Lighthouse thresholds, and actual Cloudflare edge response headers. Do not infer these passed from static build.
 
+### NT-00.1 — repeat baseline on updated HEAD (PASS)
+- Tested SHA: `6ae15f66aee6dff575c57732019e136c742425db` (exact detached HEAD matched; clean working tree).
+- Muse report: `NT-LINUX-REPORT-NT-00.1-6ae15f66aee6dff575c57732019e136c742425db-20261128-115617.txt`.
+- Report start: 2026-11-28 11:56:17 UTC (18:56:17 GMT+7). Linux 7.0.0-44-generic x86_64, Node v24.22.1, npm 10.9.4.
+- Reviewed complete report: `OVERALL_EXIT=0`; all 49 recorded EXIT markers are zero. npm ci (184 packages; node-domexception@1.0.0 deprecation warning only), typecheck, npm test, all 34 individual regression files, strict audit 12/12, Triad and Revamp passed.
+- Native build generated 109/109 pages; static build generated 107/107 pages; metadata/SEO/redirects/sitemap/robots/OG verification passed for 103 routes.
+- GitHub comparison against `14910dd8e6d6eade8369728805286043ab896ccd`: 9 commits ahead, 0 behind; only `docs/NT-AUDIT.md`, `docs/NT-MASTER-PLAN.md`, `docs/NT-PROGRESS.md` and `scripts/nt-qa-extended.sh` changed. No product code changed. The mktemp suffix fix `241977d155329cc6f86f57b81be5e95bcadc72d9` affected the extended runner, not the baseline runner.
+- NT-00.1 remains PASS on Node 24, with zero new failures. Node 22 parity and all NT-00.2 extended gates are NOT RUN in this report. No third baseline-only run is required; proceed directly to NT-00.2 on Node 22 after preflight.
+
 ### NT-00.2 — extended compatibility and production-edge audit
 - QA runner: `scripts/nt-qa-extended.sh`.
 - Latest runner commit: `241977d155329cc6f86f57b81be5e95bcadc72d9`.
 - The runner creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks and a read-only production HTTP header capture.
 - It installs Playwright browsers before launching tests, runs the encoded-asset check after the static server is ready, and exports screenshots/JSON evidence as a separate TAR.GZ bundle. Static server and edge-header logs are also preserved outside the disposable worktree.
-- Status: pending Muse execution. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
+- Status: NOT RUN as of the 18:56:17 GMT+7 baseline repeat; pending Muse execution on Node 22. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
 - Static preparation mutates Next config/metadata and removes unsupported dynamic/API routes. The extended script must run only in its disposable worktree.
 
 ## NT-01
@@ -34,7 +43,7 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
-Muse: fetch the latest branch head, validate the shell script, then run the extended QA against that exact SHA:
+Muse: select Node 22 first (for example, `nvm use 22` if installed), check that port 4173 is free and Playwright system dependencies can be installed with authorized privileges, then fetch the latest branch head and run NT-00.2 against that exact SHA. Do not run another NT-00.1-only pass.
 
 ```bash
 git fetch origin feature/nhan-tuong-ai
@@ -42,8 +51,9 @@ git checkout feature/nhan-tuong-ai
 git pull --ff-only origin feature/nhan-tuong-ai
 QA_SHA=$(git rev-parse HEAD)
 echo "Testing SHA: $QA_SHA"
-bash -n scripts/nt-qa-extended.sh
-bash scripts/nt-qa-extended.sh "$QA_SHA"
+node --version  # must be v22.x
+npm --version
+bash -n scripts/nt-qa-extended.sh && bash scripts/nt-qa-extended.sh "$QA_SHA"
 ```
 
 Send the complete TXT plus the emitted `NT-ARTIFACTS-*.tar.gz`, `NT-EDGE-HEADERS-*.txt` and `NT-STATIC-SERVER-*.log` to ChatGPT. ChatGPT will review the evidence, fix any failures, close NT-00, then begin NT-01. Do not run GitHub Actions, push, merge or deploy.

@@ -9,6 +9,15 @@
 - The first run was interrupted by Muse runtime restart during strict-audit; Muse resumed it in the same disposable worktree. The resumed strict-audit completed 12/12, and all remaining commands exited 0. This is a completed run, not a test failure.
 - No browser interaction, Firefox/WebKit compatibility, keyboard/axe, independent astronomy/calendar, Lighthouse, physical camera or iPhone/iPad tests are present in this report.
 
+## NT-00.1 repeat baseline evidence — 2026-11-28
+- Exact SHA: `6ae15f66aee6dff575c57732019e136c742425db`, branch `feature/nhan-tuong-ai`; report confirms matching HEAD and clean worktree.
+- Source: `NT-LINUX-REPORT-NT-00.1-6ae15f66aee6dff575c57732019e136c742425db-20261128-115617.txt`; report start 2026-11-28T11:56:17Z (18:56:17 GMT+7).
+- Linux 7.0.0-44-generic x86_64 GNU/Linux; Node v24.22.1; npm 10.9.4. Install added 184 packages; only recorded deprecation warning is node-domexception@1.0.0. Isolated iztro UTC+7 provider generated with 9 imports; report states original dependencies unchanged.
+- Reviewed all 49 EXIT markers (all zero), including 34/34 individual regression files, npm test, typecheck, strict audit 12/12, Triad, Revamp, native build, static preparation/build and export verification. Final `OVERALL_EXIT=0`; zero new failures reported. Native build 109/109 pages, static build 107/107 pages, SEO/metadata/redirects/sitemap/robots/OG 103 routes.
+- GitHub compare `14910dd8...6ae15f66`: ahead by 9, behind by 0; changed files confined to three NT documents and the newly added `scripts/nt-qa-extended.sh`. No product source changes. Verified `241977d155329cc6f86f57b81be5e95bcadc72d9` modifies `scripts/nt-qa-extended.sh`, not `scripts/nt-qa-baseline.sh` (correction to the accompanying QA message, not a test failure).
+- This is a baseline repeat, not extended QA. Report explicitly states extended browser/astronomy/calendar, real MediaPipe and physical camera tests NOT RUN. Lighthouse and live edge header evidence are also absent. Node 22 is still untested in this checkpoint. NT-00 remains OPEN; NT-00.2 is the next required gate.
+- Before running NT-00.2: use Node 22, validate shell syntax, ensure localhost port 4173 is unused (avoid accidentally testing another server), and make sure Playwright system dependencies can be installed with authorized privileges. Do not weaken gates or bypass environment blockers; report them separately.
+
 ## Environment and build observations
 - CI workflows pin Node 22; Muse NT-00.1 used Node 24.22.1. Node 22 parity is still an explicit gate.
 - `scripts/prepare-cloudflare-demo.mjs` mutates `next.config.js`, metadata routes and removes `app/api` plus `app/knowledge/[star]` for static export. Never run it in the primary checkout; use a detached disposable worktree.
