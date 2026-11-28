@@ -7,7 +7,7 @@ import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES } from '@/lib/ziwei/cities';
-import type {BirthRegion} from '@/lib/ziwei/legacy-birthplaces';
+import type {BirthRegion,BirthLocation} from '@/lib/ziwei/legacy-birthplaces';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
 import { candidateLunarToSolar as lunarToSolarVN, candidateSolarToLunar as solarToLunarVN } from '@/lib/ziwei/vn-calendar-candidate';
 import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
@@ -110,7 +110,7 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
     return PROVINCES.find(p => p.name === form.province);
   }, [form.province]);
 
-  const cityList = useMemo(() => form.province==='Nước ngoài'?[]:legacyPlaces?.birthLocationsForProvince(form.province)??currentProvince?.cities??[],[form.province,currentProvince,legacyPlaces]);
+  const cityList = useMemo<BirthLocation[]>(() => form.province==='Nước ngoài'?[]:legacyPlaces?.birthLocationsForProvince(form.province)??(currentProvince?.cities??[]) as BirthLocation[],[form.province,currentProvince,legacyPlaces]);
 
   const currentCityData = useMemo(() => {
     return cityList.find(c => c.name === form.city);
