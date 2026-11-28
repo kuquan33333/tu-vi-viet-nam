@@ -26,8 +26,9 @@ const monthDate=(d:Date,delta:number)=>{
  const first=date(d.getFullYear(),d.getMonth()+1+delta,1);
  return date(first.getFullYear(),first.getMonth()+1,Math.min(d.getDate(),date(first.getFullYear(),first.getMonth()+2,0).getDate()));
 };
-export default function CalendarView({data,initial}:{data:CalendarData;initial:{year:number;month:number;day:number}}){
+export default function CalendarView({initialData,initial}:{initialData:CalendarData;initial:{year:number;month:number;day:number}}){
  const [today,setToday]=useState(initial);
+ const [calendarData,setCalendarData]=useState<CalendarData>(initialData);
  const [year,setYear]=useState(initial.year);
  const [month,setMonth]=useState(initial.month);
  const [selected,setSelected]=useState(date(initial.year,initial.month,initial.day));
@@ -49,23 +50,29 @@ export default function CalendarView({data,initial}:{data:CalendarData;initial:{
   const target=gridRoot.current?.querySelector<HTMLButtonElement>('[data-date="'+key+'"]');
   if(target&&document.activeElement!==target)target.focus();
  });
- const terms=useMemo(()=>displayTerms(data,year),[data,year]);
+ useEffect(()=>{
+  if(calendarData[year])return;
+  let active=true;
+  fetch('/calendar-data.json').then(response=>{if(!response.ok)throw new Error('Calendar data request failed: '+response.status);return response.json() as Promise<CalendarData>;}).then(full=>{if(active)setCalendarData(full);}).catch(error=>{if(active)console.error('Không thể tải dữ liệu lịch mở rộng',error);});
+  return()=>{active=false};
+ },[calendarData,year]);
+ const terms=useMemo(()=>displayTerms(calendarData,year),[calendarData,year]);
  const days=useMemo(()=>{
   const offset=date(year,month,1).getDay();
   const count=Math.max(35,Math.ceil((offset+date(year,month+1,0).getDate())/7)*7);
   const byYear=new Map([[year,terms]]);
   return Array.from({length:count},(_,i)=>{
    const d=date(year,month,i-offset+1),y=d.getFullYear(),m=d.getMonth()+1,day=d.getDate();
-   if(!byYear.has(y))byYear.set(y,displayTerms(data,y));
+   if(!byYear.has(y))byYear.set(y,displayTerms(calendarData,y));
    return {d,within:m===month&&y===year,lunar:solarToLunarVN(y,m,day),marks:inRange(d)?dayMarks(y,m,day,byYear.get(y)!):[]};
   });
- },[data,year,month,terms]);
+ },[calendarData,year,month,terms]);
  const sy=selected.getFullYear(),sm=selected.getMonth()+1,sd=selected.getDate();
- const selectedYearTerms=useMemo(()=>displayTerms(data,sy),[data,sy]);
+ const selectedYearTerms=useMemo(()=>displayTerms(calendarData,sy),[calendarData,sy]);
  const selectedTerms=selectedYearTerms.filter(t=>t.month===sm&&t.day===sd);
- const latestTerm=useMemo(()=>[...displayTerms(data,sy-1),...selectedYearTerms].filter(t=>t.year*10000+t.month*100+t.day<=sy*10000+sm*100+sd).at(-1),[data,sy,sm,sd,selectedYearTerms]);
+ const latestTerm=useMemo(()=>[...displayTerms(calendarData,sy-1),...selectedYearTerms].filter(t=>t.year*10000+t.month*100+t.day<=sy*10000+sm*100+sd).at(-1),[calendarData,sy,sm,sd,selectedYearTerms]);
  const lunar=useMemo(()=>solarToLunarVN(sy,sm,sd),[sy,sm,sd]);
- const ganZhi=useMemo(()=>displayGanZhi(data,sy,sm,sd),[data,sy,sm,sd]);
+ const ganZhi=useMemo(()=>displayGanZhi(calendarData,sy,sm,sd),[data,sy,sm,sd]);
  const marks=dayMarks(sy,sm,sd,selectedYearTerms);
  const uncertainty=calendarUncertainty(sy,sm,sd);
  function shift(n:number){choose(date(year,month+n,1));}
