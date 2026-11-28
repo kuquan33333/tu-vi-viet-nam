@@ -117,6 +117,9 @@ if [[ -d out ]]; then
           if [[ "$route" =~ ^(home|chart|lich-van-nien)$ ]]; then categories=seo,accessibility,performance,best-practices; fi
           run "lighthouse-$route" "$browser_modules/.bin/lighthouse" "$url" --only-categories="$categories" --output=json --output-path="qa-artifacts/lighthouse/$route.json" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
         done
+        for repeat in 2 3; do
+          run "lighthouse-chart-repeat-$repeat" "$browser_modules/.bin/lighthouse" http://127.0.0.1:4173/chart --only-categories=seo,accessibility,performance,best-practices --output=json --output-path="qa-artifacts/lighthouse/chart-repeat-$repeat.json" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet
+        done
         run lighthouse-gates node scripts/check-seo-lighthouse.mjs
       else
         printf 'BLOCKED: could not resolve Playwright Chromium executable for Lighthouse.\n'; failed=1
