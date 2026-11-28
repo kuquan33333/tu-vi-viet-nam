@@ -34,11 +34,16 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
-Muse: sync `241977d155329cc6f86f57b81be5e95bcadc72d9`, select Node 22, validate the shell script, then run:
+Muse: fetch the latest branch head, validate the shell script, then run the extended QA against that exact SHA:
 
 ```bash
+git fetch origin feature/nhan-tuong-ai
+git checkout feature/nhan-tuong-ai
+git pull --ff-only origin feature/nhan-tuong-ai
+QA_SHA=$(git rev-parse HEAD)
+printf 'Testing SHA: %s\\n' "$QA_SHA"
 bash -n scripts/nt-qa-extended.sh
-bash scripts/nt-qa-extended.sh 241977d155329cc6f86f57b81be5e95bcadc72d9
+bash scripts/nt-qa-extended.sh "$QA_SHA"
 ```
 
 Send the complete TXT plus the emitted `NT-ARTIFACTS-*.tar.gz`, `NT-EDGE-HEADERS-*.txt` and `NT-STATIC-SERVER-*.log` to ChatGPT. ChatGPT will review the evidence, fix any failures, close NT-00, then begin NT-01. Do not run GitHub Actions, push, merge or deploy.
