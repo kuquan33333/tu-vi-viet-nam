@@ -7,7 +7,7 @@ import type { BirthInfo } from '@/lib/ziwei/types';
 import { SHICHEN, BRANCHES } from '@/lib/ziwei/constants';
 import { useTheme } from '@/components/ThemeProvider';
 import { PROVINCES } from '@/lib/ziwei/cities';
-import {birthLocationsForProvince,searchBirthplaces,birthRegion,type BirthRegion} from '@/lib/ziwei/legacy-birthplaces';
+import type {BirthRegion} from '@/lib/ziwei/legacy-birthplaces';
 import { formToBirthInfo, birthFormProblem, solarPreview } from '@/lib/ziwei/share';
 import { candidateLunarToSolar as lunarToSolarVN, candidateSolarToLunar as solarToLunarVN } from '@/lib/ziwei/vn-calendar-candidate';
 import { getHistoricalTzPeriod, resolveHistoricalCivilTime } from '@/lib/ziwei/dst-vn';
@@ -91,26 +91,32 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   const [genderChosen,setGenderChosen]=useState(!chartLayout||Boolean(initialData?.gender));
   const errorId=useId();
   const [locationQuery,setLocationQuery]=useState('');
-  const locationMatches=useMemo(()=>searchBirthplaces(locationQuery),[locationQuery]);
+  type LegacyBirthplacesModule=typeof import('@/lib/ziwei/legacy-birthplaces');
+  const [legacyPlaces,setLegacyPlaces]=useState<LegacyBirthplacesModule|null>(null);
+  useEffect(()=>{
+    if(!form.province&&!locationQuery.trim())return;
+    let active=true;
+    void import('@/lib/ziwei/legacy-birthplaces').then(module=>{if(active)setLegacyPlaces(module);});
+    return()=>{active=false;};
+  },[form.province,locationQuery]);
+  const locationMatches=useMemo(()=>legacyPlaces&&locationQuery.trim()?legacyPlaces.searchBirthplaces(locationQuery):[],[legacyPlaces,locationQuery]);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
   // Đồng bộ cho component cha
 
 
-  const cityList = useMemo(() => {
-    return birthLocationsForProvince(form.province);
-  }, [form.province]);
-
   const currentProvince = useMemo(() => {
     return PROVINCES.find(p => p.name === form.province);
   }, [form.province]);
+
+  const cityList = useMemo(() => form.province==='Nước ngoài'?[]:legacyPlaces?.birthLocationsForProvince(form.province)??currentProvince?.cities??[],[form.province,currentProvince,legacyPlaces]);
 
   const currentCityData = useMemo(() => {
     return cityList.find(c => c.name === form.city);
   }, [cityList, form.city]);
 
-  const region=birthRegion(form.province,form.city,form.historicalRegion);
+  const region=legacyPlaces?.birthRegion(form.province,form.city,form.historicalRegion)??(form.province==='Tỉnh Quảng Trị'&&Boolean(form.city)?undefined:currentProvince?.isSouthOf17thParallel);
   const isSouth=region??false;
 
   // ─── Kiểm tra múi giờ lịch sử Việt Nam ───────────────────────────
