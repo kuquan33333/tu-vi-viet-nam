@@ -94,11 +94,11 @@ export default function BirthForm({ onSubmit, onUnknownTime, loading, initialDat
   type LegacyBirthplacesModule=typeof import('@/lib/ziwei/legacy-birthplaces');
   const [legacyPlaces,setLegacyPlaces]=useState<LegacyBirthplacesModule|null>(null);
   useEffect(()=>{
-    if(!form.province&&!locationQuery.trim())return;
+    if(legacyPlaces||(!form.province&&!locationQuery.trim()))return;
     let active=true;
     void import('@/lib/ziwei/legacy-birthplaces').then(module=>{if(active)setLegacyPlaces(module);});
     return()=>{active=false;};
-  },[form.province,locationQuery]);
+  },[form.province,locationQuery,legacyPlaces]);
   const locationMatches=useMemo(()=>legacyPlaces&&locationQuery.trim()?legacyPlaces.searchBirthplaces(locationQuery):[],[legacyPlaces,locationQuery]);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
