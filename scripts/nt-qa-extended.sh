@@ -73,11 +73,11 @@ else
 fi
 run iztro-adapter npx --no-install tsx scripts/audit-vn-iztro.ts
 # Static Pages build is isolated from the owner checkout.
+run clean-static rm -rf .next out
 run prepare-static node scripts/prepare-cloudflare-demo.mjs
 run static-build npm run build
 run export-metadata node scripts/check-seo-export.mjs
 if [[ -d out ]]; then
-  run encoded-assets node scripts/check-qa-encoded-assets.mjs
   node scripts/serve-export.mjs > "$work/.nt-qa/static-server.log" 2>&1 &
   server_pid=$!
   ready=0
@@ -86,18 +86,20 @@ if [[ -d out ]]; then
     sleep 1
   done
   if ((ready==1)); then
+    run encoded-assets node scripts/check-qa-encoded-assets.mjs
     if npm install --prefix "$work/.nt-qa/browser" --ignore-scripts --no-save --no-audit --no-fund playwright@1.51.1 axe-core@4.10.3 lighthouse@12.6.0; then
       browser_modules="$work/.nt-qa/browser/node_modules"
       export PLAYWRIGHT_MODULE="$browser_modules/playwright"
       export AXE_SCRIPT="$browser_modules/axe-core/axe.min.js"
-      run browser-interaction node scripts/check-browser-interaction.mjs
-      run browser-v4 node scripts/check-v4-browser.mjs
-      run browser-five-systems node scripts/check-five-systems-browser.mjs
-      if "$browser_modules/.bin/playwright" install chromium firefox webkit; then
+      if "$browser_modules/.bin/playwright" install --with-deps chromium firefox webkit; then
+        run browser-interaction node scripts/check-browser-interaction.mjs
+        run browser-v4 node scripts/check-v4-browser.mjs
+        run browser-five-systems node scripts/check-five-systems-browser.mjs
         run ui6-chromium-0 node scripts/capture-ui-6.mjs all chromium 0 4
         run ui6-chromium-1 node scripts/capture-ui-6.mjs all chromium 1 4
         run ui6-chromium-2 node scripts/capture-ui-6.mjs all chromium 2 4
         run ui6-chromium-3 node scripts/capture-ui-6.mjs all chromium 3 4
+        run ui6-token-audit node scripts/audit-ui-6-tokens.mjs
         run ui6-firefox node scripts/capture-ui-6.mjs compat firefox 0 1
         run ui6-webkit node scripts/capture-ui-6.mjs compat webkit 0 1
         run ui6-screens node scripts/capture-ui-6.mjs screens chromium 0 1
@@ -134,6 +136,14 @@ printf '\n=== production-edge-header-summary ===\n'
 if [[ -f "$work/.nt-qa/production-headers.txt" ]]; then
   grep -iE '^(HTTP/|content-security-policy:|permissions-policy:|x-content-type-options:|x-frame-options:|referrer-policy:|cache-control:)' "$work/.nt-qa/production-headers.txt" || true
   cp "$work/.nt-qa/production-headers.txt" "$report_dir/NT-EDGE-HEADERS-${sha:0:12}-$stamp.txt"
+fi
+if [[ -f "$work/.nt-qa/static-server.log" ]]; then cp "$work/.nt-qa/static-server.log" "$report_dir/NT-STATIC-SERVER-${sha:0:12}-$stamp.log"; fi
+artifact_paths=()
+[[ -d qa-artifacts ]] && artifact_paths+=(qa-artifacts)
+[[ -d qa-baseline ]] && artifact_paths+=(qa-baseline)
+if ((${#artifact_paths[@]})); then
+  artifact_bundle="$report_dir/NT-ARTIFACTS-${sha:0:12}-$stamp.tar.gz"
+  if tar -czf "$artifact_bundle" "${artifact_paths[@]}"; then printf 'ARTIFACT_BUNDLE=%s\n' "$artifact_bundle"; else failed=1; fi
 fi
 printf '\nPhysical iPhone/iPad and real camera consent/lifecycle tests: deferred to NT-03/NT-11; not claimed here.\n'
 printf 'OVERALL_EXIT=%s\nREPORT=%s\n' "$failed" "$report"
