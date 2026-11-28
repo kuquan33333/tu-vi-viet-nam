@@ -15,3 +15,13 @@ test('D10: no remote font or telemetry and static security/cache headers',()=>{
  const h=read('public/_headers');for(const key of ['Content-Security-Policy','X-Content-Type-Options','Referrer-Policy','frame-ancestors','Cache-Control: public, max-age=31536000, immutable'])assert.ok(h.includes(key),key);
  assert.match(read('app/revamp.css'),/size:A4 landscape/);
 });
+
+test('NT-00.2: chart defers historical birthplace datasets until location interaction',()=>{
+ const form=read('components/BirthForm.tsx');
+ assert.match(form,/import type \{BirthRegion\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
+ assert.match(form,/import\('@\/lib\/ziwei\/legacy-birthplaces'\)/);
+ assert.match(form,/legacyPlaces\?\.birthLocationsForProvince/);
+ assert.match(form,/legacyPlaces\?\.searchBirthplaces/);
+ assert.doesNotMatch(form,/import \{[^}]*birthLocationsForProvince[^}]*\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
+ assert.doesNotMatch(form,/import \{[^}]*searchBirthplaces[^}]*\} from '@\/lib\/ziwei\/legacy-birthplaces'/);
+});
