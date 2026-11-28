@@ -21,7 +21,7 @@
 
 ### NT-00.2 — extended compatibility and production-edge audit
 - QA runner: `scripts/nt-qa-extended.sh`.
-- Latest runner commit: `4ad4fde63e1e389e739e9df48471d2d20be2eaaf`.
+- Latest runner commit: `241977d155329cc6f86f57b81be5e95bcadc72d9`.
 - The runner creates a disposable detached worktree, requires Node 22, reruns typecheck/regression, performs independent calendar/astronomy/iztro audits, builds static export, runs Playwright journeys at 360/1280, UI-6 Chromium route shards, Firefox/WebKit compatibility, five-system browser checks, Lighthouse gates, encoded-asset checks and a read-only production HTTP header capture.
 - It installs Playwright browsers before launching tests, runs the encoded-asset check after the static server is ready, and exports screenshots/JSON evidence as a separate TAR.GZ bundle. Static server and edge-header logs are also preserved outside the disposable worktree.
 - Status: pending Muse execution. Do not mark NT-00 closed until Node 22 and extended checks have a reviewed evidence report. Physical iPhone/iPad and real camera tests remain deferred to NT-03/NT-11.
@@ -34,10 +34,10 @@
 - The face-reading twelve-palace map must be explicitly distinguished from the twelve palaces of Zi Wei astrology. Do not combine the two systems.
 
 ## Current next action
-Muse: sync `4ad4fde63e1e389e739e9df48471d2d20be2eaaf`, select Node 22, then run:
+Muse: sync `241977d155329cc6f86f57b81be5e95bcadc72d9`, select Node 22, validate the shell script, then run:
 
 ```bash
-bash scripts/nt-qa-extended.sh 4ad4fde63e1e389e739e9df48471d2d20be2eaaf
+bash -n scripts/nt-qa-extended.sh\nbash scripts/nt-qa-extended.sh 241977d155329cc6f86f57b81be5e95bcadc72d9
 ```
 
 Send the complete TXT plus the emitted `NT-ARTIFACTS-*.tar.gz`, `NT-EDGE-HEADERS-*.txt` and `NT-STATIC-SERVER-*.log` to ChatGPT. ChatGPT will review the evidence, fix any failures, close NT-00, then begin NT-01. Do not run GitHub Actions, push, merge or deploy.
