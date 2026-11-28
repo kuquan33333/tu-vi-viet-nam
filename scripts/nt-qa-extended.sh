@@ -8,7 +8,7 @@ report_dir="${2:-$HOME/nt-qa-reports}"
 mkdir -p "$report_dir" || exit 2
 report_dir=$(cd "$report_dir" && pwd -P) || exit 2
 stamp=$(date -u +%Y%m%d-%H%M%S)
-report=$(mktemp "$report_dir/NT-EXTENDED-${sha:0:12}-$stamp-XXXXXX.txt") || exit 2
+report=$(mktemp --suffix=.txt "$report_dir/NT-EXTENDED-${sha:0:12}-$stamp-XXXXXX") || exit 2
 work=$(mktemp -d "${TMPDIR:-/tmp}/nt-extended.XXXXXX") || exit 2
 git -C "$root" worktree add --detach "$work" "$sha" || exit 2
 server_pid=""
