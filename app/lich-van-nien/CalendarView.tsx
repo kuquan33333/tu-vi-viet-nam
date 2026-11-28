@@ -72,7 +72,7 @@ export default function CalendarView({initialData,initial}:{initialData:Calendar
  const selectedTerms=selectedYearTerms.filter(t=>t.month===sm&&t.day===sd);
  const latestTerm=useMemo(()=>[...displayTerms(calendarData,sy-1),...selectedYearTerms].filter(t=>t.year*10000+t.month*100+t.day<=sy*10000+sm*100+sd).at(-1),[calendarData,sy,sm,sd,selectedYearTerms]);
  const lunar=useMemo(()=>solarToLunarVN(sy,sm,sd),[sy,sm,sd]);
- const ganZhi=useMemo(()=>displayGanZhi(calendarData,sy,sm,sd),[data,sy,sm,sd]);
+ const ganZhi=useMemo(()=>displayGanZhi(calendarData,sy,sm,sd),[calendarData,sy,sm,sd]);
  const marks=dayMarks(sy,sm,sd,selectedYearTerms);
  const uncertainty=calendarUncertainty(sy,sm,sd);
  function shift(n:number){choose(date(year,month+n,1));}
